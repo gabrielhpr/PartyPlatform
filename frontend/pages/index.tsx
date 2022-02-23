@@ -19,18 +19,37 @@ export default function HomePage() {
     let photo = [FotoDebutante, FotoInfantilFem, FotoInfantilMasc]
     const [photoNum, setPhotNum] = useState(0);
 
-    const [menuPartyType, setMenuPartyType] = useState('none');
-    const [menuTypeService, setMenuTypeService] = useState('none');
+    const [searchData, setSearchData] = useState({ partyType: '', service: '', location: ''});
+    const [menuPartyTypeDisp, setMenuPartyTypeDisp] = useState('none');
+    const [menuService, setMenuService] = useState('none');
+    const [searchInputValueFirst, setSearchInputValueFirst] = useState('');
 
-    function handleClick() {
-        let photoAux = photoNum;
-        photoAux = (photoAux + 1) % photo.length;
-        setPhotNum( photoAux );
+    function handleSearchData( event: any ) {
+        setSearchData({...searchData, [event.currentTarget.name]: event.currentTarget.value});
     }
 
+    // Return to previous step in the first search input
+    function previousStepSearch() {
+        setSearchData({...searchData, partyType:'', service:''});
+        // Hide Service Menu
+        setMenuService('none');
+        // show Party Type Menu
+        setMenuPartyTypeDisp('');
+        // Reset previous search on Party Type Menu
+        searchFunction({currentTarget: { value: ''}}, 'menuPartyType');
+        // Reset input value
+        setSearchInputValueFirst('');
+    }
+
+    // Show current state of searchData
+    function showData() {
+        console.log( searchData );
+    }
+
+    // Used in Menu search
     function searchFunction( event: any, menuId: string ) {
-        console.log( event.target.value );
-        let inputValue = event.target.value.toUpperCase();
+        console.log( event.currentTarget.value );
+        let inputValue = event.currentTarget.value.toUpperCase();
         let menu = document.getElementById( menuId );
         let itemList = menu.getElementsByTagName("button");
         
@@ -94,45 +113,105 @@ export default function HomePage() {
                             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.65)"
                         >   
 
-                            {/* Qual o tipo de festa ? */}
-                            <Flex 
-                                w='30%'
+                            
+
+                            {/* O que você procura ? */}
+                            <Flex direction='column'
+                                w='40%'
                                 h='100%'
                             >
-                                <Input placeholder='Qual o tipo de festa ?'
+
+                                <Input placeholder='O que você procura ?'
+                                    id='partyTypeAndServicesInput'
                                     bg='white'
                                     w='100%'
                                     h='100%'
                                     borderRightRadius={0}
                                     _focus={{outline:'none'}}
-                                    onClick={() => setMenuPartyType('')}
+                                    autoComplete='off'
+                                    onChange={(event: any) => { 
+                                        setSearchInputValueFirst( event.currentTarget.value );
+                                        if( searchData.partyType === '' ) {
+                                            searchFunction(event, "menuPartyType");
+                                        }
+                                        else {
+                                            if( event.currentTarget.value.length === 0 ) {
+                                                setMenuService('onclick');
+                                            }
+                                            else {
+                                                setMenuService('onsearch');
+                                                searchFunction(event, "menuServices");
+                                            }
+                                        }
+                                    }}
+                                    onClick={() => {
+                                        if(searchData.partyType === '') {
+                                            setMenuPartyTypeDisp('');
+                                        }
+                                        else if (searchData.service === '') {
+                                            setMenuService('onclick');
+                                        }
+                                        // Both are already setted up, reset all and start again
+                                        else {
+                                            setSearchData({...searchData, partyType: '', service: ''});
+                                            setSearchInputValueFirst('');
+                                            setMenuPartyTypeDisp('');
+                                            // Reset previous search on Party Type Menu
+                                            searchFunction({currentTarget: { value: ''}}, 'menuPartyType');
+                                        }
+                                    }}
+                                    value={ 
+                                        ( searchData.partyType !== '' && searchData.service !== '' )
+                                        ?
+                                        searchData.partyType + ' / ' + searchData.service
+                                        :
+                                        searchInputValueFirst
+                                    }
                                 />
 
-                                {/* Menu onClick and onSearch */}
+
+                                {/* Menu PartyType onClick and onSearch */}
                                 <Box 
                                     height={200} 
-                                    width={210}
+                                    width={350}
                                     overflowY="scroll"
-                                    display={menuPartyType}
+                                    display={menuPartyTypeDisp}
                                     position='absolute'
                                     bg='white'
                                     mt={20}
                                     borderRadius={10}
                                 >
-                                    <Flex direction="column" id="menuServices"
+                                    <Flex direction="column" id="menuPartyType"
                                         h='100%'
                                     >
+                                        <Text
+                                            bg='white'
+                                            h='20%'
+                                            fontSize={20}
+                                        >
+                                            Qual o tipo da festa ?
+                                        </Text>
+
                                         {
                                         [
                                         'Infantil', 'Debutante',
-                                        'Aniversário'
+                                        'Aniversário', 'Outros',
                                         ].map((el, i) => {
                                             return(
                                                 <Button
                                                     bg='white'
-                                                    h='33%'
+                                                    h='20%'
                                                     borderRadius={0}
                                                     _focus={{outline:'none'}}
+                                                    name='partyType'
+                                                    value={el}
+                                                    onClick={(event) => {
+                                                        handleSearchData(event);
+                                                        setSearchInputValueFirst('');
+                                                        setMenuPartyTypeDisp('none');
+                                                        setMenuService('onclick');
+                                                        document.getElementById('partyTypeAndServicesInput').focus();
+                                                    }}
                                                 >
                                                     <Text
                                                         width='80%'
@@ -147,46 +226,28 @@ export default function HomePage() {
                                         }
                                     </Flex>
                                 </Box>
+                                
 
-                            </Flex>
-
-
-                            {/* O que você procura ? */}
-                            <Flex direction='column'
-                                w='30%'
-                                h='100%'
-                            >
-
-                                <Input placeholder='O que você procura ?'
-                                    bg='white'
-                                    w='100%'
-                                    h='100%'
-                                    borderRadius={0}
-                                    _focus={{outline:'none'}}
-                                    onKeyUp={(event: any) => { 
-                                        if( event.target.value.length == 0 ) {
-                                            setMenuTypeService('onclick');
-                                        }
-                                        else {
-                                            setMenuTypeService('onsearch');
-                                        }
-                                        searchFunction(event, "menuServices");
-                                    }}
-                                    onClick={() => setMenuTypeService('onclick')}
-                                />
-
+                                
                                 {/* Menu onClick */}
                                 <Box 
                                     height={300} 
                                     width={700}
                                     overflowY="scroll"
-                                    display={menuTypeService == 'onclick' ? '' : 'none'}
+                                    display={menuService == 'onclick' ? '' : 'none'}
                                     position='absolute'
                                     bg='white'
                                     mt={20}
                                     borderRadius={10}
                                 >
-                                    <MenuServicesOnClick/>
+                                    <MenuServicesOnClick 
+                                        handlePreviousStep={previousStepSearch}
+                                        name='service'
+                                        handleClick={(event) => {
+                                            handleSearchData(event);
+                                            setMenuService('none');
+                                        }}
+                                    />
                                 </Box>
 
 
@@ -196,7 +257,7 @@ export default function HomePage() {
                                     height={400} 
                                     width={280}
                                     overflowY="scroll"
-                                    display={menuTypeService == 'onsearch' ? '' : 'none'}
+                                    display={menuService == 'onsearch' ? '' : 'none'}
                                     position='absolute'
                                     bg='white'
                                     mt={20}
@@ -218,7 +279,16 @@ export default function HomePage() {
                                         "Rancho"
                                         ].map((el, i) => {
                                             return(
-                                                <Button>{el}</Button>
+                                                <Button
+                                                    name='service'
+                                                    value={el}
+                                                    onClick={(event) => {
+                                                        handleSearchData(event);
+                                                        setMenuService('none');
+                                                    }}
+                                                >
+                                                    {el}
+                                                </Button>
                                             );
                                         })
                                         }
@@ -231,7 +301,7 @@ export default function HomePage() {
 
                             <Input placeholder='Onde ?'
                                 bg='white'
-                                w='20%'
+                                w='40%'
                                 h='100%'
                                 borderRadius={0}
                                 _focus={{outline:'none'}}
@@ -246,6 +316,7 @@ export default function HomePage() {
                                 fontSize={18}
                                 fontWeight={900}
                                 _focus={{outline:'none'}}
+                                onClick={showData}
                             >
                                 Pesquisar
                             </Button>
