@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
 import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import FotoInfantilFem from '../assets/imgs/festaInfantilFeminino1.jpg';
