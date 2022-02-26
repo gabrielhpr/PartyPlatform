@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Input, Text, Link as NavLink } from '@chakra-ui/react';
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import FotoInfantilFem from '../assets/imgs/festaInfantilFeminino1.jpg';
 import FotoInfantilMasc from '../assets/imgs/festaInfantilMasculino1.jpg';
@@ -10,7 +10,7 @@ import { useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import { MenuServicesOnClick } from '../components/MenuServicesOnClick';
-
+import { RiBriefcaseLine } from 'react-icons/ri';
 
 
 
@@ -69,7 +69,20 @@ export default function HomePage() {
             {/*************/}
             <Flex bg='purple'
                 w='100%' h={75}
+                alignItems='center'
+                justifyContent='flex-end'
             >
+                <NavLink href='enterpriseAccess'>
+                    <Button
+                        bg='purple'
+                        color='white'
+                        border='2px solid white'
+                        mr='3'
+                    >
+                        <Icon as={RiBriefcaseLine} mr='2'/>
+                        Acesso Empresas
+                    </Button>
+                </NavLink>
             </Flex>
             
             {/* Carroussel */}
