@@ -1,12 +1,45 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import Image from 'next/image'
+import { useEffect, useState } from "react";
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { CardService } from "../components/CardService";
-
+import api from "../utils/api";
+import { useRouter } from "next/router";
 
 
 
 export default function ServicesPage() {
+    const [services, setServices] = useState([]);
+    const routerNext = useRouter();
+
+    function handleClick( el: any ) {
+        console.log( el );
+        const id = el.id;
+        const partyType = el.partyMainFocus;
+
+        routerNext.push({
+            pathname: '/serviceProfile',
+            query: { 
+                id: id,
+                partyType: partyType
+            }
+        });
+    }
+
+    useEffect(() => {
+        api.get('/services', {
+                params: {
+                    partyType: 'Infantil',
+                    service: 'Fotografia',
+                    location: 'SaoPaulo'
+                }
+            })
+            .then((response) => {
+                setServices(response.data.services);
+                console.log(services[0]);
+            })
+    }, []);
+
     return (
         <Box h='100vh' w='100vw'>
 
@@ -42,16 +75,16 @@ export default function ServicesPage() {
                             rowGap={10}
                         >
                             {
-                            [1,2,3,4,5,6,7].map((el, i) => {
+                            services.map((el:any, i:any) => {
                                     return (
                                         <CardService 
-                                            name='Espaço alvorada'
-                                            location='São Paulo - SP'
+                                            name={el.enterpriseName}
+                                            location={el.city}
                                             classification='5 stars'
                                             rangeOfPeople='10-100'
                                             price='R$ 500,00'
-                                            picture={FotoDebutante} 
-
+                                            picture={FotoDebutante}
+                                            handleOnClick={() => handleClick(el)} 
                                         />
                                     );
                                 })

@@ -8,11 +8,12 @@ interface CardServiceProps {
     rangeOfPeople: string;
     price: string;
     picture: any;
+    handleOnClick: (ev: any) => void;
 }
 
 
 
-export function CardService( { name, location, classification, rangeOfPeople, price, picture } : CardServiceProps ) {
+export function CardService( { name, location, classification, rangeOfPeople, price, picture, handleOnClick } : CardServiceProps ) {
     return (
         <Flex
             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
@@ -23,7 +24,7 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
             bg='white'
             h={400}
             w='31%'
-
+            onClick={handleOnClick}
         >
             <Flex h='55%'>
                 <Image 

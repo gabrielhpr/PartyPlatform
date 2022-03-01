@@ -2,6 +2,7 @@ import { Box, Button, Flex, Input, Stack, Text, Textarea } from "@chakra-ui/reac
 import { useState } from "react";
 import { ItemList } from "../../components/Enterprise/ItemList";
 import { RegisterFormLayout } from "../../components/Enterprise/RegisterFormLayout";
+import { useRouter } from "next/router";
 
 
 interface enterpriseDataInterf {
@@ -10,7 +11,7 @@ interface enterpriseDataInterf {
     fullName: string;
     email: string;
     phone: string;
-    whatsapp: string;
+    whatsapp?: string;
     // Access Data
     password: string;
     passwordConfirmation: string;
@@ -22,9 +23,9 @@ interface enterpriseDataInterf {
     address: string;
     addressNumber: number;
     // Enterprise Social Media
-    instagram: string;
-    facebook: string;
-    website: string;
+    instagram?: string;
+    facebook?: string;
+    website?: string;
     
     partyMainFocus: string;
     serviceDescription: string;
@@ -74,10 +75,16 @@ const enterpriseDataNullState = {
 
 export default function RegisterEnterprise() {
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>( enterpriseDataNullState );
+    const routerNext = useRouter();
 
     function handleChange( event: any ) {
         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: event.currentTarget.value});
         console.log( enterpriseData );
+    }
+
+    function handleSubmit( event: any ) {
+        event.preventDefault();
+        routerNext.push("/enterpriseAccess");
     }
 
     function nextStep() {
@@ -460,7 +467,7 @@ export default function RegisterEnterprise() {
                     question="Perguntas frequentes sobre o seu serviço"
                     subTitle="Responda essas perguntas para facilitar o 
                     entendimento do cliente sobre os seus serviços"
-                    handleNextStep={nextStep}
+                    handleNextStep={handleSubmit}
                     handlePreviousStep={previousStep}
                 >
                     <Stack direction='column' justifyContent='center'

@@ -11,6 +11,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from 'react-responsive-carousel';
 import { MenuServicesOnClick } from '../components/MenuServicesOnClick';
 import { RiBriefcaseLine } from 'react-icons/ri';
+import { useRouter } from 'next/router';
 
 
 
@@ -22,6 +23,22 @@ export default function HomePage() {
     const [menuPartyTypeDisp, setMenuPartyTypeDisp] = useState('none');
     const [menuService, setMenuService] = useState('none');
     const [searchInputValueFirst, setSearchInputValueFirst] = useState('');
+
+    const routerSearch = useRouter();
+
+
+    function handleSearch() {
+
+        routerSearch.push({
+            pathname: '/services',
+            query: { 
+                partyType: searchData.partyType,
+                service: searchData.service,
+                location: searchData.location 
+            }
+        });
+
+    }
 
     function handleSearchData( event: any ) {
         setSearchData({...searchData, [event.currentTarget.name]: event.currentTarget.value});
@@ -328,7 +345,7 @@ export default function HomePage() {
                                 fontSize={18}
                                 fontWeight={900}
                                 _focus={{outline:'none'}}
-                                onClick={showData}
+                                onClick={handleSearch}
                             >
                                 Pesquisar
                             </Button>
