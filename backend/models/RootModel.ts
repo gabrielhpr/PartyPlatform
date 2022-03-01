@@ -21,5 +21,21 @@ module.exports = class RootModel {
         return result; 
     }
 
+    async selectServiceById( id: number, partyType: string ) {
+        
+        const query_select = `
+            SELECT Ads.*,
+                   Ent.*
+            FROM ${partyType+'Ads'} AS Ads
+            INNER JOIN Enterprise AS Ent 
+            ON Ads.id = Ent.id
+            WHERE Ent.id = ${id}
+        `;
+        
+        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        
+        return result; 
+    }
+
 }
    

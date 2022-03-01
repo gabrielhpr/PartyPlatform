@@ -15,4 +15,15 @@ module.exports = class RootController {
         console.log( services );
         res.status(200).json({ services });
     }
+
+    static async getServiceById(req: any, res: any) {
+        console.log( req.query);
+        
+        const { id, partyType } = req.query;
+
+        const service = await rootModel.selectServiceById(parseInt(id), partyType);
+        
+        console.log( service );
+        res.status(200).json({ service });
+    }
 }

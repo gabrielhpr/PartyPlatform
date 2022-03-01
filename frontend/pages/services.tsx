@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 export default function ServicesPage() {
     const [services, setServices] = useState([]);
     const routerNext = useRouter();
+    const {partyType, service, location} = routerNext.query;
 
     function handleClick( el: any ) {
         console.log( el );
@@ -29,9 +30,9 @@ export default function ServicesPage() {
     useEffect(() => {
         api.get('/services', {
                 params: {
-                    partyType: 'Infantil',
-                    service: 'Fotografia',
-                    location: 'SaoPaulo'
+                    partyType: partyType,
+                    service: service,
+                    location: location
                 }
             })
             .then((response) => {

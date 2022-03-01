@@ -7,6 +7,7 @@ const RootController = require("../controllers/RootController");
 //const { imageUpload } = require("../helpers/image-upload");
 
 router.get("/services", RootController.getServices);
+router.get("/serviceProfile", RootController.getServiceById);
 //partyType='.+'&service='.+'&location='.+'
 //router.get("/services", EnterpriseController.services);
 //router.post("/login", UserController.login);

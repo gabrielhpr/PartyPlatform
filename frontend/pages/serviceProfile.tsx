@@ -2,11 +2,65 @@ import { Box, Flex, Text, Input, Icon, Img, Textarea, Button } from "@chakra-ui/
 //import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill } from "react-icons/ri";
+import { useEffect, useState } from "react";
+import api from "../utils/api";
+import { useRouter } from "next/router";
+
+const serviceNullState = {
+    step: 0,
+    // Contact Data
+    fullName: '',
+    email: '',
+    phone: '',
+    whatsapp: '',
+    // Access Data
+    password: '',
+    passwordConfirmation: '',
+    // About the enterprise
+    enterpriseName: '',
+    country: '',
+    state: '',
+    city: '',
+    address: '',
+    addressNumber: 0,
+
+    // Enterprise Social Media
+    instagram: '',
+    facebook: '',
+    website: '',
+
+    partyMainFocus: '',
+    serviceDescription: '',
+    enterpriseCategory: '',
+    enterpriseSpecificCategory: '',
+
+    photos: '',
+
+    answer1: '',
+    answer2: '',
+}
 
 export default function ServiceProfilePage() {
     const images = [9, 8, 7, 6, 5].map((number) => ({
         src: `https://www.donaantoniabolos.com.br/bolo-especial/3b.jpg`
     }));
+
+    const routerNext = useRouter();
+    const {id, partyType} = routerNext.query;
+    const [service, setService] = useState(serviceNullState);
+
+    useEffect(() => {
+        api.get('/serviceProfile', {
+                params: {
+                    id: id,
+                    partyType: partyType
+                }
+            })
+            .then((response) => {
+                console.log(response.data.service[0]);
+                setService(response.data.service[0]);
+            })
+    }, []);
 
     return (
         <Box>
@@ -21,7 +75,7 @@ export default function ServiceProfilePage() {
                                 fontSize={30}
                                 fontWeight={400}
                             >
-                                Recanto da Alvorada
+                                {service.enterpriseName}
                             </Text>
                             <Text ml='3' border='2px solid red' borderRadius={5}
                                 p='1'

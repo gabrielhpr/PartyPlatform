@@ -334,6 +334,8 @@ export default function HomePage() {
                                 h='100%'
                                 borderRadius={0}
                                 _focus={{outline:'none'}}
+                                name='location'
+                                onChange={(event: any) => handleSearchData(event)}
                             />
                             <Button
                                 w='20%'

@@ -50,6 +50,17 @@ export function MenuServicesOnClick( { handlePreviousStep, handleClick }: MenuSe
             >
                 Buffet
             </Button>
+
+            <Button 
+                w='30%'
+                fontWeight={500}
+                bg='white'
+                name='service'
+                value='Fotografia'
+                onClick={handleClick}
+            >
+                Fotografia
+            </Button>
            
 
 
