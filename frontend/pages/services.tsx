@@ -1,10 +1,12 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
 import Image from 'next/image'
 import { useEffect, useState } from "react";
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { CardService } from "../components/CardService";
 import api from "../utils/api";
 import { useRouter } from "next/router";
+import { Header } from "../components/Header";
+import { RiFilter2Fill } from "react-icons/ri";
 
 
 
@@ -42,46 +44,68 @@ export default function ServicesPage() {
     }, []);
 
     return (
-        <Box h='100vh' w='100vw'>
+        <Box>
+            <Header name="" position="relative" type='oneColor' />
 
 
-            <Flex w='90%' h='90%' >
-                {/* Sidemenu including filters */}
-                <Flex w='20%' h='100%' bg='yellow'>
-                    <Text>Sidemenu</Text>
-                </Flex>
+            <Box w='100%' h='auto'
+            >
 
                 {/* Contain all cards */}
-                <Flex w='80%' h='100%' bg='white' >
+                <Flex w='100%' h='100%' bg='white' mx='auto' >
 
                     <Flex w='100%' flexWrap='wrap'
                         justifyContent='center'
                     >
 
                         {/* Visualization options */}
-                        <Flex w='80%' bg='white' justifyContent='space-between'
-                            alignItems='center'
+                        <Flex w='100%' justifyContent='center'
+                            bg='white'
+                            py='5'
+                            position='sticky'
+                            top={0}
+                            zIndex={1}
                         >
-                            <Text>100 resultados encontrados</Text>
-                            <Flex>
-                                <Button>Galeria</Button>
-                                <Button>Lista</Button>
+                            <Flex w='90%' 
+                                justifyContent='space-between'
+                                alignItems='center'
+                            >
+                                <Text
+                                    fontWeight={600}
+                                    fontSize={19}
+                                    color='gray'
+                                >
+                                    {services.length} RESULTADOS
+                                </Text>
+                                <Flex>
+                                    <Button
+                                        leftIcon={<Icon as={RiFilter2Fill}/>}
+                                        borderRadius={11}
+                                        fontSize={18}
+                                        fontWeight={500}
+                                        variant='outline'
+                                        py='3'
+                                    >
+                                        Filtros
+                                    </Button>
+                                </Flex>
                             </Flex>
                         </Flex>
 
                         {/* List of Cards */}
-                        <Flex w='80%' bg='white'
+                        <Flex w='90%' bg='white'
+                            mx='auto'
                             py='5' flexWrap='wrap'
                             justifyContent='space-between'
-                            rowGap={10}
+                            rowGap={8}
                         >
                             {
                             services.map((el:any, i:any) => {
                                     return (
                                         <CardService 
                                             name={el.enterpriseName}
-                                            location={el.city}
-                                            classification='5 stars'
+                                            location={el.city+', '+el.state}
+                                            classification='5'
                                             rangeOfPeople='10-100'
                                             price='R$ 500,00'
                                             picture={FotoDebutante}
@@ -95,14 +119,14 @@ export default function ServicesPage() {
                     </Flex>
 
                 </Flex>
-            </Flex>
+            </Box>
 
-            <Flex bg='black'
+            <Box bg='black'
                 h={300}
                 w='100%'
             >
 
-            </Flex>
+            </Box>
         </Box>
     );
 }

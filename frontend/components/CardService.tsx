@@ -1,5 +1,6 @@
-import { Flex, Text, Button } from "@chakra-ui/react";
+import { Flex, Text, Button, Icon, Box } from "@chakra-ui/react";
 import Image from 'next/image'
+import { RiMapPin2Fill, RiMoneyDollarCircleFill, RiPriceTag3Fill, RiStarSFill } from 'react-icons/ri';
 
 interface CardServiceProps {
     name: string;
@@ -22,59 +23,81 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
             //justifyContent='center'
             //alignItems='flex-start'
             bg='white'
-            h={400}
-            w='31%'
+            h='27.3vw'
+            w='21.3vw'
             onClick={handleOnClick}
+            position='relative'
+            _hover={{bg: 'rgba(0,0,0,0.1)'}}
+            cursor='pointer'
         >
-            <Flex h='55%'>
+            <Flex 
+                h='21.3vw' 
+                overflow='hidden'
+                borderTopRadius={8}
+            >
+                 
                 <Image 
                     src={picture}
+                    objectFit="cover"
                 />
+
             </Flex>
         
 
-            <Flex direction='column'
+            <Flex 
+                h='6vw'
+                direction='column'
                 alignItems='center'
                 justifyContent='center'
-                h='45%'
-                pb='2'
+                py='2'
+                px='3'
             >
                 <Flex 
-                    textAlign='center'
+                    textAlign='left'
                     flexWrap='wrap'
-                    w='80%'
+                    w='100%'
                 >
                     <Text
-                        w='100%'
+                        w='80%'
+                        whiteSpace='nowrap'
+                        overflow='hidden'
+                        textOverflow='clip'
                         fontSize={22}
-                        fontWeight={600}
+                        fontWeight={500}
                     >
                         { name }
                     </Text>
 
-                    <Text w='100%'>
-                        { location }
-                    </Text>
+                    <Flex alignItems='center' w='20%'>
+                        <Icon as={RiStarSFill}/>
+                        <Text>
+                            { classification }
+                        </Text>
+                    </Flex>
+
+                    <Flex alignItems='center' w='100%'>
+                        <Text 
+                            whiteSpace='nowrap'
+                            overflow='hidden'
+                            textOverflow='clip'
+                        >
+                            { location }
+                        </Text>
+                    </Flex>
+
+                    <Flex alignItems='center' w='100%'>
+                        <Icon as={RiPriceTag3Fill}/>
+                        <Text 
+                            whiteSpace='nowrap'
+                            overflow='hidden'
+                            textOverflow='clip'
+                            ml='2'
+                        >
+                            A partir de { price }
+                        </Text>
+                    </Flex>
                     
-                    <Text w='50%'>
-                        { classification }
-                    </Text>
-                    
-                    <Text w='50%'>
-                        { rangeOfPeople }
-                    </Text>
-                    
-                    <Text w='100%'>
-                        { price }
-                    </Text>
                 </Flex>
-                <Button
-                    bg='red'
-                    color='white'
-                    w='80%'
-                >
-                    Pedir orçamento
-                </Button>
             </Flex>
 
         </Flex>

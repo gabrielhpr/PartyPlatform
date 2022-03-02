@@ -151,6 +151,7 @@ export default function HomePage() {
                             >
 
                                 <Input placeholder='O que você procura ?'
+                                    fontSize={19}
                                     id='partyTypeAndServicesInput'
                                     bg='white'
                                     w='100%'
@@ -201,7 +202,7 @@ export default function HomePage() {
 
                                 {/* Menu PartyType onClick and onSearch */}
                                 <Box 
-                                    height={200} 
+                                    height={230} 
                                     width={350}
                                     overflowY="scroll"
                                     display={menuPartyTypeDisp}
@@ -214,9 +215,13 @@ export default function HomePage() {
                                         h='100%'
                                     >
                                         <Text
-                                            bg='white'
                                             h='20%'
-                                            fontSize={20}
+                                            fontSize={19}
+                                            fontWeight={400}
+                                            color='black'
+                                            px='5'
+                                            py='2'
+                                            bg='rgba(0,0,0,0.1)'
                                         >
                                             Qual o tipo da festa ?
                                         </Text>
@@ -230,8 +235,10 @@ export default function HomePage() {
                                                 <Button
                                                     bg='white'
                                                     h='20%'
+                                                    px='5'
                                                     borderRadius={0}
                                                     _focus={{outline:'none'}}
+                                                    _hover={{bg:'rgba(0,0,0,0.1)'}}
                                                     name='partyType'
                                                     value={el}
                                                     onClick={(event) => {
@@ -243,9 +250,10 @@ export default function HomePage() {
                                                     }}
                                                 >
                                                     <Text
-                                                        width='80%'
+                                                        width='100%'
                                                         textAlign='left'
-                                                        fontWeight={600}
+                                                        fontWeight={400}
+                                                        fontSize={18}
                                                     >
                                                         {el}
                                                     </Text>
@@ -329,6 +337,7 @@ export default function HomePage() {
 
 
                             <Input placeholder='Onde ?'
+                                fontSize={19}
                                 bg='white'
                                 w='40%'
                                 h='100%'

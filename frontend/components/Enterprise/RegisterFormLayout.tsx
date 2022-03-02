@@ -4,13 +4,14 @@ import { ReactNode } from "react";
 interface CreateAdLayoutProps {
     question: string;
     subTitle?: string;
+    lastStep?: boolean;
     children: ReactNode;
     handleNextStep: Function;
     handlePreviousStep: Function;
 }
 
 
-export function RegisterFormLayout({ question, subTitle, children, handleNextStep, handlePreviousStep }: CreateAdLayoutProps) {
+export function RegisterFormLayout({ question, subTitle, lastStep=false, children, handleNextStep, handlePreviousStep }: CreateAdLayoutProps) {
     return (
         <Flex
             height="100vh"
@@ -83,7 +84,13 @@ export function RegisterFormLayout({ question, subTitle, children, handleNextSte
                             fontSize={20}
                             onClick={handleNextStep}
                         >
-                            Avançar
+                            {
+                                lastStep 
+                                ?
+                                'Finalizar'
+                                :
+                                'Avançar'
+                            }
                         </Button>
                     </NavLink>
                 </Flex>

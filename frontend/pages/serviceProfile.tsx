@@ -5,6 +5,7 @@ import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill } from "react-icon
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import { useRouter } from "next/router";
+import { ModalServiceProfile } from "../components/ModalServiceProfile";
 
 const serviceNullState = {
     step: 0,
@@ -85,7 +86,7 @@ export default function ServiceProfilePage() {
                         </Flex>
                         
                         <Flex mt='2'>
-                            <Text>São Paulo, SP</Text>
+                            <Text>{service.city}, {service.state}</Text>
                             <Text ml='5'>Ver no mapa</Text>
                         </Flex>
                         
@@ -96,27 +97,43 @@ export default function ServiceProfilePage() {
                                     5,0
                                 </Text>
                             </Flex>
+                            
+                            <ModalServiceProfile 
+                                buttonText="Ver Telefone"
+                                title="Ligue Agora!"
+                                subtitle="Conte para o fornecedor que você
+                                o encontrou pelo Festafy"
+                                icon={RiPhoneFill}
+                                iconColor='black'
+                                content={service.phone}
+                            />
 
-                            <Flex ml='3' alignItems='center'>
-                                <Icon as={RiPhoneFill}/>
-                                <Text ml='1'>
-                                    Ver Tefone
-                                </Text>
-                            </Flex>
+                            {
+                                service.whatsapp != ''
+                                ?
+                                <ModalServiceProfile 
+                                    buttonText="Ver Whatsapp"
+                                    title="Mande Mensagem"
+                                    subtitle="Conte para o fornecedor que você
+                                    o encontrou pelo Festafy"
+                                    icon={RiWhatsappFill}
+                                    iconColor='green'
+                                    content={service.whatsapp}
+                                />
+                                :
+                                <>
+                                </>
+                            }
 
-                            <Flex ml='3' alignItems='center'>
-                                <Icon as={RiWhatsappFill} color='green'/>
-                                <Text ml='1'>
-                                    Ver Whatsapp
-                                </Text>
-                            </Flex>
-
-                            <Flex ml='3' alignItems='center'>
-                                <Icon as={RiMailFill}/>
-                                <Text ml='1'>
-                                    Ver E-mail
-                                </Text>
-                            </Flex>
+                            <ModalServiceProfile 
+                                buttonText="Ver E-mail"
+                                title="Mande um e-mail"
+                                subtitle="Conte para o fornecedor que você
+                                o encontrou pelo Festafy"
+                                icon={RiMailFill}
+                                iconColor='black'
+                                content={service.email}
+                            />
 
                         </Flex>
                     </Flex>                        
@@ -178,29 +195,6 @@ export default function ServiceProfilePage() {
 
                         <Flex w='65%' direction='column' pr='20'>
                             {/* Description about the service */}
-                            <Flex direction='column'
-                                height={1500}
-                            >
-                                <Text
-                                    as='h2'
-                                    fontSize={20}
-                                    fontWeight={700}
-                                >
-                                    Descrição
-                                </Text>
-
-                                <Text as='p'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
-                                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
-                                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
-                                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-                                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim 
-                                    id est laborum.
-                                </Text>
-                            </Flex>
-
-                            {/* Description about the service */}
                             <Flex direction='column'>
                                 <Text
                                     as='h2'
@@ -211,36 +205,9 @@ export default function ServiceProfilePage() {
                                 </Text>
 
                                 <Text as='p'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
-                                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
-                                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
-                                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-                                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim 
-                                    id est laborum.
+                                    {service.serviceDescription}
                                 </Text>
-                            </Flex>
-
-                            {/* Description about the service */}
-                            <Flex direction='column'>
-                                <Text
-                                    as='h2'
-                                    fontSize={20}
-                                    fontWeight={700}
-                                >
-                                    Descrição
-                                </Text>
-
-                                <Text as='p'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
-                                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
-                                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
-                                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-                                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim 
-                                    id est laborum.
-                                </Text>
-                            </Flex>
+                            </Flex>                            
 
                             {/* Usefull details about the service */}
                             <Flex direction='column' my='3'>

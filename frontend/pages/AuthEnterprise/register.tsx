@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ItemList } from "../../components/Enterprise/ItemList";
 import { RegisterFormLayout } from "../../components/Enterprise/RegisterFormLayout";
 import { useRouter } from "next/router";
+import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 
 
 interface enterpriseDataInterf {
@@ -76,6 +77,7 @@ const enterpriseDataNullState = {
 export default function RegisterEnterprise() {
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>( enterpriseDataNullState );
     const routerNext = useRouter();
+    const { register } = useEnterpriseAuthContext();
 
     function handleChange( event: any ) {
         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: event.currentTarget.value});
@@ -84,6 +86,7 @@ export default function RegisterEnterprise() {
 
     function handleSubmit( event: any ) {
         event.preventDefault();
+        register( enterpriseData );
         routerNext.push("/enterpriseAccess");
     }
 
@@ -467,6 +470,7 @@ export default function RegisterEnterprise() {
                     question="Perguntas frequentes sobre o seu serviço"
                     subTitle="Responda essas perguntas para facilitar o 
                     entendimento do cliente sobre os seus serviços"
+                    lastStep={true}
                     handleNextStep={handleSubmit}
                     handlePreviousStep={previousStep}
                 >
