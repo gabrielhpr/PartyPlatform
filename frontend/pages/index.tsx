@@ -84,7 +84,7 @@ export default function HomePage() {
         
             {/* Header */}
             {/*************/}
-            <Flex bg='purple'
+            <Flex bg='brand.purple'
                 w='100%' h={75}
                 alignItems='center'
                 justifyContent='flex-end'
@@ -351,7 +351,7 @@ export default function HomePage() {
                                 h='100%'
                                 //py='7'
                                 borderLeftRadius={0}
-                                bg='purple'
+                                bg='brand.pink'
                                 color='white'
                                 fontSize={18}
                                 fontWeight={900}
@@ -402,7 +402,7 @@ export default function HomePage() {
                 </Carousel>
             </Flex>
 
-            <Flex bg='purple'
+            <Flex bg='brand.white'
                 w='100%' h={75}
             >
             </Flex>   

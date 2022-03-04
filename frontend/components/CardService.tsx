@@ -1,6 +1,11 @@
 import { Flex, Text, Button, Icon, Box } from "@chakra-ui/react";
 import Image from 'next/image'
 import { RiMapPin2Fill, RiMoneyDollarCircleFill, RiPriceTag3Fill, RiStarSFill } from 'react-icons/ri';
+import { Carousel } from 'react-responsive-carousel';
+import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
+import FotoInfantilFem from '../assets/imgs/festaInfantilFeminino1.jpg';
+import FotoInfantilMasc from '../assets/imgs/festaInfantilMasculino1.jpg';
+
 
 interface CardServiceProps {
     name: string;
@@ -8,13 +13,16 @@ interface CardServiceProps {
     classification?: string;
     rangeOfPeople: string;
     price: string;
-    picture: any;
+    photos: string[];
     handleOnClick: (ev: any) => void;
 }
 
 
 
-export function CardService( { name, location, classification, rangeOfPeople, price, picture, handleOnClick } : CardServiceProps ) {
+export function CardService( { name, location, classification, rangeOfPeople, price, photos, handleOnClick } : CardServiceProps ) {
+    //let photo = [FotoDebutante, FotoInfantilFem, FotoInfantilMasc];
+    
+    
     return (
         <Flex
             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
@@ -25,23 +33,68 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
             bg='white'
             h='27.3vw'
             w='21.3vw'
-            onClick={handleOnClick}
             position='relative'
             _hover={{bg: 'rgba(0,0,0,0.1)'}}
-            cursor='pointer'
+            
         >
+            {/* 
             <Flex 
                 h='21.3vw' 
-                overflow='hidden'
+                //overflow='hidden'
                 borderTopRadius={8}
             >
-                 
+            
+            */}
+                <Carousel
+                    //height='21.3vw'
+                    //autoPlay={true}
+                    infiniteLoop
+                    transitionTime={400}
+                    //interval={4000}
+                    showThumbs={false}
+                    showArrows={true}
+                    showIndicators={true}
+                    
+                    
+                >
+
+                        {
+                            photos.map((image, i) => {
+                                return (
+                                        <Box
+                                            h='21.3vw' 
+                                            overflow='hidden'
+                                            borderTopRadius={8}
+                                            //w='100vw'
+                                            justifyContent='center'
+                                            alignItems='center'
+                                            position='relative'
+                                            onClick={handleOnClick}
+                                            cursor='pointer'
+                                        >
+                                            <Image
+                                                src={`http://localhost:5000/images/enterprise/${image}`}
+                                                //height={100}
+                                                //height={100}
+                                                //width='auto'
+                                                layout='fill'
+                                                objectFit='cover'
+                                                //objectPosition=
+                                            /> 
+                                        </Box>
+                                )
+                            })
+                        }
+                    
+                </Carousel>
+                {/*
                 <Image 
                     src={picture}
                     objectFit="cover"
                 />
-
             </Flex>
+                */}
+
         
 
             <Flex 
@@ -51,6 +104,8 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                 justifyContent='center'
                 py='2'
                 px='3'
+                onClick={handleOnClick}
+                cursor='pointer'
             >
                 <Flex 
                     textAlign='left'

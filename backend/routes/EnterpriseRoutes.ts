@@ -3,10 +3,14 @@ const router = require("express").Router();
 const EnterpriseController = require("../controllers/EnterpriseController");
 
 // middleware
+const { imageUpload } = require("../helpers/image-upload");
 ////const verifyToken = require("../helpers/verify-token");
-//const { imageUpload } = require("../helpers/image-upload");
 
-router.post("/register", EnterpriseController.register);
+router.post(
+    "/register", 
+    imageUpload.array('photos'), 
+    EnterpriseController.register
+);
 //router.get("/services", EnterpriseController.services);
 //router.post("/login", UserController.login);
 //router.get("/checkuser", UserController.checkUser);

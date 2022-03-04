@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import api from "../utils/api";
 import { useRouter } from "next/router";
 import { ModalServiceProfile } from "../components/ModalServiceProfile";
+import { ModalImageGallery } from "../components/ModalImageGallery";
 
 const serviceNullState = {
     step: 0,
@@ -42,13 +43,15 @@ const serviceNullState = {
 }
 
 export default function ServiceProfilePage() {
-    const images = [9, 8, 7, 6, 5].map((number) => ({
-        src: `https://www.donaantoniabolos.com.br/bolo-especial/3b.jpg`
-    }));
 
     const routerNext = useRouter();
     const {id, partyType} = routerNext.query;
     const [service, setService] = useState(serviceNullState);
+    const [showAllImages, setShowAllImages] = useState(false);
+
+    function handleShowAllImages() {
+        setShowAllImages(true);
+    }
 
     useEffect(() => {
         api.get('/serviceProfile', {
@@ -145,14 +148,14 @@ export default function ServiceProfilePage() {
                             <Img 
                                 borderLeftRadius={8} 
                                 objectFit='cover'
-                                src='https://www.tuacasa.com.br/wp-content/uploads/2020/11/bolo-aniversario-masculino-00.png'
+                                src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[0]}`}
                             />
                         </Flex>
 
                         <Flex w='50%' h='100%' flexWrap='wrap' >
                             <Flex w='50%' h='50%' pl='2' pb='1'>
                                 <Img 
-                                    src='https://www.tuacasa.com.br/wp-content/uploads/2020/11/bolo-aniversario-masculino-00.png'
+                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[1]}`}
                                     objectFit='cover'
                                 />
                             </Flex>
@@ -160,16 +163,18 @@ export default function ServiceProfilePage() {
                                 <Img 
                                     borderTopRightRadius={8}
                                     objectFit='cover'
-                                    src='https://www.tuacasa.com.br/wp-content/uploads/2020/11/bolo-aniversario-masculino-00.png'
+                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[2]}`}
                                 />
                             </Flex>
                             <Flex w='50%' h='50%' pl='2' pt='1'>
                                 <Img 
-                                    src='https://www.tuacasa.com.br/wp-content/uploads/2020/11/bolo-aniversario-masculino-00.png'
+                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[3]}`}
                                     objectFit='cover'
                                 />
                             </Flex>
                             <Flex w='50%' h='50%' pl='2' pt='1' position='relative'>
+                                
+                                
                                 <Button 
                                     bg='white'
                                     color='black'
@@ -178,11 +183,27 @@ export default function ServiceProfilePage() {
                                     top='50%'
                                     left='50%'
                                     transform='translate(-50%, 80%)'
+                                    onClick={handleShowAllImages}
                                 >
                                     Ver todas fotos
                                 </Button>
+
+                                <ModalImageGallery
+                                    buttonText='Ver todas as fotos'
+                                    content={
+                                        service.photos.split(',').map((image, index) => {
+                                            return {
+                                                'id': `service_${index}`,
+                                                'src': `http://localhost:5000/images/enterprise/${image}`,
+                                                'alt': 'Service',
+                                            }
+                                        })
+                                    }
+                                />
+
+
                                 <Img 
-                                    src='https://www.tuacasa.com.br/wp-content/uploads/2020/11/bolo-aniversario-masculino-00.png'
+                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
                                     borderBottomRightRadius={8}
                                     objectFit='cover'
                                 />
@@ -274,7 +295,7 @@ export default function ServiceProfilePage() {
                                     </Flex>
 
                                     <Button
-                                        bg='red'
+                                        bg='brand.pink'
                                         color='white'
                                         height={12}
                                         fontSize={18}

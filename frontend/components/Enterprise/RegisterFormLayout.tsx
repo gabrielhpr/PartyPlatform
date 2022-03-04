@@ -23,7 +23,7 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false, childre
             <Flex height="100%" width="45%"
                 justifyContent="center" alignItems="center"
                 direction="column"
-                bg="brand.red"
+                bg="brand.blue"
             >
                 <Text as="h2"
                     color="brand.white"
@@ -64,7 +64,7 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false, childre
                 <Flex justifyContent="space-between"
                     alignItems="center"
                     height="8%"
-                    bg="brand.dark_blue"
+                    bg="brand.pink"
                     py="4"
                     px="10"
                 >
@@ -77,8 +77,8 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false, childre
                     </NavLink>
 
                     <NavLink>
-                        <Button bg="brand.red"
-                            color="brand.white"
+                        <Button bg="brand.yellow"
+                            color="brand.white_45"
                             py="6"
                             px="6"
                             fontSize={20}

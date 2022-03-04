@@ -57,7 +57,7 @@ export default function enterpriseAccess() {
 
                             </Flex>
                             <NavLink href='AuthEnterprise/register'>
-                                <Button bg='red' color='white' h={12} fontSize={18}>
+                                <Button bg='brand.pink' color='white' h={12} fontSize={18}>
                                     Cadastre-se gratuitamente!
                                 </Button>
                             </NavLink>
@@ -110,7 +110,7 @@ export default function enterpriseAccess() {
 
                             <Button 
                                 mt="8"
-                                bg="brand.red"
+                                bg="brand.pink"
                                 color="brand.white"
                                 fontSize={18}
                                 py="6"

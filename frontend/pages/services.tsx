@@ -108,7 +108,7 @@ export default function ServicesPage() {
                                             classification='5'
                                             rangeOfPeople='10-100'
                                             price='R$ 500,00'
-                                            picture={FotoDebutante}
+                                            photos={el.photos.split(",")}
                                             handleOnClick={() => handleClick(el)} 
                                         />
                                     );

@@ -40,7 +40,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
     return (
         <Flex as="header"
             width="100%"
-            bg={scrollHeader ? "brand.white" : "brand.dark_blue"}
+            bg={scrollHeader ? "brand.white" : "brand.purple"}
             color="brand.white"
             py="6"
             alignItems="center"

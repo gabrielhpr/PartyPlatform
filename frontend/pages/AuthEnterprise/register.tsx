@@ -4,7 +4,7 @@ import { ItemList } from "../../components/Enterprise/ItemList";
 import { RegisterFormLayout } from "../../components/Enterprise/RegisterFormLayout";
 import { useRouter } from "next/router";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
-
+import Image from 'next/image';
 
 interface enterpriseDataInterf {
     step: number;
@@ -33,7 +33,7 @@ interface enterpriseDataInterf {
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
 
-    photos: string;
+    photos: any[];
 
     answer1: string;
     answer2: string;
@@ -67,7 +67,7 @@ const enterpriseDataNullState = {
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
 
-    photos: '',
+    photos: [],
 
     answer1: '',
     answer2: '',
@@ -78,15 +78,40 @@ export default function RegisterEnterprise() {
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>( enterpriseDataNullState );
     const routerNext = useRouter();
     const { register } = useEnterpriseAuthContext();
+    const [preview, setPreview] = useState([]);
+
+    function handleFileChange( event: any ) {
+        console.log( 'event files images' );
+        console.log( event.currentTarget.files );
+        setPreview(Array.from(event.currentTarget.files));
+        setEnterpriseData({...enterpriseData, [event.currentTarget.name]: [...event.currentTarget.files]});
+    }
 
     function handleChange( event: any ) {
         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: event.currentTarget.value});
         console.log( enterpriseData );
     }
 
-    function handleSubmit( event: any ) {
+    async function handleSubmit( event: any ) {
         event.preventDefault();
-        register( enterpriseData );
+        console.log('entrou no submit!');
+
+        const formData = new FormData;
+    
+        await Object.keys(enterpriseData).forEach((key:any) => {
+            if(key == 'photos') {
+                console.log('entrou no photos object key');
+                for(let i = 0; i < enterpriseData[key].length; i++) {
+                    formData.append('photos', enterpriseData[key][i]);
+                }
+            }
+            else {
+                formData.append(key, enterpriseData[key]);
+            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+        })
+
+        console.log( formData.values );
+        register( formData );
         routerNext.push("/enterpriseAccess");
     }
 
@@ -458,7 +483,55 @@ export default function RegisterEnterprise() {
                     handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
                 >
+                    <Flex direction='column' alignItems='center'>
+                        <Flex w='100%'
+                            justifyContent='center'
+                        >
+                            <Input
+                                w='60%'
+                                type='file'
+                                name='photos'
+                                onChange={handleFileChange}
+                                multiple={true}
+                            />
+                        </Flex>
 
+                        <Flex 
+                            w='100%' 
+                            mt='5'
+                            mx='1'
+                            h={700}
+                            alignItems='center'
+                            justifyContent='center'
+                            flexWrap='wrap'
+                            overflowY='scroll'
+                        >
+                            {
+                                preview.length > 0
+                                ?
+                                preview.map((image, index) => (
+                                    <Flex 
+                                        position='relative'
+                                        h='18vw'
+                                        w='23vw'
+                                        mx='2'
+                                        my='2'
+                                    >
+                                        <Image 
+                                            src={URL.createObjectURL(image)} 
+                                            key={`${enterpriseData.enterpriseName}
+                                            +${index}`} 
+                                            layout="fill"
+                                            objectFit="cover"
+                                        />
+                                    </Flex>    
+                                ))
+                                :
+                                <></>
+                            }
+                        </Flex>
+
+                    </Flex>
 
                 </RegisterFormLayout>
 

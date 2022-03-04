@@ -26,7 +26,6 @@ module.exports = class EnterpriseController {
             serviceDescription,
             enterpriseCategory,
             enterpriseSpecificCategory,
-            photos,
             answer1,
             answer2 
         } = req.body;
@@ -50,6 +49,23 @@ module.exports = class EnterpriseController {
             'enterpriseCategory': enterpriseCategory,
             'enterpriseSpecificCategory': enterpriseSpecificCategory
         }
+
+        // Photos
+        const photos = req.files;
+
+        console.log(req.body);
+        console.log( 'photos: ' );
+        console.log( photos );
+
+        let photosName: string[] = [];
+        photos.map((photo: any) => {
+            photosName.push( photo.filename );
+        });
+        let photosNameString = photosName.toString();
+
+        console.log('photosnamestring');
+        console.log(photosNameString);
+
         await enterpriseModel.insertEnterprise( dataEnterprise );
         
         // Get Enterprise Id
@@ -59,7 +75,6 @@ module.exports = class EnterpriseController {
         console.log('enterprise id: ');
         console.log(result[0]['id']);
 
-
         //Insert Ad
         const tableName = partyMainFocus;
 
@@ -67,7 +82,7 @@ module.exports = class EnterpriseController {
             'id': id,
             'partyMainFocus': partyMainFocus,
             'serviceDescription': serviceDescription,
-            'photos': photos,
+            'photos': photosNameString,
             'answer1': answer1,
             'answer2': answer2
         }

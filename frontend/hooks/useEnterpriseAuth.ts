@@ -51,10 +51,14 @@ export default function useEnterpriseAuth() {
     //         setAuthenticated(true);
     //     }
     // }, []);
+    const options = {
+        headers: {"content-type": "multipart/form-data"}
+    }
 
     async function register(enterprise: EnterpriseData) {
         try {
-            const data = await api.post("/enterprise/register", enterprise).then((response) => {
+            const data = await api.post("/enterprise/register", enterprise, options)
+            .then((response) => {
                 return response.data;
             });
             await authUser(data);

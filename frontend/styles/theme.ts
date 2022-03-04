@@ -5,6 +5,13 @@ export const theme = extendTheme({
 
     colors: {
         brand: {
+            "blue":     "#36C5F0",
+            "pink":     "#FF2167",
+            "yellow":   "#FFC130",
+            "green":    "#35D492",
+            "purple":   "#6C1F6E",
+
+
             "white":        "#FAFAFA",
             "red":          "#FF5955",
             "light_blue":   "#8ABFFF",
@@ -110,7 +117,12 @@ export const theme = extendTheme({
                 bg: 'brand.white',
                 color: 'black',
                 height: '100%',
-            }
+            },
+            '.carousel .control-arrow, .carousel.carousel-slider .control-arrow': {
+                opacity: 1,
+            },
+           
+            
         }
     }
 })
