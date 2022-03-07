@@ -1,9 +1,9 @@
 import { Box, Button, Flex, Input, Stack, Text, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
-import { ItemList } from "../../components/Enterprise/ItemList";
-import { RegisterFormLayout } from "../../components/Enterprise/RegisterFormLayout";
+import { ItemList } from "../../../components/Enterprise/ItemList";
+import { RegisterFormLayout } from "../../../components/Enterprise/RegisterFormLayout";
 import { useRouter } from "next/router";
-import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
+import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import Image from 'next/image';
 
 interface enterpriseDataInterf {
@@ -112,7 +112,6 @@ export default function RegisterEnterprise() {
 
         console.log( formData.values );
         register( formData );
-        routerNext.push("/enterpriseAccess");
     }
 
     function nextStep() {

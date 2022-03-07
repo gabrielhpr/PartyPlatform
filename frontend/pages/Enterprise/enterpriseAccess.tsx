@@ -1,17 +1,29 @@
 import { Box, Flex, Text, Input, Link as NavLink, Button } from "@chakra-ui/react";
 import Image from 'next/image';
-import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
+import { useState } from "react";
+import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
+import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
+import { useRouter } from "next/router";
 
 
 
 
 
 export default function enterpriseAccess() {
-    function handleChange() {
+    const [enterpriseAccessData, setEnterpriseAccessData] = useState({email: '', password:''});
+    const { login } = useEnterpriseAuthContext();
+    const routerNext = useRouter();
 
+    function handleChange( event: any ) {
+        setEnterpriseAccessData({...enterpriseAccessData, [event.currentTarget.name]: event.currentTarget.value });
     }
-    function handleSubmit() {
+    
+    function handleSubmit( event: any ) {
+        event.preventDefault();
+        console.log('entrou no submit');
+        console.log( enterpriseAccessData );
 
+        login( enterpriseAccessData );
     }
 
     return (
@@ -56,7 +68,7 @@ export default function enterpriseAccess() {
                                 </Text>
 
                             </Flex>
-                            <NavLink href='AuthEnterprise/register'>
+                            <NavLink href='/Enterprise/Auth/registerEnterprise'>
                                 <Button bg='brand.pink' color='white' h={12} fontSize={18}>
                                     Cadastre-se gratuitamente!
                                 </Button>

@@ -7,7 +7,7 @@ import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 interface HeaderProps {
     name: string;
     position: 'relative' | 'sticky';
-    type: 'oneColor' | 'changeColor'; 
+    type?: 'oneColor' | 'changeColor'; 
 }
 
 export function Header( {name, position, type='oneColor'} : HeaderProps ) {

@@ -1,11 +1,16 @@
+import bcrypt = require("bcrypt");
+import jwt = require("jsonwebtoken");
+import { nextTick } from "process";
+const createEnterpriseToken = require('../helpers/create-enterprise-token');
+const getToken = require('../helpers/get-token');
 const EnterpriseModel = require('../models/Enterprise');
 const enterpriseModel = new EnterpriseModel();
 
-
 module.exports = class EnterpriseController {
 
+    // Register
     static async register(req: any, res: any) {
-        console.log('register');
+
         const {
             fullName,
             email,
@@ -30,13 +35,17 @@ module.exports = class EnterpriseController {
             answer2 
         } = req.body;
         
+        // Create a password
+        const salt = await bcrypt.genSalt(12);
+        const passwordHash = await bcrypt.hash(password, salt);
+
         // Insert Enterprise
         const dataEnterprise = {
             'fullName': fullName,
             'email': email,
             'phone': phone,
             'whatsapp': whatsapp,
-            'password': password,
+            'password': passwordHash,
             'enterpriseName': enterpriseName,
             'country': country,
             'state': state,
@@ -49,13 +58,9 @@ module.exports = class EnterpriseController {
             'enterpriseCategory': enterpriseCategory,
             'enterpriseSpecificCategory': enterpriseSpecificCategory
         }
-
+        
         // Photos
         const photos = req.files;
-
-        console.log(req.body);
-        console.log( 'photos: ' );
-        console.log( photos );
 
         let photosName: string[] = [];
         photos.map((photo: any) => {
@@ -63,21 +68,24 @@ module.exports = class EnterpriseController {
         });
         let photosNameString = photosName.toString();
 
-        console.log('photosnamestring');
-        console.log(photosNameString);
-
-        await enterpriseModel.insertEnterprise( dataEnterprise );
+        // Try to create ENTERPRISE USER
+        let newEnterprise;
+        try {
+            // Create Enterprise user
+            newEnterprise = await enterpriseModel.insertEnterprise( dataEnterprise );
+        }
+        catch(err) {
+            res.status(500).json({message: err});
+            return;
+        }
         
-        // Get Enterprise Id
-        const result = await enterpriseModel.getEnterpriseId( email );
-        const id = result[0]['id'];
+        // Enterprise Id
+        const id = newEnterprise.id;
 
-        console.log('enterprise id: ');
-        console.log(result[0]['id']);
-
-        //Insert Ad
+        // Table to insert Ad
         const tableName = partyMainFocus;
 
+        // Ad data
         const dataAd = { 
             'id': id,
             'partyMainFocus': partyMainFocus,
@@ -86,10 +94,126 @@ module.exports = class EnterpriseController {
             'answer1': answer1,
             'answer2': answer2
         }
-        await enterpriseModel.insertAd( tableName, dataAd );
 
-        res.status(200).json({ message: "Deu bom!" });
+        // Try to create ENTERPRISE AD
+        try {
+            await enterpriseModel.insertAd( tableName, dataAd );
+        }
+        catch (err) {
+            res.status(500).json({message: err});
+            return;
+        }
+
+        // Try to create ENTERPRISE TOKEN
+        try {
+            // Create Enterprise token
+            await createEnterpriseToken(newEnterprise, req, res);        
+        }
+        catch(err) {
+            res.status(500).json({message: err});
+            return;
+        }
     }
 
+    // Login
+    static async login(req: any, res: any) {
+        const { email, password } = req.body;
 
+        console.log( req.body );
+
+        if(!email) {
+            res.status(422).json({ message: "O e-mail é obrigatório!"});
+            return;
+        }
+
+        if(!password) {
+            res.status(422).json({ message: "A senha é obrigatória!"});
+            return;
+        }
+
+        // check if user exists
+        const enterpriseExists = await enterpriseModel.getEnterpriseByEmail( email );
+
+        if( !enterpriseExists ) {
+            res.status(422).json({ message: "Não há empresa cadastrada com esse email" });
+            return;
+        }
+
+        // check if password matches with db password
+        const checkPassword = await bcrypt.compare(password, enterpriseExists.password);
+
+        if( !checkPassword ) {
+            res.status(422).json({ message: "Senha inválida" });
+            return; 
+        }
+
+        await createEnterpriseToken(enterpriseExists, req, res);
+    }
+
+    // checkUser
+    static async checkEnterprise(req: any, res: any) {
+        let currentEnterprise;
+
+        if(req.headers.authorization) {
+            const token = getToken(req);
+            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+                if(err) {
+                    return res.status(500).send({message: "Token inválido!"});
+                }
+
+                currentEnterprise = await enterpriseModel.getEnterpriseById( decoded.id );
+                currentEnterprise.password = undefined;
+            });
+        }
+        else {
+            currentEnterprise = null;
+        }
+
+        res.status(200).send(currentEnterprise);
+    }
+
+    // Get Enterprise Ads
+    static async getAds(req: any, res: any) {
+        console.log('chegou getAds');
+        let ads;
+        let id;
+
+        if(req.headers.authorization) {
+            console.log('tem token');
+            const token = getToken(req);
+            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+                if(err) {
+                    return res.status(500).send({message: "Token inválido!"});
+                }
+                id = decoded.id;
+            });
+            ads = await enterpriseModel.getAllAds(id);                
+        }
+        
+        res.status(200).json({ ads });
+    }
+
+    static async getSpecificAd(req: any, res: any) {
+        console.log('chegou getSpecific Ad');
+        let ad;
+        let id;
+        const { partyType } = req.query;
+        
+        console.log('req.query: ');
+        console.log( req.query );
+
+        if(req.headers.authorization) {
+            console.log('tem token');
+            const token = getToken(req);
+            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+                if(err) {
+                    return res.status(500).send({message: "Token inválido!"});
+                }
+                id = decoded.id;
+            });
+            ad = await enterpriseModel.getAd(id, partyType);                
+        }
+        
+        res.status(200).json({ ad });
+    }
 }

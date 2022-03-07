@@ -89,7 +89,7 @@ export default function HomePage() {
                 alignItems='center'
                 justifyContent='flex-end'
             >
-                <NavLink href='enterpriseAccess'>
+                <NavLink href='Enterprise/enterpriseAccess'>
                     <Button
                         bg='purple'
                         color='white'

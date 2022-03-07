@@ -43,17 +43,18 @@ export default function useEnterpriseAuth() {
     // Next Router
     const routerNext = useRouter();
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem("token");
-        
-    //     if(token) {
-    //         api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(token)}`;
-    //         setAuthenticated(true);
-    //     }
-    // }, []);
     const options = {
         headers: {"content-type": "multipart/form-data"}
     }
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        
+        if(token) {
+            api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(token)}`;
+            setAuthenticated(true);
+        }
+    }, []);
 
     async function register(enterprise: EnterpriseData) {
         try {
@@ -61,7 +62,7 @@ export default function useEnterpriseAuth() {
             .then((response) => {
                 return response.data;
             });
-            await authUser(data);
+            await authEnterprise(data);
         }
         catch(err) {
             // tratar o erro
@@ -69,28 +70,27 @@ export default function useEnterpriseAuth() {
         }
     }
 
-    async function authUser(data: any) {
-        setAuthenticated(true);
-        //localStorage.setItem("token", JSON.stringify(data.token));
-        //history.push("/overview");
-        routerNext.push("/");
-    }
-
-    async function login(user: any) {
+    async function login(enterprise: any) {
         let msgText = 'Login realizado com sucesso';
         let msgType = "success";
 
         try {
-            const data = await api.post("/users/login", user).then((response) => {
+            const data = await api.post("/enterprise/login", enterprise).then((response) => {
                 return response.data;
             });
-            await authUser(data);
+            await authEnterprise(data);
         }   
         catch(err) {
             console.log( err );
             // msgText = err.response.data.message;
             // msgType = "error";
         }
+    }
+
+    async function authEnterprise(data: any) {
+        setAuthenticated(true);
+        localStorage.setItem("token", JSON.stringify(data.token));
+        routerNext.push("/Enterprise/home");
     }
 
     function logout() {
@@ -101,7 +101,7 @@ export default function useEnterpriseAuth() {
         localStorage.removeItem("token");
         api.defaults.headers.common["Authorization"] = "";
 
-        routerNext.push("/");
+        routerNext.push("/Enterprise/enterpriseAccess");
         //setFlashMessage(msgText, msgType);
     }
 

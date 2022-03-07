@@ -11,9 +11,12 @@ router.post(
     imageUpload.array('photos'), 
     EnterpriseController.register
 );
+router.post("/login", EnterpriseController.login);
+router.get("/checkenterprise", EnterpriseController.checkEnterprise);
+router.get("/ads/ad", EnterpriseController.getSpecificAd);
+router.get("/ads", EnterpriseController.getAds);
+
 //router.get("/services", EnterpriseController.services);
-//router.post("/login", UserController.login);
-//router.get("/checkuser", UserController.checkUser);
 //router.get("/:id", UserController.getUserById);
 /*
 router.patch(
