@@ -12,6 +12,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { MenuServicesOnClick } from '../components/MenuServicesOnClick';
 import { RiBriefcaseLine } from 'react-icons/ri';
 import { useRouter } from 'next/router';
+import { typeOfParties } from '../utils/typeOfParties';
 
 
 
@@ -84,19 +85,27 @@ export default function HomePage() {
         
             {/* Header */}
             {/*************/}
-            <Flex bg='brand.purple'
+            <Flex bg='brand.yellow'
                 w='100%' h={75}
                 alignItems='center'
                 justifyContent='flex-end'
             >
-                <NavLink href='Enterprise/enterpriseAccess'>
+                <NavLink href='Enterprise/enterpriseAccess'
+                    _hover={{
+                        textDecor:'none'
+                    }}
+                >
                     <Button
-                        bg='purple'
-                        color='white'
-                        border='2px solid white'
+                        bg='brand.yellow'
+                        color='brand.dark_blue'
+                        border='2px solid'
+                        borderColor='brand.dark_blue'
                         mr='3'
+                        _hover={{ bg:'#ffcf4d' }}
+                        leftIcon={
+                            <Icon as={RiBriefcaseLine} mr='2'/>
+                        }
                     >
-                        <Icon as={RiBriefcaseLine} mr='2'/>
                         Acesso Empresas
                     </Button>
                 </NavLink>
@@ -227,20 +236,20 @@ export default function HomePage() {
                                         </Text>
 
                                         {
-                                        [
-                                        'Infantil', 'Debutante',
-                                        'Aniversário', 'Outros',
-                                        ].map((el, i) => {
+                                    
+                                        
+                                        
+                                        Object.values(typeOfParties).map((el, i) => {
                                             return(
                                                 <Button
                                                     bg='white'
-                                                    h='20%'
+                                                    h='25%'
                                                     px='5'
                                                     borderRadius={0}
                                                     _focus={{outline:'none'}}
                                                     _hover={{bg:'rgba(0,0,0,0.1)'}}
                                                     name='partyType'
-                                                    value={el}
+                                                    value={el.value}
                                                     onClick={(event) => {
                                                         handleSearchData(event);
                                                         setSearchInputValueFirst('');
@@ -255,7 +264,7 @@ export default function HomePage() {
                                                         fontWeight={400}
                                                         fontSize={18}
                                                     >
-                                                        {el}
+                                                        {el.textToShow}
                                                     </Text>
                                                 </Button>
                                             );
@@ -351,7 +360,7 @@ export default function HomePage() {
                                 h='100%'
                                 //py='7'
                                 borderLeftRadius={0}
-                                bg='brand.pink'
+                                bg='brand.red'
                                 color='white'
                                 fontSize={18}
                                 fontWeight={900}

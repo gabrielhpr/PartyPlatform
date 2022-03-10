@@ -1,5 +1,5 @@
 import { Flex, Icon, Text } from "@chakra-ui/react";
-import { RiCompass3Line, RiGlobalFill, RiSettings3Line, RiStore3Fill, RiStore3Line } from "react-icons/ri";
+import { RiCompass3Line, RiDraftFill, RiGlobalFill, RiSettings3Line, RiStore3Fill, RiStore3Line } from "react-icons/ri";
 import { TopMenuItem } from "./TopMenuItem";
 
 export function TopMenuEnterprise() {
@@ -21,9 +21,15 @@ export function TopMenuEnterprise() {
 
             <TopMenuItem
                 name='Meus anúncios'
-                icon={RiStore3Line}
+                icon={RiDraftFill}
                 href='/Enterprise/ads'
             />
+
+            <TopMenuItem
+                name='Meu negócio'
+                icon={RiStore3Fill}
+                href='/Enterprise/mybusiness'
+            />  
 
             <TopMenuItem
                 name='Minha conta'

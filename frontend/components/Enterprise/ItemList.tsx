@@ -3,12 +3,13 @@ import { Button, Flex, Text } from "@chakra-ui/react";
 interface TypeOfAccommodationItemProps {
     name: string;
     value: string;
+    textToShow: string;
     selectedName: string;
     styleType?: number;
     handleOnClick: Function;
 }
 
-export function ItemList({name, value, selectedName, styleType=1, handleOnClick}: TypeOfAccommodationItemProps) {
+export function ItemList({name, value, textToShow, selectedName, styleType=1, handleOnClick}: TypeOfAccommodationItemProps) {
     return (
         <Button 
             width="100%" 
@@ -36,7 +37,7 @@ export function ItemList({name, value, selectedName, styleType=1, handleOnClick}
                 <Text width="100%" ml="5"
                     fontSize={20}
                 >
-                    {value}
+                    {textToShow}
                 </Text>
             </Flex>
         </Button>

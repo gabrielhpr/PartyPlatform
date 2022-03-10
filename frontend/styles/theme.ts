@@ -5,18 +5,28 @@ export const theme = extendTheme({
 
     colors: {
         brand: {
-            "blue":     "#36C5F0",
-            "pink":     "#FF2167",
-            "yellow":   "#FFC130",
-            "green":    "#35D492",
-            "purple":   "#6C1F6E",
+            "yellow":    "#ffdd7c",
+            "red":       "#FF5851",
+            "blue":      "#3A57B5",
+            "dark_blue": "#021231",
 
+
+
+            "blue_light":"#98dffd",
+            "purple":    "#7541ee",
 
             "white":        "#FAFAFA",
-            "red":          "#FF5955",
-            "light_blue":   "#8ABFFF",
-            "dark_blue":    "#253459",
             "black":        "#000000",
+
+            "yellow_70": "#ffd666",
+            "yellow_65": "#ffcf4d",
+            "yellow_60": "#ffc933",
+            "yellow_55": "#ffc21a",
+            "yellow_50": "#ffbb00",
+            "yellow_45": "#e6a800",
+            "yellow_40": "#cc9600",
+
+            
 
             "light_blue_95":    "#e7f8fd",
             "light_blue_90":    "#cff1fc",

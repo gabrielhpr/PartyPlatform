@@ -2,27 +2,31 @@ import { Flex, Stack, Link as NavLink, Icon, Text, Divider,
     Box, Button } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { RiArrowLeftSLine } from "react-icons/ri";
-import { LeftMenuItemEdit } from "./LeftMenuItem";
+import { LeftMenuItemMyBusiness } from "./LeftMenuItem";
 import Image from 'next/image';
 
 interface LeftMenuEditProps {
     propertyName: string;
-    srcImage: string;
-    stateChanger: Function;
+    srcImage?: string;
+    menuOptions: { 
+        [key: string]: {
+            value: string,
+            textToShow: string
+        }
+    };
+    selectedOption: string;
+    handleOnClick: () => {};
     rest: any;
 }
 
-
-export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: LeftMenuEditProps) {
-    
+export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selectedOption, handleOnClick, ...rest }: LeftMenuEditProps) {
     
     return (
         <Flex 
-            position='sticky'
-            top={5}
-            h='90vh'
+            //position='sticky'
+            //top={5}
+            h='auto'
             bg="brand.dark_blue"
-            color='brand.dark_blue'
             borderTopLeftRadius={8}
             borderBottomLeftRadius={8}
             direction='column'
@@ -30,14 +34,7 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: L
         >
             <Flex justifyContent="flex-start"
                 alignItems="center"
-            >
-                <NavLink display="flex" href="/Enterprise/ads">
-                    <Icon as={RiArrowLeftSLine}
-                        color="brand.white"
-                        fontSize={30}
-                    />
-                </NavLink>
-                
+            >   
                 <Text as="h2"
                     mx="auto"
                     fontSize={25}
@@ -57,11 +54,11 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: L
                 width="100%"
                 position='relative'
             >
-                <Image 
+                {/* <Image 
                     src={srcImage}
                     layout='fill'
                     objectFit="cover"
-                />
+                /> */}
             </Flex>
 
             <Flex bg="brand.red"  height={2}/>
@@ -70,30 +67,21 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: L
                 direction='column'
 
             >
-                <LeftMenuItemEdit
-                    title="Detalhes do anúncio"
-                    subMenu={["Fotos","Informações básicas do anúncio"
-                    ]}
-                    selectedState={true}
+                <LeftMenuItemMyBusiness
+                    title={Object.values(menuOptions)[0].textToShow}
+                    value={Object.values(menuOptions)[0].value}
+                    selectedOption={selectedOption}
+                    handleOnClick={handleOnClick}
                 />
-                <Divider color="white"/>
-
+                <Divider color="white"/>                
                 
-                
-                <LeftMenuItemEdit 
-                    title="Preço"
-                    subMenu={["Preço"]}
+                <LeftMenuItemMyBusiness
+                    title={Object.values(menuOptions)[1].textToShow}
+                    value={Object.values(menuOptions)[1].value}
+                    selectedOption={selectedOption}
+                    handleOnClick={handleOnClick}
                 />
                 <Divider color="white"/>
-
-
-                <LeftMenuItemEdit 
-                    title="Políticas e Regras"
-                    subMenu={["Políticas e Regras"]}
-                />
-                <Divider color="white"/>
-               
-
             </Flex>
 
         </Flex>

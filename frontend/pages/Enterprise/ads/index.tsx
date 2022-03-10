@@ -24,6 +24,8 @@ export default function AdsEnterprise() {
             .then((response) => {
                 setAds( response.data.ads );
                 console.log( response.data.ads );
+                console.log( ads.length );
+                
             });
         }
         catch( err ) {
@@ -47,37 +49,45 @@ export default function AdsEnterprise() {
         <Box>
             <Header name="" position="relative" />
             <TopMenuEnterprise />
-
-
            
             <Box
                 boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                 borderRadius={8} 
                 mx="24" mt="5"
-                px="5" pb="5"
+                p="10"
             >
 
-                
-                <Stack direction="row" spacing={18}>
+                <Stack direction="row" spacing={18}
+                    justifyContent='center'
+                    alignItems='center'
+                >
+                    
+                    {/* Create New Add */}
+                    {
+                        ads.length <= 2
+                        ?
+                        <NavLink href="/Enterprise/ads/create">
+                            <Flex 
+                                boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                borderRadius={8} 
+                                bg="brand.white"                        
+                                color="brand.red"
+                                _hover={{bg:"gray.50"}}
+                                justifyContent="center"
+                                alignItems="center"
+                                fontSize={40}
+                                height={150}
+                                width={250}
+                            >
+                                <Icon as={RiAddLine}/>
+                            </Flex>
+                        </NavLink>
+                        :
+                        <>
+                        </>
+                    }
 
-                    <NavLink href="/ads/create">
-                        <Flex 
-                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                            borderRadius={8} 
-                            bg="brand.white"                        
-                            color="brand.red"
-                            _hover={{bg:"gray.50"}}
-                            justifyContent="center"
-                            alignItems="center"
-                            fontSize={40}
-                            height={150}
-                            width={250}
-
-                        >
-                            <Icon as={RiAddLine}/>
-                        </Flex>
-                    </NavLink>
-
+                    {/* Enterprise Ads */}
                     {
                         ads.map((el, index) => {
                             return(
@@ -93,11 +103,7 @@ export default function AdsEnterprise() {
                             )                            
                         })
                     }
-
-                    <NavLink href="/ads/edit">
-                        edit 2
-                    </NavLink>
-
+                    
                 </Stack>
                 
             </Box>

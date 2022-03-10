@@ -13,7 +13,7 @@ export function HeaderMenuItem({ title, pathTo, scroll }: MenuItemProps) {
             _focus={{outline:"none"}}
         >
             <Text textTransform="uppercase"
-                color={scroll ? "brand.dark_blue": "brand.white"}
+                color={scroll ? "brand.dark_blue": "brand.dark_blue"}
                 fontWeight={600}
                 _hover={{color:"brand.white_80"}}
             >

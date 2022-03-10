@@ -4,6 +4,7 @@ import { useState } from "react";
 import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 import { useRouter } from "next/router";
+import { Header } from "../../components/Header";
 
 
 
@@ -29,24 +30,24 @@ export default function enterpriseAccess() {
     return (
         <Box>
             {/* Header */}
-            <Box w='100%' h={20} bg='gray'>
-
-            </Box>
-
+            <Header name="" position='relative' />
             
             <Flex w='100%' h={500} position='relative' 
                 justifyContent='center'
             >
+                {/* 
                 <Image src={FotoDebutante}
                     layout='fill'
                     objectFit='cover'
                     objectPosition='center'
                 />
                 
+                */}
+                
                 {/* Shadow */}
                 <Flex w='100%' h='100%'
                     justifyContent='center'
-                    bg='rgba(0,0,0,0.45)' 
+                    bg='rgba(0,0,0,0.80)' 
                     zIndex={3}
                 >
 
@@ -122,7 +123,7 @@ export default function enterpriseAccess() {
 
                             <Button 
                                 mt="8"
-                                bg="brand.pink"
+                                bg="brand.red"
                                 color="brand.white"
                                 fontSize={18}
                                 py="6"

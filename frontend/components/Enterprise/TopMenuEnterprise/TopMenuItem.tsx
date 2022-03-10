@@ -17,20 +17,21 @@ export function TopMenuItem({name, icon, href}: TopMenuItemProps) {
         >
             <Flex direction='column' 
                 borderBottom='4px solid'
-                borderColor='brand.green'
+                borderColor={name=='Meus anúncios' ? 'brand.dark_blue' : 'brand.white'}
                 h='100%'
                 alignItems='center'
                 justifyContent='center'
                 _hover={{bg:'brand.white_85'}}
                 px='4'
+                bg='brand.white'
             >
                     <Icon as={icon} 
-                        color='brand.purple'
+                        color='brand.dark_blue'
                         fontSize={33}
                     />
                     <Text
                         mt='2'
-                        color='brand.purple'
+                        color='brand.dark_blue'
                         fontSize={17}
                         fontWeight={500}
                     >

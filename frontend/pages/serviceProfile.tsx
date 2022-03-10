@@ -7,6 +7,7 @@ import api from "../utils/api";
 import { useRouter } from "next/router";
 import { ModalServiceProfile } from "../components/ModalServiceProfile";
 import { ModalImageGallery } from "../components/ModalImageGallery";
+import { Header } from "../components/Header";
 
 const serviceNullState = {
     step: 0,
@@ -45,7 +46,6 @@ const serviceNullState = {
 export default function ServiceProfilePage() {
 
     const routerNext = useRouter();
-    const {id, partyType} = routerNext.query;
     const [service, setService] = useState(serviceNullState);
     const [showAllImages, setShowAllImages] = useState(false);
 
@@ -54,6 +54,11 @@ export default function ServiceProfilePage() {
     }
 
     useEffect(() => {
+        if( !routerNext.isReady ) {
+            return;
+        }
+        const {id, partyType} = routerNext.query;
+
         api.get('/serviceProfile', {
                 params: {
                     id: id,
@@ -64,24 +69,36 @@ export default function ServiceProfilePage() {
                 console.log(response.data.service[0]);
                 setService(response.data.service[0]);
             })
-    }, []);
+    }, [routerNext.query]);
 
     return (
         <Box>
+            <Header name="" position="relative" />
+
             {/* Content */}
-            <Flex w='100%' justifyContent='center'>
-                <Flex w='70%' direction='column'>
+            <Flex w='100%' justifyContent='center'
+                bg='brand.white'
+            >
+                <Flex w='80%' direction='column'
+                    bg='white' px={34}
+                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                    borderRadius={8}
+                    mt='5'
+                >
 
                     {/* Details about the service */}
                     <Flex direction='column'>
-                        <Flex alignItems='flex-end'>
+                        <Flex alignItems='flex-end' mt='5'>
                             <Text as='h1'
                                 fontSize={30}
-                                fontWeight={400}
+                                fontWeight={500}
                             >
                                 {service.enterpriseName}
                             </Text>
-                            <Text ml='3' border='2px solid red' borderRadius={5}
+                            <Text ml='3' 
+                                border='2px solid'
+                                borderColor='brand.red'
+                                borderRadius={5}
                                 p='1'
                             >
                                 Premium
@@ -176,7 +193,7 @@ export default function ServiceProfilePage() {
                                 
                                 
                                 <Button 
-                                    bg='white'
+                                    bg='brand.yellow'
                                     color='black'
                                     w='70%'
                                     position='absolute'
@@ -295,7 +312,7 @@ export default function ServiceProfilePage() {
                                     </Flex>
 
                                     <Button
-                                        bg='brand.pink'
+                                        bg='brand.red'
                                         color='white'
                                         height={12}
                                         fontSize={18}

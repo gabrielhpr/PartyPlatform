@@ -87,15 +87,18 @@ module.exports = class EnterpriseModel {
         console.log('ads no model');
         console.log( ads );
 
-        return result_infantil;
+        return ads;
     }
 
     async getAd( id: number, partyType: string ) {
+        console.log('entrou getAd');
+        
         var query_select= `SELECT * FROM ${partyType+'Ads'} WHERE id = ${id}`;
     
         var result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        console.log('saiu getAd');
         
-        return result;
+        return result[0];
     }
 
     async getEnterpriseByEmail( email: string ) {
@@ -114,7 +117,42 @@ module.exports = class EnterpriseModel {
         return result[0];
     }
 
-    update() {
-        console.log('update');
+    async updateAd( id:number, partyType: string, data: any ){
+        let objKeys = Object.keys(data);
+
+        const query_update = `
+            UPDATE ${partyType+'Ads'} 
+            SET serviceDescription = '${data.serviceDescription}',
+                answer1 = '${data.answer1}',
+                answer2 = '${data.answer2}'
+            WHERE id = ${id}
+        `;
+
+        await connQuery( query_update ).catch((err:any) => {throw err});
+    
     }
+
+    async updateEnterprise( id: number, data: any ){
+        const query_update = `
+            UPDATE Enterprise
+            SET fullName = '${data.fullName}',
+                email = '${data.email}',
+                phone = '${data.phone}',
+                whatsapp = '${data.whatsapp}',
+                password = '${data.password}',
+                enterpriseName = '${data.enterpriseName}',
+                country = '${data.country}',
+                state = '${data.state}',
+                city = '${data.city}',
+                address = '${data.address}',
+                addressNumber = '${data.addressNumber}',
+                instagram = '${data.instagram}',
+                facebook = '${data.facebook}',
+                website = '${data.website}'
+            WHERE id = ${id}
+        `;
+
+        await connQuery( query_update ).catch((err:any) => {throw err});
+    }
+
 }

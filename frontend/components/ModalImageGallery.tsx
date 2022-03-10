@@ -18,8 +18,8 @@ export function ModalImageGallery( {buttonText, content }: ModalImageGalleryProp
     return (
         <>
             <Button 
-                bg='white'
-                color='black'
+                bg='brand.white'
+                color='brand.dark_blue'
                 w='70%'
                 position='absolute'
                 top='50%'

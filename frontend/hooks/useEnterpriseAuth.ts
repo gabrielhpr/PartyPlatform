@@ -37,6 +37,16 @@ interface EnterpriseData {
     answer2: string;
 }
 
+interface AdData {
+    partyMainFocus: string;
+    serviceDescription: string;
+
+    photos: string;
+
+    answer1: string;
+    answer2: string;
+}
+
 export default function useEnterpriseAuth() {
 
     const [authenticated, setAuthenticated] = useState(false);
@@ -55,6 +65,18 @@ export default function useEnterpriseAuth() {
             setAuthenticated(true);
         }
     }, []);
+
+    async function createAd(adData: AdData) {
+        try {
+            await api.post("/enterprise/ads/create", adData, options)
+            .then((response) => {
+                return response.data;
+            });
+        }
+        catch( err ) {
+            console.log( err );
+        }
+    }
 
     async function register(enterprise: EnterpriseData) {
         try {
@@ -105,6 +127,6 @@ export default function useEnterpriseAuth() {
         //setFlashMessage(msgText, msgType);
     }
 
-    return { authenticated, register, logout, login };
+    return { authenticated, register, createAd, login, logout };
 }
 

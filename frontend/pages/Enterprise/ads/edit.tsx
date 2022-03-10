@@ -8,46 +8,98 @@ import { useEffect, useState } from "react";
 import { AdDetailsEdit } from "../../../components/Enterprise/Ads/Edit/AdDetails";
 import api from "../../../utils/api";
 import { useRouter } from "next/router";
-
-
+import { typeOfParties } from "../../../utils/typeOfParties";
 
 
 export default function EditAdsEnterprise() {
     const [componentToLoad, setComponentToLoad] = useState("Detalhes do anúncio");
     const [adData, setAdData] = useState({});
+    const [hasToUpdate, setHasToUpdate] = useState(false);
     const routerNext = useRouter();
-    const { partyType } = routerNext.query;
     
+    
+    
+    // GetData
     useEffect(() => {
-       
-        
+        if( !routerNext.isReady ) {
+            return;
+        }
         const token = localStorage.getItem("token");
+        const { partyType } = routerNext.query;
 
         try {
-            api.get("/enterprise/ads/ad", {
-                params: {
-                    partyType: partyType
-                },
+            api.get(`/enterprise/ads/${partyType}`, {
                 headers: {
                     'Authorization': `Bearer ${JSON.parse(token)}`
                 }
             })
             .then((response) => {
-                setAdData( response.data.ad[0] ); 
+                setAdData( response.data.ad );                 
             });
         }
         catch( err ) {
             console.log( err );
         }
 
-    }, []);
+    }, [routerNext.query]);
 
-    function saveDataChanged( data: {name: string, value: string|number} ) {
-        console.log( event );
-        setAdData({...adData, [data.name]: data.value });
+    // Update Ad
+    useEffect(() => {
+        if( !routerNext.isReady ) {
+            return;
+        }
+
+        if ( !hasToUpdate ) {            
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+        const formData = new FormData;
+    
+        Object.keys(adData).forEach((key:any) => {
+            if(key == 'photosNew') {
+                console.log('entrou no photos object key');
+                for(let i = 0; i < adData[key].length; i++) {
+                    formData.append('photosNew', adData[key][i]);
+                }
+            }
+            else {
+                formData.append(key, adData[key]);
+            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+        })
+
+        console.log('formData');
+        console.log(formData);
         
-        //setAdData({...adData, [event.currentTarget.name]: event.currentTarget.value});
-        //console.log( event.currentTarget.value );
+        try {
+            const { partyType } = routerNext.query;
+
+            api.patch(
+            `/enterprise/ads/edit/${partyType}`,
+             formData, 
+             {
+                headers: {
+                    "content-type": "multipart/form-data",
+                    'Authorization': `Bearer ${JSON.parse(token)}`
+                }
+             });
+        }
+        catch(err) {
+            // tratar o erro
+            console.log(err);
+        }
+        setHasToUpdate(false);
+
+    }, [adData, hasToUpdate]);
+
+
+
+    async function saveDataChanged( data: {name: string, value: string|number} ) {
+        console.log( data );
+        setHasToUpdate(true);
+        setAdData({...adData, [data.name]: data.value });
+        console.log('antes do formData');
+        console.log(adData);
     }
 
     return (
@@ -71,7 +123,7 @@ export default function EditAdsEnterprise() {
                 {/* Left Menu 
             */}
                 <LeftMenuEdit 
-                    propertyName={adData.partyMainFocus}
+                    propertyName={typeOfParties[adData.partyMainFocus].textToShow}
                     srcImage={`http://localhost:5000/images/enterprise/${adData?.photos.split(",")[0]}`}
                     stateChanger={setComponentToLoad}
                     w='25%'

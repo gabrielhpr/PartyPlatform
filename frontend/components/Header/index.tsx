@@ -40,8 +40,8 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
     return (
         <Flex as="header"
             width="100%"
-            bg={scrollHeader ? "brand.white" : "brand.purple"}
-            color="brand.white"
+            bg={scrollHeader ? "brand.yellow" : "brand.yellow"}
+            color="brand.dark_blue"
             py="6"
             alignItems="center"
             maxHeight={70}
@@ -63,6 +63,12 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                     <Flex width="70%" justifyContent="flex-end">
                         <Flex>
                             <Button
+                                bg='none'
+                                border="2px solid"
+                                borderColor={"brand.dark_blue"}
+                                color={"brand.dark_blue"}
+                                transition="0.3s"
+                                _hover={{bg:"brand.yellow_60", color:"brand.dark_blue"}}
                                 onClick={handleLogout}
                             >
                                 Logout
@@ -96,8 +102,8 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                             >
                                 <Button bg="none"
                                     border="2px solid"
-                                    borderColor={scrollHeader ? "brand.dark_blue": "brand.white"}
-                                    color={scrollHeader ? "brand.dark_blue": "brand.white"}
+                                    borderColor={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
+                                    color={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
                                     transition="0.3s"
                                     _hover={{bg:"brand.white", color:"brand.dark_blue"}}
                                 >

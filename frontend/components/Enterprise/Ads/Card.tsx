@@ -18,7 +18,7 @@ export function CardAds({ name, location, typeOfParty, classification, price, ph
             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
             borderRadius={8} 
             direction='column'
-            bg='white'
+            bg='brand.white'
             h='30.3vw'
             w='21.3vw'
             position='relative'
@@ -26,9 +26,13 @@ export function CardAds({ name, location, typeOfParty, classification, price, ph
         >
 
             <Flex justifyContent='center'
+                borderTopRadius={8}
                 alignItems='center'
-                fontWeight={500}
-                h='3vw'
+                fontWeight={600}
+                fontSize={22}
+                h='4vw'
+                bg='brand.dark_blue'
+                color='brand.white'
             >
                 { typeOfParty }
             </Flex>
