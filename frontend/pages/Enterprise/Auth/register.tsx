@@ -5,6 +5,9 @@ import { RegisterFormLayout } from "../../../components/Enterprise/RegisterFormL
 import { useRouter } from "next/router";
 import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import Image from 'next/image';
+import { enterpriseCategory, enterpriseSpecificCategory, typeOfParties,
+specificQuestions } from "../../../utils/typeOfParties";
+import { TextSpanInput } from "../../../components/Enterprise/TextSpanInput";
 
 interface enterpriseDataInterf {
     step: number;
@@ -35,8 +38,7 @@ interface enterpriseDataInterf {
 
     photos: any[];
 
-    answer1: string;
-    answer2: string;
+    answers: string[];
 }
 
 const enterpriseDataNullState = {
@@ -69,15 +71,14 @@ const enterpriseDataNullState = {
 
     photos: [],
 
-    answer1: '',
-    answer2: '',
+    answers: []
 }
 
 
 export default function RegisterEnterprise() {
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>( enterpriseDataNullState );
     const routerNext = useRouter();
-    const { register } = useEnterpriseAuthContext();
+    const { registerEnterprise } = useEnterpriseAuthContext();
     const [preview, setPreview] = useState([]);
 
     function handleFileChange( event: any ) {
@@ -111,7 +112,7 @@ export default function RegisterEnterprise() {
         })
 
         console.log( formData.values );
-        register( formData );
+        registerEnterprise( formData );
     }
 
     function nextStep() {
@@ -127,22 +128,35 @@ export default function RegisterEnterprise() {
 
         case 0:
             return (
-                <Flex h='100vh' w='100vw' justifyContent='center'
-                    alignItems='center' direction='column'
+                <RegisterFormLayout 
+                    question="Seja bem-vindo ao Cadastro Gratuito do Festafy!"
+                    handleNextStep={nextStep}
+                    handlePreviousStep={previousStep}
+                    showFooterMenu={false}
+                    style="yellow"
                 >
-                    <Text 
-                        mb='20'
-                        fontSize={32} fontWeight={600}
+                    <Flex direction='column'
+                        alignItems='center'
                     >
-                        Seja bem-vindo ao Cadastro Gratuito do Festafy!
-                    </Text>
-
-                    <Button bg='red' color='white'
-                        onClick={nextStep}
-                    >
-                        Começar cadastro!
-                    </Button>
-                </Flex>
+                        <Text
+                            fontWeight={500}
+                            fontSize={30}
+                        >
+                            Fique visível para centenas de clientes!
+                        </Text>
+                        <Button 
+                            mt='10'
+                            bg='brand.red' color='white'
+                            onClick={nextStep}
+                            fontSize={24}
+                            p='7'
+                            w='60%'
+                        >
+                            Começar cadastro!
+                        </Button>
+                    </Flex>
+                
+                </RegisterFormLayout>
             );
         
         {/* Dados de Contato */}
@@ -153,39 +167,40 @@ export default function RegisterEnterprise() {
                     question="Dados de contato"
                     handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
+                    style='dark'
                 >
                     <Stack direction='column' spacing={4} w='50%'>
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Nome completo 
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Nome completo"
+                            />
                             <Input type='text' name='fullName' onChange={handleChange}
                                 value={enterpriseData.fullName}
                             />
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                E-mail
-                            </Text>
+                            <TextSpanInput
+                                textToShow="E-mail"
+                            />
                             <Input type='email' name='email' onChange={handleChange} 
                                 value={enterpriseData.email}
                             />
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Telefone/Celular
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Telefone/Celular"
+                            />
                             <Input type='number' name='phone' 
                                 value={enterpriseData.phone} onChange={handleChange} 
                             />
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                WhatsApp
-                            </Text>
+                            <TextSpanInput
+                                textToShow="WhatsApp"
+                            />
                             <Input type='number' name='whatsapp' 
                                 value={enterpriseData.whatsapp} onChange={handleChange} 
                             />
@@ -202,21 +217,22 @@ export default function RegisterEnterprise() {
                     question="Dados de acesso"
                     handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
+                    style='dark'
                 >
                     <Stack direction='column' spacing={4} w='50%'>
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Usuário - Email cadastrado na página anterior 
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Usuário - Email cadastrado na página anterior"
+                            />
                             <Input type='text' value={enterpriseData.email}
                                 disabled={true} 
                             />
                         </Flex>
                         
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Senha  
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Senha"
+                            />
                             <Input type='password' name='password' 
                                 value={enterpriseData.password} 
                                 onChange={handleChange} 
@@ -224,9 +240,9 @@ export default function RegisterEnterprise() {
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Confirme a sua senha
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Confirme a sua senha"
+                            />
                             <Input type='password' name='passwordConfirmation' 
                                 value={enterpriseData.passwordConfirmation}    
                                 onChange={handleChange} 
@@ -243,12 +259,13 @@ export default function RegisterEnterprise() {
                     question="Sobre a sua empresa"
                     handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
+                    style='dark'
                 >
                     <Stack direction='column' spacing={4} w='50%'>
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Nome da empresa
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Nome da empresa"
+                            />
                             <Input type='text' name='enterpriseName' 
                                 value={enterpriseData.enterpriseName}
                                 onChange={handleChange} 
@@ -256,9 +273,9 @@ export default function RegisterEnterprise() {
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                País
-                            </Text>
+                            <TextSpanInput
+                                textToShow="País"
+                            />
                             <Input type='text' name='country' 
                                 value={enterpriseData.country}
                                 onChange={handleChange} 
@@ -266,9 +283,9 @@ export default function RegisterEnterprise() {
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Estado
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Estado"
+                            />
                             <Input type='text' name='state' 
                                 value={enterpriseData.state}
                                 onChange={handleChange}
@@ -276,9 +293,9 @@ export default function RegisterEnterprise() {
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Cidade
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Cidade"
+                            />
                             <Input type='text' name='city' 
                                 value={enterpriseData.city}
                                 onChange={handleChange}
@@ -286,18 +303,18 @@ export default function RegisterEnterprise() {
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Endereço
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Endereço"
+                            />
                             <Input type='text' name='address'
                                 value={enterpriseData.address} 
                                 onChange={handleChange} 
                             />
                         </Flex>
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Número
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Número de endereço"
+                            />
                             <Input type='number' name='addressNumber' 
                                 value={enterpriseData.addressNumber}
                                 onChange={handleChange} 
@@ -313,12 +330,13 @@ export default function RegisterEnterprise() {
                     question="Redes sociais da sua empresa"
                     handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
+                    style='dark'
                 >
                     <Stack direction='column' spacing={4} w='50%'>
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Instagram
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Instagram"
+                            />
                             <Input type='text' name='instagram' 
                                 value={enterpriseData.instagram}
                                 onChange={handleChange} 
@@ -326,9 +344,9 @@ export default function RegisterEnterprise() {
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Facebook
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Facebook"
+                            />
                             <Input type='text' name='facebook' 
                                 value={enterpriseData.facebook}
                                 onChange={handleChange} 
@@ -336,9 +354,9 @@ export default function RegisterEnterprise() {
                         </Flex>
 
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Site próprio
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Site Próprio"
+                            />
                             <Input type='text' name='website' 
                                 value={enterpriseData.website}
                                 onChange={handleChange}
@@ -362,15 +380,14 @@ export default function RegisterEnterprise() {
                         spacing={5}
                     >
                         {
-                        [
-                        'Infantil', '15 anos (Debutante)', 'Outros aniversários'
-                        ].map((el, i) => {
+                        Object.values(typeOfParties).map((el, i) => {
                             return(
                                 
                                 <ItemList
                                     styleType={2}
                                     name="partyMainFocus"
-                                    value={el}
+                                    textToShow={el.textToShow}
+                                    value={el.value}
                                     selectedName={enterpriseData.partyMainFocus}
                                     handleOnClick={handleChange}
                                 />
@@ -395,9 +412,9 @@ export default function RegisterEnterprise() {
                 >
                     <Flex direction='column' w='50%'>
                         <Flex direction='column'>
-                            <Text as='span'>
-                                Descrição
-                            </Text>
+                            <TextSpanInput
+                                textToShow="Descrição"
+                            />
                             <Textarea h={300} resize='none' name='serviceDescription'
                                 onChange={handleChange} 
                             />
@@ -418,21 +435,17 @@ export default function RegisterEnterprise() {
                         spacing={5}
                     >
                         {
-                        [
-                        'Espaço para festas', 'Prestador de serviço',
-                        'Vendas de produtos'
-                        ].map((el, i) => {
+                        Object.values(enterpriseCategory).map((el, i) => {
                             return(
-                                
                                 <ItemList
                                     styleType={2}
                                     name="enterpriseCategory"
-                                    value={el}
+                                    value={el.value}
+                                    textToShow={el.textToShow}
+                                    description={el.description}
                                     selectedName={enterpriseData.enterpriseCategory}
                                     handleOnClick={handleChange}
                                 />
-                                
-                                
                             );
                         })
                         }
@@ -450,17 +463,23 @@ export default function RegisterEnterprise() {
                     handlePreviousStep={previousStep}
                 >
                     <Stack direction="column" 
-                        spacing={5}
+                        spacing={5} 
+                        alignItems='center'
+                        justifyContent='center'
+                        flexWrap='wrap'
+                        w='80%' h='80vh'
                     >
                         {
-                        [
-                        'Fotografia', 'Decoração'
-                        ].map((el, i) => {
+                        enterpriseSpecificCategory[enterpriseData.enterpriseCategory]
+                        .map((el, i) => {
                             return(
                                 <ItemList
                                     styleType={2}
+                                    width='40%'
                                     name="enterpriseSpecificCategory"
-                                    value={el}
+                                    textAlign='center'
+                                    value={el.value}
+                                    textToShow={el.textToShow}
                                     selectedName={enterpriseData.enterpriseSpecificCategory}
                                     handleOnClick={handleChange}
                                 />
@@ -546,50 +565,68 @@ export default function RegisterEnterprise() {
                     handleNextStep={handleSubmit}
                     handlePreviousStep={previousStep}
                 >
-                    <Stack direction='column' justifyContent='center'
+                    <Stack direction='column' 
+                        justifyContent='flex-start'
                         spacing={5}
                         alignItems='center'
+                        overflowY='scroll'
                         w='100%'
+                        h='90%'
+                        //overflowWrap='wrap'
                     >
+                        {
+                        enterpriseData.enterpriseCategory == 'Espaco'
+                        ?
+                        specificQuestions['Espaco']
+                        .map((el, index) => {
+                            return (
+                                <Flex direction='column' bg='white'
+                                    w='60%'  p='5'
+                                    justifyContent='center'
+                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                    borderRadius={8} 
+                                    
+                                >
+                                    <Text 
+                                        fontSize={22}
+                                        mb='3'
+                                    >
+                                        {(index+1)+') '+el}
+                                    </Text>
+                                    <Input type='text' name='answer1' 
+                                        //value={`${enterpriseData.answer+}`}
+                                        onChange={handleChange} 
+                                    />
+                                </Flex>
+                            )
+                        })
+                        :
+                        specificQuestions['Servico'][enterpriseData.enterpriseSpecificCategory]
+                        .map((el, index) => {
+                            return (
+                                <Flex direction='column' bg='white'
+                                    w='60%'  p='5'
+                                    justifyContent='center'
+                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                    borderRadius={8} 
+                                    
+                                >
+                                    <Text 
+                                        fontSize={22}
+                                        mb='3'
+                                    >
+                                        {el}
+                                    </Text>
+                                    <Input type='text' name='answer1' 
+                                        //value={`${enterpriseData.answer+}`}
+                                        onChange={handleChange} 
+                                    />
+                                </Flex>
+                            )
+                        })
 
-                        <Flex direction='column' bg='white'
-                            w='60%'  p='5'
-                            justifyContent='center'
-                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                            borderRadius={8} 
-                            
-                        >
-                            <Text 
-                                fontSize={22}
-                                mb='3'
-                            >
-                                1-) A partir de qual preço posso contratar o seu serviço ?
-                            </Text>
-                            <Input type='text' name='answer1' 
-                                value={enterpriseData.answer1}
-                                onChange={handleChange} 
-                            />
-                        </Flex>
-
-
-                        <Flex direction='column' bg='white'
-                            w='60%'  p='5'
-                            justifyContent='center'
-                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                            borderRadius={8} 
-                        >
-                            <Text 
-                                fontSize={22}
-                                mb='3'
-                            >
-                                2-) A partir de qual preço posso contratar o seu serviço ?
-                            </Text>
-                            <Input type='text' name='answer2'
-                                value={enterpriseData.answer2} 
-                                onChange={handleChange} 
-                            />
-                        </Flex>
-
+                        }
+                        
                     </Stack>
 
                 </RegisterFormLayout>

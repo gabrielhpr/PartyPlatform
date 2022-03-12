@@ -2,7 +2,7 @@ import { Box, Flex, Text, Input, Link as NavLink, Button } from "@chakra-ui/reac
 import Image from 'next/image';
 import { useState } from "react";
 import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
-import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
+import { useUserAuthContext } from "../../context/userContext";
 import { useRouter } from "next/router";
 import { Header } from "../../components/Header";
 
@@ -10,21 +10,21 @@ import { Header } from "../../components/Header";
 
 
 
-export default function enterpriseAccess() {
-    const [enterpriseAccessData, setEnterpriseAccessData] = useState({email: '', password:''});
-    const { loginEnterprise } = useEnterpriseAuthContext();
+export default function userAccess() {
+    const [userAccessData, setUserAccessData] = useState({email: '', password:''});
+    const { loginUser } = useUserAuthContext();
     const routerNext = useRouter();
 
     function handleChange( event: any ) {
-        setEnterpriseAccessData({...enterpriseAccessData, [event.currentTarget.name]: event.currentTarget.value });
+        setUserAccessData({...userAccessData, [event.currentTarget.name]: event.currentTarget.value });
     }
     
     function handleSubmit( event: any ) {
         event.preventDefault();
         console.log('entrou no submit');
-        console.log( enterpriseAccessData );
+        console.log( userAccessData );
 
-        loginEnterprise( enterpriseAccessData );
+        loginUser( userAccessData );
     }
 
     return (
@@ -61,15 +61,15 @@ export default function enterpriseAccess() {
                                 <Text as='h2' fontSize={30} fontWeight={600}
                                     mb='2'
                                 >
-                                    Anuncie o seu serviço aqui!
+                                    Cadastre-se
                                 </Text>
 
                                 <Text as='h3' fontSize={20} fontWeight={500}>
-                                    Fique visível para centenas de novos clientes
+                                    Encontre diversos fornecedores
                                 </Text>
 
                             </Flex>
-                            <NavLink href='/Enterprise/Auth/register'>
+                            <NavLink href='/User/Auth/register'>
                                 <Button bg='brand.red' color='white' h={12} fontSize={18}>
                                     Cadastre-se gratuitamente!
                                 </Button>

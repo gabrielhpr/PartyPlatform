@@ -10,7 +10,6 @@ import { RiFilter2Fill } from "react-icons/ri";
 import { Footer } from "../components/Footer";
 
 
-
 export default function ServicesPage() {
     const [services, setServices] = useState([]);
     const routerNext = useRouter();
@@ -57,6 +56,11 @@ export default function ServicesPage() {
     return (
         <Box h='100vh'>
             <Header name="" position="relative" type='oneColor' />
+
+            <Flex>
+                
+            </Flex>
+
 
             {
             services.length > 0 
@@ -138,7 +142,6 @@ export default function ServicesPage() {
                 <Box>
                     aaa
                 </Box>
-
             }
             <Footer/>
         </Box>

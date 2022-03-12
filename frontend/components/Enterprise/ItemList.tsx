@@ -4,20 +4,25 @@ interface TypeOfAccommodationItemProps {
     name: string;
     value: string;
     textToShow: string;
+    description?: string;
+    textAlign?: 'center' | 'left';
     selectedName: string;
     styleType?: number;
+    width?: string;
     handleOnClick: Function;
 }
 
-export function ItemList({name, value, textToShow, selectedName, styleType=1, handleOnClick}: TypeOfAccommodationItemProps) {
+export function ItemList({name, value, textToShow, description, selectedName, textAlign='left', styleType=1,
+    width='100%', handleOnClick}: TypeOfAccommodationItemProps) {
     return (
         <Button 
-            width="100%" 
+            width={width} 
             py="8"
-            bg={ value === selectedName ? "brand.red" : "brand.white" }
+            h='auto'
+            bg={ value === selectedName ? "brand.yellow" : "brand.white" }
             _hover={ value === selectedName ? {} : {bg:"brand.white_90"}}
             _focus={{ outline:"none" }}
-            color={ value === selectedName ? "brand.white" : "black" }
+            color={ "brand.dark_blue" }
             name={name}
             value={value}
             onClick={handleOnClick}
@@ -29,16 +34,31 @@ export function ItemList({name, value, textToShow, selectedName, styleType=1, ha
             <Flex
                 width="100%"
                 height="100%"
-                justifyContent="space-between"
+                justifyContent="flex-start"
                 alignItems="center"
-                textAlign="left"
+                textAlign={textAlign}
                 fontWeight={400}
+                direction='column'
             >
-                <Text width="100%" ml="5"
+                <Text 
+                    w="100%" 
                     fontSize={20}
+                    fontWeight={value == selectedName ? 500 : 400}
                 >
                     {textToShow}
                 </Text>
+
+                {description
+                ?
+                <Text
+                    w='100%'    
+                >
+                    {description}
+                </Text>
+                :
+                <>
+                </>
+                }
             </Flex>
         </Button>
     );

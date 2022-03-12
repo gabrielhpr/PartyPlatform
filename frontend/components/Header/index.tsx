@@ -1,8 +1,9 @@
-import { Box, Flex, Text, Link as NavLink, Button, Stack } from "@chakra-ui/react";
+import { Box, Flex, Text, Link as NavLink, Button, Stack, Icon } from "@chakra-ui/react";
 import Image from "next/image"
 import { HeaderMenuItem } from "./HeaderMenuItem";
 import { useEffect, useState } from "react";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
+import { RiBriefcaseLine } from "react-icons/ri";
 
 interface HeaderProps {
     name: string;
@@ -85,29 +86,63 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                             justifyContent="center" alignItems="center"
                         > 
                             <HeaderMenuItem title="Home" pathTo="/" scroll={scrollHeader}/>
-                        
-                            <HeaderMenuItem title="Funcionalidades" pathTo="/" scroll={scrollHeader}/>
-
-                            <HeaderMenuItem title="Preços" pathTo="/prices" scroll={scrollHeader}/>
-
-                            <HeaderMenuItem title="Blog" pathTo="/" scroll={scrollHeader}/>
-
+                    
                         </Stack>
 
                         {/* Demo and Login */}
                         <Stack direction="row" mx={50}>
+                            {/* LOGIN */}
                             <NavLink
-                                href="/Auth/login"
+                                href="/User/userAccess"
                                 _hover={{textDecoration:"none"}}
                             >
                                 <Button bg="none"
-                                    border="2px solid"
-                                    borderColor={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
+                                    //border="2px solid"
+                                    //borderColor={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
                                     color={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
                                     transition="0.3s"
                                     _hover={{bg:"brand.white", color:"brand.dark_blue"}}
                                 >
-                                    Login
+                                    LOGIN
+                                </Button>
+                            </NavLink>
+
+                             {/* CADASTRE-SE */}
+                            <NavLink
+                                href="/User/Auth/register"
+                                _hover={{textDecoration:"none"}}
+                            >
+                                <Button bg="none"
+                                    //border="2px solid"
+                                    //borderColor={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
+                                    color={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
+                                    transition="0.3s"
+                                    _hover={{bg:"brand.white", color:"brand.dark_blue"}}
+                                >
+                                    CADASTRE-SE
+                                </Button>
+                            </NavLink>
+
+                    
+
+                            {/* ACESSO EMPRESAS */}
+                            <NavLink href='/Enterprise/enterpriseAccess'
+                                _hover={{
+                                    textDecor:'none'
+                                }}
+                            >
+                                <Button
+                                    bg='brand.yellow'
+                                    color='brand.dark_blue'
+                                    border='2px solid'
+                                    borderColor='brand.dark_blue'
+                                    mr='3'
+                                    _hover={{ bg:'#ffcf4d' }}
+                                    leftIcon={
+                                        <Icon as={RiBriefcaseLine} mr='2'/>
+                                    }
+                                >
+                                    Acesso Empresas
                                 </Button>
                             </NavLink>
                         </Stack>

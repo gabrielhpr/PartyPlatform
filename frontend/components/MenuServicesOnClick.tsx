@@ -1,69 +1,49 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
-
+import { typeOfServices } from '../utils/typeOfParties';
 
 
 interface MenuServicesOnClickProps {
+    partyType: string;
     handlePreviousStep: Function;
     handleClick: (event: any) => {};
 }
 
 
-export function MenuServicesOnClick( { handlePreviousStep, handleClick }: MenuServicesOnClickProps ) {
+export function MenuServicesOnClick( { partyType, handlePreviousStep, handleClick }: MenuServicesOnClickProps ) {
+    
     return (
         <Flex direction='column' h={300} flexWrap='wrap'
+            alignItems='flex-start' justifyContent='flex-start'
 
         >
             <Button 
+                w='50%'
                 onClick={handlePreviousStep}
             >
                 Voltar
             </Button>
-            <Button 
-                w='30%'
-                fontWeight={600}
-                bg='white'
-                name='service'
-                value='FestaInfantil'
-                onClick={handleClick}
-            >
-                Festa Infantil
-            </Button>
 
-            <Button 
-                w='30%'
-                fontWeight={600}
-                bg='white'
-                name='service'
-                value='Espaco'
-                onClick={handleClick}
-            >
-                Espaço
-            </Button>
-
-            <Button 
-                w='30%'
-                fontWeight={500}
-                bg='white'
-                name='service'
-                value='Buffet'
-                onClick={handleClick}
-            >
-                Buffet
-            </Button>
-
-            <Button 
-                w='30%'
-                fontWeight={500}
-                bg='white'
-                name='service'
-                value='Fotografia'
-                onClick={handleClick}
-            >
-                Fotografia
-            </Button>
-           
-
-
+            {
+                typeOfServices[partyType]?.services.map((el, index) => {
+                    return (
+                        <Button 
+                            w='50%'
+                            fontWeight={500}
+                            bg='white'
+                            name='service'
+                            value={el.value}
+                            onClick={handleClick}
+                        >
+                            <Text
+                                textAlign='left'
+                                w='80%'
+                            >
+                                {el.textToShow}
+                            </Text>
+                        </Button>
+                    )
+                })
+            }
             
         </Flex>
     );

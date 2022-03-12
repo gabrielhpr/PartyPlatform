@@ -121,7 +121,7 @@ export default function ServiceProfilePage() {
                             <ModalServiceProfile 
                                 buttonText="Ver Telefone"
                                 title="Ligue Agora!"
-                                subtitle="Conte para o fornecedor que você
+                                subtitle="Conte ao fornecedor que você
                                 o encontrou pelo Festafy"
                                 icon={RiPhoneFill}
                                 iconColor='black'
@@ -134,7 +134,7 @@ export default function ServiceProfilePage() {
                                 <ModalServiceProfile 
                                     buttonText="Ver Whatsapp"
                                     title="Mande Mensagem"
-                                    subtitle="Conte para o fornecedor que você
+                                    subtitle="Conte ao fornecedor que você
                                     o encontrou pelo Festafy"
                                     icon={RiWhatsappFill}
                                     iconColor='green'
@@ -148,7 +148,7 @@ export default function ServiceProfilePage() {
                             <ModalServiceProfile 
                                 buttonText="Ver E-mail"
                                 title="Mande um e-mail"
-                                subtitle="Conte para o fornecedor que você
+                                subtitle="Conte ao fornecedor que você
                                 o encontrou pelo Festafy"
                                 icon={RiMailFill}
                                 iconColor='black'

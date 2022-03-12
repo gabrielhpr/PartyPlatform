@@ -10,10 +10,13 @@ import { useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import { MenuServicesOnClick } from '../components/MenuServicesOnClick';
-import { RiBriefcaseLine } from 'react-icons/ri';
+import { RiBriefcaseLine, RiCake2Fill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
-import { typeOfParties } from '../utils/typeOfParties';
-
+import { typeOfParties, typeOfServices } from '../utils/typeOfParties';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
+import AliceCarousel from 'react-alice-carousel';
+import 'react-alice-carousel/lib/alice-carousel.css';
 
 
 export default function HomePage() {
@@ -25,7 +28,10 @@ export default function HomePage() {
     const [menuService, setMenuService] = useState('none');
     const [searchInputValueFirst, setSearchInputValueFirst] = useState('');
 
+    const [cardSearchData, setCardSearchData] = useState({ partyType: 'Infantil', service: ''});
+
     const routerSearch = useRouter();
+    const handleDragStart = (e) => e.preventDefault();
 
 
     function handleSearch() {
@@ -81,40 +87,19 @@ export default function HomePage() {
     }
 
     return (
-        <Box fontSize={32}>
+        <Box>
         
             {/* Header */}
             {/*************/}
-            <Flex bg='brand.yellow'
-                w='100%' h={75}
-                alignItems='center'
-                justifyContent='flex-end'
-            >
-                <NavLink href='Enterprise/enterpriseAccess'
-                    _hover={{
-                        textDecor:'none'
-                    }}
-                >
-                    <Button
-                        bg='brand.yellow'
-                        color='brand.dark_blue'
-                        border='2px solid'
-                        borderColor='brand.dark_blue'
-                        mr='3'
-                        _hover={{ bg:'#ffcf4d' }}
-                        leftIcon={
-                            <Icon as={RiBriefcaseLine} mr='2'/>
-                        }
-                    >
-                        Acesso Empresas
-                    </Button>
-                </NavLink>
-            </Flex>
+
+            <Header name='' position='relative' />
+
             
-            {/* Carroussel */}
+            {/* Carroussel and Menu */}
             <Flex 
                 h='70vh' 
                 w='100vw'
+                fontSize={32}
                 //justifyContent='center'
                 //alignItems='center'
                 //position='absolute'
@@ -236,8 +221,6 @@ export default function HomePage() {
                                         </Text>
 
                                         {
-                                    
-                                        
                                         
                                         Object.values(typeOfParties).map((el, i) => {
                                             return(
@@ -289,7 +272,10 @@ export default function HomePage() {
                                     <MenuServicesOnClick 
                                         handlePreviousStep={previousStepSearch}
                                         name='service'
+                                        partyType={searchData.partyType}
                                         handleClick={(event) => {
+                                            console.log('menuServicesOnClick');
+                                            console.log(searchData.partyType);
                                             handleSearchData(event);
                                             setMenuService('none');
                                         }}
@@ -312,28 +298,17 @@ export default function HomePage() {
                                     <Flex direction="column" id="menuServices"
                                     >
                                         {
-                                        [
-                                        "Acomodação móvel","Albergue", "Apartamento",
-                                        "Apartamento residencial", "Bangalô",
-                                        "Barco (Ferry Boat)", "Barco (House Boat)",
-                                        "Boutique", "Cabana", "Cama e Café (B&Bs)",
-                                        "Campings", "Casa", "Casa móvel", "Castelo",
-                                        "Celeiro", "Chalé", "Chalé (Área de Camping)",
-                                        "Condomínio","Cruzeiro", "Fazenda para hóspedes",
-                                        "Hotel", "Hotel boutique", "Hotel para casais",
-                                        "Pensão", "Pousada", "Pousada (Lodge)", "Prédio",
-                                        "Rancho"
-                                        ].map((el, i) => {
+                                        typeOfServices[searchData.partyType]?.services.map((el, i) => {
                                             return(
                                                 <Button
                                                     name='service'
-                                                    value={el}
+                                                    value={el.value}
                                                     onClick={(event) => {
                                                         handleSearchData(event);
                                                         setMenuService('none');
                                                     }}
                                                 >
-                                                    {el}
+                                                    {el.textToShow}
                                                 </Button>
                                             );
                                         })
@@ -411,10 +386,112 @@ export default function HomePage() {
                 </Carousel>
             </Flex>
 
-            <Flex bg='brand.white'
-                w='100%' h={75}
+
+            {/* Ache fornecedores */}
+            <Flex
+                w='100%'
+                h='auto'
+                bg='brand.white'
+                direction='column'
+                alignItems='center'
+                justifyContent='center'
+                my='10'                
             >
-            </Flex>   
+                <Text
+                    h="5vh"
+                    fontSize={25}
+                >
+                    Qual o tipo da sua festa ?
+                </Text>
+
+
+                <Flex direction='row'
+                    w='80%'
+                    h='12vh'
+                    alignItems='center'
+                    justifyContent='center'
+                    mt='5'
+                >  
+
+                    {
+                        Object.values(typeOfParties).map((el, index) => {
+                            return (
+                                <Button
+                                    h='80%'
+                                    bg='brand.white'
+                                    border='2px solid'
+                                    borderColor='brand.dark_blue'
+                                    onDragStart={handleDragStart}
+                                >
+                                    {el.textToShow}
+                                </Button>
+                            )
+                        })
+                    }   
+                    
+
+                </Flex>
+            
+                <Flex 
+                    justifyContent='center'
+                    alignItems='flex-start'
+                    h='35vh'
+                    w='60%'
+                    my={0}
+                    //overflowX='scroll'                    
+                >
+                   
+
+                    <AliceCarousel
+                        //autoWidth={true}
+                        //width='100%'
+                        //autoWidth={true}
+                        autoPlay={false}
+                        autoHeight={true}
+                        responsive={{
+                            0: {items:1},
+                            1024: {items:5}
+                        }}
+
+                        mouseTracking
+                        items={
+                            typeOfServices[cardSearchData.partyType].services.map((el, index) => {
+                                return (
+                                    <Button
+                                        h='15vh'
+                                        w='90%'
+                                        key={index}
+                                        boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                        bg='brand.yellow'
+                                    >
+                                        <Flex w='100%'
+                                            h='100%'
+                                            direction='column'
+                                            alignItems='center'
+                                            justifyContent='center'
+                                            
+                                        >
+                                            <Icon as={RiCake2Fill} />
+                                            <Text>
+                                                {el.textToShow}
+                                            </Text>
+                                        </Flex>
+                                    </Button>
+                                );
+                            })
+                        }
+                    />
+                    
+                    
+                </Flex>
+            
+
+            </Flex>
+
+
+
+
+            <Footer/>
         </Box>
     )
 }

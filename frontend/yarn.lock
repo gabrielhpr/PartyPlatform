@@ -2351,6 +2351,13 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+react-alice-carousel@2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/react-alice-carousel/-/react-alice-carousel-2.5.1.tgz#d8b27f942d342bf57367eb2c3301358a28758381"
+  integrity sha512-UeAd+O83TEiCxbDMMd9xAOLRr+xPNFPai9W6cNQgmIfEBgOiKDdntpTnhhwfXKoirXxQcbPlg9eG7FG9D1M4SA==
+  dependencies:
+    vanilla-swipe "^2.2.0"
+
 react-clientside-effect@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/react-clientside-effect/-/react-clientside-effect-1.2.5.tgz#e2c4dc3c9ee109f642fac4f5b6e9bf5bcd2219a3"
@@ -2762,6 +2769,11 @@ v8-compile-cache@^2.0.3:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.3.0.tgz#2de19618c66dc247dcfb6f99338035d8245a2cee"
   integrity sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==
+
+vanilla-swipe@^2.2.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/vanilla-swipe/-/vanilla-swipe-2.3.0.tgz#a2cd466aabed00c1e8abd7b69a86940bf9319516"
+  integrity sha512-4m8vZ/kckRG7RQUYNg+0lGILMHT08KEgwePlRLzediDSu7aQFBLB0V2n36vUmYqq5CVWASOzZ8zpnQFZXIbHbA==
 
 warning@^4.0.3:
   version "4.0.3"

@@ -3,7 +3,7 @@ import jwt = require("jsonwebtoken");
 import { nextTick } from "process";
 const createEnterpriseToken = require('../helpers/create-enterprise-token');
 const getToken = require('../helpers/get-token');
-const EnterpriseModel = require('../models/Enterprise');
+const EnterpriseModel = require('../models/EnterpriseModel');
 const enterpriseModel = new EnterpriseModel();
 
 module.exports = class EnterpriseController {
@@ -35,9 +35,90 @@ module.exports = class EnterpriseController {
             answer2 
         } = req.body;
         
-        // Create a password
+        // VALIDATIONS
+        if( !fullName ) {
+            res.status(422).json({ message: "O nome completo é obrigatório!"});
+            return;
+        }
+
+        if( !email ) {
+            res.status(422).json({ message: "O email é obrigatório!"});
+            return;
+        }
+
+        if( !phone ) {
+            res.status(422).json({ message: "O telefone é obrigatório!"});
+            return;
+        }
+
+        // SENHA
+        if( !password ) {
+            res.status(422).json({ message: "A senha é obrigatória!" });
+            return;
+        }
+        // Tamanho da senha
+        if( password.length < 6 ) {
+            res.status(422).json({ message: "A senha deve ter no mínimo 6 caracteres!" });
+            return;
+        }
+        // Senha deve ser igual a sua confirmação
+        if( password != passwordConfirmation ) {
+            res.status(422).json({ message: "A confirmação de senha deve ser igual a senha!" });
+            return;
+        }
+        // Transform password to hash password
         const salt = await bcrypt.genSalt(12);
         const passwordHash = await bcrypt.hash(password, salt);
+        
+        if( !enterpriseName ) {
+            res.status(422).json({ message: "O nome da empresa é obrigatório!"});
+            return;
+        }
+
+        if( !country ) {
+            res.status(422).json({ message: "O país é obrigatório!"});
+            return;
+        }
+
+        if( !state ) {
+            res.status(422).json({ message: "O estado é obrigatório!"});
+            return;
+        }
+
+        if( !city ) {
+            res.status(422).json({ message: "A cidade é obrigatória!"});
+            return;
+        }
+
+        if( !address ) {
+            res.status(422).json({ message: "O endereço é obrigatório!"});
+            return;
+        }
+
+        if( !addressNumber ) {
+            res.status(422).json({ message: "O número de endereço é obrigatório!"});
+            return;
+        }
+
+        if( !partyMainFocus ) {
+            res.status(422).json({ message: "O campo: principal tipo de festa é obrigatório!"});
+            return;
+        }
+
+        if( !serviceDescription ) {
+            res.status(422).json({ message: "A descrição do serviço é obrigatória!"});
+            return;
+        }
+
+        if( !enterpriseCategory ) {
+            res.status(422).json({ message: "A categoria da empresa é obrigatória!"});
+            return;
+        }
+
+        if( !enterpriseSpecificCategory ) {
+            res.status(422).json({ message: "A categoria específica da empresa é obrigatória!"});
+            return;
+        }
 
         // Insert Enterprise
         const dataEnterprise = {

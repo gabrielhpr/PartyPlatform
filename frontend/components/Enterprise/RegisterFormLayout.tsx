@@ -5,13 +5,19 @@ interface CreateAdLayoutProps {
     question: string;
     subTitle?: string;
     lastStep?: boolean;
+    style?: string;
+    showFooterMenu?: boolean;
     children: ReactNode;
     handleNextStep: Function;
     handlePreviousStep: Function;
 }
 
 
-export function RegisterFormLayout({ question, subTitle, lastStep=false, children, handleNextStep, handlePreviousStep }: CreateAdLayoutProps) {
+export function RegisterFormLayout({ question, subTitle, lastStep=false, 
+    style='yellow',
+    showFooterMenu=true,
+    children, 
+    handleNextStep, handlePreviousStep }: CreateAdLayoutProps) {
     return (
         <Flex
             height="100vh"
@@ -23,12 +29,12 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false, childre
             <Flex height="100%" width="45%"
                 justifyContent="center" alignItems="center"
                 direction="column"
-                bg="brand.blue"
+                bg={style=='yellow' ? 'brand.yellow' : 'brand.dark_blue'}
             >
                 <Text as="h2"
-                    color="brand.white"
+                    color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
                     fontSize={40}
-                    fontWeight={700}
+                    fontWeight={500}
                     textAlign="center"
                     width="70%"
                 >
@@ -37,9 +43,9 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false, childre
 
                 <Text display={!subTitle ? "none" : ""}
                     as="h4"
-                    color="brand.white"
+                    color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
                     fontSize={20}
-                    fontWeight={700}
+                    fontWeight={400}
                     textAlign="center"
                     width="60%"
                     mt="4"
@@ -54,46 +60,63 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false, childre
                 direction="column"
                 bg="brand.white"
             >
-                <Flex height="92%" alignItems="center"
+                <Flex height={showFooterMenu ? "92%" : "100%"}
+                     alignItems="center"
                     justifyContent="center"
                 >
                     { children }
                 </Flex>
 
                 {/* Footer - Voltar, Avançar */}
-                <Flex justifyContent="space-between"
-                    alignItems="center"
-                    height="8%"
-                    bg="brand.pink"
-                    py="4"
-                    px="10"
-                >
-                    <NavLink>
-                        <Text as="h4" fontSize={20} color="brand.white"
-                            onClick={handlePreviousStep}
+                {
+                    showFooterMenu
+                    ?
+                    <Flex justifyContent="space-between"
+                        alignItems="center"
+                        height="8%"
+                        bg={style=='yellow' ? 'brand.dark_blue' : 'brand.yellow'}
+                        py="4"
+                        px="10"
+                    >
+                        <NavLink
+                            _hover={{textDecor: 'none'}}
                         >
-                            Voltar
-                        </Text>
-                    </NavLink>
+                            <Text as="h4" fontSize={20} 
+                                color={style=='yellow' ? 'brand.white' : 'brand.dark_blue'}
+                                onClick={handlePreviousStep}
+                                fontWeight={600}
+                                _hover={{color:'brand.white_50'}}
+                            >
+                                Voltar
+                            </Text>
+                        </NavLink>
 
-                    <NavLink>
-                        <Button bg="brand.yellow"
-                            color="brand.white_45"
-                            py="6"
-                            px="6"
-                            fontSize={20}
-                            onClick={handleNextStep}
+                        <NavLink
+                            _hover={{textDecor: 'none'}}
                         >
-                            {
-                                lastStep 
-                                ?
-                                'Finalizar'
-                                :
-                                'Avançar'
-                            }
-                        </Button>
-                    </NavLink>
-                </Flex>
+                            <Button 
+                                bg={style=='yellow' ? 'brand.yellow' : 'brand.dark_blue'}
+                                color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
+                                py="6"
+                                px="6"
+                                fontSize={20}
+                                onClick={handleNextStep}
+                                _hover={style=='yellow' ? {bg:'brand.yellow_50'} : {bg:'brand.white_40'}}
+                            >
+                                {
+                                    lastStep 
+                                    ?
+                                    'Finalizar'
+                                    :
+                                    'Avançar'
+                                }
+                            </Button>
+                        </NavLink>
+                    </Flex>
+                    :
+                    <>
+                    </>
+                }
 
             </Flex>
         </Flex>

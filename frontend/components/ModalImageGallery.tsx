@@ -30,18 +30,35 @@ export function ModalImageGallery( {buttonText, content }: ModalImageGalleryProp
                 {buttonText}
             </Button>
 
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose}
+                size='full'
+                
+            >
                 <ModalOverlay />
-                <ModalContent alignItems='center'>
+                <ModalContent 
+                   
+                    bg='black'
+                >
                     
 
-                    <ModalCloseButton />
+                    <ModalCloseButton 
+                        color='brand.white'
+                        fontSize={20}
+                        //fontWeight={700}
+                    />
                     
-                    <ModalBody>
+                    <ModalBody
+                        alignItems='center'
+                        justifyContent='center'
                         
+                        display='flex'
+                    >
+                       
                         <ImageGallery
                             data={content}
                         />
+                         
+                       
                     </ModalBody>
                 </ModalContent>
             </Modal>        

@@ -1,40 +1,25 @@
 // api
 import api from "../utils/api";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 //import { useHistory } from "react-router-dom";
 
-interface EnterpriseData {
+interface UserData {
     // Contact Data
     fullName: string;
     email: string;
     phone: string;
-    whatsapp?: string;
+   
     // Access Data
     password: string;
     passwordConfirmation: string;
-    // About the enterprise
-    enterpriseName: string;
+    // About the User
+   
     country: string;
     state: string;
     city: string;
-    address: string;
-    addressNumber: number;
-    // Enterprise Social Media
-    instagram?: string;
-    facebook?: string;
-    website?: string;
+   
     
-    partyMainFocus: string;
-    serviceDescription: string;
-    enterpriseCategory: string;
-    enterpriseSpecificCategory: string;
-
-    photos: string;
-
-    answer1: string;
-    answer2: string;
 }
 
 interface AdData {
@@ -47,9 +32,9 @@ interface AdData {
     answer2: string;
 }
 
-export default function useEnterpriseAuth() {
+export default function useUserAuth() {
 
-    const [authenticatedEnterprise, setAuthenticatedEnterprise] = useState(false);
+    const [authenticated, setAuthenticated] = useState(false);
     // Next Router
     const routerNext = useRouter();
 
@@ -62,29 +47,17 @@ export default function useEnterpriseAuth() {
         
         if(token) {
             api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(token)}`;
-            setAuthenticatedEnterprise(true);
+            setAuthenticated(true);
         }
     }, []);
 
-    async function createAd(adData: AdData) {
+    async function registeUser(user: UserData) {
         try {
-            await api.post("/enterprise/ads/create", adData, options)
+            const data = await api.post("/user/register", user, options)
             .then((response) => {
                 return response.data;
             });
-        }
-        catch( err ) {
-            console.log( err );
-        }
-    }
-
-    async function registerEnterprise(enterprise: EnterpriseData) {
-        try {
-            const data = await api.post("/enterprise/register", enterprise, options)
-            .then((response) => {
-                return response.data;
-            });
-            await authEnterprise(data);
+            await authUser(data);
         }
         catch(err) {
             // tratar o erro
@@ -92,15 +65,15 @@ export default function useEnterpriseAuth() {
         }
     }
 
-    async function loginEnterprise(enterprise: any) {
+    async function loginUser(user: any) {
         let msgText = 'Login realizado com sucesso';
         let msgType = "success";
 
         try {
-            const data = await api.post("/enterprise/login", enterprise).then((response) => {
+            const data = await api.post("/user/login", user).then((response) => {
                 return response.data;
             });
-            await authEnterprise(data);
+            await authUser(data);
         }   
         catch(err) {
             console.log( err );
@@ -109,24 +82,24 @@ export default function useEnterpriseAuth() {
         }
     }
 
-    async function authEnterprise(data: any) {
-        setAuthenticatedEnterprise(true);
+    async function authUser(data: any) {
+        setAuthenticated(true);
         localStorage.setItem("token", JSON.stringify(data.token));
-        routerNext.push("/Enterprise/home");
+        routerNext.push("/User/home");
     }
 
-    function logoutEnterprise() {
+    function logoutUser() {
         const msgText = "Logout realizado com sucesso!";
         const msgType = "success";
 
-        setAuthenticatedEnterprise( false );
+        setAuthenticated( false );
         localStorage.removeItem("token");
         api.defaults.headers.common["Authorization"] = "";
 
-        routerNext.push("/Enterprise/enterpriseAccess");
+        routerNext.push("/User/UserAccess");
         //setFlashMessage(msgText, msgType);
     }
 
-    return { authenticatedEnterprise, registerEnterprise, createAd, loginEnterprise, logoutEnterprise };
+    return { authenticated, register, createAd, login, logout };
 }
 

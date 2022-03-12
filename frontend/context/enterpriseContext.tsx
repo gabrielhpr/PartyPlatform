@@ -2,11 +2,11 @@ import { createContext, ReactNode, useContext } from "react";
 import useEnterpriseAuth from "../hooks/useEnterpriseAuth";
 
 interface EnterpriseContextInterface {
-    authenticated: boolean;
-    register: Function;
+    authenticatedEnterprise: boolean;
+    registerEnterprise: Function;
     createAd: Function;
-    login: Function;
-    logout: Function;
+    loginEnterprise: Function;
+    logoutEnterprise: Function;
 }
 
 const Context = createContext({} as EnterpriseContextInterface);
@@ -16,10 +16,10 @@ interface EnterpriseProviderProps {
 }
 
 export function EnterpriseProvider({children}: EnterpriseProviderProps) {
-    const { authenticated, register, createAd, login, logout } = useEnterpriseAuth();
+    const { authenticatedEnterprise, registerEnterprise, createAd, loginEnterprise, logoutEnterprise } = useEnterpriseAuth();
     
     return (
-        <Context.Provider value={{ authenticated, register, createAd, login, logout }}>
+        <Context.Provider value={{ authenticatedEnterprise, registerEnterprise, createAd, loginEnterprise, logoutEnterprise }}>
             {children}
         </Context.Provider>
     );
