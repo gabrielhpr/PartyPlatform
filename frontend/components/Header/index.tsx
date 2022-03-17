@@ -4,6 +4,7 @@ import { HeaderMenuItem } from "./HeaderMenuItem";
 import { useEffect, useState } from "react";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 import { RiBriefcaseLine } from "react-icons/ri";
+import { useUserAuthContext } from "../../context/userContext";
 
 interface HeaderProps {
     name: string;
@@ -12,11 +13,16 @@ interface HeaderProps {
 }
 
 export function Header( {name, position, type='oneColor'} : HeaderProps ) {
-    const { authenticated, logout } = useEnterpriseAuthContext();
+    const { authenticatedEnterprise, logoutEnterprise } = useEnterpriseAuthContext();
+    const { authenticatedUser, logoutUser } = useUserAuthContext();
     const [scrollHeader, setScrollHeader] = useState(false);
 
-    function handleLogout() {
-        logout();
+    function handleLogoutEnterprise() {
+        logoutEnterprise();
+    }
+
+    function handleLogoutUser() {
+        logoutUser();
     }
 
     const listenScrollEvent = (event) => {
@@ -54,13 +60,24 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
         >
             {/* Logo and enterprise name */}
             <Flex width="30%">
-                
+                <NavLink width='100%' href='/'
+                    _hover={{outline: 'none'}}
+                    _focus={{border:'none'}}
+                >
+                    <Text
+                        fontSize={25}
+                        fontWeight={500}
+                    >
+                        Festafy
+                    </Text>
+                </NavLink>
             </Flex>
-            
-            {
-                authenticated 
+        
+
+            {   
+                /* USER */
+                authenticatedUser
                 ?
-                
                     <Flex width="70%" justifyContent="flex-end">
                         <Flex>
                             <Button
@@ -70,17 +87,37 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                                 color={"brand.dark_blue"}
                                 transition="0.3s"
                                 _hover={{bg:"brand.yellow_60", color:"brand.dark_blue"}}
-                                onClick={handleLogout}
+                                onClick={handleLogoutUser}
                             >
                                 Logout
                             </Button>
                         </Flex>
 
                     </Flex>
-            
                 :
                 
-                    <Flex justifyContent="center" width="70%">
+                /* ENTERPRISE */
+                authenticatedEnterprise
+                ?
+                    <Flex width="70%" justifyContent="flex-end">
+                        <Flex>
+                            <Button
+                                bg='none'
+                                border="2px solid"
+                                borderColor={"brand.dark_blue"}
+                                color={"brand.dark_blue"}
+                                transition="0.3s"
+                                _hover={{bg:"brand.yellow_60", color:"brand.dark_blue"}}
+                                onClick={handleLogoutEnterprise}
+                            >
+                                Logout
+                            </Button>
+                        </Flex>
+
+                    </Flex>
+                :
+                /* GENERAL */
+                    <Flex width="70%" justifyContent="flex-end">
                         {/* Menu */}
                         <Stack direction="row" spacing={10}
                             justifyContent="center" alignItems="center"
@@ -146,7 +183,6 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                                 </Button>
                             </NavLink>
                         </Stack>
-
                     </Flex>
                 
             }

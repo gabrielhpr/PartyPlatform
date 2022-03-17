@@ -24,6 +24,11 @@ module.exports = class UserController {
             country
         } = req.body;
         
+        if( !password ) {
+            res.status(422).json({ message: "A senha é obrigatória!"});
+            return;
+        }
+
         // Create a password
         const salt = await bcrypt.genSalt(12);
         const passwordHash = await bcrypt.hash(password, salt);

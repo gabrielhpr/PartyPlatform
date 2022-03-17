@@ -8,9 +8,10 @@ module.exports = class RootController {
         console.log('getServices');
         console.log( req.query);
         
-        const { partyType, service, location } = req.query;
+        const { partyType, service, city, state, country } = req.query;
+        console.log(partyType, service, city, state, country);
 
-        const services = await rootModel.selectServices(partyType, service, location);
+        const services = await rootModel.selectServices(partyType, service, city, state, country);
         
         console.log( services );
         res.status(200).json({ services });

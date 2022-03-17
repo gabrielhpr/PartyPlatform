@@ -32,7 +32,7 @@ export default function ServicesPage() {
         if( !routerNext.isReady ) {
             return;
         }
-        const { partyType, service, location } = routerNext.query;
+        const { partyType, service, city, state, country } = routerNext.query;
        
 
         try {
@@ -40,7 +40,9 @@ export default function ServicesPage() {
                     params: {
                         partyType: partyType,
                         service: service,
-                        location: location
+                        city: city,
+                        state: state,
+                        country: country
                     }
                 })
                 .then((response) => {

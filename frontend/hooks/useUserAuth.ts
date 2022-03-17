@@ -34,7 +34,7 @@ interface AdData {
 
 export default function useUserAuth() {
 
-    const [authenticated, setAuthenticated] = useState(false);
+    const [authenticatedUser, setAuthenticatedUser] = useState(false);
     // Next Router
     const routerNext = useRouter();
 
@@ -47,13 +47,13 @@ export default function useUserAuth() {
         
         if(token) {
             api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(token)}`;
-            setAuthenticated(true);
+            setAuthenticatedUser(true);
         }
     }, []);
 
-    async function registeUser(user: UserData) {
+    async function registerUser(user: UserData) {
         try {
-            const data = await api.post("/user/register", user, options)
+            const data = await api.post("/user/register", user)
             .then((response) => {
                 return response.data;
             });
@@ -83,7 +83,7 @@ export default function useUserAuth() {
     }
 
     async function authUser(data: any) {
-        setAuthenticated(true);
+        setAuthenticatedUser(true);
         localStorage.setItem("token", JSON.stringify(data.token));
         routerNext.push("/User/home");
     }
@@ -92,14 +92,14 @@ export default function useUserAuth() {
         const msgText = "Logout realizado com sucesso!";
         const msgType = "success";
 
-        setAuthenticated( false );
+        setAuthenticatedUser( false );
         localStorage.removeItem("token");
         api.defaults.headers.common["Authorization"] = "";
 
-        routerNext.push("/User/UserAccess");
+        routerNext.push("/User/userAccess");
         //setFlashMessage(msgText, msgType);
     }
 
-    return { authenticated, register, createAd, login, logout };
+    return { authenticatedUser, registerUser, loginUser, logoutUser };
 }
 

@@ -72,6 +72,7 @@ export default function useEnterpriseAuth() {
             .then((response) => {
                 return response.data;
             });
+            routerNext.push("/Enterprise/ads");
         }
         catch( err ) {
             console.log( err );

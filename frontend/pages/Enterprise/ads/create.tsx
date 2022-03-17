@@ -4,7 +4,7 @@ import { ItemList } from "../../../components/Enterprise/ItemList";
 import { RegisterFormLayout } from "../../../components/Enterprise/RegisterFormLayout";
 import Image from 'next/image';
 import api from "../../../utils/api";
-import { typeOfParties } from "../../../utils/typeOfParties";
+import { specificQuestions, typeOfParties } from "../../../utils/typeOfParties";
 import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 
 interface adDataInterf {
@@ -13,8 +13,56 @@ interface adDataInterf {
 
     photos: any[];
 
-    answer1: string;
-    answer2: string;
+    q1: string;
+    q2: string;
+    q3: string;
+    q4: string;
+    q5: string;
+    q6: string;
+    q7: string;
+    q8: string;
+    q9: string;
+    q10: string;
+    q11: string;
+    q12: string;
+    q13: string;
+    q14: string;
+    q15: string;
+    q16: string;
+    q17: string;
+    q18: string;
+    q19: string;
+    q20: string;
+    q21: string;
+    q22: string;
+    q23: string;
+    q24: string;
+    q25: string;
+    q26: string;
+    q27: string;
+    q28: string;
+    q29: string;
+    q30: string;
+    q31: string;
+    q32: string;
+    q33: string;
+    q34: string;
+    q35: string;
+    q36: string;
+    q37: string;
+    q38: string;
+    q39: string;
+    q40: string;
+    q41: string;
+    q42: string;
+    q43: string;
+    q44: string;
+    q45: string;
+    q46: string;
+    q47: string;
+    q48: string;
+    q49: string;
+    q50: string;
 }
 
 const adDataNullState = {
@@ -23,14 +71,116 @@ const adDataNullState = {
 
     photos: [],
 
-    answer1: '',
-    answer2: '',
+    q1: '',
+    q2: '',
+    q3: '',
+    q4: '',
+    q5: '',
+    q6: '',
+    q7: '',
+    q8: '',
+    q9: '',
+    q10: '',
+    q11: '',
+    q12: '',
+    q13: '',
+    q14: '',
+    q15: '',
+    q16: '',
+    q17: '',
+    q18: '',
+    q19: '',
+    q20: '',
+    q21: '',
+    q22: '',
+    q23: '',
+    q24: '',
+    q25: '',
+    q26: '',
+    q27: '',
+    q28: '',
+    q29: '',
+    q30: '',
+    q31: '',
+    q32: '',
+    q33: '',
+    q34: '',
+    q35: '',
+    q36: '',
+    q37: '',
+    q38: '',
+    q39: '',
+    q40: '',
+    q41: '',
+    q42: '',
+    q43: '',
+    q44: '',
+    q45: '',
+    q46: '',
+    q47: '',
+    q48: '',
+    q49: '',
+    q50: ''
 }
+
+interface enterpriseDataInterf {
+    id: number;
+    // Contact Data
+    fullName: string;
+    email: string;
+    phone: string;
+    whatsapp?: string;
+    // Access Data
+    password: string;
+    // About the enterprise
+    enterpriseName: string;
+    country: string;
+    state: string;
+    city: string;
+    address: string;
+    addressNumber: number;
+    // Enterprise Social Media
+    instagram?: string;
+    facebook?: string;
+    website?: string;
+    
+    partyMainFocus: string;
+    enterpriseCategory: string;
+    enterpriseSpecificCategory: string;
+}
+
+const enterpriseDataNullState = {
+    id: 0,
+    // Contact Data
+    fullName: '',
+    email: '',
+    phone: '',
+    whatsapp: '',
+    // Access Data
+    password: '',
+    // About the enterprise
+    enterpriseName: '',
+    country: '',
+    state: '',
+    city: '',
+    address: '',
+    addressNumber: 0,
+
+    // Enterprise Social Media
+    instagram: '',
+    facebook: '',
+    website: '',
+
+    partyMainFocus: '',
+    enterpriseCategory: '',
+    enterpriseSpecificCategory: ''    
+}
+
 
 export default function CreateAdEnterprise() {
     const [newAdData, setNewAdData] = useState<adDataInterf>(adDataNullState);
     const [adsCreated, setAdsCreated] = useState([]);
-    const [enterpriseData, setEnterpriseData] = useState({});
+    const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>(enterpriseDataNullState);
     const [step, setStep] = useState(0);
     const [preview, setPreview] = useState([]);
     const [partiesAdsAlreadyCreated, setPartiesAdsAlreadyCreated] = useState([]);
@@ -53,6 +203,8 @@ export default function CreateAdEnterprise() {
                 }
             })
             .then((response) => {
+                console.log('createAd - /enterprise/ads');
+                console.log( response.data.ads );
                 setAdsCreated( response.data.ads );
                 setPartiesAdsAlreadyCreated( response.data.ads.map((el, index) => {
                     return el.partyMainFocus;
@@ -262,50 +414,275 @@ export default function CreateAdEnterprise() {
                     handleNextStep={handleSubmit}
                     handlePreviousStep={previousStep}
                 >
-                    <Stack direction='column' justifyContent='center'
+                     <Stack direction='column' 
+                        justifyContent='flex-start'
                         spacing={5}
                         alignItems='center'
+                        overflowY='scroll'
                         w='100%'
+                        h='90%'
+                        //overflowWrap='wrap'
                     >
+                        {
+                        enterpriseData?.enterpriseCategory == 'Espaco'
+                        ?
+                        specificQuestions['Espaco']
+                        .map((el, index) => {
+                            // POSSUI BUFFET JUNTO COM O ESPAÇO
+                            if( newAdData.q3 == 'Sim' && 
+                                (
+                                ['q21','q22','q23'].includes(el?.name[0])
+                                ||
+                                ['q21','q22','q23'].includes(el?.name[1])
+                                ) ) 
+                            {
+                                console.log('entrou no sim');
+                                console.log(el.name);
+                                
+                                
+                                return (
+                                    <>
+                                    </>
+                                );
+                            }
+                            // SEM BUFFET JUNTO COM O ESPAÇO
+                            else if(newAdData.q3 == 'Não' && 
+                                (
+                                ['q5','q6','q7','q8','q9','q10','q11','q12','q13','q14',
+                                'q15','q16','q17','q18','q19','q20'].includes(el?.name[0]) 
+                                ||
+                                ['q5','q6','q7','q8','q9','q10','q11','q12','q13','q14',
+                                'q15','q16','q17','q18','q19','q20'].includes(el?.name[1]) 
+                                )
+                                ) 
+                            {
+                                return (
+                                    <>
+                                    </>
+                                );
+                            }
+                            // NÃO SABE SE TEM OU NÃO BUFFET
+                            else {
+                                return (
+                                    <Flex direction='column' bg='white'
+                                        w='60%'  p='5'
+                                        justifyContent='center'
+                                        boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                        borderRadius={8} 
+                                    >
+                                        <Text 
+                                            fontSize={22}
+                                            mb='3'
+                                        >
+                                            {el.question}
+                                        </Text>
+    
+                                        {/* RADIO */}
+                                        {
+                                            el.type == 'radio'
+                                            ?
+                                            <Flex direction='column'>
+                                                <Flex
+                                                    justifyContent='space-evenly'
+                                                    mb='4'
+                                                >
+                                                    {
+                                                        el.options.map((element, index) => {
+                                                            return (
+                                                                <ItemList
+                                                                    styleType={2}
+                                                                    width='40%'
+                                                                    name={el.name[0]}
+                                                                    textAlign='center'
+                                                                    value={element}
+                                                                    textToShow={element}
+                                                                    selectedName={newAdData?.[el.name[0]]}
+                                                                    handleOnClick={handleChange}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                </Flex>
+    
+                                                <Textarea name={el.name[1]} 
+                                                    placeholder={el.placeholder}
+                                                    value={newAdData?.[el.name[1]]}
+                                                    onChange={handleChange} 
+                                                />
+                                            </Flex>
+                                            :
+                                            <>
+                                            </>
+                                        }
+    
+                                        {/* TEXTAREA */}
+                                        {
+                                            el.type == 'textarea'  
+                                            ?
+                                            <Flex direction='column'>
+                                                <Textarea 
+                                                    name={el.name[0]} 
+                                                    placeholder={el.placeholder}
+                                                    value={newAdData?.[el.name[0]]}
+                                                    onChange={handleChange} 
+                                                />
+                                            </Flex>
+                                            :
+                                            <>
+                                            </>
+                                        }       
+    
+                                        {/* INPUT */}
+                                        {
+                                            el.type == 'input'  
+                                            ?
+                                            <Flex direction='row'
+                                                alignItems='center'
+                                                //justifyContent='center'
+                                            >
+                                                {
+                                                    el.span
+                                                    ?
+                                                    <Text as='span' mr='2'
+    
+                                                    >
+                                                        {el.span}
+                                                    </Text>
+                                                    :
+                                                    <>
+                                                    </>
+                                                }
+                                                <Input 
+                                                    name={el.name[0]} 
+                                                    type={el.inputType}
+                                                    width='40%'
+                                                    value={newAdData?.[el.name[0]]}
+                                                    onChange={handleChange} 
+                                                />
+                                            </Flex>
+                                            :
+                                            <>
+                                            </>
+                                        }       
+    
+                                    </Flex>
+                                )
+                            }
+                        })
+                        :
+                        specificQuestions['Servico'][enterpriseData.enterpriseSpecificCategory]
+                        .map((el, index) => {
+                            return (
+                                <Flex direction='column' bg='white'
+                                    w='60%'  p='5'
+                                    justifyContent='center'
+                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                    borderRadius={8} 
+                                >
+                                    <Text 
+                                        fontSize={22}
+                                        mb='3'
+                                    >
+                                        {el.question}
+                                    </Text>
 
-                        <Flex direction='column' bg='white'
-                            w='60%'  p='5'
-                            justifyContent='center'
-                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                            borderRadius={8} 
-                            
-                        >
-                            <Text 
-                                fontSize={22}
-                                mb='3'
-                            >
-                                1-) A partir de qual preço posso contratar o seu serviço ?
-                            </Text>
-                            <Input type='text' name='answer1' 
-                                value={newAdData.answer1}
-                                onChange={handleChange} 
-                            />
-                        </Flex>
+                                    {/* RADIO */}
+                                    {
+                                        el.type == 'radio'
+                                        ?
+                                        <Flex 
+                                            direction='column'
+                                        >
+                                            <Stack
+                                                justifyContent='space-evenly'
+                                                alignItems='center'
+                                                mb='4'
+                                                direction={el.options.length < 3 ? 'row' : 'column'}
+                                            >
+                                                {
+                                                    el.options.map((element, index) => {
+                                                        return (
+                                                            <ItemList
+                                                                styleType={2}
+                                                                width={el.options.length < 3 ? '40%' : '70%'}
+                                                                name={el.name[0]}
+                                                                textAlign='center'
+                                                                value={element}
+                                                                textToShow={element}
+                                                                selectedName={enterpriseData?.[el.name[0]]}
+                                                                handleOnClick={handleChange}
+                                                            />
+                                                        )
+                                                    })
+                                                }
+                                            </Stack>
 
+                                            <Textarea name={el.name[1]} 
+                                                placeholder={el.placeholder}
+                                                value={enterpriseData?.[el.name[1]]}
+                                                onChange={handleChange} 
+                                            />
+                                        </Flex>
+                                        :
+                                        <>
+                                        </>
+                                    }
 
-                        <Flex direction='column' bg='white'
-                            w='60%'  p='5'
-                            justifyContent='center'
-                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                            borderRadius={8} 
-                        >
-                            <Text 
-                                fontSize={22}
-                                mb='3'
-                            >
-                                2-) A partir de qual preço posso contratar o seu serviço ?
-                            </Text>
-                            <Input type='text' name='answer2'
-                                value={newAdData.answer2} 
-                                onChange={handleChange} 
-                            />
-                        </Flex>
+                                    {/* TEXTAREA */}
+                                    {
+                                        el.type == 'textarea'  
+                                        ?
+                                        <Flex direction='column'>
+                                            <Textarea 
+                                                name={el.name[0]} 
+                                                placeholder={el.placeholder}
+                                                value={enterpriseData?.[el.name[0]]}
+                                                onChange={handleChange} 
+                                            />
+                                        </Flex>
+                                        :
+                                        <>
+                                        </>
+                                    }       
 
+                                    {/* INPUT */}
+                                    {
+                                        el.type == 'input'  
+                                        ?
+                                        <Flex direction='row'
+                                            alignItems='center'
+                                            //justifyContent='center'
+                                        >
+                                            {
+                                                el.span
+                                                ?
+                                                <Text as='span' mr='2'
+
+                                                >
+                                                    {el.span}
+                                                </Text>
+                                                :
+                                                <>
+                                                </>
+                                            }
+                                            <Input 
+                                                name={el.name[0]} 
+                                                type={el.inputType}
+                                                width='40%'
+                                                value={enterpriseData?.[el.name[0]]}
+                                                onChange={handleChange} 
+                                            />
+                                        </Flex>
+                                        :
+                                        <>
+                                        </>
+                                    }       
+
+                                </Flex>
+                            )
+                        })
+                        }
+                        
                     </Stack>
 
                 </RegisterFormLayout>

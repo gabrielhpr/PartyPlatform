@@ -4,16 +4,19 @@ const connQuery = require('../db/conn');
 
 module.exports = class RootModel {
 
-    async selectServices(partyType: string, service: string, location:string) {
+    async selectServices(partyType: string, service: string, city: string, state: string, country: string) {
         
         const query_select = `
             SELECT Ads.*,
                    Ent.*
-            FROM ${partyType+'Ads'} AS Ads
+            FROM Ads 
             INNER JOIN Enterprise AS Ent 
-            ON Ads.id = Ent.id
-            WHERE Ent.enterpriseSpecificCategory = '${service}' 
-            AND Ent.city = '${location}'
+            ON Ads.enterpriseId = Ent.id
+            WHERE Ent.enterpriseSpecificCategory = '${service}'
+            AND Ads.partyMainFocus = '${partyType}' 
+            AND Ent.city = '${city}'
+            AND Ent.state = '${state}'
+            AND Ent.country = '${country}'
         `;
         
         const result = await connQuery( query_select ).catch( (err:any) => {throw err});
@@ -21,15 +24,15 @@ module.exports = class RootModel {
         return result; 
     }
 
-    async selectServiceById( id: number, partyType: string ) {
+    async selectServiceById( enterpriseId: number, partyType: string ) {
         
         const query_select = `
             SELECT Ads.*,
                    Ent.*
-            FROM ${partyType+'Ads'} AS Ads
+            FROM Ads
             INNER JOIN Enterprise AS Ent 
-            ON Ads.id = Ent.id
-            WHERE Ent.id = ${id}
+            ON Ads.enterpriseId = Ent.id
+            WHERE Ent.id = ${enterpriseId}
         `;
         
         const result = await connQuery( query_select ).catch( (err:any) => {throw err});

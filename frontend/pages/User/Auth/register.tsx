@@ -2,9 +2,9 @@ import { Box, Flex, Text, Input, Link as NavLink, Button } from "@chakra-ui/reac
 import Image from 'next/image';
 import { useState } from "react";
 import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
-import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import { useRouter } from "next/router";
 import { Header } from "../../../components/Header";
+import { useUserAuthContext } from "../../../context/userContext";
 
 interface userRegisterDataProps {
     fullName: string;
@@ -34,7 +34,7 @@ const userRegisterDataNullState = {
 
 export default function registerUser() {
     const [userRegisterData, setUserRegisterData] = useState<userRegisterDataProps>(userRegisterDataNullState);
-    const { loginUser } = useEnterpriseAuthContext();
+    const { registerUser } = useUserAuthContext();
     const routerNext = useRouter();
 
     function handleChange( event: any ) {
@@ -46,7 +46,7 @@ export default function registerUser() {
         event.preventDefault();
         console.log('entrou no submit');
         console.log( userRegisterData );
-        loginUser( userRegisterData );
+        registerUser( userRegisterData );
     }
 
     return (

@@ -9,10 +9,11 @@ import { useState } from 'react';
 
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+
 import { MenuServicesOnClick } from '../components/MenuServicesOnClick';
 import { RiBriefcaseLine, RiCake2Fill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
-import { typeOfParties, typeOfServices } from '../utils/typeOfParties';
+import { locationMap, typeOfParties, typeOfServices } from '../utils/typeOfParties';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import AliceCarousel from 'react-alice-carousel';
@@ -23,10 +24,11 @@ export default function HomePage() {
     let photo = [FotoDebutante, FotoInfantilFem, FotoInfantilMasc]
     const [photoNum, setPhotNum] = useState(0);
 
-    const [searchData, setSearchData] = useState({ partyType: '', service: '', location: ''});
+    const [searchData, setSearchData] = useState({ partyType: '', service: '', location: '', city: '', state: '', country: ''});
     const [menuPartyTypeDisp, setMenuPartyTypeDisp] = useState('none');
     const [menuService, setMenuService] = useState('none');
     const [searchInputValueFirst, setSearchInputValueFirst] = useState('');
+    const [menuWhere, setMenuWhere] = useState('none');
 
     const [cardSearchData, setCardSearchData] = useState({ partyType: 'Infantil', service: ''});
 
@@ -41,7 +43,9 @@ export default function HomePage() {
             query: { 
                 partyType: searchData.partyType,
                 service: searchData.service,
-                location: searchData.location 
+                city: searchData.city,
+                state: searchData.state,
+                country: searchData.country
             }
         });
 
@@ -135,8 +139,6 @@ export default function HomePage() {
                             mx='auto'
                             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.65)"
                         >   
-
-                            
 
                             {/* O que você procura ? */}
                             <Flex direction='column'
@@ -318,18 +320,77 @@ export default function HomePage() {
 
                             </Flex>
                             
-
-
-                            <Input placeholder='Onde ?'
-                                fontSize={19}
-                                bg='white'
+                            <Flex direction='column'
                                 w='40%'
                                 h='100%'
-                                borderRadius={0}
-                                _focus={{outline:'none'}}
-                                name='location'
-                                onChange={(event: any) => handleSearchData(event)}
-                            />
+                            >
+                                {/* Onde - Localização */}
+                                <Input placeholder='Onde ?'
+                                    fontSize={19}
+                                    bg='white'
+                                    w='100%'
+                                    h='100%'
+                                    autoComplete='off'
+                                    borderRadius={0}
+                                    _focus={{outline:'none'}}
+                                    value={searchData.location}
+                                    onChange={(event: any) => {
+                                        setSearchData({...searchData, location: event.currentTarget.value})
+                                        searchFunction(event, "menuWhere");
+                                    }}
+                                    onClick={() => {
+                                        setMenuWhere('onclick')
+                                    }}
+                                />
+                                <Box 
+                                    height={230} 
+                                    width={350}
+                                    overflowY="scroll"
+                                    display={menuWhere}
+                                    position='absolute'
+                                    bg='white'
+                                    mt={20}
+                                    borderRadius={10}
+                                >
+                                    <Flex direction="column" id="menuWhere"
+                                        h='100%'
+                                    >
+
+                                        {
+                                        
+                                        Object.values(locationMap).map((el, i) => {
+                                            return(
+                                                <Button
+                                                    bg='white'
+                                                    h='25%'
+                                                    px='5'
+                                                    py='4'
+                                                    borderRadius={0}
+                                                    _focus={{outline:'none'}}
+                                                    _hover={{bg:'rgba(0,0,0,0.1)'}}
+                                                    //name='partyType'
+                                                    //value={searchData.location}
+                                                    onClick={(event) => {
+                                                        setSearchData({...searchData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
+                                                        setMenuWhere('none');
+                                                    }}
+                                                >
+                                                    <Text
+                                                        width='100%'
+                                                        textAlign='left'
+                                                        fontWeight={400}
+                                                        fontSize={18}
+                                                    >
+                                                        {el.textToShow}
+                                                    </Text>
+                                                </Button>
+                                            );
+                                        })
+                                        }
+                                    </Flex>
+                                </Box>
+                            </Flex>
+
                             <Button
                                 w='20%'
                                 h='100%'

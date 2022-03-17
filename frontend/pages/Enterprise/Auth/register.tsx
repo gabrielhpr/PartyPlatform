@@ -6,7 +6,9 @@ import { useRouter } from "next/router";
 import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import Image from 'next/image';
 import { enterpriseCategory, enterpriseSpecificCategory, typeOfParties,
-specificQuestions } from "../../../utils/typeOfParties";
+specificQuestions, 
+enterpriseSpecificCategoryDict,
+locationMap} from "../../../utils/typeOfParties";
 import { TextSpanInput } from "../../../components/Enterprise/TextSpanInput";
 
 interface enterpriseDataInterf {
@@ -21,9 +23,13 @@ interface enterpriseDataInterf {
     passwordConfirmation: string;
     // About the enterprise
     enterpriseName: string;
-    country: string;
-    state: string;
+    
+    // Just for showing the user
+    location: string;
+
     city: string;
+    state: string;
+    country: string;
     address: string;
     addressNumber: number;
     // Enterprise Social Media
@@ -38,7 +44,56 @@ interface enterpriseDataInterf {
 
     photos: any[];
 
-    answers: string[];
+    q1: string;
+    q2: string;
+    q3: string;
+    q4: string;
+    q5: string;
+    q6: string;
+    q7: string;
+    q8: string;
+    q9: string;
+    q10: string;
+    q11: string;
+    q12: string;
+    q13: string;
+    q14: string;
+    q15: string;
+    q16: string;
+    q17: string;
+    q18: string;
+    q19: string;
+    q20: string;
+    q21: string;
+    q22: string;
+    q23: string;
+    q24: string;
+    q25: string;
+    q26: string;
+    q27: string;
+    q28: string;
+    q29: string;
+    q30: string;
+    q31: string;
+    q32: string;
+    q33: string;
+    q34: string;
+    q35: string;
+    q36: string;
+    q37: string;
+    q38: string;
+    q39: string;
+    q40: string;
+    q41: string;
+    q42: string;
+    q43: string;
+    q44: string;
+    q45: string;
+    q46: string;
+    q47: string;
+    q48: string;
+    q49: string;
+    q50: string;
 }
 
 const enterpriseDataNullState = {
@@ -53,9 +108,10 @@ const enterpriseDataNullState = {
     passwordConfirmation: '',
     // About the enterprise
     enterpriseName: '',
-    country: '',
-    state: '',
+    location: '',
     city: '',
+    state: '',
+    country: '',
     address: '',
     addressNumber: 0,
 
@@ -71,7 +127,56 @@ const enterpriseDataNullState = {
 
     photos: [],
 
-    answers: []
+    q1: '',
+    q2: '',
+    q3: '',
+    q4: '',
+    q5: '',
+    q6: '',
+    q7: '',
+    q8: '',
+    q9: '',
+    q10: '',
+    q11: '',
+    q12: '',
+    q13: '',
+    q14: '',
+    q15: '',
+    q16: '',
+    q17: '',
+    q18: '',
+    q19: '',
+    q20: '',
+    q21: '',
+    q22: '',
+    q23: '',
+    q24: '',
+    q25: '',
+    q26: '',
+    q27: '',
+    q28: '',
+    q29: '',
+    q30: '',
+    q31: '',
+    q32: '',
+    q33: '',
+    q34: '',
+    q35: '',
+    q36: '',
+    q37: '',
+    q38: '',
+    q39: '',
+    q40: '',
+    q41: '',
+    q42: '',
+    q43: '',
+    q44: '',
+    q45: '',
+    q46: '',
+    q47: '',
+    q48: '',
+    q49: '',
+    q50: ''
 }
 
 
@@ -80,6 +185,7 @@ export default function RegisterEnterprise() {
     const routerNext = useRouter();
     const { registerEnterprise } = useEnterpriseAuthContext();
     const [preview, setPreview] = useState([]);
+    const [menuWhere, setMenuWhere] = useState('none');
 
     function handleFileChange( event: any ) {
         console.log( 'event files images' );
@@ -91,6 +197,23 @@ export default function RegisterEnterprise() {
     function handleChange( event: any ) {
         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: event.currentTarget.value});
         console.log( enterpriseData );
+    }
+
+    // Used in Menu search
+    function searchFunction( event: any, menuId: string ) {
+        console.log( event.currentTarget.value );
+        let inputValue = event.currentTarget.value.toUpperCase();
+        let menu = document.getElementById( menuId );
+        let itemList = menu.getElementsByTagName("button");
+        
+        for (let i = 0; i < itemList.length; i++) {
+            if (itemList[i].innerHTML.toUpperCase().indexOf(inputValue) > -1) {
+                itemList[i].style.display = "";
+            } 
+            else {
+                itemList[i].style.display = "none";
+            }
+        }
     }
 
     async function handleSubmit( event: any ) {
@@ -119,7 +242,11 @@ export default function RegisterEnterprise() {
         setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
     }
     function previousStep() {
-        if( enterpriseData.step > 0) {
+        // Reseta as respostas das perguntas específicas sobre cada segmento
+        if( enterpriseData.step == 10 ) {
+            setEnterpriseData({...enterpriseData, step: enterpriseData.step - 1, q1: '',q2: '',q3: '',q4: '',q5: '',q6: '',q7: '',q8: '',q9: '',q10: '',q11: '',q12: '',q13: '',q14: '',q15: '',q16: '',q17: '',q18: '',q19: '',q20: '',q21: '',q22: '',q23: '',q24: '',q25: '',q26: '',q27: '',q28: '',q29: '',q30: '',q31: '',q32: '',q33: '',q34: '',q35: '',q36: '',q37: '',q38: '',q39: '',q40: '',q41: '',q42: '',q43: '',q44: '',q45: '',q46: '',q47: '',q48: '',q49: '',q50: ''});
+        }
+        else if( enterpriseData.step > 0) {
             setEnterpriseData({...enterpriseData, step: enterpriseData.step - 1});
         }
     }
@@ -261,7 +388,10 @@ export default function RegisterEnterprise() {
                     handlePreviousStep={previousStep}
                     style='dark'
                 >
-                    <Stack direction='column' spacing={4} w='50%'>
+                    <Stack direction='column' spacing={4} w='50%'
+                        as='form'
+                        autoComplete='off'
+                    >
                         <Flex direction='column'>
                             <TextSpanInput
                                 textToShow="Nome da empresa"
@@ -269,38 +399,74 @@ export default function RegisterEnterprise() {
                             <Input type='text' name='enterpriseName' 
                                 value={enterpriseData.enterpriseName}
                                 onChange={handleChange} 
+                                autoCapitalize="off"
                             />
                         </Flex>
 
-                        <Flex direction='column'>
+                        <Flex direction='column'
+                        >
                             <TextSpanInput
-                                textToShow="País"
+                                textToShow="Localização da empresa"
                             />
-                            <Input type='text' name='country' 
-                                value={enterpriseData.country}
-                                onChange={handleChange} 
+                            {/* Onde - Localização */}
+                            <Input 
+                                _focus={{outline:'none'}}
+                                value={enterpriseData.location}
+                                onChange={(event: any) => {
+                                    setEnterpriseData({...enterpriseData, location: event.currentTarget.value});
+                                    searchFunction(event, "menuWhere");
+                                }}
+                                onClick={() => {
+                                    setMenuWhere('onclick')
+                                }}
                             />
-                        </Flex>
-
-                        <Flex direction='column'>
-                            <TextSpanInput
-                                textToShow="Estado"
-                            />
-                            <Input type='text' name='state' 
-                                value={enterpriseData.state}
-                                onChange={handleChange}
-                            />
-                        </Flex>
-
-                        <Flex direction='column'>
-                            <TextSpanInput
-                                textToShow="Cidade"
-                            />
-                            <Input type='text' name='city' 
-                                value={enterpriseData.city}
-                                onChange={handleChange}
-                            />
-                        </Flex>
+                            <Box 
+                                height={230} 
+                                width={350}
+                                display={menuWhere}
+                                position='absolute'
+                                overflowY="scroll"
+                                bg='brand.white'
+                                mt={20}
+                                borderRadius={10}
+                                zIndex={3}
+                            >
+                                <Flex direction="column" id="menuWhere"
+                                    h='100%'
+                                >
+                                    {
+                                    Object.values(locationMap).map((el, i) => {
+                                        return(
+                                            <Button
+                                                bg='white'
+                                                h='25%'
+                                                py='4'
+                                                px='5'
+                                                borderRadius={0}
+                                                _focus={{outline:'none'}}
+                                                _hover={{bg:'rgba(0,0,0,0.1)'}}
+                                                //name='partyType'
+                                                //value={el.value}
+                                                onClick={(event) => {
+                                                    setEnterpriseData({...enterpriseData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
+                                                    setMenuWhere('none');
+                                                }}
+                                            >
+                                                <Text
+                                                    width='100%'
+                                                    textAlign='left'
+                                                    fontWeight={400}
+                                                    fontSize={18}
+                                                >
+                                                    {el.textToShow}
+                                                </Text>
+                                            </Button>
+                                        );
+                                    })
+                                    }
+                                </Flex>
+                            </Box>
+                        </Flex>                        
 
                         <Flex direction='column'>
                             <TextSpanInput
@@ -558,7 +724,7 @@ export default function RegisterEnterprise() {
         case 10:
             return (
                 <RegisterFormLayout 
-                    question="Perguntas frequentes sobre o seu serviço"
+                    question={`Perguntas frequentes sobre ${enterpriseSpecificCategoryDict[enterpriseData.enterpriseSpecificCategory]}`}
                     subTitle="Responda essas perguntas para facilitar o 
                     entendimento do cliente sobre os seus serviços"
                     lastStep={true}
@@ -579,26 +745,146 @@ export default function RegisterEnterprise() {
                         ?
                         specificQuestions['Espaco']
                         .map((el, index) => {
-                            return (
-                                <Flex direction='column' bg='white'
-                                    w='60%'  p='5'
-                                    justifyContent='center'
-                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                                    borderRadius={8} 
-                                    
-                                >
-                                    <Text 
-                                        fontSize={22}
-                                        mb='3'
+                            // POSSUI BUFFET JUNTO COM O ESPAÇO
+                            if( enterpriseData.q3 == 'Sim' && 
+                                (
+                                ['q21','q22','q23'].includes(el?.name[0])
+                                ||
+                                ['q21','q22','q23'].includes(el?.name[1])
+                                ) ) 
+                            {
+                                console.log('entrou no sim');
+                                console.log(el.name);
+                                
+                                
+                                return (
+                                    <>
+                                    </>
+                                );
+                            }
+                            // SEM BUFFET JUNTO COM O ESPAÇO
+                            else if(enterpriseData.q3 == 'Não' && 
+                                (
+                                ['q5','q6','q7','q8','q9','q10','q11','q12','q13','q14',
+                                'q15','q16','q17','q18','q19','q20'].includes(el?.name[0]) 
+                                ||
+                                ['q5','q6','q7','q8','q9','q10','q11','q12','q13','q14',
+                                'q15','q16','q17','q18','q19','q20'].includes(el?.name[1]) 
+                                )
+                                ) 
+                            {
+                                return (
+                                    <>
+                                    </>
+                                );
+                            }
+                            // NÃO SABE SE TEM OU NÃO BUFFET
+                            else {
+                                return (
+                                    <Flex direction='column' bg='white'
+                                        w='60%'  p='5'
+                                        justifyContent='center'
+                                        boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                        borderRadius={8} 
                                     >
-                                        {(index+1)+') '+el}
-                                    </Text>
-                                    <Input type='text' name='answer1' 
-                                        //value={`${enterpriseData.answer+}`}
-                                        onChange={handleChange} 
-                                    />
-                                </Flex>
-                            )
+                                        <Text 
+                                            fontSize={22}
+                                            mb='3'
+                                        >
+                                            {el.question}
+                                        </Text>
+    
+                                        {/* RADIO */}
+                                        {
+                                            el.type == 'radio'
+                                            ?
+                                            <Flex direction='column'>
+                                                <Flex
+                                                    justifyContent='space-evenly'
+                                                    mb='4'
+                                                >
+                                                    {
+                                                        el.options.map((element, index) => {
+                                                            return (
+                                                                <ItemList
+                                                                    styleType={2}
+                                                                    width='40%'
+                                                                    name={el.name[0]}
+                                                                    textAlign='center'
+                                                                    value={element}
+                                                                    textToShow={element}
+                                                                    selectedName={enterpriseData?.[el.name[0]]}
+                                                                    handleOnClick={handleChange}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                </Flex>
+    
+                                                <Textarea name={el.name[1]} 
+                                                    placeholder={el.placeholder}
+                                                    value={enterpriseData?.[el.name[1]]}
+                                                    onChange={handleChange} 
+                                                />
+                                            </Flex>
+                                            :
+                                            <>
+                                            </>
+                                        }
+    
+                                        {/* TEXTAREA */}
+                                        {
+                                            el.type == 'textarea'  
+                                            ?
+                                            <Flex direction='column'>
+                                                <Textarea 
+                                                    name={el.name[0]} 
+                                                    placeholder={el.placeholder}
+                                                    value={enterpriseData?.[el.name[0]]}
+                                                    onChange={handleChange} 
+                                                />
+                                            </Flex>
+                                            :
+                                            <>
+                                            </>
+                                        }       
+    
+                                        {/* INPUT */}
+                                        {
+                                            el.type == 'input'  
+                                            ?
+                                            <Flex direction='row'
+                                                alignItems='center'
+                                                //justifyContent='center'
+                                            >
+                                                {
+                                                    el.span
+                                                    ?
+                                                    <Text as='span' mr='2'
+    
+                                                    >
+                                                        {el.span}
+                                                    </Text>
+                                                    :
+                                                    <>
+                                                    </>
+                                                }
+                                                <Input 
+                                                    name={el.name[0]} 
+                                                    type={el.inputType}
+                                                    width='40%'
+                                                    value={enterpriseData?.[el.name[0]]}
+                                                    onChange={handleChange} 
+                                                />
+                                            </Flex>
+                                            :
+                                            <>
+                                            </>
+                                        }       
+    
+                                    </Flex>
+                                )
+                            }
                         })
                         :
                         specificQuestions['Servico'][enterpriseData.enterpriseSpecificCategory]
@@ -609,22 +895,109 @@ export default function RegisterEnterprise() {
                                     justifyContent='center'
                                     boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                     borderRadius={8} 
-                                    
                                 >
                                     <Text 
                                         fontSize={22}
                                         mb='3'
                                     >
-                                        {el}
+                                        {el.question}
                                     </Text>
-                                    <Input type='text' name='answer1' 
-                                        //value={`${enterpriseData.answer+}`}
-                                        onChange={handleChange} 
-                                    />
+
+                                    {/* RADIO */}
+                                    {
+                                        el.type == 'radio'
+                                        ?
+                                        <Flex 
+                                            direction='column'
+                                        >
+                                            <Stack
+                                                justifyContent='space-evenly'
+                                                alignItems='center'
+                                                mb='4'
+                                                direction={el.options.length < 3 ? 'row' : 'column'}
+                                            >
+                                                {
+                                                    el.options.map((element, index) => {
+                                                        return (
+                                                            <ItemList
+                                                                styleType={2}
+                                                                width={el.options.length < 3 ? '40%' : '70%'}
+                                                                name={el.name[0]}
+                                                                textAlign='center'
+                                                                value={element}
+                                                                textToShow={element}
+                                                                selectedName={enterpriseData?.[el.name[0]]}
+                                                                handleOnClick={handleChange}
+                                                            />
+                                                        )
+                                                    })
+                                                }
+                                            </Stack>
+
+                                            <Textarea name={el.name[1]} 
+                                                placeholder={el.placeholder}
+                                                value={enterpriseData?.[el.name[1]]}
+                                                onChange={handleChange} 
+                                            />
+                                        </Flex>
+                                        :
+                                        <>
+                                        </>
+                                    }
+
+                                    {/* TEXTAREA */}
+                                    {
+                                        el.type == 'textarea'  
+                                        ?
+                                        <Flex direction='column'>
+                                            <Textarea 
+                                                name={el.name[0]} 
+                                                placeholder={el.placeholder}
+                                                value={enterpriseData?.[el.name[0]]}
+                                                onChange={handleChange} 
+                                            />
+                                        </Flex>
+                                        :
+                                        <>
+                                        </>
+                                    }       
+
+                                    {/* INPUT */}
+                                    {
+                                        el.type == 'input'  
+                                        ?
+                                        <Flex direction='row'
+                                            alignItems='center'
+                                            //justifyContent='center'
+                                        >
+                                            {
+                                                el.span
+                                                ?
+                                                <Text as='span' mr='2'
+
+                                                >
+                                                    {el.span}
+                                                </Text>
+                                                :
+                                                <>
+                                                </>
+                                            }
+                                            <Input 
+                                                name={el.name[0]} 
+                                                type={el.inputType}
+                                                width='40%'
+                                                value={enterpriseData?.[el.name[0]]}
+                                                onChange={handleChange} 
+                                            />
+                                        </Flex>
+                                        :
+                                        <>
+                                        </>
+                                    }       
+
                                 </Flex>
                             )
                         })
-
                         }
                         
                     </Stack>

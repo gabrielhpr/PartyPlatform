@@ -16,8 +16,8 @@ app.use(express.static("public"));
 const EnterpriseRoutes = require("./routes/EnterpriseRoutes");
 app.use("/enterprise", EnterpriseRoutes);
 
-// const UserRoutes = require("./routes/UserRoutes");
-// app.use("/user", UserRoutes);
+const UserRoutes = require("./routes/UserRoutes");
+app.use("/user", UserRoutes);
 
 const RootRoutes = require("./routes/RootRoutes");
 app.use("", RootRoutes);

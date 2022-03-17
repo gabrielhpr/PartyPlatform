@@ -31,10 +31,60 @@ module.exports = class EnterpriseController {
             serviceDescription,
             enterpriseCategory,
             enterpriseSpecificCategory,
-            answer1,
-            answer2 
+            q1,
+            q2,
+            q3,
+            q4,
+            q5,
+            q6,
+            q7,
+            q8,
+            q9,
+            q10,
+            q11,
+            q12,
+            q13,
+            q14,
+            q15,
+            q16,
+            q17,
+            q18,
+            q19,
+            q20,
+            q21,
+            q22,
+            q23,
+            q24,
+            q25,
+            q26,
+            q27,
+            q28,
+            q29,
+            q30,
+            q31,
+            q32,
+            q33,
+            q34,
+            q35,
+            q36,
+            q37,
+            q38,
+            q39,
+            q40,
+            q41,
+            q42,
+            q43,
+            q44,
+            q45,
+            q46,
+            q47,
+            q48,
+            q49,
+            q50
         } = req.body;
         
+        //console.log(req.body);
+
         // VALIDATIONS
         if( !fullName ) {
             res.status(422).json({ message: "O nome completo é obrigatório!"});
@@ -75,8 +125,8 @@ module.exports = class EnterpriseController {
             return;
         }
 
-        if( !country ) {
-            res.status(422).json({ message: "O país é obrigatório!"});
+        if( !city ) {
+            res.status(422).json({ message: "A cidade é obrigatória!"});
             return;
         }
 
@@ -85,8 +135,8 @@ module.exports = class EnterpriseController {
             return;
         }
 
-        if( !city ) {
-            res.status(422).json({ message: "A cidade é obrigatória!"});
+        if( !country ) {
+            res.status(422).json({ message: "O país é obrigatório!"});
             return;
         }
 
@@ -168,17 +218,65 @@ module.exports = class EnterpriseController {
 
         // Ad data
         const dataAd = { 
-            'id': id,
+            'enterpriseId': id,
             'partyMainFocus': partyMainFocus,
             'serviceDescription': serviceDescription,
             'photos': photosNameString,
-            'answer1': answer1,
-            'answer2': answer2
+            'q1': q1,
+            'q2': q2,
+            'q3': q3,
+            'q4': q4,
+            'q5': q5,
+            'q6': q6,
+            'q7': q7,
+            'q8': q8,
+            'q9': q9,
+            'q10': q10,
+            'q11': q11,
+            'q12': q12,
+            'q13': q13,
+            'q14': q14,
+            'q15': q15,
+            'q16': q16,
+            'q17': q17,
+            'q18': q18,
+            'q19': q19,
+            'q20': q20,
+            'q21': q21,
+            'q22': q22,
+            'q23': q23,
+            'q24': q24,
+            'q25': q25,
+            'q26': q26,
+            'q27': q27,
+            'q28': q28,
+            'q29': q29,
+            'q30': q30,
+            'q31': q31,
+            'q32': q32,
+            'q33': q33,
+            'q34': q34,
+            'q35': q35,
+            'q36': q36,
+            'q37': q37,
+            'q38': q38,
+            'q39': q39,
+            'q40': q40,
+            'q41': q41,
+            'q42': q42,
+            'q43': q43,
+            'q44': q44,
+            'q45': q45,
+            'q46': q46,
+            'q47': q47,
+            'q48': q48,
+            'q49': q49,
+            'q50': q50
         }
 
         // Try to create ENTERPRISE AD
         try {
-            await enterpriseModel.insertAd( tableName, dataAd );
+            await enterpriseModel.insertAd( dataAd );
         }
         catch (err) {
             res.status(500).json({message: err});
@@ -297,8 +395,56 @@ module.exports = class EnterpriseController {
         const { 
             serviceDescription, 
             photos,
-            answer1, 
-            answer2
+            q1,
+            q2,
+            q3,
+            q4,
+            q5,
+            q6,
+            q7,
+            q8,
+            q9,
+            q10,
+            q11,
+            q12,
+            q13,
+            q14,
+            q15,
+            q16,
+            q17,
+            q18,
+            q19,
+            q20,
+            q21,
+            q22,
+            q23,
+            q24,
+            q25,
+            q26,
+            q27,
+            q28,
+            q29,
+            q30,
+            q31,
+            q32,
+            q33,
+            q34,
+            q35,
+            q36,
+            q37,
+            q38,
+            q39,
+            q40,
+            q41,
+            q42,
+            q43,
+            q44,
+            q45,
+            q46,
+            q47,
+            q48,
+            q49,
+            q50
         } = req.body;
         
         console.log('serviceDescription');
@@ -356,21 +502,59 @@ module.exports = class EnterpriseController {
         //     res.status(422).json({ message: "A resposta da pergunta 1 é obrigatória!" });
         //     return;
         // }
-        ad.answer1 = answer1;
-        console.log('answer1');
-        console.log(answer1);
-        
-
-        // if( !answer2 ) {
-        //     res.status(422).json({ message: "A resposta da pergunta 2 é obrigatória!" });
-        //     return;
-        // }
-        ad.answer2 = answer2;
-        console.log('answer2');
-        console.log(answer2);
+        ad.q1 = q1;
+        ad.q2 = q2;
+        ad.q3 = q3;
+        ad.q4 = q4;
+        ad.q5 = q5;
+        ad.q6 = q6;
+        ad.q7 = q7;
+        ad.q8 = q8;
+        ad.q9 = q9;
+        ad.q10 = q10;
+        ad.q11 = q11;
+        ad.q12 = q12;
+        ad.q13 = q13;
+        ad.q14 = q14;
+        ad.q15 = q15;
+        ad.q16 = q16;
+        ad.q17 = q17;
+        ad.q18 = q18;
+        ad.q19 = q19;
+        ad.q20 = q20;
+        ad.q21 = q21;
+        ad.q22 = q22;
+        ad.q23 = q23;
+        ad.q24 = q24;
+        ad.q25 = q25;
+        ad.q26 = q26;
+        ad.q27 = q27;
+        ad.q28 = q28;
+        ad.q29 = q29;
+        ad.q30 = q30;
+        ad.q31 = q31;
+        ad.q32 = q32;
+        ad.q33 = q33;
+        ad.q34 = q34;
+        ad.q35 = q35;
+        ad.q36 = q36;
+        ad.q37 = q37;
+        ad.q38 = q38;
+        ad.q39 = q39;
+        ad.q40 = q40;
+        ad.q41 = q41;
+        ad.q42 = q42;
+        ad.q43 = q43;
+        ad.q44 = q44;
+        ad.q45 = q45;
+        ad.q46 = q46;
+        ad.q47 = q47;
+        ad.q48 = q48;
+        ad.q49 = q49;
+        ad.q50 = q50;
 
         try {
-            await enterpriseModel.updateAd(id, partyType, ad);
+            await enterpriseModel.updateAd(ad.id, ad);
             res.status(200).send('Atualizado com sucesso');
             console.log('update com sucesso');
         }
@@ -387,8 +571,56 @@ module.exports = class EnterpriseController {
         const {
             partyMainFocus,
             serviceDescription,
-            answer1,
-            answer2 
+            q1,
+            q2,
+            q3,
+            q4,
+            q5,
+            q6,
+            q7,
+            q8,
+            q9,
+            q10,
+            q11,
+            q12,
+            q13,
+            q14,
+            q15,
+            q16,
+            q17,
+            q18,
+            q19,
+            q20,
+            q21,
+            q22,
+            q23,
+            q24,
+            q25,
+            q26,
+            q27,
+            q28,
+            q29,
+            q30,
+            q31,
+            q32,
+            q33,
+            q34,
+            q35,
+            q36,
+            q37,
+            q38,
+            q39,
+            q40,
+            q41,
+            q42,
+            q43,
+            q44,
+            q45,
+            q46,
+            q47,
+            q48,
+            q49,
+            q50
         } = req.body;
                 
         // Photos
@@ -414,20 +646,68 @@ module.exports = class EnterpriseController {
                 
         // Table to insert Ad
         const tableName = partyMainFocus;
-
+        
         // Ad data
         const dataAd = { 
-            'id': id,
+            'enterpriseId': id,
             'partyMainFocus': partyMainFocus,
             'serviceDescription': serviceDescription,
             'photos': photosNameString,
-            'answer1': answer1,
-            'answer2': answer2
+            'q1': q1,
+            'q2': q2,
+            'q3': q3,
+            'q4': q4,
+            'q5': q5,
+            'q6': q6,
+            'q7': q7,
+            'q8': q8,
+            'q9': q9,
+            'q10': q10,
+            'q11': q11,
+            'q12': q12,
+            'q13': q13,
+            'q14': q14,
+            'q15': q15,
+            'q16': q16,
+            'q17': q17,
+            'q18': q18,
+            'q19': q19,
+            'q20': q20,
+            'q21': q21,
+            'q22': q22,
+            'q23': q23,
+            'q24': q24,
+            'q25': q25,
+            'q26': q26,
+            'q27': q27,
+            'q28': q28,
+            'q29': q29,
+            'q30': q30,
+            'q31': q31,
+            'q32': q32,
+            'q33': q33,
+            'q34': q34,
+            'q35': q35,
+            'q36': q36,
+            'q37': q37,
+            'q38': q38,
+            'q39': q39,
+            'q40': q40,
+            'q41': q41,
+            'q42': q42,
+            'q43': q43,
+            'q44': q44,
+            'q45': q45,
+            'q46': q46,
+            'q47': q47,
+            'q48': q48,
+            'q49': q49,
+            'q50': q50
         }
 
         // Try to create ENTERPRISE AD
         try {
-            await enterpriseModel.insertAd( tableName, dataAd );
+            await enterpriseModel.insertAd( dataAd );
             res.status(200).send('Anúncio inserido com sucesso!');
         }
         catch (err) {

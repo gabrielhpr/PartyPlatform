@@ -16,8 +16,7 @@ export const typeOfServices = {
             {value: 'Bolos', textToShow: 'Bolos'},
             {value: 'Doces', textToShow: 'Doces'},
             // SERVIÇOS
-            {value: 'Fotografia', textToShow: 'Fotografia'},
-            {value: 'Filmagem', textToShow: 'Filmagem'},
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
             {value: 'Decoracao', textToShow: 'Decoração'},
             {value: 'Musica', textToShow: 'Música'},
             {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa'}
@@ -33,8 +32,7 @@ export const typeOfServices = {
             {value: 'Bolos', textToShow: 'Bolos'},
             {value: 'Doces', textToShow: 'Doces'},
             // SERVIÇOS
-            {value: 'Fotografia', textToShow: 'Fotografia'},
-            {value: 'Filmagem', textToShow: 'Filmagem'},
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
             {value: 'Decoracao', textToShow: 'Decoração'},
             {value: 'Musica', textToShow: 'Música'},
             {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa'}
@@ -50,8 +48,7 @@ export const typeOfServices = {
             {value: 'Bolos', textToShow: 'Bolos'},
             {value: 'Doces', textToShow: 'Doces'},
             // SERVIÇOS
-            {value: 'Fotografia', textToShow: 'Fotografia'},
-            {value: 'Filmagem', textToShow: 'Filmagem'},
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
             {value: 'Decoracao', textToShow: 'Decoração'},
             {value: 'Musica', textToShow: 'Música'},
             {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa'}
@@ -66,7 +63,7 @@ export const enterpriseCategory = {
     },
     Servico: {
         value: 'Servico', textToShow: 'Prestador de serviço',
-        description: 'Fotografia, Decoração, Bolos, Doces, ...'
+        description: 'Fotografia/Filmagem, Decoração, Bolos, Doces, ...'
     }
 }
 
@@ -82,10 +79,30 @@ export const enterpriseSpecificCategory = {
         {value: 'Bolos', textToShow: 'Bolos'},
         {value: 'Decoracao', textToShow: 'Decoração'},
         {value: 'Doces', textToShow: 'Doces'},
-        {value: 'Fotografia', textToShow: 'Fotografia'},
-        {value: 'Filmagem', textToShow: 'Filmagem'},
+        {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
         {value: 'Musica', textToShow: 'Música'}
     ]
+}
+
+export const enterpriseSpecificCategoryDict = {
+    'SalaoDeFesta': 'Salão de Festa',
+    'Chacara': 'Chácara',
+    'Buffet': 'Buffet',
+    'AnimacaoDeFesta': 'Animação de Festa',
+    'Bolos': 'Bolos',
+    'Decoracao': 'Decoração',
+    'Doces': 'Doces',
+    'FotografiaFilmagem': 'Fotografia/Filmagem',
+    'Musica': 'Música'
+}
+
+export const locationMap = {
+    l1: {city: 'osasco', state: 'sp', country: 'brasil', textToShow: 'Osasco - SP, Brasil'},
+    l2: {city: 'saopaulo', state: 'sp', country: 'brasil', textToShow: 'São Paulo - SP, Brasil'},
+    l3: {city: 'carapicuiba', state: 'sp', country: 'brasil', textToShow: 'Carapicuíba - SP, Brasil'},
+    l4: {city: 'barueri', state: 'sp', country: 'brasil', textToShow: 'Barueri - SP, Brasil'},
+    l5: {city: 'cotia', state: 'sp', country: 'brasil', textToShow: 'Cotia - SP, Brasil'},
+    l6: {city: 'itapevi', state: 'sp', country: 'brasil', textToShow: 'Itapevi - SP, Brasil'},
 }
 
 
@@ -93,135 +110,161 @@ export const enterpriseSpecificCategory = {
 
 export const specificQuestions = {
     Espaco: [
-        'Celebra mais de um evento por dia ?',  
+        {name: ['q1', 'q2'], question: 'Celebra mais de um evento por dia ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+
         // BUFFET
-        'Dispõe de buffet/cozinha própria ?',
+        {name: ['q3', 'q4'], question: 'Dispõe de buffet/cozinha própria ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+
         // Se sim
-        'O que inclui o menu ?',
-        'É possível alugar apenas o espaço sem o serviço de buffet ?',
-        'Qual é o tipo de cozinha servida ?',
-        'É possível adaptar ou alterar os menus ?',
-        'Dispõe de menus especiais ?',
-        'Também serve o bolo de noiva ?',
-        'Posso levar o meu próprio bolo de noiva? Tem algum encargo ?',
-        'Como funciona o Open bar ?',
+        {name: ['q5'], question: 'Qual o preço mínimo por pessoa ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+        {name: ['q6'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+        {name: ['q7'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+        {name: ['q8'], question: 'O que inclui o menu ?', description: '', type: 'textarea', placeholder: ''},
+        {name: ['q9','q10'], question: 'É possível alugar apenas o espaço sem o serviço de buffet ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q11'], question: 'Qual é o tipo de cozinha servida ?', description: '', type: 'textarea', placeholder: ''},
+        {name: ['q12', 'q13'], question: 'É possível adaptar ou alterar os menus ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q14', 'q15'], question: 'Dispõe de menus especiais ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q16', 'q17'], question: 'Também serve o bolo de noiva ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q18', 'q19'], question: 'Posso levar o meu próprio bolo de noiva? Tem algum encargo ?', description: '', type: 'radio', options: ['Não há encargo', 'Há encargo'], placeholder: 'Observações: '},
+        {name: ['q20'], question: 'Como funciona o Open bar ?', description: '', type: 'textarea', placeholder: ''},
+
+        // Se não
+        {name: ['q21'], question: 'Qual o preço mínimo do aluguel do espaço ?', description: '', type: 'input', inputType: 'number'},
+        {name: ['q22'], question: 'Qual o número mínimo de convidados que aceita ?', description: '', type: 'input', inputType: 'number'},
+        {name: ['q23'], question: 'Qual o número máximo de convidados que aceita ?', description: '', type: 'input', inputType: 'number'},
 
         // ESPAÇO
-        'Tem uma hora limite para as celebrações ?',
-        'Exclusividade de fotógrafo ?',
-        'Exclusividade de música ?',
-        'Exclusividade de buffet ?',
-        'Existe algum pagamento fixo pelo lugar ?',
-        'Qual é a penalização no caso de não se atingir o mínimo ?',
-        'Quais são as formas de pagamento ?',
-        'Dispõe de acessos para pessoas com deficiência ?',
+        {name: ['q24', 'q25'], question: 'Tem uma hora limite para as celebrações ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q26', 'q27'], question: 'Há exclusividade de buffet ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q28', 'q29'], question: 'Há exclusividade de decoração ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q30', 'q31'], question: 'Há exclusividade de fotógrafo ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q32', 'q33'], question: 'Há exclusividade de música ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q34', 'q35'], question: 'Existe algum pagamento fixo pelo lugar ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q36', 'q37'], question: 'Há penalização no caso de não se atingir o número mínimo de pessoas ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q38', 'q39'], question: 'Parcela até a data do evento ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+        {name: ['q40'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''},
+        {name: ['q41', 'q42'], question: 'Dispõe de acessos para pessoas com deficiência ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '}
     ],
     Servico: {
         Buffet: [
             // BUFFET
-            'Cozinha no mesmo local da recepção ?',
-            'O que inclui o menu ?',
-            'É possível adaptar ou alterar os menus ?',
-            'É possível elaborar menus personalizados ?',
-            'Qual é o tipo de cozinha servida ?',
-            'Dispõe de menus especiais ?',
-            'Também serve o bolo de noiva ?',
-            'Posso levar o meu próprio bolo de noiva? Tem algum encargo ?',
-            'Tem uma hora limite para as celebrações ?',
-            'Como funciona o Open bar ?',
-            'Celebra mais de um evento por dia ?',
-            'Qual é a penalização no caso de não se atingir o mínimo ?',
-            'Quais são as formas de pagamento ?'
+            {name: ['q1'], question: 'Qual o preço mínimo por pessoa ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name: ['q2'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+            {name: ['q3'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+            {name: ['q4', 'q5'], question: 'Tem uma hora limite para as celebrações ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q6','q7'], question: 'Cozinha no mesmo local da recepção ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q8'], question: 'O que inclui o menu ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q9','q10'], question: 'É possível adaptar ou alterar os menus ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q11','q12'], question: 'É possível elaborar menus personalizados ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q13'], question: 'Qual é o tipo de cozinha servida ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q14','q15'], question: 'Dispõe de menus especiais ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q16','q17'], question: 'Também serve o bolo de noiva ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q18','q19'], question: 'Posso levar o meu próprio bolo de noiva? Tem algum encargo ?', description: '', type: 'radio', options: ['Não há encargo', 'Há encargo'], placeholder: 'Observações: '},
+            {name: ['q20','q21'], question: 'Tem uma hora limite para as celebrações ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q22'], question: 'Como funciona o Open bar ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q23','q24'], question: 'Celebra mais de um evento por dia ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q25','q26'], question: 'Há penalização no caso de não se atingir o número mínimo de pessoas ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q27','q28'], question: 'Parcela até a data do evento ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q29'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         Bolos: [
-            'Que tipos de bolos oferece ?',
-            'Realiza trabalhos a medida ?',
-            'Dispõe de bolos especiais ?',
-            'Que outros produtos oferece ?',
-            'Leva o produto ao local da recepção ?',
-            'Há algum custo para entregar a domicílio ?',
-            'Quais são as formas de pagamento ?'
+            {name: ['q1'], question: 'Qual o preço mínimo do kg ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name: ['q2'], question: 'Qual o peso mínimo do bolo ?', description: '', type: 'input', inputType:'number', span: 'Kg '},
+            {name: ['q3'], question: 'Qual o peso máximo do bolo ?', description: '', type: 'input', inputType:'number', span: 'Kg '},
+            {name: ['q4'], question: 'Que tipos de bolos oferece ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q5','q6'], question: 'Realiza trabalhos a medida ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q7','q8'], question: 'Dispõe de bolos especiais ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q9'], question: 'Que outros produtos oferece ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q10','q11'], question: 'Realiza a entrega do produto ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q12','q13'], question: 'Qual o custo para entregar ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q14'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         Doces: [
-            'Que tipo de produtos estão disponíveis ?',
-            'Realiza trabalhos a medida ?',
-            'Leva o produto ao local da recepção ?',
-            'Quais são as formas de pagamento ?',
+            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name: ['q2'], question: 'Que tipo de produtos estão disponíveis ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q3','q4'], question: 'Realiza trabalhos sob medida ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q5','q6'], question: 'Realiza a entrega do produto ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q7'], question: 'Qual o custo para entregar ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q8'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
-        Fotografia: [
-            'Com que antecedência devo entrar em contato ?',
-            'Cobre mais de um casamento por dia ?',
-            'Que estilo de fotografia realiza ?',
-            'Qual é a tecnologia utilizada ?',
-            'Utiliza alguma técnica especial ou inovadora ?',
-            'Que material utiliza ?',
-            'Dispõe de algum sistema para compartilhar as fotos online ?',
-            'Qual é o tempo de entrega aproximado do álbum finalizado ?',
-            'Entrega todas as cópias originais ?',
-            'Trabalha sozinho ou conta com uma equipe de profissionais ?',
-            'Tem um substituto em caso de imprevisto ?',
-            'Reserva o direito de publicar as fotos do casamento ?',
-            'Recebe por horas ou por evento ?',
-            'Se fosse necessário, poderia realizar horas extras ?',
-            'Como é o pagamento das horas extras ?',
-            'Quais são as formas de pagamento ?'
+        FotografiaFilmagem: [
+            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+
+            {name: ['q2','q3'], question: 'Quais serviços realiza ?', description: '', type: 'radio', options:['Fotografia', 'Filmagem', 'Fotografia e Filmagem']},
+            
+            // Geral
+            {name: ['q4'], question: 'Com que antecedência devo entrar em contato ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q5','q6'], question: 'Cobre mais de um evento por dia ?', description: '', type: 'radio', options:['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q7','q8'], question: 'Recebe por horas ou por evento ?', description: '', type: 'radio', options: ['Por horas', 'Por evento'], placeholder: 'Observações: '},
+            {name: ['q9','q10'], question: 'Se fosse necessário, poderia realizar horas extras ?', description: '', type:'radio', options:['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q11'], question: 'Como é o pagamento das horas extras ?', description: '', type:'textarea', placeholder: ''},
+            {name: ['q12', 'q13'], question: 'Parcela até a data do evento ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q14'], question: 'Quais são as formas de pagamento ?', description: '', type:'textarea', placeholder: ''},
+            {name: ['q15','q16'], question: 'Trabalha sozinho ou conta com uma equipe de profissionais ?', description: '', type: 'radio', options: ['Sozinho', 'Com equipe'], placeholder: 'Observações: '},
+            {name: ['q17','q18'], question: 'Tem um substituto em caso de imprevisto ?', description: '', type: 'radio', options:['Sim','Não'], placeholder: 'Observações: '},
+            {name: ['q19','q20'], question: 'Reserva o direito de publicar as fotos/filmagem do evento ?', description: '', type: 'radio', options:['Sim','Não'], placeholder: 'Observações: '},
+            
+            // Fotografia
+            {name: ['q21'], question: 'Que estilo de fotografia realiza ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q22'], question: 'Qual é a tecnologia utilizada ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q23'], question: 'Utiliza alguma técnica especial ou inovadora ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q24'], question: 'Que material utiliza ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q25','q26'], question: 'Dispõe de algum sistema para compartilhar as fotos online ?', description: '', type: 'radio', options:['Sim','Não'], placeholder: 'Observações: '},
+            {name: ['q27'], question: 'Qual é o tempo de entrega aproximado do álbum finalizado ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q28','q29'], question: 'Entrega todas as cópias originais ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            
+            // Filmagem
+            {name: ['q30'], question: 'Que estilo de vídeo realiza ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q31'], question: 'Qual é a tecnologia utilizada ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q32'], question: 'Utiliza alguma técnica especial ou inovadora ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q33'], question: 'Que material utiliza ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q34'], question: 'Como é o seu estilo de trabalhar?', description: '', type: 'textarea', placeholder: ''}
         ],     
-        Filmagem: [
-            'Com que antecedência devo entrar em contato ?',
-            'Cobre mais de um casamento por dia ?',
-            'Que estilo de vídeo realiza ?',
-            'Qual é a tecnologia utilizada ?',
-            'Utiliza alguma técnica especial ou inovadora ?',
-            'Que material utiliza ?',
-            'Trabalha sozinho ou conta com uma equipe de profissionais ?',
-            'Tem um substituto em caso de imprevisto ?',
-            'Reserva o direito de publicar as fotos do casamento ?',
-            'Qual é o tempo de entrega aproximado do álbum finalizado ?',
-            'Recebe por horas ou por evento ?',
-            'Se fosse necessário, poderia realizar horas extras ?',
-            'Como é o pagamento das horas extras ?',
-            'Quais são as formas de pagamento ?',
-            'Como é o seu estilo de trabalhar?'
-        ],
         Decoracao: [
-            'Ao contratar o serviço, encarrega-se de: ',
-            'Com que antecedência devo entrar em contato ?',
-            'Tem um showroom para ver os exemplos disponíveis ?',
-            'Dispõe de um serviço de assessoria ?',
-            'Quais são as formas de pagamento ?'
+            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name: ['q2'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+            {name: ['q3'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+            {name: ['q4'], question: 'Ao contratar o serviço, encarrega-se de: ', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q5'], question: 'Com que antecedência devo entrar em contato ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q6','q7'], question: 'Tem um showroom para ver os exemplos disponíveis ?', description: '', type: 'radio', options:['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q8','q9'], question: 'Parcela até a data do evento ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q10'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         Musica: [
-            'O que inclui o pack de casamento ?',
-            'Com que antecedência devo entrar em contato ?',
-            'Tamanho da formação',
-            'Repertório:',
-            'Há algum problema ou impedimento se peço uma música que não está no repertório ?',
-            'Experiência:',
-            'Dispõe de equipamento próprio ?',
-            'Necessita de algum material em concreto ou condições específicas para oferecer o serviço ?',
-            'Pode fazer deslocamentos ?',
-            'Cobre mais de um casamento por dia ?',
-            'Trabalha sozinho ou conta com uma equipe de profissionais ?',
-            'Quanto tempo dura o serviço ?',
-            'De quanto tempo necessita para preparar a atuação ?',
-            'Realiza atuações ao ar livre ?',
-            'Recebe por horas ou por evento ?',
-            'Se fosse necessário, poderia realizar horas extras ?',
-            'Como é o pagamento das horas extras ?',
-            'Quais são as formas de pagamento ?',
+            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name: ['q2'], question: 'O que inclui o pack de casamento ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q3'], question: 'Com que antecedência devo entrar em contato ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q4'], question: 'Qual o tamanho da formação ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q5'], question: 'Qual é o repertório ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q6','q7'], question: 'Há algum problema ou impedimento se peço uma música que não está no repertório ?', description: '', type: 'radio', options:['Sim','Não'], placeholder: 'Observações: '},
+            {name: ['q8'], question: 'Descreva sua experiência:', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q9','q10'], question: 'Dispõe de equipamento próprio ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q11'], question: 'Necessita de algum material em concreto ou condições específicas para oferecer o serviço ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q12','q13'], question: 'Pode fazer deslocamentos ?', description: '', type: 'radio', options:['Sim','Não'], placeholder: 'Observações: '},
+            {name: ['q14','q15'], question: 'Cobre mais de um evento por dia ?', description: '', type: 'radio', options:['Sim','Não'], placeholder: 'Observações: '},
+            {name: ['q16', 'q17'], question: 'Trabalha sozinho ou conta com uma equipe de profissionais ?', description: '', type: 'radio', options: ['Sozinho', 'Com equipe'], placeholder: 'Observações: '},
+            {name: ['q18'], question: 'Quanto tempo dura o serviço ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q19'], question: 'De quanto tempo necessita para preparar a atuação ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q20','q21'], question: 'Realiza atuações ao ar livre ?', description: '', type: 'radio', options:['Sim','Não'], placeholder: 'Observações: '},
+            {name: ['q22','q23'], question: 'Recebe por horas ou por evento ?', description: '', type: 'radio', options:['Por horas', 'Por evento'], placeholder: 'Observações: '},
+            {name: ['q24','q25'], question: 'Se fosse necessário, poderia realizar horas extras ?', description: '', type: 'radio', options:['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q26'], question: 'Como é o pagamento das horas extras ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q27','q28'], question: 'Parcela até a data do evento ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name: ['q29'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         AnimacaoDeFesta: [
-            'Com que antecedência devo entrar em contato ?',
-            'Que outros serviços são oferecidos ?',
-            'Necessita de algum material em concreto ou condições específicas para oferecer o serviço ?',
-            'Quanto tempo dura o serviço ?',
-            'De quanto tempo necessita para preparar a atuação ?',
-            'Trabalha sozinho ou conta com uma equipe de profissionais ?',
-            'Realiza atuações ao ar livre ?',
-            'Recebe por horas ou por evento ?',
-            'Se fosse necessário, poderia realizar horas extras ?',
-            'Como é o pagamento das horas extras ?',
-            'Quais são as formas de pagamento ?'
+            {name:['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name:['q2'], question: 'Com que antecedência devo entrar em contato ?', description: '', type:'textarea', placeholder: ''},
+            {name:['q3'], question: 'Que outros serviços são oferecidos ?', description: '', type:'textarea', placeholder: ''},
+            {name:['q4'], question: 'Necessita de algum material em concreto ou condições específicas para oferecer o serviço ?', description: '', type:'textarea', placeholder: ''},
+            {name:['q5'], question: 'Quanto tempo dura o serviço ?', description: '', type:'textarea', placeholder: ''},
+            {name:['q6'], question: 'De quanto tempo necessita para preparar a atuação ?', description: '', type:'textarea', placeholder: ''},
+            {name:['q7'], question: 'Trabalha sozinho ou conta com uma equipe de profissionais ?', description: '', type:'radio', options:['Sozinho', 'Com equipe'], placeholder: 'Observações: '},
+            {name:['q8','q9'], question: 'Realiza atuações ao ar livre ?', description: '', type:'radio', options:['Sim','Não'], placeholder: 'Observações: '},
+            {name:['q10','q11'], question: 'Recebe por horas ou por evento ?', description: '', type:'radio', options:['Por horas', 'Por evento'], placeholder: 'Observações: '},
+            {name:['q12','q13'], question: 'Se fosse necessário, poderia realizar horas extras ?', description: '', type:'radio', options: ['Sim','Não'], placeholder: 'Observações: '},
+            {name:['q14'], question: 'Como é o pagamento das horas extras ?', description: '', type:'textarea', placeholder: ''},
+            {name:['q15'], question: 'Quais são as formas de pagamento ?', description: '', type:'textarea', placeholder: ''}
         ]
     }
 }

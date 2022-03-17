@@ -115,6 +115,24 @@ export function AdDetailsEdit({ serviceDescription, photos, saveDataChanged}) {
                 />
                 <EditDivider/>
 
+                <TitleEdit 
+                    title="Perguntas frequentes" 
+                    mb="5"
+                    id="Perguntas Frequentes"
+                    //handleData={handleData}
+                />
+
+               
+                <ItemEdit 
+                    title="Descrição do serviço"
+                    name='serviceDescription'
+                    itemValue={`${serviceDescription}`}
+                    about="Todos os detalhes acerca do seu espaço"
+                    saveDataChanged={saveDataChanged}
+
+                />
+                <EditDivider/>
+
                
                 
 

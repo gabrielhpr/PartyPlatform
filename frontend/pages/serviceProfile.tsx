@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { ModalServiceProfile } from "../components/ModalServiceProfile";
 import { ModalImageGallery } from "../components/ModalImageGallery";
 import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
 
 const serviceNullState = {
     step: 0,
@@ -78,12 +79,13 @@ export default function ServiceProfilePage() {
             {/* Content */}
             <Flex w='100%' justifyContent='center'
                 bg='brand.white'
+                mb='20'
             >
                 <Flex w='80%' direction='column'
                     bg='white' px={34}
                     boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                     borderRadius={8}
-                    mt='5'
+                    mt='10'
                 >
 
                     {/* Details about the service */}
@@ -343,6 +345,8 @@ export default function ServiceProfilePage() {
                     </Flex>
                 </Flex>
             </Flex>
+
+            <Footer />
         </Box>
     );
 }

@@ -14,12 +14,11 @@ import { typeOfParties } from "../../../utils/typeOfParties";
 export default function EditAdsEnterprise() {
     const [componentToLoad, setComponentToLoad] = useState("Detalhes do anúncio");
     const [adData, setAdData] = useState({});
+    const [enterpriseData, setEnterpriseData] = useState({});
     const [hasToUpdate, setHasToUpdate] = useState(false);
     const routerNext = useRouter();
     
-    
-    
-    // GetData
+    // GetData - Ads and enterprise
     useEffect(() => {
         if( !routerNext.isReady ) {
             return;
@@ -35,6 +34,21 @@ export default function EditAdsEnterprise() {
             })
             .then((response) => {
                 setAdData( response.data.ad );                 
+            });
+        }
+        catch( err ) {
+            console.log( err );
+        }
+
+        // Get enterprise data
+        try {
+            api.get("/enterprise/myenterprise", {
+                headers: {
+                    'Authorization': `Bearer ${JSON.parse(token)}`
+                }
+            })
+            .then((response) => {
+                setEnterpriseData( response.data.enterpriseData );
             });
         }
         catch( err ) {
@@ -120,10 +134,9 @@ export default function EditAdsEnterprise() {
                 mx="auto" 
                 w='80%'
             >
-                {/* Left Menu 
-            */}
+                {/* Left Menu */}
                 <LeftMenuEdit 
-                    propertyName={typeOfParties[adData.partyMainFocus].textToShow}
+                    propertyName={typeOfParties[adData?.partyMainFocus].textToShow}
                     srcImage={`http://localhost:5000/images/enterprise/${adData?.photos.split(",")[0]}`}
                     stateChanger={setComponentToLoad}
                     w='25%'
@@ -150,7 +163,6 @@ export default function EditAdsEnterprise() {
                         <h2>afsdfas</h2>
                     }
 
-                
                 </Flex>
 
             </Flex>
