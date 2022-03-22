@@ -5,6 +5,12 @@ import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import FotoInfantilFem from '../assets/imgs/festaInfantilFeminino1.jpg';
 import FotoInfantilMasc from '../assets/imgs/festaInfantilMasculino1.jpg';
 
+import Debutante from '../assets/imgs/debutante.png';
+import IdosoAniversario from '../assets/imgs/idoso-aniversario.png';
+import MulherAniversario from '../assets/imgs/mulher-aniversario.png';
+import CriancaAniversario from '../assets/imgs/crianca-aniversario.png';
+
+
 import { useState } from 'react';
 
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -24,7 +30,7 @@ export default function HomePage() {
     let photo = [FotoDebutante, FotoInfantilFem, FotoInfantilMasc]
     const [photoNum, setPhotNum] = useState(0);
 
-    const [searchData, setSearchData] = useState({ partyType: '', service: '', location: '', city: '', state: '', country: ''});
+    const [searchData, setSearchData] = useState({ partyType: '', serviceCategory: '', serviceSpecificCategory: '', location: '', city: '', state: '', country: ''});
     const [menuPartyTypeDisp, setMenuPartyTypeDisp] = useState('none');
     const [menuService, setMenuService] = useState('none');
     const [searchInputValueFirst, setSearchInputValueFirst] = useState('');
@@ -42,7 +48,8 @@ export default function HomePage() {
             pathname: '/services',
             query: { 
                 partyType: searchData.partyType,
-                service: searchData.service,
+                serviceCategory: searchData.serviceCategory,
+                serviceSpecificCategory: searchData.serviceSpecificCategory,
                 city: searchData.city,
                 state: searchData.state,
                 country: searchData.country
@@ -57,7 +64,7 @@ export default function HomePage() {
 
     // Return to previous step in the first search input
     function previousStepSearch() {
-        setSearchData({...searchData, partyType:'', service:''});
+        setSearchData({...searchData, partyType:'', serviceCategory:'', serviceSpecificCategory: ''});
         // Hide Service Menu
         setMenuService('none');
         // show Party Type Menu
@@ -101,38 +108,45 @@ export default function HomePage() {
             
             {/* Carroussel and Menu */}
             <Flex 
-                h='70vh' 
+                h='90vh' 
                 w='100vw'
                 fontSize={32}
-                //justifyContent='center'
+                justifyContent='center'
+                
                 //alignItems='center'
                 //position='absolute'
-                //bg='black'
+                bg='brand.yellow'
             >
                 
                 <Flex 
-                    width='100vw' 
-                    height='70vh' 
+                    width='100%' 
+                    height='90vh' 
                     alignItems='center'
-                    justifyContent='center'
-                    bg='rgba(0,0,0,0.25)' zIndex={5}
+                    justifyContent='space-between'
+                    bg='rgba(0,0,0,0)' zIndex={5}
                     position='absolute'
+
                 >
                     
                     <Flex
                         direction='column' justifyContent='center'
-                        width='80%' 
+                        width='50%'
+                        //bg='brand.yellow'
+                        borderRadius={30}
+                        borderRightRadius='50%'
+                        pl='40'
+                        h='100%'
                     >
 
-                        <Text as='h2' fontSize={42} color='white'
-                            zIndex={2} fontWeight={900} textAlign='center'
+                        <Text as='h2' fontSize={42} color='black'
+                            zIndex={2} fontWeight={600} textAlign='center'
                             mb='6'
                         >
                             Tudo para a sua festa de aniversário!
                         </Text>
 
                         <Flex 
-                            width={700}
+                            width='90%'
                             height={16}
                             borderRadius={8}
                             alignItems='center'
@@ -174,12 +188,12 @@ export default function HomePage() {
                                         if(searchData.partyType === '') {
                                             setMenuPartyTypeDisp('');
                                         }
-                                        else if (searchData.service === '') {
+                                        else if (searchData.serviceCategory === '') {
                                             setMenuService('onclick');
                                         }
                                         // Both are already setted up, reset all and start again
                                         else {
-                                            setSearchData({...searchData, partyType: '', service: ''});
+                                            setSearchData({...searchData, partyType: '', serviceCategory: '', serviceSpecificCategory: ''});
                                             setSearchInputValueFirst('');
                                             setMenuPartyTypeDisp('');
                                             // Reset previous search on Party Type Menu
@@ -187,9 +201,9 @@ export default function HomePage() {
                                         }
                                     }}
                                     value={ 
-                                        ( searchData.partyType !== '' && searchData.service !== '' )
+                                        ( searchData.partyType !== '' && searchData.serviceCategory !== '' )
                                         ?
-                                        searchData.partyType + ' / ' + searchData.service
+                                        searchData.partyType + ' / ' + searchData.serviceCategory + ' / ' + searchData.serviceSpecificCategory
                                         :
                                         searchInputValueFirst
                                     }
@@ -278,7 +292,7 @@ export default function HomePage() {
                                         handleClick={(event) => {
                                             console.log('menuServicesOnClick');
                                             console.log(searchData.partyType);
-                                            handleSearchData(event);
+                                            setSearchData({...searchData, serviceCategory: event.currentTarget.value.split('-')[0], serviceSpecificCategory: event.currentTarget.value.split('-')[1]});
                                             setMenuService('none');
                                         }}
                                     />
@@ -304,9 +318,9 @@ export default function HomePage() {
                                             return(
                                                 <Button
                                                     name='service'
-                                                    value={el.value}
+                                                    value={el.parent+'-'+el.value}
                                                     onClick={(event) => {
-                                                        handleSearchData(event);
+                                                        setSearchData({...searchData, serviceCategory: el.parent, serviceSpecificCategory: el.value});
                                                         setMenuService('none');
                                                     }}
                                                 >
@@ -408,8 +422,80 @@ export default function HomePage() {
                         </Flex>
 
                     </Flex>
+                
+                    {/* Square of pictures */}
+                    <Flex direction='column' 
+                        justifyContent='center'
+                        alignItems='center'
+                        w='50%'
+                        h='100%'
+                        bg='brand.white'
+                        borderLeftRadius='50%'
+                        //borderRightRadius='50%'
+
+                        
+                        
+                    >
+                        <Flex  mb='5' mx='auto'>
+                            <Flex position='relative'
+                                h={230} w={230}
+                                mr='5' 
+                                borderRadius={4}
+                                overflow='hidden'
+                                
+                            >
+                                <Image
+                                    src={CriancaAniversario}
+                                    layout='fill'
+                                    objectFit='cover'
+                                /> 
+                            </Flex>
+
+                            <Flex position='relative'
+                                h={230} w={230}
+                                borderRadius={4}
+                                overflow='hidden'
+                            >
+                                <Image
+                                    src={Debutante}
+                                    layout='fill'
+                                    objectFit='cover'
+                                /> 
+                            </Flex>
+                        </Flex>
+                                        
+                        <Flex mx='auto'>
+                            <Flex position='relative'
+                                h={230} w={230}
+                                mr='5'
+                                borderRadius={4}
+                                overflow='hidden'
+                            >
+                                <Image
+                                    src={MulherAniversario}
+                                    layout='fill'
+                                    objectFit='cover'
+                                /> 
+                            </Flex>
+
+                            <Flex position='relative'
+                                h={230} w={230}
+                                borderRadius={4}
+                                overflow='hidden'
+                            >
+                                <Image
+                                    src={IdosoAniversario}
+                                    layout='fill'
+                                    objectFit='cover'
+                                /> 
+                            </Flex>
+                        </Flex>
+                    </Flex>
                 </Flex>
-                    
+
+                {
+                /* 
+
                 <Carousel
                     width='100vw'
                     autoPlay={true}
@@ -445,6 +531,9 @@ export default function HomePage() {
                         }
                     
                 </Carousel>
+
+                */
+                }
             </Flex>
 
 

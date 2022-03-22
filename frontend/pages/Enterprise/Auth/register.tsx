@@ -10,6 +10,7 @@ specificQuestions,
 enterpriseSpecificCategoryDict,
 locationMap} from "../../../utils/typeOfParties";
 import { TextSpanInput } from "../../../components/Enterprise/TextSpanInput";
+import { PriceCard } from "../../../components/Enterprise/priceCard";
 
 interface enterpriseDataInterf {
     step: number;
@@ -727,8 +728,8 @@ export default function RegisterEnterprise() {
                     question={`Perguntas frequentes sobre ${enterpriseSpecificCategoryDict[enterpriseData.enterpriseSpecificCategory]}`}
                     subTitle="Responda essas perguntas para facilitar o 
                     entendimento do cliente sobre os seus serviços"
-                    lastStep={true}
-                    handleNextStep={handleSubmit}
+                    lastStep={false}
+                    handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
                 >
                     <Stack direction='column' 
@@ -737,7 +738,7 @@ export default function RegisterEnterprise() {
                         alignItems='center'
                         overflowY='scroll'
                         w='100%'
-                        h='90%'
+                        h='75vh'
                         //overflowWrap='wrap'
                     >
                         {
@@ -1006,6 +1007,56 @@ export default function RegisterEnterprise() {
 
             );
 
+        
+        case 11:
+            return (
+                <Flex w='100vw' h='100vh' justifyContent='center'>
+                    <Flex 
+                        direction='column'
+                        justifyContent='center' 
+                        width='70%' height='100%'
+                        alignItems='center' 
+                    >
+                        <Text fontSize={36}
+                            fontWeight={500}
+                            mb='20'
+                        >
+                            Escolha o seu plano
+                        </Text>
+
+                        <Stack direction="row" spacing="10"
+                            justifyContent="center" 
+                            alignItems="center" 
+                            bg="brand.white_95"
+                        >
+                            {/* Card */}
+                            <PriceCard title="START (Grátis)" price={0}
+                                functionalities={[
+                                    "Gerenciador de anúncios",
+                                    "Gerenciador de mensagens"
+                                ]}
+                            />
+
+                            <PriceCard title="PRO" price={69.99}
+                                functionalities={[
+                                    "Gerenciador de anúncios",
+                                    "Gerenciador de mensagens"
+                                ]}
+                            />
+
+                            <PriceCard title="VIP" price={139.99}
+                                functionalities={[
+                                    "Gerenciador de anúncios",
+                                    "Gerenciador de mensagens"
+                                ]}
+                            />
+                    
+                    
+                        </Stack> 
+                    </Flex>
+                </Flex>
+            );
+        
         default:
             return (
                 <Box>

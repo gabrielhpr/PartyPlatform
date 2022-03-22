@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 import { RiBriefcaseLine } from "react-icons/ri";
 import { useUserAuthContext } from "../../context/userContext";
+import { useRouter } from 'next/router';
 
 interface HeaderProps {
     name: string;
@@ -15,7 +16,11 @@ interface HeaderProps {
 export function Header( {name, position, type='oneColor'} : HeaderProps ) {
     const { authenticatedEnterprise, logoutEnterprise } = useEnterpriseAuthContext();
     const { authenticatedUser, logoutUser } = useUserAuthContext();
+    const [ enterpriseArea, setEnterpriseArea ] = useState(false);
     const [scrollHeader, setScrollHeader] = useState(false);
+    const routerNext = useRouter();
+
+
 
     function handleLogoutEnterprise() {
         logoutEnterprise();
@@ -43,6 +48,20 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
             window.removeEventListener('scroll', listenScrollEvent);
         }
     }, []);
+
+    useEffect(() => {
+        if( !routerNext.isReady ) {
+            return;
+        }
+        if( routerNext.pathname == '/Enterprise/enterpriseAccess' ) {
+            setEnterpriseArea(true);
+        }
+        else {
+            setEnterpriseArea(false);
+        }
+        console.log( routerNext.pathname );
+
+    }, [routerNext.pathname]);
 
     return (
         <Flex as="header"
@@ -96,7 +115,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                     </Flex>
                 :
                 
-                /* ENTERPRISE */
+                /* ENTERPRISE AUTHENTICATED */
                 authenticatedEnterprise
                 ?
                     <Flex width="70%" justifyContent="flex-end">
@@ -115,6 +134,15 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                         </Flex>
 
                     </Flex>
+                :
+
+                /* ENTERPRISE AREA (NOT AUTHENTICATED) */
+                enterpriseArea
+                ?
+                    <Flex>
+                        
+                    </Flex>
+
                 :
                 /* GENERAL */
                     <Flex width="70%" justifyContent="flex-end">

@@ -1,5 +1,8 @@
-import { Flex, Input, Text, Link as NavLink, Button } from "@chakra-ui/react";
+import { Flex, Input, Text, Link as NavLink, Button, Icon, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverHeader, PopoverBody, useDisclosure, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import React from "react";
 import { ReactNode } from "react";
+import { RiCloseFill } from "react-icons/ri";
 import { Header } from "../Header";
 
 interface CreateAdLayoutProps {
@@ -18,15 +21,19 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
     style='yellow',
     showFooterMenu=true,
     children, 
-    handleNextStep, handlePreviousStep }: CreateAdLayoutProps) {
+    handleNextStep, handlePreviousStep 
+}: CreateAdLayoutProps) {
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const cancelRef = React.useRef();
+    const routerNext = useRouter();
+    
     return (
         <Flex direction='column'
             h='100vh'
             w='100vw'
             justifyContent='space-between'
-        >
-            <Header name='' position="relative" />
-            
+        >            
             <Flex
                 h='100%'
                 w='100%'
@@ -68,6 +75,52 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
                     direction="column"
                     bg="brand.white"
                 >
+                    {/* Close button */}
+                    <Flex justifyContent='flex-end'>
+                        <Button 
+                            bg='none'
+                            py='2' px='2'
+                            my='2' mx='2'
+                            _hover={{bg:'none', textColor: 'brand.red'}}
+                            _focus={{outline:'none'}}
+                            onClick={onOpen}
+                        >
+                            <Icon as={RiCloseFill} fontSize={30} />
+                        </Button>
+
+                        <AlertDialog
+                            isOpen={isOpen}
+                            leastDestructiveRef={cancelRef}
+                            onClose={onClose}
+                        >
+                            <AlertDialogOverlay>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                        Tem certeza que deseja sair ?
+                                    </AlertDialogHeader>
+
+                                    <AlertDialogBody>
+                                        Você irá perder todo o
+                                        seu progresso
+                                    </AlertDialogBody>
+
+                                    <AlertDialogFooter>
+                                        <Button ref={cancelRef} onClick={onClose}>
+                                            Vou ficar
+                                        </Button>
+                                        <Button colorScheme='red' ml={3} 
+                                            onClick={() => {   
+                                                routerNext.push("/");
+                                        }}
+                                        >
+                                            Sair
+                                        </Button>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialogOverlay>
+                        </AlertDialog>
+                    </Flex>
+
                     <Flex height={showFooterMenu ? "92%" : "100%"}
                         alignItems="center"
                         justifyContent="center"

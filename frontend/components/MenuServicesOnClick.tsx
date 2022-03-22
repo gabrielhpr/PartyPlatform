@@ -31,7 +31,7 @@ export function MenuServicesOnClick( { partyType, handlePreviousStep, handleClic
                             fontWeight={500}
                             bg='white'
                             name='service'
-                            value={el.value}
+                            value={el.parent+'-'+el.value}
                             onClick={handleClick}
                         >
                             <Text

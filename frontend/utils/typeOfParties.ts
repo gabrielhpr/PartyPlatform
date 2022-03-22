@@ -9,52 +9,52 @@ export const typeOfServices = {
     Infantil: {
         services: [
             // ESPAÇOS
-            {value: 'Chacara', textToShow: 'Chácara'},
-            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas'},
+            {value: 'Chacara', textToShow: 'Chácara', parent: 'Espaco'},
+            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent: 'Espaco'},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional'},
-            {value: 'Bolos', textToShow: 'Bolos'},
-            {value: 'Doces', textToShow: 'Doces'},
+            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico'},
+            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico'},
+            {value: 'Doces', textToShow: 'Doces', parent:'Servico'},
             // SERVIÇOS
-            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
-            {value: 'Decoracao', textToShow: 'Decoração'},
-            {value: 'Musica', textToShow: 'Música'},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa'}
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico'},
+            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico'},
+            {value: 'Musica', textToShow: 'Música', parent:'Servico'},
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico'}
         ]
     },
     Debutante: {
         services: [
             // ESPAÇOS
-            {value: 'Chacara', textToShow: 'Chácara'},
-            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas'},
+            {value: 'Chacara', textToShow: 'Chácara', parent:'Espaco'},
+            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent:'Espaco'},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional'},
-            {value: 'Bolos', textToShow: 'Bolos'},
-            {value: 'Doces', textToShow: 'Doces'},
+            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico'},
+            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico'},
+            {value: 'Doces', textToShow: 'Doces', parent:'Servico'},
             // SERVIÇOS
-            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
-            {value: 'Decoracao', textToShow: 'Decoração'},
-            {value: 'Musica', textToShow: 'Música'},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa'}
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico'},
+            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico'},
+            {value: 'Musica', textToShow: 'Música', parent:'Servico'},
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico'}
         ]
     },
     Aniversario: {
         services: [
             // ESPAÇOS
-            {value: 'Chacara', textToShow: 'Chácara'},
-            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas'},
+            {value: 'Chacara', textToShow: 'Chácara', parent:'Espaco'},
+            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent:'Espaco'},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional'},
-            {value: 'Bolos', textToShow: 'Bolos'},
-            {value: 'Doces', textToShow: 'Doces'},
+            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico'},
+            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico'},
+            {value: 'Doces', textToShow: 'Doces', parent:'Servico'},
             // SERVIÇOS
-            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
-            {value: 'Decoracao', textToShow: 'Decoração'},
-            {value: 'Musica', textToShow: 'Música'},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa'}
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico'},
+            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico'},
+            {value: 'Musica', textToShow: 'Música', parent:'Servico'},
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico'}
         ]
     }
-}
+} 
 
 export const enterpriseCategory = {
     Espaco: {
@@ -105,6 +105,59 @@ export const locationMap = {
     l6: {city: 'itapevi', state: 'sp', country: 'brasil', textToShow: 'Itapevi - SP, Brasil'},
 }
 
+
+export const priceOptionsPerService = {
+    Espaco: {
+        SoEspaco: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-500', textToShow: 'Até R$500'},
+            {value: '500-1000', textToShow: 'Entre R$500 e R$1000'},
+            {value: '1000-2000', textToShow: 'Entre R$1000 e R$2000'},
+            {value: '2000-3000', textToShow: 'Entre R$2000 e R$3000'},
+            {value: '3000-5000', textToShow: 'Entre R$3000 e R$5000'},
+            {value: '5000-10000', textToShow: 'Entre R$5000 e R$10000'},
+            {value: '10000-20000', textToShow: 'Entre R$10000 e R$20000'},
+            {value: '20000-1000000', textToShow: '+R$20000'}
+        ],
+        EspacoEBuffet: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-30', textToShow: 'Até R$30'},
+            {value: '30-50', textToShow: 'Entre R$30 e R$50'},
+            {value: '50-75', textToShow: 'Entre R$50 e R$75'},
+            {value: '75-100', textToShow: 'Entre R$75 e R$100'},
+            {value: '100-100000', textToShow: '+R$100'}
+        ]
+    },
+    Servico: {
+        Buffet: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-30', textToShow: 'Até R$30'},
+            {value: '30-50', textToShow: 'Entre R$30 e R$50'},
+            {value: '50-75', textToShow: 'Entre R$50 e R$75'},
+            {value: '75-100', textToShow: 'Entre R$75 e R$100'},
+            {value: '100-100000', textToShow: '+R$100'}
+        ],
+        Bolo: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-30', textToShow: 'Até R$30'},
+            {value: '30-50', textToShow: 'Entre R$30 e R$50'},
+            {value: '50-75', textToShow: 'Entre R$50 e R$75'},
+            {value: '75-100', textToShow: 'Entre R$75 e R$100'},
+            {value: '100-100000', textToShow: '+R$100'}
+        ],
+        FotografiaFilmagem: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-30', textToShow: 'Até R$30'},
+            {value: '30-50', textToShow: 'Entre R$30 e R$50'},
+            {value: '50-75', textToShow: 'Entre R$50 e R$75'},
+            {value: '75-100', textToShow: 'Entre R$75 e R$100'},
+            {value: '100-100000', textToShow: '+R$100'}
+        ],
+    }
+
+}
 
 
 
@@ -169,8 +222,8 @@ export const specificQuestions = {
         ],
         Bolos: [
             {name: ['q1'], question: 'Qual o preço mínimo do kg ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
-            {name: ['q2'], question: 'Qual o peso mínimo do bolo ?', description: '', type: 'input', inputType:'number', span: 'Kg '},
-            {name: ['q3'], question: 'Qual o peso máximo do bolo ?', description: '', type: 'input', inputType:'number', span: 'Kg '},
+            {name: ['q2'], question: 'Qual o peso mínimo que atende ?', description: '', type: 'input', inputType:'number', span: 'Kg '},
+            {name: ['q3'], question: 'Qual o peso máximo que atende ?', description: '', type: 'input', inputType:'number', span: 'Kg '},
             {name: ['q4'], question: 'Que tipos de bolos oferece ?', description: '', type: 'textarea', placeholder: ''},
             {name: ['q5','q6'], question: 'Realiza trabalhos a medida ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
             {name: ['q7','q8'], question: 'Dispõe de bolos especiais ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
