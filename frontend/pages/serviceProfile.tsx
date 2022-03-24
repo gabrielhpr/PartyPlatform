@@ -1,7 +1,7 @@
-import { Box, Flex, Text, Input, Icon, Img, Textarea, Button } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar } from "@chakra-ui/react";
 //import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
-import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill } from "react-icons/ri";
+import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import { useRouter } from "next/router";
@@ -9,9 +9,93 @@ import { ModalServiceProfile } from "../components/ModalServiceProfile";
 import { ModalImageGallery } from "../components/ModalImageGallery";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { specificQuestions } from "../utils/typeOfParties";
+
+interface serviceDataInterf {
+    // Contact Data
+    fullName: string;
+    email: string;
+    phone: string;
+    whatsapp?: string;
+    // Access Data
+    password: string;
+    passwordConfirmation: string;
+    // About the enterprise
+    enterpriseName: string;
+    
+    // Just for showing the user
+    location: string;
+
+    city: string;
+    state: string;
+    country: string;
+    address: string;
+    addressNumber: number;
+    // Enterprise Social Media
+    instagram?: string;
+    facebook?: string;
+    website?: string;
+    
+    partyMainFocus: string;
+    serviceDescription: string;
+    enterpriseCategory: string;
+    enterpriseSpecificCategory: string;
+
+    photos: any[];
+
+    q1: string;
+    q2: string;
+    q3: string;
+    q4: string;
+    q5: string;
+    q6: string;
+    q7: string;
+    q8: string;
+    q9: string;
+    q10: string;
+    q11: string;
+    q12: string;
+    q13: string;
+    q14: string;
+    q15: string;
+    q16: string;
+    q17: string;
+    q18: string;
+    q19: string;
+    q20: string;
+    q21: string;
+    q22: string;
+    q23: string;
+    q24: string;
+    q25: string;
+    q26: string;
+    q27: string;
+    q28: string;
+    q29: string;
+    q30: string;
+    q31: string;
+    q32: string;
+    q33: string;
+    q34: string;
+    q35: string;
+    q36: string;
+    q37: string;
+    q38: string;
+    q39: string;
+    q40: string;
+    q41: string;
+    q42: string;
+    q43: string;
+    q44: string;
+    q45: string;
+    q46: string;
+    q47: string;
+    q48: string;
+    q49: string;
+    q50: string;
+}
 
 const serviceNullState = {
-    step: 0,
     // Contact Data
     fullName: '',
     email: '',
@@ -22,9 +106,10 @@ const serviceNullState = {
     passwordConfirmation: '',
     // About the enterprise
     enterpriseName: '',
-    country: '',
-    state: '',
+    location: '',
     city: '',
+    state: '',
+    country: '',
     address: '',
     addressNumber: 0,
 
@@ -38,17 +123,75 @@ const serviceNullState = {
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
 
-    photos: '',
+    photos: [],
 
-    answer1: '',
-    answer2: '',
+    q1: '',
+    q2: '',
+    q3: '',
+    q4: '',
+    q5: '',
+    q6: '',
+    q7: '',
+    q8: '',
+    q9: '',
+    q10: '',
+    q11: '',
+    q12: '',
+    q13: '',
+    q14: '',
+    q15: '',
+    q16: '',
+    q17: '',
+    q18: '',
+    q19: '',
+    q20: '',
+    q21: '',
+    q22: '',
+    q23: '',
+    q24: '',
+    q25: '',
+    q26: '',
+    q27: '',
+    q28: '',
+    q29: '',
+    q30: '',
+    q31: '',
+    q32: '',
+    q33: '',
+    q34: '',
+    q35: '',
+    q36: '',
+    q37: '',
+    q38: '',
+    q39: '',
+    q40: '',
+    q41: '',
+    q42: '',
+    q43: '',
+    q44: '',
+    q45: '',
+    q46: '',
+    q47: '',
+    q48: '',
+    q49: '',
+    q50: ''
 }
 
 export default function ServiceProfilePage() {
 
     const routerNext = useRouter();
-    const [service, setService] = useState(serviceNullState);
+    const [service, setService] = useState<serviceDataInterf>(serviceNullState);
+    const [opinions, setOpinions] = useState([]);
     const [showAllImages, setShowAllImages] = useState(false);
+
+    function handleOpinion() {
+        routerNext.push({
+            pathname: '/rating',
+            query: { 
+                enterpriseId: routerNext.query.id,
+            }
+        });
+    }
 
     function handleShowAllImages() {
         setShowAllImages(true);
@@ -67,8 +210,13 @@ export default function ServiceProfilePage() {
                 }
             })
             .then((response) => {
-                console.log(response.data.service[0]);
+                console.log('Service');
+                console.log(response.data.service);
+                console.log('Opinions');
+                console.log(response.data.opinions);
+                
                 setService(response.data.service[0]);
+                setOpinions(response.data.opinions);
             })
     }, [routerNext.query]);
 
@@ -76,7 +224,10 @@ export default function ServiceProfilePage() {
         <Box>
             <Header name="" position="relative" />
 
-            {/* Content */}
+            {
+            service.serviceDescription != ''
+            ?
+            /* Content */
             <Flex w='100%' justifyContent='center'
                 bg='brand.white'
                 mb='20'
@@ -108,7 +259,7 @@ export default function ServiceProfilePage() {
                         </Flex>
                         
                         <Flex mt='2'>
-                            <Text>{service.city}, {service.state}</Text>
+                            <Text>{service.location}</Text>
                             <Text ml='5'>Ver no mapa</Text>
                         </Flex>
                         
@@ -230,16 +381,19 @@ export default function ServiceProfilePage() {
                         </Flex>
                             
                     </Flex>
-
+                    
+                    {/* Service Description, Common Douts and Send Message */}
                     <Flex direction='row'>
-
-                        <Flex w='65%' direction='column' pr='20'>
+                        
+                        {/* Service Description, Common Douts and Send Message */}
+                        <Flex w='70%' direction='column' pr='15'>
                             {/* Description about the service */}
-                            <Flex direction='column'>
+                            <Flex direction='column' mb='8'>
                                 <Text
                                     as='h2'
-                                    fontSize={20}
+                                    fontSize={23}
                                     fontWeight={700}
+                                    mb='4'
                                 >
                                     Descrição
                                 </Text>
@@ -249,28 +403,292 @@ export default function ServiceProfilePage() {
                                 </Text>
                             </Flex>                            
 
-                            {/* Usefull details about the service */}
-                            <Flex direction='column' my='3'>
+                            {/* Dúvidas - Usefull details about the service */}
+                            <Flex 
+                                direction='column' my='3'
+                                justifyContent='flex-start'
+                                alignItems='flex-start'
+                                //spacing={5}
+                                w='100%'
+                                h='50vh'
+                            >
                                 <Text as='h2' 
-                                    fontSize={18}
+                                    fontSize={23}
                                     fontWeight={700}
+                                    mb='4'
                                 >
-                                    Informações rápidas
+                                    Dúvidas Frequentes
                                 </Text>
 
-                                <Text as='h3'>
-                                    Subtitle
-                                </Text>
+                                <Stack
+                                    overflowY='scroll'
+                                    w='100%'
+                                    h='50vh'
+                                >
+                                
+                                    {
+                                        service.enterpriseCategory == 'Espaco'
+                                        ?
+                                        specificQuestions['Espaco']
+                                        .map((el, index) => {
+                                            // POSSUI BUFFET JUNTO COM O ESPAÇO
+                                            if( service.q3 == 'Sim' && 
+                                                (
+                                                ['q21','q22','q23'].includes(el?.name[0])
+                                                ||
+                                                ['q21','q22','q23'].includes(el?.name[1])
+                                                ) ) 
+                                            {
+                                                return (
+                                                    <>
+                                                    </>
+                                                );
+                                            }
+                                            // SEM BUFFET JUNTO COM O ESPAÇO
+                                            else if( service.q3 == 'Não' && 
+                                                (
+                                                ['q5','q6','q7','q8','q9','q10','q11','q12','q13','q14',
+                                                'q15','q16','q17','q18','q19','q20'].includes(el?.name[0]) 
+                                                ||
+                                                ['q5','q6','q7','q8','q9','q10','q11','q12','q13','q14',
+                                                'q15','q16','q17','q18','q19','q20'].includes(el?.name[1]) 
+                                                )
+                                                ) 
+                                            {
+                                                return (
+                                                    <>
+                                                    </>
+                                                );
+                                            }
+                                            else {
+                                                return (
+                                                    <Flex direction='column'
+                                                        w='100%'  
+                                                        justifyContent='flex-start'
+                                                        alignItems='flex-start'
+                                                    >
+                                                        <Text 
+                                                            fontSize={22}
+                                                            mb='3'
+                                                        >
+                                                            {el.question}
+                                                        </Text>
 
-                                <Text as='p'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                                </Text>
+                                                        <Text 
+                                                            fontSize={22}
+                                                            mb='3'
+                                                        >
+                                                            {service[el.name[0]]}
+                                                        </Text>
 
+                                                        <Flex bg='rgba(0,0,0,0.3)' h={0.1} w='100%' mt='4' mb='3'></Flex>
+                                                    </Flex>
+                                                );
+                                            }
+                                            })
+                                        :
+                                        specificQuestions['Servico'][service.enterpriseSpecificCategory]
+                                        .map((el, index) => {
+                                            return (
+                                                <Flex direction='column'
+                                                    w='100%'  
+                                                    justifyContent='flex-start'
+                                                    alignItems='flex-start'
+                                                >
+                                                    <Text 
+                                                        fontSize={20}
+                                                        fontWeight={500}
+                                                        mb='2'
+                                                    >
+                                                        {el.question}
+                                                    </Text>
+
+                                                    <Text 
+                                                        fontSize={18}
+                                                    >
+                                                        { el.name.length > 1 ? service[el.name[0]] + '.  '+ service[el.name[1]] : service[el.name[0]] }
+                                                    </Text>
+
+                                                    <Flex bg='rgba(0,0,0,0.3)' h={0.1} w='100%' mt='4' mb='3'></Flex>
+                                                </Flex>
+                                            );
+                                        })
+                                    }
+                                </Stack>
+                        
                             </Flex>
+
+                            {/* Rating and Opinions */}
+                            
+                            <Flex w='100%' 
+                                direction='column'
+                                my='3'
+
+                            >
+                                {/* Header */}
+                                <Flex w='100%'
+                                    py='5'
+                                    justifyContent='space-between'
+                                    alignItems='center'
+                                >
+                                    <Text
+                                        fontSize={20}
+                                    >
+                                        {opinions.length} {opinions.length > 1 ? 'Opiniões' : 'Opinião'}
+                                    </Text>
+                                    <Button
+                                        variant='outline'
+                                        colorScheme='red'
+                                        onClick={handleOpinion}
+                                    >
+                                        Deixe a sua opinião
+                                    </Button>
+                                </Flex>
+                                    
+                                {
+                                opinions.length > 0
+                                ?
+                                <Flex w='100%' direction='column'>
+                                    {/* Rating info */}
+                                    <Flex w='100%' mb='4'>
+                                        {/* Rating star box */}
+                                        <Flex 
+                                            w='20%'
+                                            direction='column'
+                                            alignItems='center'
+                                            border='1px solid rgba(0,0,0,0.3)'
+                                            borderRadius={8}
+                                            p='5'
+                                        >
+                                            <Flex alignItems='center'>
+                                                <Icon as={RiStarFill} 
+                                                    color='brand.yellow'
+                                                    fontSize={36}
+                                                    
+                                                />
+                                                <Text ml='2'
+                                                    fontSize={40}
+                                                    fontWeight={400}
+                                                >
+                                                    {Number(opinions?.reduce((acc:any, curr:any) => acc + curr.ratingGeneral, 0) / opinions.length).toFixed(2)}
+                                                </Text>
+                                            </Flex>
+
+                                            <Text
+                                            > 
+                                                de 5.0
+                                            </Text>
+                                        </Flex>
+
+                                        <Flex 
+                                            w='80%'
+                                            ml='5'
+                                            direction='column'
+                                            justifyContent='center'
+                                            wrap='wrap'
+                                        >
+                                            {
+                                                [
+                                                    {title: 'Qualidade do serviço', value: 'ratingServiceQuality'},
+                                                    {title: 'Relação Custo Benefício', value: 'ratingPrice'},
+                                                    {title: 'Tempo de resposta', value: 'ratingAnswerTime'},
+                                                    {title: 'Flexibilidade', value: 'ratingFlexibility'},
+                                                    {title: 'Profissionalismo', value: 'ratingProfessionalism'}
+
+                                                ].map((el, index) => {
+                                                    return (
+                                                        <Flex alignItems='center' h='30%' mr='7'
+                                                            justifyContent='space-between'
+                                                        >
+                                                            <Text
+                                                                mr='2'
+                                                            >
+                                                                {el.title}:   
+                                                            </Text>
+                                                            <Flex alignItems='center'>
+                                                                <Icon as={RiStarFill} mr='2' color='brand.yellow' />
+                                                                <Text>
+                                                                    { Number( opinions?.reduce((acc:any, curr:any) => acc + curr[el.value], 0) / opinions.length).toFixed(2) }
+                                                                </Text>
+                                                            </Flex>
+                                                        </Flex>
+                                                    );
+                                                })
+                                            }
+                                        </Flex>
+                                    </Flex>
+
+                                    {/* Opinions about the service */}
+                                    <Flex w='100%' direction='column'>
+                                        {/* Opinion */}
+                                        {
+                                            opinions.map((el, index) => {
+                                                return (
+                                                    <Flex 
+                                                        py='5' 
+                                                        px='4'
+                                                        direction='column'
+                                                        borderBottom='1px solid rgba(0,0,0,0.4)'
+                                                    >
+                                                        {/* Name, Avatar */}
+                                                        <Flex mb='2' 
+                                                            alignItems='center'
+                                                        >
+                                                            <Avatar mr='4'
+                                                                name={el.fullName.split(' ')?.slice(0,2).join(' ')}
+                                                                h={70} w={70} 
+                                                                size='lg'
+                                                            />
+
+                                                            <Flex direction='column'>
+                                                                <Text
+                                                                    fontSize={19}
+                                                                    fontWeight={500}
+                                                                >
+                                                                    {el.fullName.split(' ')?.slice(0,2).join(' ')}
+                                                                </Text>
+                                                                <Text>
+                                                                    Data da Festa: {el.partyDate.substring(0,10)}
+                                                                </Text>
+                                                            </Flex>
+
+                                                        </Flex>
+
+                                                        {/* Title */}
+                                                        <Text
+                                                            fontWeight={500}
+                                                            fontSize={20}
+                                                            mb='2'
+                                                        >
+                                                            {el.opinionTitle}
+                                                        </Text>
+
+                                                        {/* Content */}
+                                                        <Text
+                                                            fontSize={16}
+                                                        >
+                                                            {el.opinionContent}
+                                                        </Text>
+
+                                                    </Flex>
+                                                )
+                                            })
+                                        }
+                                            
+                                    </Flex>
+                                </Flex>
+                                :
+                                <>
+                                </>
+                                }
+                            </Flex>
+                           
+
                         </Flex>
 
+
                         {/* Card */}
-                        <Flex w='35%' 
+                        <Flex w='30%' 
                             justifyContent='flex-end'
                         >
                             <Flex 
@@ -318,6 +736,12 @@ export default function ServiceProfilePage() {
                                         color='white'
                                         height={12}
                                         fontSize={18}
+                                        onClick={() => {
+                                            console.log('Service');
+                                            console.log(service);
+                                            console.log('Opinião');
+                                            console.log(opinions[0]);
+                                        }}
                                     >
                                         Pedir orçamento!
                                     </Button>
@@ -332,19 +756,13 @@ export default function ServiceProfilePage() {
                         </Flex>
 
                     </Flex>
-
-
-                    {/* Rating */}
-                    <Flex>
-
-                    </Flex>
-
-                    {/* Opinions about the service */}
-                    <Flex>
-
-                    </Flex>
+                    
                 </Flex>
             </Flex>
+            :
+            <>
+            </>
+            }
 
             <Footer />
         </Box>

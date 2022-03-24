@@ -1,7 +1,7 @@
 import { Box, Flex, Text, Input, Link as NavLink, Button } from "@chakra-ui/react";
 import Image from 'next/image';
 import { useState } from "react";
-import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
+import KidBirthday from '../../assets/imgs/kid-birthday.jpg';
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 import { useRouter } from "next/router";
 import { Header } from "../../components/Header";
@@ -32,46 +32,59 @@ export default function enterpriseAccess() {
             {/* Header */}
             <Header name="" position='relative' />
             
-            <Flex w='100%' h={500} position='relative' 
+            <Flex w='100%' h={550} position='relative' 
                 justifyContent='center'
             >
-                {/* 
-                <Image src={FotoDebutante}
+                
+                <Image src={KidBirthday}
                     layout='fill'
                     objectFit='cover'
                     objectPosition='center'
                 />
                 
-                */}
+                
                 
                 {/* Shadow */}
                 <Flex w='100%' h='100%'
                     justifyContent='center'
-                    bg='rgba(0,0,0,0.80)' 
+                    bg='rgba(0,0,0,0.30)' 
                     zIndex={3}
                 >
 
-                    <Flex w='70%' h='100%' justifyContent='space-between'
+                    <Flex w='90%' h='100%' justifyContent='space-between'
                         alignItems='center' 
                     >
 
                         <Flex direction='column'
+                            alignItems='center'
                         >
                             <Flex color='white' direction='column' mb='5'>
-                                <Text as='h2' fontSize={30} fontWeight={600}
-                                    mb='2'
+                                <Text as='h2' fontSize={39} fontWeight={600}
+                                    mb='3'
                                 >
                                     Anuncie o seu serviço aqui!
                                 </Text>
 
-                                <Text as='h3' fontSize={20} fontWeight={500}>
-                                    Fique visível para centenas de novos clientes
+                                <Text as='h3' fontSize={23} fontWeight={500}>
+                                    * Fique visível para centenas de novos clientes
+                                </Text>
+
+                                <Text as='h3' fontSize={23} fontWeight={500}>
+                                    * Seja encontrado por clientes interessados
                                 </Text>
 
                             </Flex>
+
                             <NavLink href='/Enterprise/Auth/register'>
-                                <Button bg='brand.red' color='white' h={12} fontSize={18}>
-                                    Cadastre-se gratuitamente!
+                                <Button bg='brand.red' color='white' py='7'
+                                    
+                                >
+                                    <Text
+                                        fontSize={20}
+                                        fontWeight={600}
+                                    >
+                                        Cadastre-se gratuitamente!
+                                    </Text>
                                 </Button>
                             </NavLink>
                         </Flex>
@@ -81,17 +94,19 @@ export default function enterpriseAccess() {
                             direction="column"
                             width={400} 
                             height='80%'
-                            pt="1"
+                            pt="0"
                             pb="1"
                             px="10" 
                             justifyContent="center"
-                            bg="white" 
+                            bg="brand.white" 
                             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                             borderRadius={8} 
                             fontSize={20}
                         >
-                            <Text as="h2" textAlign="center" my="1" fontSize={22} 
+                            <Text as="h2" textAlign="center" my="3" 
+                                fontSize={25} 
                                 fontWeight={500}
+                                color='brand.dark_blue'
                             >
                                 SEJA BEM-VINDO!
                             </Text>

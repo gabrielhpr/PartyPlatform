@@ -87,7 +87,9 @@ module.exports = class RootController {
 
         const service = await rootModel.selectServiceById(parseInt(id), partyType);
         
+        const opinions = await rootModel.selectOpinionsByEnterpriseId(parseInt(id), partyType);
+
         console.log( service );
-        res.status(200).json({ service });
+        res.status(200).json({ service: service, opinions: opinions });
     }
 }

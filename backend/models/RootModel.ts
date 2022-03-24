@@ -9,23 +9,41 @@ module.exports = class RootModel {
         const { nOfPeople, minPeople, maxPeople, minPeopleColumn, maxPeopleColumn } = nOfPeopleObj;
         console.log('model - price');
         console.log(price);
-    
 
         let query_select = `
             SELECT Ads.*,
                    Ent.*
             FROM Ads 
             INNER JOIN Enterprise AS Ent 
-            ON Ads.enterpriseId = Ent.id
+            ON Ads.enterpriseId = Ent.id            
             WHERE Ads.partyMainFocus = '${partyType}' 
-            AND Ent.city = '${city}'
-            AND Ent.state = '${state}'
-            AND Ent.country = '${country}'
-            AND Ent.enterpriseSpecificCategory = '${serviceSpecificCategory}'
         `;
+
+        // Service Category
+        if( serviceCategory != undefined && serviceCategory != '' ) {
+            query_select = query_select + ` AND Ent.enterpriseCategory = '${serviceCategory}' `;
+        }
+        // Service Specific Category
+        if( serviceSpecificCategory != undefined && serviceSpecificCategory != '' ) {
+            query_select = query_select + ` AND Ent.enterpriseSpecificCategory = '${serviceSpecificCategory}' `;
+        }
+
+        // Location
+        // City
+        if( city != undefined && city != '' ) {
+            query_select = query_select + ` AND Ent.city = '${city}' `;
+        }
+        // State
+        if( state != undefined && state != '' ) {
+            query_select = query_select + ` AND Ent.state = '${state}' `;
+        }
+        // Country
+        if( country != undefined && country != '' ) {
+            query_select = query_select + ` AND Ent.country = '${country}' `;
+        }
         
         // Number of People
-        if( nOfPeople != undefined && nOfPeople != '-1' && nOfPeople.length > 0) {
+        if( nOfPeople != undefined && nOfPeople != '-1' && nOfPeople.length > 0 && nOfPeople != '' ) {
             if( serviceCategory == 'Espaco' && minPeopleColumn == '' ) {
                 query_select = query_select + ` AND 
                                                 ( 
@@ -41,7 +59,7 @@ module.exports = class RootModel {
         }        
 
         // Price
-        if( price != undefined && price != '-1' && price.length > 0) {
+        if( price != undefined && price != '-1' && price.length > 0 && price != '' ) {
             if( serviceCategory == 'Espaco' ) {
                 // Buffet included
                 if( priceColumn == 'q5' ) {
@@ -68,12 +86,12 @@ module.exports = class RootModel {
     async selectServiceById( enterpriseId: number, partyType: string ) {
         
         const query_select = `
-            SELECT Ads.*,
-                   Ent.*
-            FROM Ads
-            INNER JOIN Enterprise AS Ent 
-            ON Ads.enterpriseId = Ent.id
+            SELECT Ent.*,
+                   Ads.*
+            FROM Enterprise as Ent
+            INNER JOIN Ads ON Ent.id = Ads.enterpriseId
             WHERE Ent.id = ${enterpriseId}
+            AND Ads.partyMainFocus = '${partyType}'
         `;
         
         const result = await connQuery( query_select ).catch( (err:any) => {throw err});
@@ -81,5 +99,22 @@ module.exports = class RootModel {
         return result; 
     }
 
+
+    async selectOpinionsByEnterpriseId( enterpriseId: number, partyType: string ) {
+        const query_select = `
+            SELECT  Ent.id,
+                    User.fullName,
+                    Rat.*
+            FROM Enterprise as Ent
+            INNER JOIN Rating AS Rat ON Ent.id = Rat.enterpriseId 
+            INNER JOIN User ON User.id = Rat.userId
+            WHERE Ent.id = ${enterpriseId}
+            AND Rat.partyType = '${partyType}'
+        `;
+        
+        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        
+        return result; 
+    }
 }
    

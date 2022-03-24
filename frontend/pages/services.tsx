@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { Header } from "../components/Header";
 import { RiFilter2Fill } from "react-icons/ri";
 import { Footer } from "../components/Footer";
-import { priceOptionsPerService } from "../utils/typeOfParties";
+import { minPrice, priceOptionsPerService } from "../utils/typeOfParties";
 
 
 export default function ServicesPage() {
@@ -67,8 +67,6 @@ export default function ServicesPage() {
                 
             </Flex>
 
-
-             
             <Box w='100%' h='auto'
             >
 
@@ -323,10 +321,10 @@ export default function ServicesPage() {
                                         <CardService 
                                             key={i}
                                             name={el.enterpriseName}
-                                            location={el.city+', '+el.state}
-                                            classification='5'
+                                            location={el.location}
+                                            classification={el.ratingQuantity != 0 ? `${el.ratingSum / el.ratingQuantity} (${el.ratingQuantity})` : '0'}
                                             rangeOfPeople='10-100'
-                                            price='R$ 500,00'
+                                            price={'R$ ' + minPrice(el)}
                                             photos={el.photos.split(",")}
                                             handleOnClick={() => handleClick(el)} 
                                         />

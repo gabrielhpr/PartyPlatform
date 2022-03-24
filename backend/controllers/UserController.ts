@@ -308,4 +308,85 @@ module.exports = class UserController {
         res.status(200).send(currentUser);
     }
 
+    // Create user rating about the service
+    static async rate(req: any, res: any) {
+        
+        console.log('entrou no rate');
+
+        const {
+            enterpriseId,
+            partyType,
+            partyDate, 
+            opinionTitle,
+            opinionContent,
+            recommendToAFriend,
+            recommendToAFriendObservation,
+            ratingServiceQuality,
+            ratingPrice,
+            ratingAnswerTime,
+            ratingFlexibility,
+            ratingProfessionalism,
+        } = req.body;
+
+        if(!req.headers.authorization) {
+            return res.status(500).send({message: "Não possui token!"});
+        }
+        
+        console.log('tem token');
+        const token = getToken(req);
+
+        let userId;
+        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            if(err) {
+                return res.status(500).send({message: "Token inválido!"});
+            }
+            userId = decoded.id;
+        });
+
+        // Validations
+        if( !enterpriseId ) {
+            res.status(422).json({ message: "É necessário ter o id da empresa que está sendo avaliada!"});
+            return;
+        }
+
+        const ratingGeneral = (ratingServiceQuality + ratingPrice + ratingAnswerTime + ratingFlexibility + ratingProfessionalism) / 5;
+        
+        //console.log( ratingGeneral );
+
+        const ratingData = {
+            'userId': userId,
+            'type': 'opinion',
+            'enterpriseId': enterpriseId,
+            'partyType': partyType,
+            'partyDate': partyDate, 
+            'opinionTitle': opinionTitle,
+            'opinionContent': opinionContent,
+            'recommendToAFriend': recommendToAFriend,
+            'recommendToAFriendObservation': recommendToAFriendObservation,
+            'ratingServiceQuality': ratingServiceQuality,
+            'ratingPrice': ratingPrice,
+            'ratingAnswerTime': ratingAnswerTime,
+            'ratingFlexibility': ratingFlexibility,
+            'ratingProfessionalism': ratingProfessionalism,
+            'ratingGeneral': ratingGeneral
+        }
+
+        try {
+            // Create Rating
+            await userModel.insertRating( ratingData );
+            
+            const { adId, ratingQuantity, ratingSum } = await userModel.getAdRating(enterpriseId, partyType);
+            console.log('getAdRating');
+            console.log( ratingQuantity, ratingSum );
+            // Update Ad ratingQuantity and ratingSum
+            await userModel.updateAdRating( adId, ratingQuantity + 1, ratingSum + ratingGeneral );
+
+            res.status(200).send({message: 'Avaliação criada com sucesso!'});
+        }
+        catch(err) {
+            res.status(500).json({message: err});
+            return;
+        }
+
+    }
 }

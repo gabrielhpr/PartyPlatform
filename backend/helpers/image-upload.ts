@@ -10,9 +10,6 @@ const imageStorage = multer.diskStorage({
         if( req.baseUrl.includes('enterprise') ) {
             folder = 'enterprise';
         }
-        else if (req.baseUrl.includes('services')) {
-            folder = 'services';
-        }
 
         cb(null, `public/images/${folder}`);
     },

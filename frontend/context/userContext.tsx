@@ -5,6 +5,7 @@ interface UserContextInterface {
     authenticatedUser: boolean;
     registerUser: Function;
     loginUser: Function;
+    userRate: Function;
     logoutUser: Function;
 }
 
@@ -15,10 +16,10 @@ interface UserProviderProps {
 }
 
 export function UserProvider({children}: UserProviderProps) {
-    const { authenticatedUser, registerUser, loginUser, logoutUser } = useUserAuth();
+    const { authenticatedUser, registerUser, loginUser, userRate, logoutUser } = useUserAuth();
     
     return (
-        <Context.Provider value={{ authenticatedUser, registerUser, loginUser, logoutUser }}>
+        <Context.Provider value={{ authenticatedUser, registerUser, loginUser, userRate, logoutUser }}>
             {children}
         </Context.Provider>
     );

@@ -14,6 +14,24 @@ interface userDataObjProps {
     city: string;
 }
 
+interface ratingObjProps {
+    userId: string;
+    type: string;
+    enterpriseId: string;
+    partyType: string;
+    partyDate: string; 
+    opinionTitle: string;
+    opinionContent: string;
+    recommendToAFriend: string;
+    recommendToAFriendObservation: string;
+    ratingServiceQuality: number;
+    ratingPrice: number;
+    ratingAnswerTime: number;
+    ratingFlexibility: number;
+    ratingProfessionalism: number;
+    ratingGeneral: number;
+}
+
 module.exports = class UserModel {
    
     // Insert User
@@ -69,6 +87,57 @@ module.exports = class UserModel {
         `;
 
         await connQuery( query_update ).catch((err:any) => {throw err});
+    }
+
+    async insertRating( ratingData: ratingObjProps ) {
+
+        console.log('insert rating');
+        let objLength = Object.keys(ratingData).length;
+
+        const query_insert = `INSERT INTO Rating 
+            (${'??,'.repeat(objLength-1)}??) 
+            VALUES (${'?,'.repeat(objLength-1) }?)`;
+        
+        const data = Object.keys(ratingData).concat( Object.values(ratingData) );
+
+        // INSERT rating in table
+        await connQuery( query_insert, data ).catch((err:any) => {throw err});    
+    }
+
+    async getAdRating( enterpriseId: number, partyType: string ) {
+        console.log('entrou model getAdRating');
+        const query_select = `
+                             SELECT 
+                                    id as adId,
+                                    ratingQuantity,
+                                    ratingSum 
+                             FROM Ads 
+                             WHERE enterpriseId = ${enterpriseId}
+                             AND partyMainFocus = '${partyType}'
+                            `;
+            
+        const result = await connQuery( query_select ).catch( (err:any) => {throw err});        
+
+        return result[0];
+    }
+
+    async updateAdRating( adId: number, ratingQuantity: number, ratingSum: number ) {
+        console.log('updateAdRating model');
+        console.log(adId);
+        
+        console.log(ratingQuantity);
+        console.log(ratingSum);
+        
+        
+        
+        const query_update = `
+            UPDATE Ads
+            SET ratingQuantity = '${ratingQuantity}',
+                ratingSum = '${ratingSum}'
+            WHERE id = ${adId}
+        `;
+
+        await connQuery( query_update ).catch((err:any) => {throw err});  
     }
 
 }

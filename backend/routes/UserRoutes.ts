@@ -13,6 +13,7 @@ router.post(
 );
 router.post("/login", UserController.login);
 
+router.post("/rating", UserController.rate);
 //router.get("/services/:", UserController.getServices);
 //router.get("/services", EnterpriseController.services);
 //router.post("/login", UserController.login);

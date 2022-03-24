@@ -12,6 +12,7 @@ module.exports = class EnterpriseController {
     static async register(req: any, res: any) {
 
         const {
+            plan,
             fullName,
             email,
             phone,
@@ -22,6 +23,7 @@ module.exports = class EnterpriseController {
             country,
             state,
             city,
+            location,
             address,
             addressNumber,
             instagram,
@@ -140,6 +142,11 @@ module.exports = class EnterpriseController {
             return;
         }
 
+        if( !location ) {
+            res.status(422).json({ message: "A localização é obrigatória!"});
+            return;
+        }
+
         if( !address ) {
             res.status(422).json({ message: "O endereço é obrigatório!"});
             return;
@@ -172,6 +179,7 @@ module.exports = class EnterpriseController {
 
         // Insert Enterprise
         const dataEnterprise = {
+            'plan': plan,
             'fullName': fullName,
             'email': email,
             'phone': phone,
@@ -181,6 +189,7 @@ module.exports = class EnterpriseController {
             'country': country,
             'state': state,
             'city': city,
+            'location': location,
             'address': address,
             'addressNumber': addressNumber,
             'instagram': instagram,
@@ -213,8 +222,6 @@ module.exports = class EnterpriseController {
         // Enterprise Id
         const id = newEnterprise.id;
 
-        // Table to insert Ad
-        const tableName = partyMainFocus;
 
         // Ad data
         const dataAd = { 
@@ -644,8 +651,6 @@ module.exports = class EnterpriseController {
             id = decoded.id;
         });
                 
-        // Table to insert Ad
-        const tableName = partyMainFocus;
         
         // Ad data
         const dataAd = { 

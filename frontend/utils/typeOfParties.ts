@@ -105,7 +105,6 @@ export const locationMap = {
     l6: {city: 'itapevi', state: 'sp', country: 'brasil', textToShow: 'Itapevi - SP, Brasil'},
 }
 
-
 export const priceOptionsPerService = {
     Espaco: {
         SoEspaco: [
@@ -159,6 +158,23 @@ export const priceOptionsPerService = {
 
 }
 
+export function minPrice(element : any) {
+    let price = '';
+
+    if( element.enterpriseCategory == 'Espaco' ) {
+        if( element.q3 == 'Sim' ) {
+            price = element.q5;
+        }
+        else {
+            price = element.q21;
+        }
+    }
+    else if( element.enterpriseCategory == 'Servico' ) {
+        price = element.q1;
+    }
+
+    return price;
+}
 
 
 export const specificQuestions = {

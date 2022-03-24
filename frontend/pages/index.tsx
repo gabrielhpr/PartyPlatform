@@ -1,9 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Box, Button, Flex, Icon, Input, Text, Link as NavLink } from '@chakra-ui/react';
-import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
-import FotoInfantilFem from '../assets/imgs/festaInfantilFeminino1.jpg';
-import FotoInfantilMasc from '../assets/imgs/festaInfantilMasculino1.jpg';
 
 import Debutante from '../assets/imgs/debutante.png';
 import IdosoAniversario from '../assets/imgs/idoso-aniversario.png';
@@ -27,7 +24,6 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 
 
 export default function HomePage() {
-    let photo = [FotoDebutante, FotoInfantilFem, FotoInfantilMasc]
     const [photoNum, setPhotNum] = useState(0);
 
     const [searchData, setSearchData] = useState({ partyType: '', serviceCategory: '', serviceSpecificCategory: '', location: '', city: '', state: '', country: ''});
@@ -108,7 +104,7 @@ export default function HomePage() {
             
             {/* Carroussel and Menu */}
             <Flex 
-                h='90vh' 
+                h='92vh' 
                 w='100vw'
                 fontSize={32}
                 justifyContent='center'
@@ -120,27 +116,27 @@ export default function HomePage() {
                 
                 <Flex 
                     width='100%' 
-                    height='90vh' 
+                    height='92vh' 
                     alignItems='center'
                     justifyContent='space-between'
                     bg='rgba(0,0,0,0)' zIndex={5}
                     position='absolute'
 
                 >
-                    
+                    {/* Menus */}
                     <Flex
                         direction='column' justifyContent='center'
                         width='50%'
                         //bg='brand.yellow'
                         borderRadius={30}
                         borderRightRadius='50%'
-                        pl='40'
+                        px='30'
                         h='100%'
                     >
 
                         <Text as='h2' fontSize={42} color='black'
                             zIndex={2} fontWeight={600} textAlign='center'
-                            mb='6'
+                            mb='8'
                         >
                             Tudo para a sua festa de aniversário!
                         </Text>
@@ -432,8 +428,6 @@ export default function HomePage() {
                         bg='brand.white'
                         borderLeftRadius='50%'
                         //borderRightRadius='50%'
-
-                        
                         
                     >
                         <Flex  mb='5' mx='auto'>
@@ -441,6 +435,7 @@ export default function HomePage() {
                                 h={230} w={230}
                                 mr='5' 
                                 borderRadius={4}
+                                borderTopLeftRadius='50%'
                                 overflow='hidden'
                                 
                             >
@@ -455,6 +450,7 @@ export default function HomePage() {
                                 h={230} w={230}
                                 borderRadius={4}
                                 overflow='hidden'
+                                borderTopRightRadius='50%'
                             >
                                 <Image
                                     src={Debutante}
@@ -469,6 +465,7 @@ export default function HomePage() {
                                 h={230} w={230}
                                 mr='5'
                                 borderRadius={4}
+                                borderBottomLeftRadius='50%'
                                 overflow='hidden'
                             >
                                 <Image
@@ -482,6 +479,7 @@ export default function HomePage() {
                                 h={230} w={230}
                                 borderRadius={4}
                                 overflow='hidden'
+                                borderBottomRightRadius='50%'
                             >
                                 <Image
                                     src={IdosoAniversario}
@@ -491,49 +489,9 @@ export default function HomePage() {
                             </Flex>
                         </Flex>
                     </Flex>
+                
                 </Flex>
-
-                {
-                /* 
-
-                <Carousel
-                    width='100vw'
-                    autoPlay={true}
-                    infiniteLoop
-                    transitionTime={800}
-                    interval={4000}
-                    showThumbs={false}
-                    z-index={3}
-                >
-
-                        {
-                            photo.map((image, i) => {
-                                return (
-                                        <Box
-                                            h='70vh' 
-                                            w='100vw'
-                                            justifyContent='center'
-                                            alignItems='center'
-                                            position='relative'
-                                        >
-                                            <Image
-                                                src={image}
-                                                //height={100}
-                                                //height={100}
-                                                //width='auto'
-                                                layout='fill'
-                                                objectFit='cover'
-                                                //objectPosition=
-                                            /> 
-                                        </Box>
-                                )
-                            })
-                        }
-                    
-                </Carousel>
-
-                */
-                }
+        
             </Flex>
 
 
@@ -545,20 +503,22 @@ export default function HomePage() {
                 direction='column'
                 alignItems='center'
                 justifyContent='center'
-                my='10'                
+                mt='10'                
             >
                 <Text
                     h="5vh"
-                    fontSize={25}
+                    fontSize={28}
+                    fontWeight={600}
+                    mb='10'
                 >
                     Qual o tipo da sua festa ?
                 </Text>
 
-
+                {/* Type of party */}
                 <Flex direction='row'
-                    w='80%'
-                    h='12vh'
-                    alignItems='center'
+                    w='100%'
+                    h='30vh'
+                    alignItems='flex-end'
                     justifyContent='center'
                     mt='5'
                 >  
@@ -567,78 +527,132 @@ export default function HomePage() {
                         Object.values(typeOfParties).map((el, index) => {
                             return (
                                 <Button
-                                    h='80%'
-                                    bg='brand.white'
-                                    border='2px solid'
-                                    borderColor='brand.dark_blue'
-                                    onDragStart={handleDragStart}
+                                    mr='5'
+                                    p='0'
+                                    w='15vw'
+                                    h='100%'
+                                    bg={cardSearchData.partyType == el.value ? 'brand.yellow' : 'brand.white'}
+                                    value={el.value}
+                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                    onClick={(event:any) => setCardSearchData({...cardSearchData, partyType: event.currentTarget.value})}
                                 >
-                                    {el.textToShow}
+                                    <Flex direction='column' h='100%' w='100%'
+                                        justifyContent='center' 
+                                        alignItems='center'
+                                        
+                                    >
+                                        <Flex position='relative'
+                                            h='25vh' 
+                                            w='15vw'
+                                            borderRadius={4}
+                                            overflow='hidden'
+                                        >
+                                            <Image
+                                                src={el.value == 'Infantil' ? CriancaAniversario : el.value == 'Debutante' ? Debutante : IdosoAniversario}
+                                                layout='fill'
+                                                objectFit='cover'
+                                            /> 
+                                        </Flex>
+
+                                        <Flex
+                                            h='5vh'
+                                            alignItems='center'                                    
+                                        >
+                                            <Text
+                                            >
+                                                {el.textToShow}
+                                            </Text>
+                                        </Flex>
+                                    </Flex>
                                 </Button>
                             )
                         })
                     }   
-                    
 
                 </Flex>
             
+                {/* Services */}
                 <Flex 
                     justifyContent='center'
                     alignItems='flex-start'
                     h='35vh'
-                    w='60%'
-                    my={0}
-                    //overflowX='scroll'                    
+                    w='100%'
+                    mt='4'
+                    pt='14'
+                    bg='brand.yellow'
+                    borderTopRadius='20%'
                 >
-                   
+                    <Flex
+                        w='60%'
+                    >
+                        <AliceCarousel
+                            autoPlay={false}
+                            autoHeight={true}
+                            responsive={{
+                                0: {items:1},
+                                1024: {items:5}
+                            }}
 
-                    <AliceCarousel
-                        //autoWidth={true}
-                        //width='100%'
-                        //autoWidth={true}
-                        autoPlay={false}
-                        autoHeight={true}
-                        responsive={{
-                            0: {items:1},
-                            1024: {items:5}
-                        }}
-
-                        mouseTracking
-                        items={
-                            typeOfServices[cardSearchData.partyType].services.map((el, index) => {
-                                return (
-                                    <Button
-                                        h='15vh'
-                                        w='90%'
-                                        key={index}
-                                        boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                                        bg='brand.yellow'
-                                    >
-                                        <Flex w='100%'
-                                            h='100%'
-                                            direction='column'
-                                            alignItems='center'
-                                            justifyContent='center'
-                                            
+                            mouseTracking
+                            items={
+                                typeOfServices[cardSearchData.partyType].services.map((el, index) => {
+                                    return (
+                                        <Button
+                                            h='15vh'
+                                            w='90%'
+                                            key={index}
+                                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                            bg='rgba(255,255,255,0.95)'
+                                            _hover={{bg:'brand.yellow'}}
+                                            onClick={() => {
+                                                routerSearch.push({
+                                                    pathname: '/services',
+                                                    query: { 
+                                                        partyType: cardSearchData.partyType,
+                                                        serviceCategory: el.parent,
+                                                        serviceSpecificCategory: el.value,
+                                                    }
+                                                });
+                                            }}
                                         >
-                                            <Icon as={RiCake2Fill} />
-                                            <Text>
-                                                {el.textToShow}
-                                            </Text>
-                                        </Flex>
-                                    </Button>
-                                );
-                            })
-                        }
-                    />
+                                            <Flex w='100%'
+                                                h='100%'
+                                                direction='column'
+                                                alignItems='center'
+                                                justifyContent='space-evenly'
+                                                py='4'
+                                            >
+                                                <Icon as={RiCake2Fill} color='brand.dark_blue' 
+                                                    fontSize={42}
+                                                />
+                                                <Text
+                                                    
+                                                >
+                                                    {el.textToShow}
+                                                </Text>
+                                            </Flex>
+                                        </Button>
+                                    );
+                                })
+                            }
+                        />
                     
-                    
+                    </Flex>
+
                 </Flex>
             
 
             </Flex>
 
 
+            {/* Empresas destacadas */}
+            <Flex
+                w='100%'
+                h='30vh'
+                bg='brand.white'
+            >
+
+            </Flex>
 
 
             <Footer/>

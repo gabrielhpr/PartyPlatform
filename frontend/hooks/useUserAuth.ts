@@ -18,8 +18,6 @@ interface UserData {
     country: string;
     state: string;
     city: string;
-   
-    
 }
 
 interface AdData {
@@ -82,10 +80,29 @@ export default function useUserAuth() {
         }
     }
 
+    async function userRate(rating: any) {
+        const token = localStorage.getItem("token");
+
+        try {
+            await api.post("/user/rating", rating, {
+                headers: {
+                    'Authorization': `Bearer ${JSON.parse(token)}`
+                }
+            })
+            .then((response) => {
+                return response.data;
+            });
+        }
+        catch(err) {
+            // tratar o erro
+            console.log(err);
+        }
+    }
+
     async function authUser(data: any) {
         setAuthenticatedUser(true);
         localStorage.setItem("token", JSON.stringify(data.token));
-        routerNext.push("/User/home");
+        //routerNext.push("/User/home");
     }
 
     function logoutUser() {
@@ -100,6 +117,6 @@ export default function useUserAuth() {
         //setFlashMessage(msgText, msgType);
     }
 
-    return { authenticatedUser, registerUser, loginUser, logoutUser };
+    return { authenticatedUser, registerUser, loginUser, logoutUser, userRate };
 }
 
