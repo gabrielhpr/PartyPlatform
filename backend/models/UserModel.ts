@@ -104,6 +104,20 @@ module.exports = class UserModel {
         await connQuery( query_insert, data ).catch((err:any) => {throw err});    
     }
 
+    async insertEmail( emailData: any ) {
+        console.log('insert email data');
+        let objLength = Object.keys(emailData).length;
+
+        const query_insert = `INSERT INTO BudgetEmails 
+            (${'??,'.repeat(objLength-1)}??) 
+            VALUES (${'?,'.repeat(objLength-1) }?)`;
+        
+        const data = Object.keys(emailData).concat( Object.values(emailData) );
+
+        // INSERT email in table
+        await connQuery( query_insert, data ).catch((err:any) => {throw err});    
+    }
+
     async getAdRating( enterpriseId: number, partyType: string ) {
         console.log('entrou model getAdRating');
         const query_select = `
@@ -140,4 +154,15 @@ module.exports = class UserModel {
         await connQuery( query_update ).catch((err:any) => {throw err});  
     }
 
+    async getEntepriseEmail( enterpriseId: number ) {
+        const query_select = `
+                                SELECT email as enterpriseEmail
+                                FROM Enterprise 
+                                WHERE id = ${enterpriseId}
+                             `;
+            
+        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        
+        return result[0];
+    }
 }

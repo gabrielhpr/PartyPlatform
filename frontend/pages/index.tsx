@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Box, Button, Flex, Icon, Input, Text, Link as NavLink } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Input, Text, Link as NavLink, useBreakpointValue } from '@chakra-ui/react';
 
 import Debutante from '../assets/imgs/debutante.png';
 import IdosoAniversario from '../assets/imgs/idoso-aniversario.png';
@@ -8,19 +8,20 @@ import MulherAniversario from '../assets/imgs/mulher-aniversario.png';
 import CriancaAniversario from '../assets/imgs/crianca-aniversario.png';
 
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 
 import { MenuServicesOnClick } from '../components/MenuServicesOnClick';
-import { RiBriefcaseLine, RiCake2Fill } from 'react-icons/ri';
+import { RiBriefcaseLine, RiCake2Fill, RiCloseFill, RiArrowGoBackFill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
 import { locationMap, typeOfParties, typeOfServices } from '../utils/typeOfParties';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
+import { Sidebar } from '../components/Sidebar';
 
 
 export default function HomePage() {
@@ -36,6 +37,38 @@ export default function HomePage() {
 
     const routerSearch = useRouter();
     const handleDragStart = (e) => e.preventDefault();
+
+    const isMobileVersion = useBreakpointValue({
+        base: true,
+        lg: false,
+    });
+
+    // Close dropdown menu on click outside
+    useEffect(() => {
+        if( !isMobileVersion ) {
+            console.log('entrou');
+            document.addEventListener('mouseup', function (e) {
+                var menu1 = document.getElementById('menuPartyTypeOnClickAndOnSearch');
+                var menu2 = document.getElementById('menuServicesOnClick');
+                var menu3 = document.getElementById('menuServicesOnSearch');
+                var menu4 = document.getElementById('menuLocation');
+    
+                if (!menu1?.contains(e.target)) {
+                    setMenuPartyTypeDisp('none');
+                }
+                if (!menu2?.contains(e.target)) {
+                    setMenuService('none');
+                }
+                if (!menu3?.contains(e.target)) {
+                    setMenuService('none');
+                }
+                if (!menu4?.contains(e.target)) {
+                    setMenuWhere('none');
+                }
+    
+            }.bind(this));
+        }
+    },[]);
 
 
     function handleSearch() {
@@ -101,10 +134,11 @@ export default function HomePage() {
 
             <Header name='' position='relative' />
 
+            <Sidebar/>
             
             {/* Carroussel and Menu */}
             <Flex 
-                h='92vh' 
+                height='92vh'
                 w='100vw'
                 fontSize={32}
                 justifyContent='center'
@@ -116,26 +150,32 @@ export default function HomePage() {
                 
                 <Flex 
                     width='100%' 
-                    height='92vh' 
+                    height='92vh'
                     alignItems='center'
                     justifyContent='space-between'
                     bg='rgba(0,0,0,0)' zIndex={5}
                     position='absolute'
-
+                    flexWrap='wrap'
+                
                 >
                     {/* Menus */}
                     <Flex
-                        direction='column' justifyContent='center'
-                        width='50%'
+                        direction='column' 
+                        justifyContent={{base:'center', lg:'center'}}
+                        width={{base:'100%', lg:'50%'}}
+                        h={{base:'50%', lg:'100%'}}
                         //bg='brand.yellow'
                         borderRadius={30}
                         borderRightRadius='50%'
                         px='30'
-                        h='100%'
                     >
 
-                        <Text as='h2' fontSize={42} color='black'
-                            zIndex={2} fontWeight={600} textAlign='center'
+                        <Text as='h2' 
+                            fontSize={{base:32,lg:42}}
+                            fontWeight={600} 
+                            color='black'
+                            zIndex={2} 
+                            textAlign='center'
                             mb='8'
                         >
                             Tudo para a sua festa de aniversário!
@@ -143,16 +183,17 @@ export default function HomePage() {
 
                         <Flex 
                             width='90%'
-                            height={16}
+                            height={{base:'auto',lg:16}}
                             borderRadius={8}
                             alignItems='center'
+                            direction={{base:'column',lg:'row'}}
                             mx='auto'
                             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.65)"
                         >   
 
                             {/* O que você procura ? */}
                             <Flex direction='column'
-                                w='40%'
+                                w={{base:'100%',lg:'40%'}}
                                 h='100%'
                             >
 
@@ -162,6 +203,7 @@ export default function HomePage() {
                                     bg='white'
                                     w='100%'
                                     h='100%'
+                                    py={{base:'3',lg:'0'}}
                                     borderRightRadius={0}
                                     _focus={{outline:'none'}}
                                     autoComplete='off'
@@ -181,11 +223,19 @@ export default function HomePage() {
                                         }
                                     }}
                                     onClick={() => {
+                                        console.log('clicou');
                                         if(searchData.partyType === '') {
                                             setMenuPartyTypeDisp('');
                                         }
                                         else if (searchData.serviceCategory === '') {
-                                            setMenuService('onclick');
+                                            if(isMobileVersion) {
+                                                console.log('is mobile version');
+                                                setMenuService('mobile');
+                                            }
+                                            else {
+                                                console.log('not mobile version');
+                                                setMenuService('onclick');
+                                            }
                                         }
                                         // Both are already setted up, reset all and start again
                                         else {
@@ -208,37 +258,66 @@ export default function HomePage() {
 
                                 {/* Menu PartyType onClick and onSearch */}
                                 <Box 
-                                    height={230} 
-                                    width={350}
+                                    height={{base:'100vh',lg:230}}
+                                    width={{base:'100vw',lg:350}}
+                                    mt={{base:12,lg:20}}
+                                    position={{base:'fixed',lg:'absolute'}}
+                                    left={{base:0, lg:'auto'}}
+                                    bottom={{base: 0, lg:'auto'}}
+                                    borderTopRadius={{base:'30%'}}
+                                    borderRadius={{base:0, lg:10}}
+                                    id='menuPartyTypeOnClickAndOnSearch'
                                     overflowY="scroll"
                                     display={menuPartyTypeDisp}
-                                    position='absolute'
+                                    zIndex={3}
                                     bg='white'
-                                    mt={20}
-                                    borderRadius={10}
                                 >
                                     <Flex direction="column" id="menuPartyType"
                                         h='100%'
                                     >
-                                        <Text
-                                            h='20%'
-                                            fontSize={19}
-                                            fontWeight={400}
-                                            color='black'
+                                        <Flex
+                                            h={{base:'10%',lg:'20%'}}
                                             px='5'
                                             py='2'
                                             bg='rgba(0,0,0,0.1)'
+                                            alignItems='center'
+                                            justifyContent='space-between'
                                         >
-                                            Qual o tipo da festa ?
-                                        </Text>
+                                            <Text
+                                                fontSize={19}
+                                                fontWeight={400}
+                                                color='black'
+                                            >
+                                                Qual o tipo da festa ?
+                                            </Text>
+                                            
+                                            {/* Close button */}
+                                            {
+                                                isMobileVersion
+                                                &&
+                                                <Button 
+                                                    bg='none'
+                                                    py='2' px='2'
+                                                    my='2' mx='2'
+                                                    _hover={{bg:'none', textColor: 'brand.red'}}
+                                                    _focus={{outline:'none'}}
+                                                    onClick={() => {
+                                                        setMenuPartyTypeDisp('none');
+                                                    }}
+                                                >
+                                                    <Icon as={RiCloseFill} fontSize={30} />
+                                                </Button>
+                                            }
+
+                                        </Flex>
 
                                         {
-                                        
+                                        /* Type of parties */
                                         Object.values(typeOfParties).map((el, i) => {
                                             return(
                                                 <Button
                                                     bg='white'
-                                                    h='25%'
+                                                    h={{base:'10%',lg:'25%'}}
                                                     px='5'
                                                     borderRadius={0}
                                                     _focus={{outline:'none'}}
@@ -249,8 +328,15 @@ export default function HomePage() {
                                                         handleSearchData(event);
                                                         setSearchInputValueFirst('');
                                                         setMenuPartyTypeDisp('none');
-                                                        setMenuService('onclick');
-                                                        document.getElementById('partyTypeAndServicesInput').focus();
+                                                        if( isMobileVersion ) {
+                                                            console.log('is mobile versions');
+                                                            
+                                                            setMenuService('mobile');
+                                                        }
+                                                        else {
+                                                            setMenuService('onclick');
+                                                            document.getElementById('partyTypeAndServicesInput').focus();
+                                                        }
                                                     }}
                                                 >
                                                     <Text
@@ -269,17 +355,137 @@ export default function HomePage() {
                                 </Box>
                                 
 
-                                
-                                {/* Menu onClick */}
+                                {/* MOBILE - Menu Services */}
                                 <Box 
-                                    height={300} 
+                                    id='menuServicesOnSearchMobile'
+                                    height='100vh'
+                                    width='100vw'
+                                    mt={12}
+                                    position='fixed'
+                                    left={0}
+                                    bottom={0}
+                                    borderTopRadius='30%'
+                                    borderRadius={0}
+                                    zIndex={5}                                    
+                                    overflowY="scroll"
+                                    display={menuService == 'mobile' ? '' : 'none'}
+                                    bg='brand.white'
+                                >
+                                    <Flex direction="column" 
+                                        alignItems='center'
+                                    >
+                                        <Flex justifyContent='space-between'
+                                            alignItems='center'
+                                            w='100%'
+                                        >
+                                            <Button 
+                                                bg='none'
+                                                py='2' px='2'
+                                                my='2' mx='2'
+                                                _hover={{bg:'none', textColor: 'brand.red'}}
+                                                _focus={{outline:'none'}}
+                                                onClick={() => {
+                                                    setMenuService('none');
+                                                    setMenuPartyTypeDisp('');
+                                                }}
+                                            >
+                                                <Icon as={RiArrowGoBackFill} 
+                                                    fontSize={22} 
+                                                />
+                                            </Button>
+
+                                            <Text
+                                                fontSize={20}
+                                                fontWeight={500}
+                                            >
+                                                O que procura ?
+                                            </Text>
+                                            <Button 
+                                                bg='none'
+                                                py='2' px='2'
+                                                my='2' mx='2'
+                                                _hover={{bg:'none', textColor: 'brand.red'}}
+                                                _focus={{outline:'none'}}
+                                                onClick={() => {
+                                                    setMenuService('none');
+                                                }}
+                                            >
+                                                <Icon as={RiCloseFill} fontSize={30} />
+                                            </Button>
+                                        </Flex>
+
+                                        <Input placeholder='O que você procura ?'
+                                            fontSize={19}
+                                            mb='3'
+                                            id='partyTypeAndServicesInputMobile'
+                                            bg='white'
+                                            w='90%'
+                                            h='100%'
+                                            py={{base:'3',lg:'0'}}
+                                            borderRightRadius={10}
+                                            _focus={{outline:'none'}}
+                                            autoComplete='off'
+                                            onChange={(event: any) => { 
+                                                setSearchInputValueFirst( event.currentTarget.value );
+                                                searchFunction(event, "menuServicesMobile");
+                                                //handleSearchData({...searchData, serviceCategory: event.currentTarget.value});
+                                            }}
+                                            value={searchInputValueFirst}
+                                        />
+
+                                        <Flex id="menuServicesMobile" 
+                                            direction='column'
+                                            w='100%'
+                                        >
+                                            {
+                                            typeOfServices[searchData.partyType]?.services.map((el, i) => {
+                                                return(
+                                                    <Button
+                                                        key={i}
+                                                        w='100%'
+                                                        py='6'
+                                                        bg='brand.white'
+                                                        borderBottom='1px solid rgba(0,0,0,0.2)'
+                                                        borderRadius={0}
+                                                        name='service'
+                                                        value={el.parent+'-'+el.value}
+                                                        onClick={(event) => {
+                                                            setSearchData({...searchData, serviceCategory: el.parent, serviceSpecificCategory: el.value});
+                                                            setMenuService('none');
+                                                        }}
+                                                    >
+                                                        <Text
+                                                            textAlign='left'
+                                                            w='80%'
+                                                            fontWeight={400}
+                                                        >
+                                                            {el.textToShow}
+                                                        </Text>
+                                                    </Button>
+                                                );
+                                            })
+                                            }
+                                        </Flex>
+
+                                    </Flex>
+                                </Box>
+
+
+                                {/* DESKTOP */}
+                                {/* Menu onClick - Desktop */}
+                                <Box 
+                                    height={230}
                                     width={700}
+                                    mt={20}
+                                    position={'absolute'}
+                                    left='auto'
+                                    bottom='auto'
+                                    borderRadius={10}
+                                    id='menuServicesOnClick'
                                     overflowY="scroll"
                                     display={menuService == 'onclick' ? '' : 'none'}
-                                    position='absolute'
                                     bg='white'
-                                    mt={20}
-                                    borderRadius={10}
+                                    zIndex={3}
                                 >
                                     <MenuServicesOnClick 
                                         handlePreviousStep={previousStepSearch}
@@ -294,10 +500,9 @@ export default function HomePage() {
                                     />
                                 </Box>
 
-
-
-                                {/* Menu onSearch */}
+                                {/* Menu onSearch - Desktop */}
                                 <Box 
+                                    id='menuServicesOnSearch'
                                     height={400} 
                                     width={280}
                                     overflowY="scroll"
@@ -330,8 +535,9 @@ export default function HomePage() {
 
                             </Flex>
                             
+                            {/* LOCATION MENU */}
                             <Flex direction='column'
-                                w='40%'
+                                w={{base:'100%',lg:'40%'}}
                                 h='100%'
                             >
                                 {/* Onde - Localização */}
@@ -340,6 +546,7 @@ export default function HomePage() {
                                     bg='white'
                                     w='100%'
                                     h='100%'
+                                    py={{base:'3',lg:'0'}}
                                     autoComplete='off'
                                     borderRadius={0}
                                     _focus={{outline:'none'}}
@@ -349,21 +556,93 @@ export default function HomePage() {
                                         searchFunction(event, "menuWhere");
                                     }}
                                     onClick={() => {
-                                        setMenuWhere('onclick')
+                                        setMenuWhere('onclick');
+                                        setSearchData({...searchData, location: ''})
                                     }}
                                 />
+
+                                {/* LOCATION MENU */}
                                 <Box 
-                                    height={230} 
-                                    width={350}
+                                    id='menuLocation'
+                                    height={{base:'100vh',lg:230}}
+                                    width={{base:'100vw',lg:350}}
+                                    mt={{base:12,lg:20}}
+                                    left={{base:0, lg:'auto'}}
+                                    bottom={{base: 0, lg:'auto'}}
+                                    borderTopRadius={{base:'30%'}}
+                                    borderRadius={{base:0, lg:10}}
                                     overflowY="scroll"
                                     display={menuWhere}
-                                    position='absolute'
-                                    bg='white'
-                                    mt={20}
-                                    borderRadius={10}
+                                    position={{base:'fixed',lg:'absolute'}}
+                                    bg='brand.white'
+                                    zIndex={5}
                                 >
-                                    <Flex direction="column" id="menuWhere"
-                                        h='100%'
+                                    
+                                    {
+                                        isMobileVersion
+                                        &&
+                                        <Flex justifyContent='center'
+                                            direction='column'
+                                            h='15vh' w='100%'
+                                        >
+                                            {/* Close button */}
+                                            <Flex justifyContent='space-between'
+                                                alignItems='center'
+                                                direction='row'
+                                                w='100%'
+                                                px='4'
+                                                h='50%'
+                                            >
+                                                <Flex alignItems='center'>
+                                                    <Text
+                                                        fontSize={20}
+                                                        fontWeight={500}
+                                                        h='100%'
+                                                    >
+                                                        Onde ?
+                                                    </Text>
+                                                </Flex>
+
+                                                <Button 
+                                                    bg='brand.white'
+                                                    h='100%'
+                                                    py='2' px='2'
+                                                
+                                                    _hover={{bg:'none', textColor: 'brand.red'}}
+                                                    _focus={{outline:'none'}}
+                                                    onClick={() => {
+                                                        setMenuWhere('none');
+                                                    }}
+                                                >
+                                                    <Icon as={RiCloseFill} fontSize={30} />
+                                                </Button>
+                                            </Flex>
+
+                                            <Input placeholder='Onde procura ?'
+                                                h='50%'
+                                                fontSize={19}
+                                                mb='3'
+                                                mx='auto'
+                                                id='inputWhere'
+                                                bg='white'
+                                                w='90%'
+                                                py={{base:'3',lg:'0'}}
+                                                borderRightRadius={10}
+                                                _focus={{outline:'none'}}
+                                                autoComplete='off'
+                                                value={searchData.location}
+                                                onChange={(event: any) => {
+                                                    setSearchData({...searchData, location: event.currentTarget.value})
+                                                    searchFunction(event, "menuWhere");
+                                                }}
+                                            />
+                                        </Flex>
+                                        
+                                    }
+
+                                    <Flex direction="column" 
+                                        id="menuWhere"
+                                        h={{base:'85vh',lg:'100%'}}
                                     >
 
                                         {
@@ -371,10 +650,13 @@ export default function HomePage() {
                                         Object.values(locationMap).map((el, i) => {
                                             return(
                                                 <Button
-                                                    bg='white'
-                                                    h='25%'
+                                                    key={i}
+                                                    py='6'
                                                     px='5'
-                                                    py='4'
+                                                    bg='brand.white'
+                                                    borderBottom='1px solid rgba(0,0,0,0.2)'
+                                                    h={{base:'8%',lg:'25%'}}
+                                                    //py='4'
                                                     borderRadius={0}
                                                     _focus={{outline:'none'}}
                                                     _hover={{bg:'rgba(0,0,0,0.1)'}}
@@ -399,13 +681,15 @@ export default function HomePage() {
                                         }
                                     </Flex>
                                 </Box>
+
                             </Flex>
 
                             <Button
-                                w='20%'
+                                w={{base:'100%',lg:'20%'}}
                                 h='100%'
+                                py={{base:'3',lg:'0'}}
                                 //py='7'
-                                borderLeftRadius={0}
+                                borderLeftRadius={{lg:0}}
                                 bg='brand.red'
                                 color='white'
                                 fontSize={18}
@@ -423,17 +707,21 @@ export default function HomePage() {
                     <Flex direction='column' 
                         justifyContent='center'
                         alignItems='center'
-                        w='50%'
-                        h='100%'
+                        //mx='auto'
+                        w={{base:'100%', lg:'50%'}}
+                        h={{base:'50%', lg:'100%'}}
                         bg='brand.white'
-                        borderLeftRadius='50%'
-                        //borderRightRadius='50%'
-                        
+                        borderLeftRadius={{base:'0%', lg:'50%'}}
+                        borderTopRadius={{base:'30%'}}
+                        borderTopRightRadius={{base:'30%',lg:'0%'}}
+                        //borderBottomLeftRadius={{base:'30%'}}
+
                     >
-                        <Flex  mb='5' mx='auto'>
+                        <Flex  mb={{base:'2', lg:'5'}} mx='auto'>
                             <Flex position='relative'
-                                h={230} w={230}
-                                mr='5' 
+                                h={{base:150, lg:230}} 
+                                w={{base:150, lg:230}} 
+                                mr={{base:'2', lg:'5'}}
                                 borderRadius={4}
                                 borderTopLeftRadius='50%'
                                 overflow='hidden'
@@ -447,7 +735,8 @@ export default function HomePage() {
                             </Flex>
 
                             <Flex position='relative'
-                                h={230} w={230}
+                                h={{base:150, lg:230}} 
+                                w={{base:150, lg:230}} 
                                 borderRadius={4}
                                 overflow='hidden'
                                 borderTopRightRadius='50%'
@@ -462,8 +751,9 @@ export default function HomePage() {
                                         
                         <Flex mx='auto'>
                             <Flex position='relative'
-                                h={230} w={230}
-                                mr='5'
+                                h={{base:150, lg:230}} 
+                                w={{base:150, lg:230}} 
+                                mr={{base:'2', lg:'5'}}
                                 borderRadius={4}
                                 borderBottomLeftRadius='50%'
                                 overflow='hidden'
@@ -476,7 +766,8 @@ export default function HomePage() {
                             </Flex>
 
                             <Flex position='relative'
-                                h={230} w={230}
+                                h={{base:150, lg:230}} 
+                                w={{base:150, lg:230}} 
                                 borderRadius={4}
                                 overflow='hidden'
                                 borderBottomRightRadius='50%'
@@ -517,19 +808,18 @@ export default function HomePage() {
                 {/* Type of party */}
                 <Flex direction='row'
                     w='100%'
-                    h='30vh'
+                    h={{base:'35vh', lg:'30vh'}}
                     alignItems='flex-end'
-                    justifyContent='center'
+                    justifyContent={{base:'space-evenly',lg:'center'}}
                     mt='5'
                 >  
-
                     {
                         Object.values(typeOfParties).map((el, index) => {
                             return (
                                 <Button
-                                    mr='5'
+                                    mr={{base:'0',lg:'5'}}
                                     p='0'
-                                    w='15vw'
+                                    w={{base:'30vw', lg:'15vw'}}
                                     h='100%'
                                     bg={cardSearchData.partyType == el.value ? 'brand.yellow' : 'brand.white'}
                                     value={el.value}
@@ -542,8 +832,8 @@ export default function HomePage() {
                                         
                                     >
                                         <Flex position='relative'
-                                            h='25vh' 
-                                            w='15vw'
+                                            h='28vh' 
+                                            w={{base:'30vw', lg:'15vw'}}
                                             borderRadius={4}
                                             overflow='hidden'
                                         >
@@ -555,10 +845,16 @@ export default function HomePage() {
                                         </Flex>
 
                                         <Flex
-                                            h='5vh'
-                                            alignItems='center'                                    
+                                            h='7vh'
+                                            w={{base:'30vw', lg:'15vw'}}
+                                            alignItems='center' 
+                                            //flexWrap='wrap'                                            
                                         >
                                             <Text
+                                                w='100%'
+                                                whiteSpace='break-spaces'
+                                                fontSize={{base: 16, lg:18}}
+                                                fontWeight={500}
                                             >
                                                 {el.textToShow}
                                             </Text>
@@ -575,7 +871,7 @@ export default function HomePage() {
                 <Flex 
                     justifyContent='center'
                     alignItems='flex-start'
-                    h='35vh'
+                    h={{base:'45vh', lg:'35vh'}}
                     w='100%'
                     mt='4'
                     pt='14'
@@ -583,13 +879,14 @@ export default function HomePage() {
                     borderTopRadius='20%'
                 >
                     <Flex
-                        w='60%'
-                    >
+                        w={{base:'60%', lg:'60%'}}
+                        h={{base:'20vh',lg:'15vh'}}
+                        >
                         <AliceCarousel
                             autoPlay={false}
                             autoHeight={true}
                             responsive={{
-                                0: {items:1},
+                                0: {items:1.1},
                                 1024: {items:5}
                             }}
 
@@ -598,8 +895,10 @@ export default function HomePage() {
                                 typeOfServices[cardSearchData.partyType].services.map((el, index) => {
                                     return (
                                         <Button
-                                            h='15vh'
+                                            h={{base:'20vh',lg:'15vh'}}
                                             w='90%'
+                                            my='1'
+                                            mx='1'
                                             key={index}
                                             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                             bg='rgba(255,255,255,0.95)'
@@ -622,7 +921,7 @@ export default function HomePage() {
                                                 justifyContent='space-evenly'
                                                 py='4'
                                             >
-                                                <Icon as={RiCake2Fill} color='brand.dark_blue' 
+                                                <Icon as={el.icon} color='brand.dark_blue' 
                                                     fontSize={42}
                                                 />
                                                 <Text
@@ -645,7 +944,7 @@ export default function HomePage() {
             </Flex>
 
 
-            {/* Empresas destacadas */}
+            {/* Empresas destacadas 
             <Flex
                 w='100%'
                 h='30vh'
@@ -653,7 +952,7 @@ export default function HomePage() {
             >
 
             </Flex>
-
+            */}
 
             <Footer/>
         </Box>

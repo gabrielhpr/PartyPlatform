@@ -1,11 +1,14 @@
-import { Box, Flex, Text, Link as NavLink, Button, Stack, Icon } from "@chakra-ui/react";
+import { Box, Flex, Text, Link as NavLink, Button, Stack, Icon, 
+    useBreakpointValue, IconButton } from "@chakra-ui/react";
 import Image from "next/image"
 import { HeaderMenuItem } from "./HeaderMenuItem";
 import { useEffect, useState } from "react";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
-import { RiBriefcaseLine } from "react-icons/ri";
+import { useSidebarDrawer } from "../../context/sidebarDrawerContext";
+import { RiBriefcaseLine, RiMenuLine, RiUserLine } from "react-icons/ri";
 import { useUserAuthContext } from "../../context/userContext";
 import { useRouter } from 'next/router';
+import { FaRegUser } from "react-icons/fa";
 
 interface HeaderProps {
     name: string;
@@ -19,15 +22,19 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
     const [ enterpriseArea, setEnterpriseArea ] = useState(false);
     const [scrollHeader, setScrollHeader] = useState(false);
     const routerNext = useRouter();
+    const { onOpen } = useSidebarDrawer();
+    const isMobileVersion = useBreakpointValue({
+        base: true,
+        lg: false,
+    });
 
 
-
-    function handleLogoutEnterprise() {
-        logoutEnterprise();
+    async function handleLogoutEnterprise() {
+        await logoutEnterprise();
     }
 
-    function handleLogoutUser() {
-        logoutUser();
+    async function handleLogoutUser() {
+        await logoutUser();
     }
 
     const listenScrollEvent = (event) => {
@@ -71,30 +78,53 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
             py="6"
             alignItems="center"
             maxHeight={70}
-            px="12"
+            px={{base:"5",lg:"12"}}
             position={position}
             top="0"
             zIndex={1}
             justifyContent="space-between"
         >
+
+            {
+                isMobileVersion 
+                &&
+                <IconButton
+                    aria-label="Open navigation"
+                    icon={<Icon as={RiMenuLine} />}
+                    fontSize="24"
+                    variant="unstyled"
+                    onClick={onOpen}
+                />
+            }
+
+
+
             {/* Logo and enterprise name */}
-            <Flex width="30%">
+            <Flex width={{base:"80%",lg:"30%"}}>
                 <NavLink width='100%' href='/'
                     _hover={{outline: 'none'}}
                     _focus={{border:'none'}}
                 >
                     <Text
+                        textAlign='center'
                         fontSize={25}
                         fontWeight={500}
                     >
-                        Festafy
+                        {enterpriseArea ? 'Festafy Business': 'Festafy'}
                     </Text>
                 </NavLink>
             </Flex>
         
+            
+
+
+
+
+
+
 
             {   
-                /* USER */
+                /* USER AUTHENTICATED */
                 authenticatedUser
                 ?
                     <Flex width="70%" justifyContent="flex-end">
@@ -139,12 +169,37 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                 /* ENTERPRISE AREA (NOT AUTHENTICATED) */
                 enterpriseArea
                 ?
-                    <Flex>
-                        
-                    </Flex>
+                    /* USER BUTTON */
+                    <NavLink
+                        href="/Enterprise/enterpriseAccess"
+                    >
+                        <IconButton
+                            aria-label="Open navigation"
+                            icon={<Icon as={FaRegUser} />}
+                            fontSize="24"
+                            variant="unstyled"
+                            //onClick={}
+                        />
+                    </NavLink>
 
                 :
-                /* GENERAL */
+                    /* GENERAL */
+                    
+                isMobileVersion == true
+                ?
+                    /* USER BUTTON */
+                    <NavLink
+                        href="/User/userAccess"
+                    >
+                        <IconButton
+                            aria-label="Open navigation"
+                            icon={<Icon as={FaRegUser} />}
+                            fontSize="24"
+                            variant="unstyled"
+                            //onClick={}
+                        />
+                    </NavLink>
+                :
                     <Flex width="70%" justifyContent="flex-end">
                         {/* Menu */}
                         <Stack direction="row" spacing={10}
@@ -172,7 +227,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                                 </Button>
                             </NavLink>
 
-                             {/* CADASTRE-SE */}
+                            {/* CADASTRE-SE */}
                             <NavLink
                                 href="/User/Auth/register"
                                 _hover={{textDecoration:"none"}}
@@ -212,6 +267,8 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                             </NavLink>
                         </Stack>
                     </Flex>
+
+                    
                 
             }
             

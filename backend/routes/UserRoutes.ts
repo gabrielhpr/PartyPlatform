@@ -14,6 +14,8 @@ router.post(
 router.post("/login", UserController.login);
 
 router.post("/rating", UserController.rate);
+router.post("/sendEmail", UserController.sendEmail);
+router.get("/user", UserController.getUser);
 //router.get("/services/:", UserController.getServices);
 //router.get("/services", EnterpriseController.services);
 //router.post("/login", UserController.login);

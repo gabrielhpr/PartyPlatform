@@ -1,6 +1,9 @@
 import bcrypt = require("bcrypt");
 import jwt = require("jsonwebtoken");
 import { nextTick } from "process";
+const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.js");
+const mailchimpClient = mailchimpFactory("rcUfsa5vVBpbmJlzbkjF0A");
+
 const createUserToken = require('../helpers/create-user-token');
 const getToken = require('../helpers/get-token');
 const UserModel = require('../models/UserModel');
@@ -387,6 +390,82 @@ module.exports = class UserController {
             res.status(500).json({message: err});
             return;
         }
+
+    }
+
+    static async sendEmail(req: any, res: any) {
+        console.log('Entrou - Controller - sendEmail');
+        const {
+            enterpriseId,
+            partyType,
+            partyDate,
+            nOfPeople,
+            messageContent
+        } = req.body;
+
+        if(!req.headers.authorization) {
+            return res.status(500).send({message: "Não possui token!"});
+        }
+        
+        let userId;
+        console.log('tem token');
+        const token = getToken(req);
+
+        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            if(err) {
+                return res.status(500).send({message: "Token inválido!"});
+            }
+            userId = decoded.id;
+        });
+
+        let userData = await userModel.getUserById( userId );   
+
+        const { enterpriseEmail } = await userModel.getEntepriseEmail( enterpriseId );
+
+        console.log( 'enterpriseEmail' );
+        console.log( enterpriseEmail );
+
+        const emailData = {
+            'type': 'budget',
+            'userId': userData.id,
+            'enterpriseId': enterpriseId,
+            'partyType': partyType,
+            'partyDate': partyDate,
+            'nOfPeople': nOfPeople,
+            'messageContent': messageContent
+        }
+
+        // Inserting email in table
+        await userModel.insertEmail( emailData );
+
+        // Sending the email using Mandril
+
+        const run = async () => {
+            const response = await mailchimpClient.messages.send({ message: 
+                {
+                    subject: '[Pedido de orçamento]',
+                    text: `
+                        Olá, tudo bem ? ${userData.fullName} 
+                        enviou um pedido de orçamento para você! 
+                        Sua festa será realizada no dia ${emailData.partyDate}
+                        e é do tipo ${emailData.partyType}. 
+                        Para entrar em contato com o cliente, utilize o 
+                        email: ${userData.email} ou o telefone: 
+                        ${userData.phone}.
+                        A mensagem deixada por ele foi: 
+                        ${emailData.messageContent}.
+                    `,
+                    from_email: 'festafy@festafy.com.br',
+                    to: [ {email: enterpriseEmail, name: 'Fornecedor', type:'to'} ]
+                } 
+            });
+            console.log(response);
+        };
+
+        run();
+
+        return res.status(200).send({message: "Email enviado com sucesso!"});
+
 
     }
 }

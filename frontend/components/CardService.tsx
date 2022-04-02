@@ -23,7 +23,6 @@ interface CardServiceProps {
 export function CardService( { name, location, classification, rangeOfPeople, price, photos, handleOnClick } : CardServiceProps ) {
     //let photo = [FotoDebutante, FotoInfantilFem, FotoInfantilMasc];
     
-    
     return (
         <Flex
             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
@@ -32,11 +31,10 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
             //justifyContent='center'
             //alignItems='flex-start'
             bg='white'
-            h='27.3vw'
-            w='21.3vw'
+            h={{base:'50vh', lg:'42vh'}}
+            w={{base:'90vw', lg:'30vw', xl:'20vw'}}
             position='relative'
             _hover={{bg: 'rgba(0,0,0,0.1)'}}
-            
         >
             {/* 
             <Flex 
@@ -63,7 +61,7 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                                 return (
                                         <Box
                                             key={i}
-                                            h='21.3vw' 
+                                            h={{base:'40vh', lg:'32vh'}}
                                             overflow='hidden'
                                             borderTopRadius={8}
                                             //w='100vw'
@@ -100,7 +98,7 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
         
 
             <Flex 
-                h='6vw'
+                h={{base:'10vh',lg:'10vh'}}
                 direction='column'
                 alignItems='center'
                 justifyContent='center'
@@ -115,7 +113,7 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                     w='100%'
                 >
                     <Text
-                        w='80%'
+                        w='75%'
                         whiteSpace='nowrap'
                         overflow='hidden'
                         textOverflow='clip'
@@ -125,7 +123,7 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                         { name }
                     </Text>
 
-                    <Flex alignItems='center' w='20%'>
+                    <Flex alignItems='center' w='25%'>
                         <Icon as={RiStarSFill}/>
                         <Text>
                             { classification }

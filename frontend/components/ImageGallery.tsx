@@ -1,6 +1,6 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import Image from "next/image";
 
 interface ImageGalleryProps {
@@ -8,9 +8,14 @@ interface ImageGalleryProps {
 }
 
 export function ImageGallery({data}: ImageGalleryProps) {
+    const isMobileVersion = useBreakpointValue({
+        base: true,
+        lg: false,
+    });
+
 	return (
         <Carousel
-            width='70vw'
+            width={isMobileVersion ? '100vw' : '70vw'}
             autoPlay={true}
             infiniteLoop
             transitionTime={600}
@@ -22,7 +27,7 @@ export function ImageGallery({data}: ImageGalleryProps) {
                 data.map((image, i) => {
                     return (
                             <Box
-                                h='85vh' 
+                                h={{base:'45vh', lg:'85vh'}}
                                 w='100%'
                                 justifyContent='center'
                                 alignItems='center'
@@ -30,12 +35,8 @@ export function ImageGallery({data}: ImageGalleryProps) {
                             >
                                 <Image
                                     src={image}
-                                    //height={100}
-                                    //height={100}
-                                    //width='auto'
                                     layout='fill'
                                     objectFit='cover'
-                                    //objectPosition=
                                 /> 
                             </Box>
                     )

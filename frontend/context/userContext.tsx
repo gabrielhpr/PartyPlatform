@@ -3,9 +3,10 @@ import useUserAuth from "../hooks/useUserAuth";
 
 interface UserContextInterface {
     authenticatedUser: boolean;
-    registerUser: Function;
-    loginUser: Function;
+    registerUser: (userData:any, redirect?:boolean) => {};
+    loginUser: (userData:any, redirect?:boolean) => {};
     userRate: Function;
+    userSendEmail: Function;
     logoutUser: Function;
 }
 
@@ -16,10 +17,10 @@ interface UserProviderProps {
 }
 
 export function UserProvider({children}: UserProviderProps) {
-    const { authenticatedUser, registerUser, loginUser, userRate, logoutUser } = useUserAuth();
+    const { authenticatedUser, registerUser, loginUser, userRate, logoutUser, userSendEmail } = useUserAuth();
     
     return (
-        <Context.Provider value={{ authenticatedUser, registerUser, loginUser, userRate, logoutUser }}>
+        <Context.Provider value={{ authenticatedUser, registerUser, loginUser, userRate, logoutUser, userSendEmail }}>
             {children}
         </Context.Provider>
     );

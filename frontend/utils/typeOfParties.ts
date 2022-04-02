@@ -1,3 +1,9 @@
+import { RiQuestionFill } from "react-icons/ri"
+import { GiBlockHouse, GiCupcake, GiPartyFlags, GiForkKnifeSpoon, GiPartyPopper } from "react-icons/gi";
+import { FaBirthdayCake } from "react-icons/fa";
+import { ImCamera } from "react-icons/im";
+import { BsMusicNoteBeamed } from "react-icons/bs";
+
 
 export const typeOfParties = {
     Infantil: {value: 'Infantil', textToShow: 'Infantil'},
@@ -9,49 +15,49 @@ export const typeOfServices = {
     Infantil: {
         services: [
             // ESPAÇOS
-            {value: 'Chacara', textToShow: 'Chácara', parent: 'Espaco'},
-            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent: 'Espaco'},
+            {value: 'Chacara', textToShow: 'Chácara', parent: 'Espaco', icon: GiBlockHouse },
+            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent: 'Espaco', icon: GiBlockHouse},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico'},
-            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico'},
-            {value: 'Doces', textToShow: 'Doces', parent:'Servico'},
+            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
+            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico', icon: FaBirthdayCake},
+            {value: 'Doces', textToShow: 'Doces', parent:'Servico', icon: GiCupcake},
             // SERVIÇOS
-            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico'},
-            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico'},
-            {value: 'Musica', textToShow: 'Música', parent:'Servico'},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico'}
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico', icon: ImCamera},
+            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico', icon: GiPartyFlags},
+            {value: 'Musica', textToShow: 'Música', parent:'Servico', icon: BsMusicNoteBeamed},
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper}
         ]
     },
     Debutante: {
         services: [
             // ESPAÇOS
-            {value: 'Chacara', textToShow: 'Chácara', parent:'Espaco'},
-            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent:'Espaco'},
+            {value: 'Chacara', textToShow: 'Chácara', parent: 'Espaco', icon: GiBlockHouse },
+            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent: 'Espaco', icon: GiBlockHouse},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico'},
-            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico'},
-            {value: 'Doces', textToShow: 'Doces', parent:'Servico'},
+            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
+            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico', icon: FaBirthdayCake},
+            {value: 'Doces', textToShow: 'Doces', parent:'Servico', icon: GiCupcake},
             // SERVIÇOS
-            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico'},
-            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico'},
-            {value: 'Musica', textToShow: 'Música', parent:'Servico'},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico'}
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico', icon: ImCamera},
+            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico', icon: GiPartyFlags},
+            {value: 'Musica', textToShow: 'Música', parent:'Servico', icon: BsMusicNoteBeamed},
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper}
         ]
     },
     Aniversario: {
         services: [
             // ESPAÇOS
-            {value: 'Chacara', textToShow: 'Chácara', parent:'Espaco'},
-            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent:'Espaco'},
+            {value: 'Chacara', textToShow: 'Chácara', parent: 'Espaco', icon: GiBlockHouse },
+            {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent: 'Espaco', icon: GiBlockHouse},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico'},
-            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico'},
-            {value: 'Doces', textToShow: 'Doces', parent:'Servico'},
+            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
+            {value: 'Bolos', textToShow: 'Bolos', parent:'Servico', icon: FaBirthdayCake},
+            {value: 'Doces', textToShow: 'Doces', parent:'Servico', icon: GiCupcake},
             // SERVIÇOS
-            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico'},
-            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico'},
-            {value: 'Musica', textToShow: 'Música', parent:'Servico'},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico'}
+            {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico', icon: ImCamera},
+            {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico', icon: GiPartyFlags},
+            {value: 'Musica', textToShow: 'Música', parent:'Servico', icon: BsMusicNoteBeamed},
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper}
         ]
     }
 } 
@@ -116,8 +122,7 @@ export const priceOptionsPerService = {
             {value: '2000-3000', textToShow: 'Entre R$2000 e R$3000'},
             {value: '3000-5000', textToShow: 'Entre R$3000 e R$5000'},
             {value: '5000-10000', textToShow: 'Entre R$5000 e R$10000'},
-            {value: '10000-20000', textToShow: 'Entre R$10000 e R$20000'},
-            {value: '20000-1000000', textToShow: '+R$20000'}
+            {value: '10000-10000000', textToShow: '+R$10000'}
         ],
         EspacoEBuffet: [
             {value: '-1', textToShow: 'Sem filtro'},
@@ -126,10 +131,17 @@ export const priceOptionsPerService = {
             {value: '30-50', textToShow: 'Entre R$30 e R$50'},
             {value: '50-75', textToShow: 'Entre R$50 e R$75'},
             {value: '75-100', textToShow: 'Entre R$75 e R$100'},
-            {value: '100-100000', textToShow: '+R$100'}
+            {value: '100-1000000', textToShow: '+R$100'}
         ]
     },
     Servico: {
+        AnimacaoDeFesta: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-300', textToShow: 'Até R$300'},
+            {value: '300-500', textToShow: 'Entre R$300 e R$500'},
+            {value: '500-1000', textToShow: 'Entre R$500 e R$1000'},
+            {value: '1000-10000000', textToShow: '+R$1000'},
+        ],
         Buffet: [
             {value: '-1', textToShow: 'Sem filtro'},
             {value: '0-30', textToShow: 'Até R$30'},
@@ -138,22 +150,48 @@ export const priceOptionsPerService = {
             {value: '75-100', textToShow: 'Entre R$75 e R$100'},
             {value: '100-100000', textToShow: '+R$100'}
         ],
-        Bolo: [
+        Bolos: [
             {value: '-1', textToShow: 'Sem filtro'},
             {value: '0-30', textToShow: 'Até R$30'},
             {value: '30-50', textToShow: 'Entre R$30 e R$50'},
             {value: '50-75', textToShow: 'Entre R$50 e R$75'},
             {value: '75-100', textToShow: 'Entre R$75 e R$100'},
-            {value: '100-100000', textToShow: '+R$100'}
+            {value: '100-200', textToShow: 'Entre R$100 e R$200'},
+            {value: '200-300', textToShow: 'Entre R$200 e R$300'},
+            {value: '300-10000000', textToShow: '+R$300'},
+        ],
+        Decoracao: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-500', textToShow: 'Até R$500'},
+            {value: '500-1000', textToShow: 'Entre R$500 e R$1000'},
+            {value: '1000-2000', textToShow: 'Entre R$1000 e R$2000'},
+            {value: '2000-3000', textToShow: 'Entre R$2000 e R$3000'},
+            {value: '3000-5000', textToShow: 'Entre R$3000 e R$5000'},
+            {value: '5000-1000000', textToShow: '+R$5000'},
+        ],
+        Doces: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-50', textToShow: 'Até R$50'},
+            {value: '50-100', textToShow: 'Entre R$50 e R$100'},
+            {value: '100-200', textToShow: 'Entre R$100 e R$200'},
+            {value: '200-1000000', textToShow: '+R$200'}
         ],
         FotografiaFilmagem: [
             {value: '-1', textToShow: 'Sem filtro'},
-            {value: '0-30', textToShow: 'Até R$30'},
-            {value: '30-50', textToShow: 'Entre R$30 e R$50'},
-            {value: '50-75', textToShow: 'Entre R$50 e R$75'},
-            {value: '75-100', textToShow: 'Entre R$75 e R$100'},
-            {value: '100-100000', textToShow: '+R$100'}
+            {value: '0-500', textToShow: 'Até R$500'},
+            {value: '500-1000', textToShow: 'Entre R$500 e R$1000'},
+            {value: '1000-2000', textToShow: 'Entre R$1000 e R$2000'},
+            {value: '2000-3000', textToShow: 'Entre R$2000 e R$3000'},
+            {value: '3000-5000', textToShow: 'Entre R$3000 e R$5000'},
+            {value: '5000-1000000', textToShow: '+R$5000'},        
         ],
+        Musica: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-500', textToShow: 'Até R$500'},
+            {value: '500-1000', textToShow: 'Entre R$500 e R$1000'},
+            {value: '1000-2000', textToShow: 'Entre R$1000 e R$2000'},
+            {value: '2000-1000000', textToShow: '+R$2000'}
+        ]
     }
 
 }

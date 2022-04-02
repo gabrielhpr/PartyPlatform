@@ -116,7 +116,7 @@ export default function useEnterpriseAuth() {
         routerNext.push("/Enterprise/home");
     }
 
-    function logoutEnterprise() {
+    async function logoutEnterprise() {
         const msgText = "Logout realizado com sucesso!";
         const msgType = "success";
 

@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Link as NavLink, Stack } from "@chakra-ui/react";
+import { Box, Flex, Icon, Link as NavLink, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { RiAddLine } from "react-icons/ri";
 import { CardAds } from "../../../components/Enterprise/Ads/Card";
@@ -66,7 +66,10 @@ export default function AdsEnterprise() {
                     {
                         ads.length <= 2
                         ?
-                        <NavLink href="/Enterprise/ads/create">
+                        <NavLink href="/Enterprise/ads/create"
+                            h='30.3vw'
+                            w='21.3vw'
+                        >
                             <Flex 
                                 boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                 borderRadius={8} 
@@ -76,10 +79,14 @@ export default function AdsEnterprise() {
                                 justifyContent="center"
                                 alignItems="center"
                                 fontSize={40}
-                                height={150}
-                                width={250}
+                                direction='column'
+                                h='100%'
+                                w='100%'
                             >
-                                <Icon as={RiAddLine}/>
+                                <Icon as={RiAddLine}
+                                    fontSize={54}
+                                    fontWeight={400}
+                                />
                             </Flex>
                         </NavLink>
                         :

@@ -7,16 +7,19 @@ import { ImageGallery } from "./ImageGallery";
     interface ModalImageGalleryProps {
         buttonText: string;
         content: ReactNode;
+        handleFunctions: any;
     }
     
-export function ModalImageGallery( {buttonText, content }: ModalImageGalleryProps ) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+export function ModalImageGallery( {buttonText, content, handleFunctions }: ModalImageGalleryProps ) {
+    const { isOpen, onOpen, onClose } = handleFunctions;
     
     console.log('content: ');
     console.log(content);
 
     return (
         <>
+            {/* 
+            
             <Button 
                 bg='brand.white'
                 color='brand.dark_blue'
@@ -29,6 +32,7 @@ export function ModalImageGallery( {buttonText, content }: ModalImageGalleryProp
             >
                 {buttonText}
             </Button>
+            */}
 
             <Modal isOpen={isOpen} onClose={onClose}
                 size='full'
@@ -36,11 +40,9 @@ export function ModalImageGallery( {buttonText, content }: ModalImageGalleryProp
             >
                 <ModalOverlay />
                 <ModalContent 
-                   
                     bg='black'
                 >
                     
-
                     <ModalCloseButton 
                         color='brand.white'
                         fontSize={20}
@@ -50,15 +52,11 @@ export function ModalImageGallery( {buttonText, content }: ModalImageGalleryProp
                     <ModalBody
                         alignItems='center'
                         justifyContent='center'
-                        
                         display='flex'
                     >
-                       
                         <ImageGallery
                             data={content}
-                        />
-                         
-                       
+                        />                         
                     </ModalBody>
                 </ModalContent>
             </Modal>        

@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink } from "@chakra-ui/react";
 //import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
@@ -10,6 +10,8 @@ import { ModalImageGallery } from "../components/ModalImageGallery";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { specificQuestions } from "../utils/typeOfParties";
+import { useUserAuthContext } from "../context/userContext";
+import { Sidebar } from "../components/Sidebar";
 
 interface serviceDataInterf {
     // Contact Data
@@ -183,14 +185,35 @@ export default function ServiceProfilePage() {
     const [service, setService] = useState<serviceDataInterf>(serviceNullState);
     const [opinions, setOpinions] = useState([]);
     const [showAllImages, setShowAllImages] = useState(false);
+    const [emailData, setEmailData] = useState({});
+    const { userSendEmail } = useUserAuthContext();
+    const isMobileVersion = useBreakpointValue({
+        base: true,
+        lg: false,
+    });
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+
 
     function handleOpinion() {
         routerNext.push({
             pathname: '/rating',
             query: { 
                 enterpriseId: routerNext.query.id,
+                partyType: routerNext.query.partyType
             }
         });
+    }
+
+    function handleEmailDataChange( event: any ) {
+        setEmailData({...emailData, [event.currentTarget.name]: event.currentTarget.value});
+    }
+
+    function handleSendEmail() {
+        console.log( emailData );
+
+        userSendEmail( emailData );
+
     }
 
     function handleShowAllImages() {
@@ -202,6 +225,9 @@ export default function ServiceProfilePage() {
             return;
         }
         const {id, partyType} = routerNext.query;
+
+        // Save the enterprise id and party type, for email sending
+        setEmailData({...emailData, enterpriseId: id, partyType: partyType});
 
         api.get('/serviceProfile', {
                 params: {
@@ -224,6 +250,8 @@ export default function ServiceProfilePage() {
         <Box>
             <Header name="" position="relative" />
 
+            <Sidebar/>
+
             {
             service.serviceDescription != ''
             ?
@@ -232,15 +260,19 @@ export default function ServiceProfilePage() {
                 bg='brand.white'
                 mb='20'
             >
-                <Flex w='80%' direction='column'
-                    bg='white' px={34}
-                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                    borderRadius={8}
-                    mt='10'
+                <Flex w={{base:'100%', lg:'80%'}}
+                    direction='column'
+                    bg='white' 
+                    px={{base:0,lg:34}}
+                    boxShadow={{lg:"0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"}}
+                    borderRadius={{lg:8}}
+                    mt={{base:'0',lg:'10'}}
                 >
 
                     {/* Details about the service */}
-                    <Flex direction='column'>
+                    <Flex direction='column'
+                        px={{base:'5',lg:'0'}}
+                    >
                         <Flex alignItems='flex-end' mt='5'>
                             <Text as='h1'
                                 fontSize={30}
@@ -248,14 +280,7 @@ export default function ServiceProfilePage() {
                             >
                                 {service.enterpriseName}
                             </Text>
-                            <Text ml='3' 
-                                border='2px solid'
-                                borderColor='brand.red'
-                                borderRadius={5}
-                                p='1'
-                            >
-                                Premium
-                            </Text>
+                            
                         </Flex>
                         
                         <Flex mt='2'>
@@ -313,80 +338,119 @@ export default function ServiceProfilePage() {
 
 
                     {/* Photos */}
-                    <Flex w='100%' pb='10' pt='5' h={500}>
-                        <Flex w='50%'>
+                    <Flex w='100%' pb='10' pt='5' 
+                        h={{base:400,lg:500}}
+                    >
+                    
+                        <Flex w={{base:'100%', lg:'50%'}}
+                            onClick={onOpen}
+                            position='relative'
+                        >
+
+                            <Button 
+                                bg='brand.white'
+                                color='brand.dark_blue'
+                                w='20%'
+                                position='absolute'
+                                right={0}
+                                bottom={0}
+                                transform='translate(-5%, -10%)'
+                                onClick={onOpen}
+                                borderRadius={8}
+                            >
+                                + Fotos
+                            </Button>                                    
+
                             <Img 
-                                borderLeftRadius={8} 
+                                borderLeftRadius={{base:0,lg:8}}
                                 objectFit='cover'
                                 src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[0]}`}
                             />
                         </Flex>
 
-                        <Flex w='50%' h='100%' flexWrap='wrap' >
-                            <Flex w='50%' h='50%' pl='2' pb='1'>
-                                <Img 
-                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[1]}`}
-                                    objectFit='cover'
-                                />
-                            </Flex>
-                            <Flex w='50%' h='50%' pl='2' pb='1'>
-                                <Img 
-                                    borderTopRightRadius={8}
-                                    objectFit='cover'
-                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[2]}`}
-                                />
-                            </Flex>
-                            <Flex w='50%' h='50%' pl='2' pt='1'>
-                                <Img 
-                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[3]}`}
-                                    objectFit='cover'
-                                />
-                            </Flex>
-                            <Flex w='50%' h='50%' pl='2' pt='1' position='relative'>
-                                
-                                
-                                <Button 
-                                    bg='brand.yellow'
-                                    color='black'
-                                    w='70%'
-                                    position='absolute'
-                                    top='50%'
-                                    left='50%'
-                                    transform='translate(-50%, 80%)'
-                                    onClick={handleShowAllImages}
+                        {
+                            !isMobileVersion
+                            &&
+                            /* Other showed pictures */
+                            <Flex w='50%' h='100%' flexWrap='wrap' >
+                                <Flex w='50%' h='50%' pl='2' pb='1'
+                                    onClick={onOpen}
                                 >
-                                    Ver todas fotos
-                                </Button>
+                                    <Img 
+                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[1]}`}
+                                        objectFit='cover'
+                                    />
+                                </Flex>
+                                <Flex w='50%' h='50%' pl='2' pb='1'
+                                    onClick={onOpen}
+                                >
+                                    <Img 
+                                        borderTopRightRadius={8}
+                                        objectFit='cover'
+                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[2]}`}
+                                    />
+                                </Flex>
+                                <Flex w='50%' h='50%' pl='2' pt='1'
+                                    onClick={onOpen}
+                                >
+                                    <Img 
+                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[3]}`}
+                                        objectFit='cover'
+                                    />
+                                </Flex>
+                                <Flex w='50%' h='50%' pl='2' pt='1' position='relative'>
 
-                                <ModalImageGallery
-                                    buttonText='Ver todas as fotos'
-                                    content={
-                                        service.photos.split(',').map((image, index) => {
-                                            return {
-                                                'id': `service_${index}`,
-                                                'src': `http://localhost:5000/images/enterprise/${image}`,
-                                                'alt': 'Service',
-                                            }
-                                        })
-                                    }
-                                />
+                                    <Button 
+                                        bg='brand.white'
+                                        color='brand.dark_blue'
+                                        w='70%'
+                                        position='absolute'
+                                        top='50%'
+                                        left='50%'
+                                        transform='translate(-50%, 80%)'
+                                        onClick={onOpen}
+                                    >
+                                        Ver todas as fotos
+                                    </Button>
 
+                                    
 
-                                <Img 
-                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
-                                    borderBottomRightRadius={8}
-                                    objectFit='cover'
-                                />
+                                    <Img 
+                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
+                                        borderBottomRightRadius={8}
+                                        objectFit='cover'
+                                    />
+                                </Flex>
                             </Flex>
-                        </Flex>
+                        }
+
+                        {/* Photo Gallery Modal */}
+                        <ModalImageGallery
+                            buttonText='Ver todas as fotos'
+                            handleFunctions={{isOpen, onOpen, onClose}}
+                            content={
+                                service.photos.split(',').map((image, index) => {
+                                    return {
+                                        'id': `service_${index}`,
+                                        'src': `http://localhost:5000/images/enterprise/${image}`,
+                                        'alt': 'Service',
+                                    }
+                                })
+                            }
+                        />
                             
                     </Flex>
                     
                     {/* Service Description, Common Douts and Send Message */}
-                    <Flex direction='row'>
+                    <Flex direction='row'
+                        px={{base:'5',lg:'0'}}
+                    >
                         
                         {/* Service Description, Common Douts and Send Message */}
-                        <Flex w='70%' direction='column' pr='15'>
+                        <Flex w={{base:'100%',lg:'70%'}} 
+                            direction='column' 
+                            pr={{base:'0',lg:'15'}}
+                        >
                             {/* Description about the service */}
                             <Flex direction='column' mb='8'>
                                 <Text
@@ -519,7 +583,6 @@ export default function ServiceProfilePage() {
                             </Flex>
 
                             {/* Rating and Opinions */}
-                            
                             <Flex w='100%' 
                                 direction='column'
                                 my='3'
@@ -550,15 +613,18 @@ export default function ServiceProfilePage() {
                                 ?
                                 <Flex w='100%' direction='column'>
                                     {/* Rating info */}
-                                    <Flex w='100%' mb='4'>
+                                    <Flex w='100%' mb='4'
+                                        flexWrap={{base:'wrap',lg:'nowrap'}}
+                                    >
                                         {/* Rating star box */}
                                         <Flex 
-                                            w='20%'
+                                            w={{base:'50%',lg:'20%'}}
                                             direction='column'
                                             alignItems='center'
                                             border='1px solid rgba(0,0,0,0.3)'
                                             borderRadius={8}
-                                            p='5'
+                                            px='5'
+                                            py={{base:'10', lg:'5'}}
                                         >
                                             <Flex alignItems='center'>
                                                 <Icon as={RiStarFill} 
@@ -581,11 +647,11 @@ export default function ServiceProfilePage() {
                                         </Flex>
 
                                         <Flex 
-                                            w='80%'
-                                            ml='5'
+                                            w={{base:'100%',lg:'80%'}} 
+                                            ml={{base:0,lg:'5'}}
                                             direction='column'
                                             justifyContent='center'
-                                            wrap='wrap'
+                                            flexWrap={{base:'nowrap',lg:'wrap'}}
                                         >
                                             {
                                                 [
@@ -597,8 +663,11 @@ export default function ServiceProfilePage() {
 
                                                 ].map((el, index) => {
                                                     return (
-                                                        <Flex alignItems='center' h='30%' mr='7'
+                                                        <Flex alignItems='center' 
+                                                            h={{base:'50%',lg:'30%'}}
+                                                            mr='7'
                                                             justifyContent='space-between'
+                                                            py={{base:'2.5',lg:'0'}}
                                                         >
                                                             <Text
                                                                 mr='2'
@@ -626,11 +695,11 @@ export default function ServiceProfilePage() {
                                                 return (
                                                     <Flex 
                                                         py='5' 
-                                                        px='4'
+                                                        px={{base:'1',lg:'4'}}
                                                         direction='column'
                                                         borderBottom='1px solid rgba(0,0,0,0.4)'
                                                     >
-                                                        {/* Name, Avatar */}
+                                                        {/* Name, Avatar, date */}
                                                         <Flex mb='2' 
                                                             alignItems='center'
                                                         >
@@ -648,7 +717,7 @@ export default function ServiceProfilePage() {
                                                                     {el.fullName.split(' ')?.slice(0,2).join(' ')}
                                                                 </Text>
                                                                 <Text>
-                                                                    Data da Festa: {el.partyDate.substring(0,10)}
+                                                                    Data da Festa: {el.partyDate.substring(8,10)+'/'+el.partyDate.substring(5,7)+'/'+el.partyDate.substring(0,4)}
                                                                 </Text>
                                                             </Flex>
 
@@ -681,83 +750,136 @@ export default function ServiceProfilePage() {
                                 <>
                                 </>
                                 }
-                            </Flex>
-                           
-
+                            </Flex>                           
                         </Flex>
 
-
-                        {/* Card */}
-                        <Flex w='30%' 
-                            justifyContent='flex-end'
-                        >
-                            <Flex 
-                                h={420}
-                                w='85%'
-                                position='sticky'
-                                top={20}
-                                px='5'
-                                boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                                borderRadius={8}
-                                direction='column'
-                                textAlign='center'
+                        {
+                            isMobileVersion == false
+                            &&
+                            /* Card */
+                            <Flex w='30%' 
+                                justifyContent='flex-end'
                             >
-
-                                <Text as='h2'
-                                    fontSize={21}
-                                    fontWeight={500}
-                                    my='4'
-                                >
-                                    Pedir um orçamento!
-                                </Text>
-
                                 <Flex 
+                                    h={420}
+                                    w='85%'
+                                    position='sticky'
+                                    top={20}
+                                    px='5'
+                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                    borderRadius={8}
                                     direction='column'
-                                    textAlign='left'
+                                    textAlign='center'
                                 >
-                                    
-                                    <Flex direction='column' mb='3'>
-                                        <Text as='span'>Data do evento</Text>
-                                        <Input type='date' />
-                                    </Flex>
 
-                                    <Flex direction='column' mb='3'>
-                                        <Text as='span'>Número de convidados</Text>
-                                        <Input type='number' />
-                                    </Flex>
-
-                                    <Flex direction='column' mb='3'>
-                                        <Text as='span'>Mensagem</Text>
-                                        <Textarea resize='none' maxLength={300} h={100}/>
-                                    </Flex>
-
-                                    <Button
-                                        bg='brand.red'
-                                        color='white'
-                                        height={12}
-                                        fontSize={18}
-                                        onClick={() => {
-                                            console.log('Service');
-                                            console.log(service);
-                                            console.log('Opinião');
-                                            console.log(opinions[0]);
-                                        }}
+                                    <Text as='h2'
+                                        fontSize={21}
+                                        fontWeight={500}
+                                        my='4'
                                     >
-                                        Pedir orçamento!
-                                    </Button>
+                                        Pedir um orçamento!
+                                    </Text>
 
+                                    <Flex 
+                                        direction='column'
+                                        textAlign='left'
+                                    >
+                                        
+                                        <Flex direction='column' mb='3'>
+                                            <Text as='span'>Data do evento</Text>
+                                            <Input type='date' 
+                                                name='partyDate'
+                                                onChange={handleEmailDataChange}
+                                            />
+                                        </Flex>
 
+                                        <Flex direction='column' mb='3'>
+                                            <Text as='span'>Número de convidados</Text>
+                                            <Input type='number' 
+                                                name='nOfPeople'
+                                                onChange={handleEmailDataChange}
+                                            />
+                                        </Flex>
 
+                                        <Flex direction='column' mb='3'>
+                                            <Text as='span'>Mensagem</Text>
+                                            <Textarea resize='none' 
+                                                maxLength={300} h={100}
+                                                name='messageContent'
+                                                onChange={handleEmailDataChange}
+                                            />
+                                        </Flex>
 
-                                </Flex>
-                            </Flex>    
-
-
-                        </Flex>
+                                        <Button
+                                            bg='brand.red'
+                                            color='white'
+                                            height={12}
+                                            fontSize={18}
+                                            onClick={() => {
+                                                handleSendEmail();
+                                                // console.log('Service');
+                                                //console.log(service);
+                                                // console.log('Opinião');
+                                                // console.log(opinions[0]);
+                                            }}
+                                        >
+                                            Pedir orçamento!
+                                        </Button>
+                                    </Flex>
+                                </Flex>    
+                            </Flex>
+                        }
 
                     </Flex>
                     
                 </Flex>
+
+                {/* Pedir orçamento mobile */}
+                {
+                    isMobileVersion
+                    &&
+                    <Flex
+                        position='fixed'
+                        bg='brand.white'
+                        bottom={0}
+                        h='9vh'
+                        w='100%'
+                        alignItems='center'
+                        justifyContent='space-evenly'
+                        borderTop='2px solid rgba(0,0,0,0.10)'
+                    >
+                        <Button
+                            bg='brand.red'
+                            color='white'
+                            //height={12}
+                            fontSize={18}
+                            h='70%'
+                            w='70%'
+                        >
+                            Pedir orçamento grátis!
+                        </Button>
+
+                        {/* PHONE CALL */}
+                        <NavLink
+                            href={`tel:${service.phone}`}
+                            h='70%'
+                            w='20%'
+                            bg='gray'
+                            color='brand.white'
+                            borderRadius={8}
+                        >
+                            <Flex 
+                                h='100%'
+                                alignItems='center'
+                                justifyContent='center'
+                            >
+                                <Icon as={RiPhoneFill}
+                                    fontSize={24}
+                                />
+                            </Flex>
+                        </NavLink>
+                    </Flex>
+                }
             </Flex>
             :
             <>

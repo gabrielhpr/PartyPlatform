@@ -1,10 +1,12 @@
-import { Box, Flex, Text, Input, Link as NavLink, Button } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Link as NavLink, Button, Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, useBreakpointValue } from "@chakra-ui/react";
 import Image from 'next/image';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
 import { useRouter } from "next/router";
 import { Header } from "../../../components/Header";
 import { useUserAuthContext } from "../../../context/userContext";
+import { locationMap, typeOfParties } from "../../../utils/typeOfParties";
+import { Footer } from "../../../components/Footer";
 
 interface userRegisterDataProps {
     fullName: string;
@@ -13,7 +15,9 @@ interface userRegisterDataProps {
     password: string;
     passwordConfirmation: string;
     partyType: string;
+    partyTypeTextToShow: string;
     partyDate: string;
+    location: string;
     city: string;
     state: string;
     country: string;
@@ -26,7 +30,9 @@ const userRegisterDataNullState = {
     password: '',
     passwordConfirmation: '',
     partyType: '',
+    partyTypeTextToShow: '',
     partyDate: '',
+    location: '',
     city: '',
     state: '',
     country: ''
@@ -35,7 +41,23 @@ const userRegisterDataNullState = {
 export default function registerUser() {
     const [userRegisterData, setUserRegisterData] = useState<userRegisterDataProps>(userRegisterDataNullState);
     const { registerUser } = useUserAuthContext();
+    const [menuWhere, setMenuWhere] = useState('none');
     const routerNext = useRouter();
+    const isMobileVersion = useBreakpointValue({
+        base: true,
+        lg: false,
+    });
+    
+    // Close dropdown menu on click outside
+    useEffect(() => {
+        document.addEventListener('mouseup', function (e) {
+            var menu1 = document.getElementById('menuLocation');
+
+            if (!menu1?.contains(e.currentTarget)) {
+                setMenuWhere('none');
+            }
+        }.bind(this));
+    },[]);
 
     function handleChange( event: any ) {
         setUserRegisterData({...userRegisterData, [event.currentTarget.name]: event.currentTarget.value });
@@ -49,12 +71,29 @@ export default function registerUser() {
         registerUser( userRegisterData );
     }
 
+    // Used in Menu search
+    function searchFunction( event: any, menuId: string ) {
+        console.log( event.currentTarget.value );
+        let inputValue = event.currentTarget.value.toUpperCase();
+        let menu = document.getElementById( menuId );
+        let itemList = menu.getElementsByTagName("button");
+        
+        for (let i = 0; i < itemList.length; i++) {
+            if (itemList[i].innerHTML.toUpperCase().indexOf(inputValue) > -1) {
+                itemList[i].style.display = "";
+            } 
+            else {
+                itemList[i].style.display = "none";
+            }
+        }
+    }
+
     return (
         <Box>
             {/* Header */}
             <Header name="" position='relative' />
             
-            <Flex w='100%' h='auto' position='relative' 
+            <Flex w='100vw' h='auto' position='relative' 
                 justifyContent='center'
             >
                 {/* 
@@ -67,46 +106,57 @@ export default function registerUser() {
                 */}
                 
                 {/* Shadow */}
-                <Flex w='100%' h='100%'
-                    justifyContent='center'
-                    bg='rgba(0,0,0,0.80)' 
+                <Flex 
+                    w='100%' 
+                    h='100%'
+                    justifyContent={{base:'flex-start', lg:'center'}}
+                    bg={{base:'brand.white', lg:'rgba(0,0,0,0.80)'}}
                     zIndex={3}
                 >
 
-                    <Flex w='70%' h='100%' justifyContent='space-between'
-                        alignItems='center' 
-                        my='10'
+                    <Flex w={{base:'100%', lg:'75%'}}
+                        h='100%' 
+                        justifyContent={{base:'center', lg:'space-between'}}
+                        alignItems='center'
+                        my={{base:'0', lg:'10'}}
                     >
-
-                        <Flex direction='column'
-                        >
-                            <Flex color='white' direction='column' mb='5'>
-                                <Text as='h2' fontSize={30} fontWeight={600}
-                                    mb='2'
+                        
+                        {
+                            isMobileVersion == false
+                            &&
+                            /* Text */
+                            <Flex direction='column' w='50%'
+                            >
+                                <Flex direction='column' mb='5'
+                                    textColor='white'
                                 >
-                                    Anuncie o seu serviço aqui!
-                                </Text>
-
-                                <Text as='h3' fontSize={20} fontWeight={500}>
-                                    Fique visível para centenas de novos clientes
-                                </Text>
-
+                                    <Text as='h2' fontSize={30} fontWeight={600}
+                                        mb='2'
+                                    >
+                                        Cadastre-se para achar os melhores fornecedores do mercado!
+                                    </Text>
+                                    <Text as='h3' fontSize={20} fontWeight={500}>
+                                        Salve os fornecedores que gostou, peça orçamentos pela 
+                                        plataforma, avalie os prestadores de serviço
+                                    </Text>
+                                </Flex>
                             </Flex>
-                            
-                        </Flex>
+                        }
                         
                         {/* Form Login */}
                         <Flex 
                             direction="column"
-                            width={450} 
+                            width={{base:'90%', lg:'40%'}}
                             height='80%'
                             py='8'
-                            px="10" 
-                            justifyContent="center"
-                            bg="white" 
-                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                            px={{base:'0', lg:"10"}}
+                            justifyContent='center'
+                            //alignItems='center'
+                            bg="brand.white" 
+                            //boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                             borderRadius={8} 
                             fontSize={20}
+                            //zIndex={5}
                         >
                             <Text as="h2" textAlign="center" my="1" fontSize={22} 
                                 fontWeight={500}
@@ -115,8 +165,10 @@ export default function registerUser() {
                             </Text>
 
 
-                            <Flex direction="column" mt="3">
-                                <Text color="brand.white_40" fontSize={19}>
+                            <Flex direction="column" mt="3"
+                            >
+                                <Text color="brand.white_40" fontSize={19}
+                                >
                                     Nome completo
                                 </Text>
 
@@ -187,46 +239,116 @@ export default function registerUser() {
                                     Onde reside
                                 </Text>
 
-                                <Flex>
-                                    <Input placeholder="Cidade"
-                                        name="city"
-                                        type="text"
-                                        onChange={handleChange}
+                                <Flex direction='column'
+                                >
+                                    {/* Onde - Localização */}
+                                    <Input 
+                                        _focus={{outline:'none'}}
+                                        value={userRegisterData.location}
+                                        onChange={(event: any) => {
+                                            setUserRegisterData({...userRegisterData, location: event.currentTarget.value});
+                                            searchFunction(event, "menuWhere");
+                                        }}
+                                        onClick={() => {
+                                            setMenuWhere('onclick')
+                                        }}
                                     />
-                                    <Input placeholder="Estado"
-                                        name="state"
-                                        type="text"
-                                        onChange={handleChange}
-                                    />
-                                    <Input placeholder="País"
-                                        name="country"
-                                        type="text"
-                                        onChange={handleChange}
-                                    />
-                                </Flex>
+                                    <Box 
+                                        id='menuLocation'
+                                        height={230} 
+                                        width={350}
+                                        display={menuWhere}
+                                        position='absolute'
+                                        overflowY="scroll"
+                                        bg='brand.white'
+                                        mt={10}
+                                        borderRadius={10}
+                                        zIndex={3}
+                                    >
+                                        <Flex direction="column" id="menuWhere"
+                                            h='100%'
+                                        >
+                                            {
+                                            Object.values(locationMap).map((el, i) => {
+                                                return(
+                                                    <Button
+                                                        bg='white'
+                                                        h='25%'
+                                                        py='4'
+                                                        px='5'
+                                                        borderRadius={0}
+                                                        _focus={{outline:'none'}}
+                                                        _hover={{bg:'rgba(0,0,0,0.1)'}}
+                                                        //name='partyType'
+                                                        //value={el.value}
+                                                        onClick={(event) => {
+                                                            setUserRegisterData({...userRegisterData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
+                                                            setMenuWhere('none');
+                                                        }}
+                                                    >
+                                                        <Text
+                                                            width='100%'
+                                                            textAlign='left'
+                                                            fontWeight={400}
+                                                            fontSize={18}
+                                                        >
+                                                            {el.textToShow}
+                                                        </Text>
+                                                    </Button>
+                                                );
+                                            })
+                                            }
+                                        </Flex>
+                                    </Box>
+                                </Flex>       
                             </Flex>
 
                             <Flex direction="row"
                                 mt="3"
+                                justifyContent='space-between'
                             >
-                                <Flex direction='column'>
+                                <Flex direction='column'
+                                    w='50%'
+                                >
                                     <Text color="brand.white_40" fontSize={19}>
                                         Tipo de festa
                                     </Text>
-                                    <Input
-                                        name="partyType"
-                                        type="text"
-                                        onChange={handleChange}
-                                    />
+
+                                    <Menu>
+                                        <MenuButton as={Button} colorScheme='gray'>
+                                            {userRegisterData.partyTypeTextToShow || 'Selecione'}
+                                        </MenuButton>
+                                        <MenuList minWidth='240px'>
+                                            <MenuOptionGroup type='radio'
+                                            >         
+                                                {
+                                                    Object.values( typeOfParties ).map((el, index) => {
+                                                        return (
+                                                            <MenuItemOption value={el.value}
+                                                                onClick={() => {
+                                                                    setUserRegisterData({...userRegisterData, partyType: el.value, partyTypeTextToShow: el.textToShow });
+                                                                }}
+                                                            >
+                                                                {el.textToShow}
+                                                            </MenuItemOption>
+                                                        )
+                                                    })
+                                                }                                       
+                                            </MenuOptionGroup>
+                                        </MenuList>
+                                    </Menu>
+
                                 </Flex>
 
-                                <Flex direction='column' ml='2'>
+                                <Flex direction='column' ml='2'
+                                    w='50%'
+                                >
                                     <Text color="brand.white_40" fontSize={19}>
                                         Data da festa
                                     </Text>
                                     <Input
                                         name="partyDate"
-                                        type="text"
+                                        type="date"
                                         onChange={handleChange}
                                     />
                                 </Flex>
@@ -250,6 +372,8 @@ export default function registerUser() {
                 </Flex>
 
             </Flex>
+
+            <Footer/>
         </Box>
     );
 }

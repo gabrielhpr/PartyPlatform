@@ -12,19 +12,19 @@ import { Header } from "../../components/Header";
 
 export default function userAccess() {
     const [userAccessData, setUserAccessData] = useState({email: '', password:''});
-    const { loginUser } = useUserAuthContext();
+    const { loginUser, authenticatedUser } = useUserAuthContext();
     const routerNext = useRouter();
 
     function handleChange( event: any ) {
         setUserAccessData({...userAccessData, [event.currentTarget.name]: event.currentTarget.value });
     }
     
-    function handleSubmit( event: any ) {
+    async function handleSubmit( event: any ) {
         event.preventDefault();
         console.log('entrou no submit');
         console.log( userAccessData );
 
-        loginUser( userAccessData );
+        await loginUser( userAccessData );
     }
 
     return (

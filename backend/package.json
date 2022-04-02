@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@mailchimp/mailchimp_transactional": "^1.0.47",
     "@types/multer": "^1.4.7",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",

@@ -122,7 +122,9 @@ export function AdDetailsEdit({ serviceDescription, photos, saveDataChanged}) {
                     //handleData={handleData}
                 />
 
-               
+                {
+                    
+                }
                 <ItemEdit 
                     title="Descrição do serviço"
                     name='serviceDescription'

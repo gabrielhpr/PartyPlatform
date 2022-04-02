@@ -49,13 +49,13 @@ export default function useUserAuth() {
         }
     }, []);
 
-    async function registerUser(user: UserData) {
+    async function registerUser(user: UserData, redirect: boolean = true) {
         try {
             const data = await api.post("/user/register", user)
             .then((response) => {
                 return response.data;
             });
-            await authUser(data);
+            await authUser(data, redirect);
         }
         catch(err) {
             // tratar o erro
@@ -63,7 +63,7 @@ export default function useUserAuth() {
         }
     }
 
-    async function loginUser(user: any) {
+    async function loginUser(user: any, redirect: boolean = true) {
         let msgText = 'Login realizado com sucesso';
         let msgType = "success";
 
@@ -71,7 +71,7 @@ export default function useUserAuth() {
             const data = await api.post("/user/login", user).then((response) => {
                 return response.data;
             });
-            await authUser(data);
+            await authUser(data, redirect);
         }   
         catch(err) {
             console.log( err );
@@ -99,10 +99,33 @@ export default function useUserAuth() {
         }
     }
 
-    async function authUser(data: any) {
+    async function userSendEmail(emailData: any) {
+        const token = localStorage.getItem("token");
+
+        try {
+            await api.post("/user/sendEmail", emailData, {
+                headers: {
+                    'Authorization': `Bearer ${JSON.parse(token)}`
+                }
+            })
+            .then((response) => {
+                return response.data;
+            });
+        }
+        catch(err) {
+            // tratar o erro
+            console.log(err);
+        }
+    }
+
+    async function authUser(data: any, redirect: boolean) {
         setAuthenticatedUser(true);
         localStorage.setItem("token", JSON.stringify(data.token));
-        //routerNext.push("/User/home");
+        
+        if( redirect == true ) {
+            routerNext.push("/User/home");
+        }
+        return authenticatedUser;
     }
 
     function logoutUser() {
@@ -117,6 +140,6 @@ export default function useUserAuth() {
         //setFlashMessage(msgText, msgType);
     }
 
-    return { authenticatedUser, registerUser, loginUser, logoutUser, userRate };
+    return { authenticatedUser, registerUser, loginUser, logoutUser, userRate, userSendEmail };
 }
 

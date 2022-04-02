@@ -1,5 +1,5 @@
-import { Box, Button, Flex, Input, Stack, Text, Textarea } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box, Button, Flex, FormControl, FormErrorMessage, Input, Stack, Text, Textarea } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { ItemList } from "../../../components/Enterprise/ItemList";
 import { RegisterFormLayout } from "../../../components/Enterprise/RegisterFormLayout";
 import { useRouter } from "next/router";
@@ -11,6 +11,9 @@ enterpriseSpecificCategoryDict,
 locationMap} from "../../../utils/typeOfParties";
 import { TextSpanInput } from "../../../components/Enterprise/TextSpanInput";
 import { PriceCard } from "../../../components/Enterprise/priceCard";
+import * as yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+
 
 interface enterpriseDataInterf {
     step: number;
@@ -182,13 +185,35 @@ const enterpriseDataNullState = {
     q50: ''
 }
 
+const enterpriseRegisterFormSchema = yup.object().shape({
+    fullName: yup.string().required('O nome completo é obrigatório'),
+    email: yup.string().required("E-mail obrigatório").email("E-mail inválido"),
+    phone: yup.number().required("O telefone é obrigatório"),
+    whatsapp: yup.number().required("Whats obrigatorio"),
+    password: yup.string().required("Senha obrigatória").min(6, "No mínimo 6 caracteres"),
+    password_confirmation: yup.string().oneOf([null, yup.ref("password")], 
+        "As senhas precisam ser iguais"),
+});
 
 export default function RegisterEnterprise() {
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>( enterpriseDataNullState );
+    const [formErrors, setFormErrors] = useState<enterpriseDataInterf>( enterpriseDataNullState );
     const routerNext = useRouter();
     const { registerEnterprise } = useEnterpriseAuthContext();
     const [preview, setPreview] = useState([]);
     const [menuWhere, setMenuWhere] = useState('none');
+
+
+    //   Close dropdown menu on click outside
+    useEffect(() => {
+        document.addEventListener('mouseup', function (e) {
+            var menu1 = document.getElementById('menuLocation');
+
+            if (!menu1?.contains(e.currentTarget)) {
+                setMenuWhere('none');
+            }
+        }.bind(this));
+    },[]);
 
     function handleFileChange( event: any ) {
         console.log( 'event files images' );
@@ -199,6 +224,7 @@ export default function RegisterEnterprise() {
 
     function handleChange( event: any ) {
         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: event.currentTarget.value});
+        setFormErrors({...formErrors, [event.currentTarget.name]: ''});
         console.log( enterpriseData );
     }
 
@@ -241,8 +267,54 @@ export default function RegisterEnterprise() {
         registerEnterprise( formData );
     }
 
-    function nextStep() {
-        setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
+    async function handleValidation( fields: Array<string> ) {
+        // Reset errors message
+        fields.map((el, index) => {
+            setFormErrors((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await enterpriseRegisterFormSchema
+            .validateAt( el, enterpriseData)
+            .catch((err) => {
+                setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
+            });
+        });
+
+        let validForm = true;
+
+        // Check if can go to the next step
+        fields.map( (el, index) => {
+            
+            let isValidField = yup.reach( enterpriseRegisterFormSchema, el )
+            .isValidSync( enterpriseData[el] );
+
+            validForm = validForm && isValidField;                
+        });
+
+        // If there is no error its validated
+        if( validForm ) {
+            setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
+        }
+    }
+
+    async function nextStep() {
+        
+        if( enterpriseData.step == 1 ) {     
+            console.log('entrou no step 1');       
+            await handleValidation(
+                ['fullName', 'email', 'phone', 'whatsapp']
+            );
+           
+        }
+        else if(enterpriseData.step == 0) {
+            setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
+        }
+        
+
+        
+        
     }
 
     function previousStep() {
@@ -293,7 +365,6 @@ export default function RegisterEnterprise() {
         {/* Dados de Contato */}
         case 1:
             return (
-        
                 <RegisterFormLayout 
                     question="Dados de contato"
                     handleNextStep={nextStep}
@@ -302,39 +373,61 @@ export default function RegisterEnterprise() {
                 >
                     <Stack direction='column' spacing={4} w='50%'>
                         <Flex direction='column'>
-                            <TextSpanInput
-                                textToShow="Nome completo"
-                            />
-                            <Input type='text' name='fullName' onChange={handleChange}
-                                value={enterpriseData.fullName}
-                            />
+                            <FormControl isInvalid={formErrors.fullName != '' ? true : false}>
+                                <TextSpanInput
+                                    textToShow="Nome completo"
+                                />
+                                <Input type='text' name='fullName' onChange={handleChange}
+                                    value={enterpriseData.fullName}
+                                />
+                                <FormErrorMessage>
+                                    {formErrors.fullName}
+                                </FormErrorMessage>
+                            </FormControl>
                         </Flex>
 
                         <Flex direction='column'>
-                            <TextSpanInput
-                                textToShow="E-mail"
-                            />
-                            <Input type='email' name='email' onChange={handleChange} 
-                                value={enterpriseData.email}
-                            />
+                            <FormControl isInvalid={formErrors.email != '' ? true : false}>
+                                <TextSpanInput
+                                    textToShow="E-mail"
+                                />
+                                <Input type='email' name='email' onChange={handleChange} 
+                                    value={enterpriseData.email}
+                                />
+                                <FormErrorMessage>
+                                        {formErrors.email}
+                                </FormErrorMessage>
+                            </FormControl>   
                         </Flex>
 
                         <Flex direction='column'>
-                            <TextSpanInput
-                                textToShow="Telefone/Celular"
-                            />
-                            <Input type='number' name='phone' 
-                                value={enterpriseData.phone} onChange={handleChange} 
-                            />
+                            <FormControl isInvalid={formErrors.phone != '' ? true : false}>
+
+                                <TextSpanInput
+                                    textToShow="Telefone/Celular"
+                                />
+                                <Input type='number' name='phone' 
+                                    value={enterpriseData.phone} onChange={handleChange} 
+                                />
+                                <FormErrorMessage>
+                                    {formErrors.phone}
+                                </FormErrorMessage>
+                            </FormControl>
                         </Flex>
 
                         <Flex direction='column'>
-                            <TextSpanInput
-                                textToShow="WhatsApp"
-                            />
-                            <Input type='number' name='whatsapp' 
-                                value={enterpriseData.whatsapp} onChange={handleChange} 
-                            />
+                            <FormControl isInvalid={formErrors.whatsapp != '' ? true : false}>
+
+                                <TextSpanInput
+                                    textToShow="WhatsApp"
+                                />
+                                <Input type='number' name='whatsapp' 
+                                    value={enterpriseData.whatsapp} onChange={handleChange} 
+                                />
+                                <FormErrorMessage>
+                                    {formErrors.whatsapp}
+                                </FormErrorMessage>
+                            </FormControl>
                         </Flex>                        
                     </Stack>
                 </RegisterFormLayout>
@@ -425,6 +518,7 @@ export default function RegisterEnterprise() {
                                 }}
                             />
                             <Box 
+                                id='menuLocation'
                                 height={230} 
                                 width={350}
                                 display={menuWhere}

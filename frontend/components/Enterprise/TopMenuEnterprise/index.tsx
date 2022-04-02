@@ -1,8 +1,13 @@
 import { Flex, Icon, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { RiCompass3Line, RiDraftFill, RiGlobalFill, RiSettings3Line, RiStore3Fill, RiStore3Line } from "react-icons/ri";
 import { TopMenuItem } from "./TopMenuItem";
 
 export function TopMenuEnterprise() {
+    
+
+
     return (
         <Flex as="header"
             width="100%"
