@@ -14,6 +14,124 @@ import { PriceCard } from "../../../components/Enterprise/priceCard";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 
+const monetaryRegex = /^([0-9]{1,3}\.([0-9]{3}\.)*[0-9]{3}|[0-9]+)(,[0-9][0-9])?$/;
+const validTextRegex = /^[^'"`]*$/;
+
+const invalidTextRegex = 'Texto inválido! Aspas não são permitidas!';
+
+function handleTestValidation(value:any, ctx: any, questionN: number) {
+    //if( value ) {
+        console.log('question number: ');
+        console.log( questionN );
+
+        let schemaQ = yup.string().optional();
+
+        /* ESPACO */
+        if( ctx.parent.enterpriseCategory == 'Espaco' ) {
+            for(let i=0; i < specificQuestions.Espaco.length; i++) {
+                if( specificQuestions.Espaco[i].name[0] == ('q'+questionN) ) {
+                    //console.log('espaco caso 0');
+                    let qObj = specificQuestions.Espaco[i];
+
+                    if( (questionN >= 5 && questionN <=20) && ctx.parent.q3 == 'Não' ) {
+                        // optional
+                    }
+                    else if( (questionN >= 21 && questionN <= 23) && ctx.parent.q3 == 'Sim' ) {
+                        // optional
+                    }
+                    else {
+                        switch( qObj.type ) {
+                            case 'radio':
+                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                            .oneOf( qObj.options, 'Opção não válida');
+                            case 'textarea':
+                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                          .matches( validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+                            case 'input':
+                                if( qObj.specific == 'price' ) {
+                                    schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                               .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
+                                }
+                                else if( qObj.specific == 'nOfPeople' ) {
+                                    schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                              .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
+                                }
+                        }
+                    }
+                }
+                // Observations case
+                else if( specificQuestions.Espaco[i]?.name[1] == ('q'+questionN) ) {
+                    //console.log('espaco caso 1');
+                    schemaQ = yup.string().optional()
+                              .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+                }
+            }
+        }
+        /* SERVICO */
+        else if( ctx.parent.enterpriseCategory == 'Servico' ) {
+            let spcCat = ctx.parent.enterpriseSpecificCategory;
+
+            for(let i=0; i < specificQuestions.Servico[spcCat].length; i++) {
+                
+                if( specificQuestions.Servico[spcCat][i].name[0] == ('q'+questionN) ) {
+                    console.log('servico caso 0');
+                    let qObj = specificQuestions.Servico[spcCat][i];
+                    
+                    switch( qObj.type ) {
+                        case 'radio':
+                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .oneOf( qObj.options, 'Opção não válida');
+                        case 'textarea':
+                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+                        case 'input':
+                            if( qObj.specific == 'price' ) {
+                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                            .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
+                            }
+                            else if( qObj.specific == 'nOfPeople' ) {
+                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                            .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
+                            }
+                            else if( qObj.specific == 'float' ) {
+                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                          .matches(/^[0-9]+(,[0-9][0-9])?$/, {message:'Valor inválido - Exemplo válido: 1,5', excludeEmptyString: true });
+                            }
+                    }
+                    
+                }
+                // Observations case
+                else if( specificQuestions.Espaco[i]?.name[1] == ('q'+questionN) ) {
+                    console.log('servico caso 1');
+                    schemaQ = yup.string().optional()
+                                .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+                }
+            }
+        }
+        else {
+            return false;
+        }
+    
+        return schemaQ.isValid( value ).then( async (valid) => {
+            if( valid ) {
+                console.log(questionN);
+                console.log('valor valido');
+                return true;
+            }
+            else {
+                console.log(questionN);
+                console.log('valor nao valido');
+                let errMes = await schemaQ.validate(value).catch((err) => {return err});
+                return ctx.createError({
+                    message: errMes,
+                }); 
+            }
+        })                    
+    //}
+    return ctx.createError({
+        message: 'Valor inválido',
+    })
+}
 
 interface enterpriseDataInterf {
     step: number;
@@ -428,35 +546,317 @@ const enterpriseRegisterQuestionsDataSchema = yup.object().shape({
                 })
             }
         }),  
-    q1: yup.string().required('A resposta da primeira pergunta é obrigatória')
+    q1: yup.string()
         .test({
             name: 'q1Test',
             test: function(value, ctx) {
-                if( value ) {
-                    let schema1 = yup.string().matches(/^12$/, {message: 'aaab'} );
-                    return schema1.isValid(value).then( async (valid) => {
-                        console.log('is valid');
-                        console.log(valid);
-                        if( valid ) {
-                            return true;
-                        }
-                        else {
-                            let errMes = await schema1.validate(value).catch((err) => {return err});
-                            return this.createError({
-                                message: errMes,
-                            })
-                        }                    
-                    })
-                }
-                return this.createError({
-                    message: 'Categoria inválida',
-                })
+                return handleTestValidation(value, ctx, 1);
             }
-        })
+        }),
+    q2: yup.string()
+        .test({
+            name: 'q2Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 2);
+            }
+        }),
+    q3: yup.string()
+        .test({
+            name: 'q3Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 3);
+            }
+        }),
+    q4: yup.string()
+        .test({
+            name: 'q4Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 4);
+            }
+        }),
+    q5: yup.string()
+        .test({
+            name: 'q5Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 5);
+            }
+        }),
+    q6: yup.string()
+        .test({
+            name: 'q6Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 6);
+            }
+        }),
+    q7: yup.string()
+        .test({
+            name: 'q7Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 7);
+            }
+        }),
+    q8: yup.string()
+        .test({
+            name: 'q8Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 8);
+            }
+        }),
+    q9: yup.string()
+        .test({
+            name: 'q9Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 9);
+            }
+        }),
+    q10: yup.string()
+        .test({
+            name: 'q10Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 10);
+            }
+        }),
+    q11: yup.string()
+        .test({
+            name: 'q11Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 11);
+            }
+        }),
+    q12: yup.string()
+        .test({
+            name: 'q12Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 12);
+            }
+        }),
+    q13: yup.string()
+        .test({
+            name: 'q13Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 13);
+            }
+        }),
+    q14: yup.string()
+        .test({
+            name: 'q14Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 14);
+            }
+        }),
+    q15: yup.string()
+        .test({
+            name: 'q15Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 15);
+            }
+        }),
+    q16: yup.string()
+        .test({
+            name: 'q16Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 16);
+            }
+        }),
+    q17: yup.string()
+        .test({
+            name: 'q17Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 17);
+            }
+        }),
+    q18: yup.string()
+        .test({
+            name: 'q18Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 18);
+            }
+        }),
+    q19: yup.string()
+        .test({
+            name: 'q19Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 19);
+            }
+        }),
+    q20: yup.string()
+        .test({
+            name: 'q20Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 20);
+            }
+        }),
+    q21: yup.string()
+        .test({
+            name: 'q21Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 21);
+            }
+        }),
+    q22: yup.string()
+        .test({
+            name: 'q22Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 22);
+            }
+        }),
+    q23: yup.string()
+        .test({
+            name: 'q23Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 23);
+            }
+        }),
+    q24: yup.string()
+        .test({
+            name: 'q24Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 24);
+            }
+        }),
+    q25: yup.string()
+        .test({
+            name: 'q25Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 25);
+            }
+        }),
+    q26: yup.string()
+        .test({
+            name: 'q26Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 26);
+            }
+        }),
+    q27: yup.string()
+        .test({
+            name: 'q27Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 27);
+            }
+        }),
+    q28: yup.string()
+        .test({
+            name: 'q28Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 28);
+            }
+        }),
+    q29: yup.string()
+        .test({
+            name: 'q29Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 29);
+            }
+        }),
+    q30: yup.string()
+        .test({
+            name: 'q30Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 30);
+            }
+        }),
+    q31: yup.string()
+        .test({
+            name: 'q31Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 31);
+            }
+        }),
+    q32: yup.string()
+        .test({
+            name: 'q32Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 32);
+            }
+        }),
+    q33: yup.string()
+        .test({
+            name: 'q33Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 33);
+            }
+        }),
+    q34: yup.string()
+        .test({
+            name: 'q34Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 34);
+            }
+        }),
+    q35: yup.string()
+        .test({
+            name: 'q35Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 35);
+            }
+        }),
+    q36: yup.string()
+        .test({
+            name: 'q36Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 36);
+            }
+        }),
+    q37: yup.string()
+        .test({
+            name: 'q37Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 37);
+            }
+        }),
+    q38: yup.string()
+        .test({
+            name: 'q38Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 38);
+            }
+        }),
+    q39: yup.string()
+        .test({
+            name: 'q39Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 39);
+            }
+        }),
+    q40: yup.string()
+        .test({
+            name: 'q40Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 40);
+            }
+        }),
+    q41: yup.string()
+        .test({
+            name: 'q41Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 41);
+            }
+        }),
+    q42: yup.string()
+        .test({
+            name: 'q42Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 42);
+            }
+        }),
+    q43: yup.string()
+        .test({
+            name: 'q43Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 43);
+            }
+        }),
+    q44: yup.string()
+        .test({
+            name: 'q44Test',
+            test: function(value, ctx) {
+                return handleTestValidation(value, ctx, 44);
+            }
+        }),
+
 });
-
-
-
+   
 export default function RegisterEnterprise() {
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>( enterpriseDataNullState );
     const [formErrors, setFormErrors] = useState<enterpriseDataFormErrorInterf>( enterpriseDataFormErrorNullState );
@@ -671,8 +1071,56 @@ export default function RegisterEnterprise() {
         }
         else if( enterpriseData.step == 10 ) {
             console.log('entrou no step 10');
-        
-            let fields = ['enterpriseCategory', 'enterpriseSpecificCategory', 'q1'];
+            console.log( enterpriseData );
+
+            let fields = [
+                'enterpriseCategory', 
+                'enterpriseSpecificCategory', 
+                'q1',
+                'q2',
+                'q3',
+                'q4',
+                'q5',
+                'q6',
+                'q7',
+                'q8',
+                'q9',
+                'q10',
+                'q11',
+                'q12',
+                'q13',
+                'q14',
+                'q15',
+                'q16',
+                'q17',
+                'q18',
+                'q19',
+                'q20',
+                'q21',
+                'q22',
+                'q23',
+                'q24',
+                'q25',
+                'q26',
+                'q27',
+                'q28',
+                'q29',
+                'q30',
+                'q31',
+                'q32',
+                'q33',
+                'q34',
+                'q35',
+                'q36',
+                'q37',
+                'q38',
+                'q39',
+                'q40',
+                'q41',
+                'q42',
+                'q43',
+                'q44'
+            ];
 
             //Reset errors message
             fields.map((el, index) => {
@@ -696,7 +1144,50 @@ export default function RegisterEnterprise() {
             .isValid({
                 enterpriseCategory: enterpriseData.enterpriseCategory,
                 enterpriseSpecificCategory: enterpriseData.enterpriseSpecificCategory,
-                q1: enterpriseData.q1
+                q1: enterpriseData.q1,
+                q2: enterpriseData.q2,
+                q3: enterpriseData.q3,
+                q4: enterpriseData.q4,
+                q5: enterpriseData.q5,
+                q6: enterpriseData.q6,
+                q7: enterpriseData.q7,
+                q8: enterpriseData.q8,
+                q9: enterpriseData.q9,
+                q10: enterpriseData.q10,
+                q11: enterpriseData.q11,
+                q12: enterpriseData.q12,
+                q13: enterpriseData.q13,
+                q14: enterpriseData.q14,
+                q15: enterpriseData.q15,
+                q16: enterpriseData.q16,
+                q17: enterpriseData.q17,
+                q18: enterpriseData.q18,
+                q19: enterpriseData.q19,
+                q20: enterpriseData.q20,
+                q21: enterpriseData.q21,
+                q22: enterpriseData.q22,
+                q23: enterpriseData.q23,
+                q24: enterpriseData.q24,
+                q25: enterpriseData.q25,
+                q26: enterpriseData.q26,
+                q27: enterpriseData.q27,
+                q28: enterpriseData.q28,
+                q29: enterpriseData.q29,
+                q30: enterpriseData.q30,
+                q31: enterpriseData.q31,
+                q32: enterpriseData.q32,
+                q33: enterpriseData.q33,
+                q34: enterpriseData.q34,
+                q35: enterpriseData.q35,
+                q36: enterpriseData.q36,
+                q37: enterpriseData.q37,
+                q38: enterpriseData.q38,
+                q39: enterpriseData.q39,
+                q40: enterpriseData.q40,
+                q41: enterpriseData.q41,
+                q42: enterpriseData.q42,
+                q43: enterpriseData.q43,
+                q44: enterpriseData.q44
             })
             .then((val) =>{
                 if( val ) {
@@ -1332,8 +1823,8 @@ export default function RegisterEnterprise() {
                                 ['q21','q22','q23'].includes(el?.name[1])
                                 ) ) 
                             {
-                                console.log('entrou no sim');
-                                console.log(el.name);
+                                //console.log('entrou no sim');
+                                //console.log(el.name);
                                 
                                 
                                 return (
@@ -1378,27 +1869,32 @@ export default function RegisterEnterprise() {
                                             el.type == 'radio'
                                             ?
                                             <Flex direction='column'>
-                                                <Flex
-                                                    justifyContent='space-evenly'
-                                                    mb='4'
-                                                >
-                                                    {
-                                                        el.options.map((element, index) => {
-                                                            return (
-                                                                <ItemList
-                                                                    styleType={2}
-                                                                    width='40%'
-                                                                    name={el.name[0]}
-                                                                    textAlign='center'
-                                                                    value={element}
-                                                                    textToShow={element}
-                                                                    selectedName={enterpriseData?.[el.name[0]]}
-                                                                    handleOnClick={handleChange}
-                                                                />
-                                                            )
-                                                        })
-                                                    }
-                                                </Flex>
+                                                <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                    <Flex
+                                                        justifyContent='space-evenly'
+                                                        mb='4'
+                                                    >
+                                                        {
+                                                            el.options.map((element, index) => {
+                                                                return (
+                                                                    <ItemList
+                                                                        styleType={2}
+                                                                        width='40%'
+                                                                        name={el.name[0]}
+                                                                        textAlign='center'
+                                                                        value={element}
+                                                                        textToShow={element}
+                                                                        selectedName={enterpriseData?.[el.name[0]]}
+                                                                        handleOnClick={handleChange}
+                                                                    />
+                                                                )
+                                                            })
+                                                        }
+                                                    </Flex>
+                                                    <FormErrorMessage>
+                                                        {formErrors[el.name[0]]}
+                                                    </FormErrorMessage>
+                                                </FormControl>
     
                                                 <Textarea name={el.name[1]} 
                                                     placeholder={el.placeholder}
@@ -1416,12 +1912,17 @@ export default function RegisterEnterprise() {
                                             el.type == 'textarea'  
                                             ?
                                             <Flex direction='column'>
-                                                <Textarea 
-                                                    name={el.name[0]} 
-                                                    placeholder={el.placeholder}
-                                                    value={enterpriseData?.[el.name[0]]}
-                                                    onChange={handleChange} 
-                                                />
+                                                <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                    <Textarea 
+                                                        name={el.name[0]} 
+                                                        placeholder={el.placeholder}
+                                                        value={enterpriseData?.[el.name[0]]}
+                                                        onChange={handleChange} 
+                                                    />
+                                                    <FormErrorMessage>
+                                                        {formErrors[el.name[0]]}
+                                                    </FormErrorMessage>
+                                                </FormControl>
                                             </Flex>
                                             :
                                             <>
@@ -1436,25 +1937,31 @@ export default function RegisterEnterprise() {
                                                 alignItems='center'
                                                 //justifyContent='center'
                                             >
-                                                {
-                                                    el.span
-                                                    ?
-                                                    <Text as='span' mr='2'
-    
-                                                    >
-                                                        {el.span}
-                                                    </Text>
-                                                    :
-                                                    <>
-                                                    </>
-                                                }
-                                                <Input 
-                                                    name={el.name[0]} 
-                                                    type={el.inputType}
-                                                    width='40%'
-                                                    value={enterpriseData?.[el.name[0]]}
-                                                    onChange={handleChange} 
-                                                />
+                                                <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                    {
+                                                        el.span
+                                                        ?
+                                                        <Text as='span' mr='2'
+        
+                                                        >
+                                                            {el.span}
+                                                        </Text>
+                                                        :
+                                                        <>
+                                                        </>
+                                                    }
+                                                    <Input 
+                                                        name={el.name[0]} 
+                                                        type={el.inputType}
+                                                        width='40%'
+                                                        value={enterpriseData?.[el.name[0]]}
+                                                        onChange={handleChange} 
+                                                    />
+                                                    <FormErrorMessage>
+                                                        {formErrors[el.name[0]]}
+                                                    </FormErrorMessage>
+                                                </FormControl>
+
                                             </Flex>
                                             :
                                             <>
@@ -1490,29 +1997,34 @@ export default function RegisterEnterprise() {
                                         <Flex 
                                             direction='column'
                                         >
-                                            <Stack
-                                                justifyContent='space-evenly'
-                                                alignItems='center'
-                                                mb='4'
-                                                direction={el.options.length < 3 ? 'row' : 'column'}
-                                            >
-                                                {
-                                                    el.options.map((element, index) => {
-                                                        return (
-                                                            <ItemList
-                                                                styleType={2}
-                                                                width={el.options.length < 3 ? '40%' : '70%'}
-                                                                name={el.name[0]}
-                                                                textAlign='center'
-                                                                value={element}
-                                                                textToShow={element}
-                                                                selectedName={enterpriseData?.[el.name[0]]}
-                                                                handleOnClick={handleChange}
-                                                            />
-                                                        )
-                                                    })
-                                                }
-                                            </Stack>
+                                            <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                <Stack
+                                                    justifyContent='space-evenly'
+                                                    alignItems='center'
+                                                    mb='4'
+                                                    direction={el.options.length < 3 ? 'row' : 'column'}
+                                                >
+                                                    {
+                                                        el.options.map((element, index) => {
+                                                            return (
+                                                                <ItemList
+                                                                    styleType={2}
+                                                                    width={el.options.length < 3 ? '40%' : '70%'}
+                                                                    name={el.name[0]}
+                                                                    textAlign='center'
+                                                                    value={element}
+                                                                    textToShow={element}
+                                                                    selectedName={enterpriseData?.[el.name[0]]}
+                                                                    handleOnClick={handleChange}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                </Stack>
+                                                <FormErrorMessage>
+                                                    {formErrors[el.name[0]]}
+                                                </FormErrorMessage>
+                                            </FormControl>
 
                                             <Textarea name={el.name[1]} 
                                                 placeholder={el.placeholder}
@@ -1530,12 +2042,17 @@ export default function RegisterEnterprise() {
                                         el.type == 'textarea'  
                                         ?
                                         <Flex direction='column'>
-                                            <Textarea 
-                                                name={el.name[0]} 
-                                                placeholder={el.placeholder}
-                                                value={enterpriseData?.[el.name[0]]}
-                                                onChange={handleChange} 
-                                            />
+                                            <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                <Textarea 
+                                                    name={el.name[0]} 
+                                                    placeholder={el.placeholder}
+                                                    value={enterpriseData?.[el.name[0]]}
+                                                    onChange={handleChange} 
+                                                />
+                                                <FormErrorMessage>
+                                                    {formErrors[el.name[0]]}
+                                                </FormErrorMessage>
+                                            </FormControl>
                                         </Flex>
                                         :
                                         <>
@@ -1549,26 +2066,32 @@ export default function RegisterEnterprise() {
                                         <Flex direction='row'
                                             alignItems='center'
                                             //justifyContent='center'
-                                        >
-                                            {
-                                                el.span
-                                                ?
-                                                <Text as='span' mr='2'
+                                        >                                     
+                                            <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                {
+                                                    el.span
+                                                    ?
+                                                    <Text as='span' mr='2'
 
-                                                >
-                                                    {el.span}
-                                                </Text>
-                                                :
-                                                <>
-                                                </>
-                                            }
-                                            <Input 
-                                                name={el.name[0]} 
-                                                type={el.inputType}
-                                                width='40%'
-                                                value={enterpriseData?.[el.name[0]]}
-                                                onChange={handleChange} 
-                                            />
+                                                    >
+                                                        {el.span}
+                                                    </Text>
+                                                    :
+                                                    <>
+                                                    </>
+                                                }
+                                                <Input 
+                                                    name={el.name[0]} 
+                                                    type={el.inputType}
+                                                    width='40%'
+                                                    value={enterpriseData?.[el.name[0]]}
+                                                    onChange={handleChange} 
+                                                />
+                                                <FormErrorMessage>
+                                                    {formErrors[el.name[0]]}
+                                                </FormErrorMessage>
+                                            </FormControl>
+
                                         </Flex>
                                         :
                                         <>

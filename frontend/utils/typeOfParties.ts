@@ -223,9 +223,9 @@ export const specificQuestions = {
         {name: ['q3', 'q4'], question: 'Dispõe de buffet/cozinha própria ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
 
         // Se sim
-        {name: ['q5'], question: 'Qual o preço mínimo por pessoa ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
-        {name: ['q6'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
-        {name: ['q7'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+        {name: ['q5'], question: 'Qual o preço mínimo por pessoa ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific:'price'},
+        {name: ['q6'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'text', specific: 'nOfPeople'},
+        {name: ['q7'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'text', specific: 'nOfPeople'},
         {name: ['q8'], question: 'O que inclui o menu ?', description: '', type: 'textarea', placeholder: ''},
         {name: ['q9','q10'], question: 'É possível alugar apenas o espaço sem o serviço de buffet ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
         {name: ['q11'], question: 'Qual é o tipo de cozinha servida ?', description: '', type: 'textarea', placeholder: ''},
@@ -236,9 +236,9 @@ export const specificQuestions = {
         {name: ['q20'], question: 'Como funciona o Open bar ?', description: '', type: 'textarea', placeholder: ''},
 
         // Se não
-        {name: ['q21'], question: 'Qual o preço mínimo do aluguel do espaço ?', description: '', type: 'input', inputType: 'number'},
-        {name: ['q22'], question: 'Qual o número mínimo de convidados que aceita ?', description: '', type: 'input', inputType: 'number'},
-        {name: ['q23'], question: 'Qual o número máximo de convidados que aceita ?', description: '', type: 'input', inputType: 'number'},
+        {name: ['q21'], question: 'Qual o preço mínimo do aluguel do espaço ?', description: '', type: 'input', inputType: 'text', specific: 'price'},
+        {name: ['q22'], question: 'Qual o número mínimo de convidados que aceita ?', description: '', type: 'input', inputType: 'text', specific: 'nOfPeople'},
+        {name: ['q23'], question: 'Qual o número máximo de convidados que aceita ?', description: '', type: 'input', inputType: 'text', specific: 'nOfPeople'},
 
         // ESPAÇO
         {name: ['q24', 'q25'], question: 'Tem uma hora limite para as celebrações ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
@@ -255,9 +255,9 @@ export const specificQuestions = {
     Servico: {
         Buffet: [
             // BUFFET
-            {name: ['q1'], question: 'Qual o preço mínimo por pessoa ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
-            {name: ['q2'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
-            {name: ['q3'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+            {name: ['q1'], question: 'Qual o preço mínimo por pessoa ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific: 'price'},
+            {name: ['q2'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'text', specific: 'nOfPeople' },
+            {name: ['q3'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'text', specific: 'nOfPeople'},
             {name: ['q4', 'q5'], question: 'Tem uma hora limite para as celebrações ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
             {name: ['q6','q7'], question: 'Cozinha no mesmo local da recepção ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
             {name: ['q8'], question: 'O que inclui o menu ?', description: '', type: 'textarea', placeholder: ''},
@@ -275,19 +275,19 @@ export const specificQuestions = {
             {name: ['q29'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         Bolos: [
-            {name: ['q1'], question: 'Qual o preço mínimo do kg ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
-            {name: ['q2'], question: 'Qual o peso mínimo que atende ?', description: '', type: 'input', inputType:'number', span: 'Kg '},
-            {name: ['q3'], question: 'Qual o peso máximo que atende ?', description: '', type: 'input', inputType:'number', span: 'Kg '},
+            {name: ['q1'], question: 'Qual o preço mínimo do kg ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific: 'price'},
+            {name: ['q2'], question: 'Qual o peso mínimo que atende ?', description: '', type: 'input', inputType:'text', span: 'Kg ', specific: 'float'},
+            {name: ['q3'], question: 'Qual o peso máximo que atende ?', description: '', type: 'input', inputType:'text', span: 'Kg ', specific: 'float'},
             {name: ['q4'], question: 'Que tipos de bolos oferece ?', description: '', type: 'textarea', placeholder: ''},
             {name: ['q5','q6'], question: 'Realiza trabalhos a medida ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
             {name: ['q7','q8'], question: 'Dispõe de bolos especiais ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
             {name: ['q9'], question: 'Que outros produtos oferece ?', description: '', type: 'textarea', placeholder: ''},
             {name: ['q10','q11'], question: 'Realiza a entrega do produto ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
-            {name: ['q12','q13'], question: 'Qual o custo para entregar ?', description: '', type: 'textarea', placeholder: ''},
+            {name: ['q12','q13'], question: 'Há custo de entrega ? Se sim, qual é o custo ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
             {name: ['q14'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         Doces: [
-            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific: 'price'},
             {name: ['q2'], question: 'Que tipo de produtos estão disponíveis ?', description: '', type: 'textarea', placeholder: ''},
             {name: ['q3','q4'], question: 'Realiza trabalhos sob medida ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
             {name: ['q5','q6'], question: 'Realiza a entrega do produto ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
@@ -295,7 +295,7 @@ export const specificQuestions = {
             {name: ['q8'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         FotografiaFilmagem: [
-            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific: 'price'},
 
             {name: ['q2','q3'], question: 'Quais serviços realiza ?', description: '', type: 'radio', options:['Fotografia', 'Filmagem', 'Fotografia e Filmagem']},
             
@@ -328,9 +328,9 @@ export const specificQuestions = {
             {name: ['q34'], question: 'Como é o seu estilo de trabalhar?', description: '', type: 'textarea', placeholder: ''}
         ],     
         Decoracao: [
-            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
-            {name: ['q2'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
-            {name: ['q3'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'number'},
+            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific: 'price'},
+            {name: ['q2'], question: 'Qual o número mínimo de convidados que atende ?', description: '', type: 'input', inputType:'text', specific: 'nOfPeople'},
+            {name: ['q3'], question: 'Qual o número máximo de convidados que atende ?', description: '', type: 'input', inputType:'text', specific: 'nOfPeople'},
             {name: ['q4'], question: 'Ao contratar o serviço, encarrega-se de: ', description: '', type: 'textarea', placeholder: ''},
             {name: ['q5'], question: 'Com que antecedência devo entrar em contato ?', description: '', type: 'textarea', placeholder: ''},
             {name: ['q6','q7'], question: 'Tem um showroom para ver os exemplos disponíveis ?', description: '', type: 'radio', options:['Sim', 'Não'], placeholder: 'Observações: '},
@@ -338,7 +338,7 @@ export const specificQuestions = {
             {name: ['q10'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         Musica: [
-            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name: ['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific: 'price'},
             {name: ['q2'], question: 'O que inclui o pack de casamento ?', description: '', type: 'textarea', placeholder: ''},
             {name: ['q3'], question: 'Com que antecedência devo entrar em contato ?', description: '', type: 'textarea', placeholder: ''},
             {name: ['q4'], question: 'Qual o tamanho da formação ?', description: '', type: 'textarea', placeholder: ''},
@@ -360,7 +360,7 @@ export const specificQuestions = {
             {name: ['q29'], question: 'Quais são as formas de pagamento ?', description: '', type: 'textarea', placeholder: ''}
         ],
         AnimacaoDeFesta: [
-            {name:['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'number', span: 'R$ '},
+            {name:['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific: 'price'},
             {name:['q2'], question: 'Com que antecedência devo entrar em contato ?', description: '', type:'textarea', placeholder: ''},
             {name:['q3'], question: 'Que outros serviços são oferecidos ?', description: '', type:'textarea', placeholder: ''},
             {name:['q4'], question: 'Necessita de algum material em concreto ou condições específicas para oferecer o serviço ?', description: '', type:'textarea', placeholder: ''},
