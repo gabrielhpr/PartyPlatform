@@ -42,6 +42,7 @@ export function ItemList({name, value, textToShow, description, selectedName, te
             >
                 <Text 
                     w="100%" 
+                    whiteSpace='break-spaces'
                     fontSize={20}
                     fontWeight={value == selectedName ? 500 : 400}
                 >
@@ -51,7 +52,10 @@ export function ItemList({name, value, textToShow, description, selectedName, te
                 {description
                 ?
                 <Text
-                    w='100%'    
+                    w='100%'  
+                    whiteSpace='break-spaces'
+                    //overflow='hidden'
+                    //textOverflow='clip'  
                 >
                     {description}
                 </Text>

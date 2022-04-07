@@ -11,6 +11,7 @@ import { HiSpeakerphone } from 'react-icons/hi';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import { typeOfParties, typeOfServices } from "../../utils/typeOfParties";
+import { Sidebar } from "../../components/Sidebar";
 
 export default function enterpriseAccess() {
     const [enterpriseAccessData, setEnterpriseAccessData] = useState({email: '', password:''});
@@ -42,6 +43,8 @@ export default function enterpriseAccess() {
             {/* Header */}
             <Header name="" position='relative' />
             
+            <Sidebar/>
+
             {/* Top Picture */}
             <Flex w='100%' h='55vh' position='relative' 
                 justifyContent='center'
@@ -243,79 +246,76 @@ export default function enterpriseAccess() {
                             }
                         </Flex>
                         
-                        {
-                            isMobileVersion == false
-                            &&
-                            /* Form Login */
-                            <Flex 
-                                direction="column"
-                                w='30%'
-                                height='80%'
-                                pt="0"
-                                pb="1"
-                                px="10" 
-                                justifyContent="center"
-                                bg="brand.white" 
-                                boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                                borderRadius={8} 
-                                fontSize={20}
+                        {/* Form Login - DESKTOP */}
+                        <Flex 
+                            display={{base:'none', lg:'flex'}}
+                            direction="column"
+                            w='30%'
+                            height='80%'
+                            pt="0"
+                            pb="1"
+                            px="10" 
+                            justifyContent="center"
+                            bg="brand.white" 
+                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                            borderRadius={8} 
+                            fontSize={20}
+                        >
+                            <Text as="h2" textAlign="center" my="3" 
+                                fontSize={25} 
+                                fontWeight={500}
+                                color='brand.dark_blue'
                             >
-                                <Text as="h2" textAlign="center" my="3" 
-                                    fontSize={25} 
-                                    fontWeight={500}
-                                    color='brand.dark_blue'
-                                >
-                                    SEJA BEM-VINDO!
+                                SEJA BEM-VINDO!
+                            </Text>
+
+                            <Flex direction="column" mt="3">
+                                <Text color="brand.white_40" fontSize={19}>
+                                    E-mail
                                 </Text>
 
-                                <Flex direction="column" mt="3">
-                                    <Text color="brand.white_40" fontSize={19}>
-                                        E-mail
-                                    </Text>
-
-                                    <Input placeholder="email@example.com"
-                                        name="email"
-                                        onChange={handleChange}
-                                    />
-                                </Flex>
-
-                                <Flex direction="column"
-                                    mt="3"
-                                >
-                                    <Text color="brand.white_40" fontSize={19}>
-                                        Senha
-                                    </Text>
-
-                                    <Input placeholder="********"
-                                        name="password"
-                                        type="password"
-                                        onChange={handleChange}
-                                    />
-                                </Flex>
-
-                                <Button 
-                                    mt="8"
-                                    bg="brand.red"
-                                    color="brand.white"
-                                    fontSize={18}
-                                    py="6"
-                                    onClick={handleSubmit}
-                                >
-                                    LOGIN
-                                </Button>
-
-                                <Flex direction="column" justifyContent="center" mt='4'>
-                                    <NavLink href="/prices">
-                                        <Text textAlign="center" fontSize={16}
-                                            color="brand.light_blue_40"
-                                        >
-                                            Esqueceu sua senha ?
-                                        </Text>
-                                    </NavLink>
-                                </Flex>
-
+                                <Input placeholder="email@example.com"
+                                    name="email"
+                                    onChange={handleChange}
+                                />
                             </Flex>
-                        }
+
+                            <Flex direction="column"
+                                mt="3"
+                            >
+                                <Text color="brand.white_40" fontSize={19}>
+                                    Senha
+                                </Text>
+
+                                <Input placeholder="********"
+                                    name="password"
+                                    type="password"
+                                    onChange={handleChange}
+                                />
+                            </Flex>
+
+                            <Button 
+                                mt="8"
+                                bg="brand.red"
+                                color="brand.white"
+                                fontSize={18}
+                                py="6"
+                                onClick={handleSubmit}
+                            >
+                                LOGIN
+                            </Button>
+
+                            <Flex direction="column" justifyContent="center" mt='4'>
+                                <NavLink href="/prices">
+                                    <Text textAlign="center" fontSize={16}
+                                        color="brand.light_blue_40"
+                                    >
+                                        Esqueceu sua senha ?
+                                    </Text>
+                                </NavLink>
+                            </Flex>
+
+                        </Flex>
                     
                     </Flex>
 

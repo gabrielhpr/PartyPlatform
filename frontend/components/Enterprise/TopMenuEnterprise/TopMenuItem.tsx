@@ -34,8 +34,9 @@ export function TopMenuItem({name, icon, href}: TopMenuItemProps) {
                 alignItems='center'
                 justifyContent='center'
                 _hover={{bg:'brand.white_85'}}
-                px='4'
+                px={{base:'1',lg:'4'}}
                 bg={href == routerPathName ? 'rgba(0,0,0,0.12)' : 'brand.white'}
+                overflowX='hidden'
             >
                     <Icon as={icon} 
                         color='brand.dark_blue'
@@ -44,8 +45,9 @@ export function TopMenuItem({name, icon, href}: TopMenuItemProps) {
                     <Text
                         mt='2'
                         color='brand.dark_blue'
-                        fontSize={17}
+                        fontSize={{base:15,lg:17}}
                         fontWeight={500}
+                        textAlign='center'
                     >
                         {name}
                     </Text>

@@ -4,6 +4,8 @@ import { ReactNode } from "react";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { LeftMenuItemMyBusiness } from "./LeftMenuItem";
 import Image from 'next/image';
+import AliceCarousel from 'react-alice-carousel';
+import 'react-alice-carousel/lib/alice-carousel.css';
 
 interface LeftMenuEditProps {
     propertyName: string;
@@ -27,8 +29,8 @@ export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selecte
             //top={5}
             h='auto'
             bg="brand.dark_blue"
-            borderTopLeftRadius={8}
-            borderBottomLeftRadius={8}
+            borderLeftRadius={8}
+            borderRightRadius={{base:8, lg:0}}
             direction='column'
             {...rest}
         >
@@ -47,6 +49,7 @@ export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selecte
                 </Text>
             </Flex> 
 
+           
             <Flex
                 boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                 borderRadius={8} 
@@ -63,8 +66,66 @@ export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selecte
 
             <Flex bg="brand.red"  height={2}/>
             
+            {/* MOBILE MENU */}
+            <Flex
+                display={{base:'flex', lg:'none'}}
+                alignItems='center'
+                w={{base:'90%'}}
+                h={{base:'10vh'}}
+            >
+                <AliceCarousel
+                    autoPlay={false}
+                    autoHeight={true}
+                    responsive={{
+                        0: {items:1.5},
+                        1024: {items:5}
+                    }}
+                    disableDotsControls={true}
+                    disableButtonsControls={true}
+                    mouseTracking
+                    items={
+                        Object.values(menuOptions).map((el, index) => {
+                            return (
+                                <Button
+                                    h={{base:'5vh'}}
+                                    w='90%'
+                                    my='1'
+                                    mx='1'
+                                    key={index}
+                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                    bg='rgba(255,255,255,0.95)'
+                                    _hover={{bg:'brand.yellow'}}
+                                    onClick={handleOnClick}
+                                    value={el.value}
+                                    
+                                >
+                                    <Flex w='100%'
+                                        h='100%'
+                                        direction='column'
+                                        alignItems='center'
+                                        justifyContent='space-evenly'
+                                        py='4'
+                                    >
+                                        <Text
+                                            w='90%'
+                                            whiteSpace='break-spaces' 
+                                        >
+                                            {el.textToShow}
+                                        </Text>
+                                    </Flex>
+                                </Button>
+                            );
+                        })
+                    }
+                />
+            
+            </Flex>
+
+            
+            {/* DESKTOP MENU */}
             <Flex 
                 direction='column'
+                display={{base:'none', lg:'flex'}}
 
             >
                 <LeftMenuItemMyBusiness

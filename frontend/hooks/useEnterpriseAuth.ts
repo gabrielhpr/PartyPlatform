@@ -58,7 +58,7 @@ export default function useEnterpriseAuth() {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("tokenEnterprise");
         
         if(token) {
             api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(token)}`;
@@ -112,7 +112,8 @@ export default function useEnterpriseAuth() {
 
     async function authEnterprise(data: any) {
         setAuthenticatedEnterprise(true);
-        localStorage.setItem("token", JSON.stringify(data.token));
+        localStorage.removeItem("tokenUser");
+        localStorage.setItem("tokenEnterprise", JSON.stringify(data.token));
         routerNext.push("/Enterprise/home");
     }
 
@@ -121,7 +122,7 @@ export default function useEnterpriseAuth() {
         const msgType = "success";
 
         setAuthenticatedEnterprise( false );
-        localStorage.removeItem("token");
+        localStorage.removeItem("tokenEnterprise");
         api.defaults.headers.common["Authorization"] = "";
 
         routerNext.push("/Enterprise/enterpriseAccess");

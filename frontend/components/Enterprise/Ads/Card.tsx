@@ -15,22 +15,23 @@ interface CardAdsProps {
 export function CardAds({ name, location, typeOfParty, classification, price, photo, handleOnClick } : CardAdsProps ) {
     return (
         <Flex
+            h={{base:'71vw', lg:'30.3vw'}}
+            w={{base:'80vw', lg:'21.3vw'}}
             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
             borderRadius={8} 
             direction='column'
             bg='brand.white'
-            h='30.3vw'
-            w='21.3vw'
             position='relative'
             _hover={{bg: 'rgba(0,0,0,0.1)'}}
         >
 
-            <Flex justifyContent='center'
+            <Flex 
+                h={{base:'13vw', lg:'4vw'}}
+                justifyContent='center'
                 borderTopRadius={8}
                 alignItems='center'
                 fontWeight={600}
                 fontSize={22}
-                h='4vw'
                 bg='brand.dark_blue'
                 color='brand.white'
             >
@@ -38,7 +39,7 @@ export function CardAds({ name, location, typeOfParty, classification, price, ph
             </Flex>
 
             <Box
-                h='21.3vw' 
+                h={{base:'35.3vw', lg:'21.3vw' }}
                 overflow='hidden'
                 //borderTopRadius={8}
                 justifyContent='center'
@@ -81,14 +82,20 @@ export function CardAds({ name, location, typeOfParty, classification, price, ph
                         { name }
                     </Text>
 
-                    <Flex alignItems='center' w='20%'>
+                    <Flex 
+                        w='20%'
+                        alignItems='center' 
+                    >
                         <Icon as={RiStarSFill}/>
                         <Text>
                             { classification }
                         </Text>
                     </Flex>
 
-                    <Flex alignItems='center' w='100%'>
+                    <Flex alignItems='center' 
+                        w='100%'
+                    
+                    >
                         <Text 
                             whiteSpace='nowrap'
                             overflow='hidden'

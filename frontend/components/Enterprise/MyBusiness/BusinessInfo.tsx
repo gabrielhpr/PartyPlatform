@@ -25,7 +25,7 @@ export function BusinessInfoMyBusiness({ email, password, fullName, phone,
      instagram, facebook, website, saveDataChanged }: BusinessInfoMyBusinessProps) 
     {
     return (
-        <Stack w='50vw'>
+        <Stack w={{base:'100%', lg:'50vw'}}>
             <Box>
                 {/* DADOS DE ACESSO */}
                 <TitleEdit 

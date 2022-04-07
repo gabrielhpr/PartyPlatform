@@ -142,9 +142,6 @@ export default function HomePage() {
                 w='100vw'
                 fontSize={32}
                 justifyContent='center'
-                
-                //alignItems='center'
-                //position='absolute'
                 bg='brand.yellow'
             >
                 
@@ -156,7 +153,6 @@ export default function HomePage() {
                     bg='rgba(0,0,0,0)' zIndex={5}
                     position='absolute'
                     flexWrap='wrap'
-                
                 >
                     {/* Menus */}
                     <Flex
@@ -291,23 +287,22 @@ export default function HomePage() {
                                                 Qual o tipo da festa ?
                                             </Text>
                                             
-                                            {/* Close button */}
-                                            {
-                                                isMobileVersion
-                                                &&
-                                                <Button 
-                                                    bg='none'
-                                                    py='2' px='2'
-                                                    my='2' mx='2'
-                                                    _hover={{bg:'none', textColor: 'brand.red'}}
-                                                    _focus={{outline:'none'}}
-                                                    onClick={() => {
-                                                        setMenuPartyTypeDisp('none');
-                                                    }}
-                                                >
-                                                    <Icon as={RiCloseFill} fontSize={30} />
-                                                </Button>
-                                            }
+                                            {/* Close button - MOBILE*/}
+                                            
+                                            <Button 
+                                                display={{base:'',lg:'none'}}
+                                                bg='none'
+                                                py='2' px='2'
+                                                my='2' mx='2'
+                                                _hover={{bg:'none', textColor: 'brand.red'}}
+                                                _focus={{outline:'none'}}
+                                                onClick={() => {
+                                                    setMenuPartyTypeDisp('none');
+                                                }}
+                                            >
+                                                <Icon as={RiCloseFill} fontSize={30} />
+                                            </Button>
+                                            
 
                                         </Flex>
 
@@ -541,7 +536,9 @@ export default function HomePage() {
                                 h='100%'
                             >
                                 {/* Onde - Localização */}
-                                <Input placeholder='Onde ?'
+                                <Input 
+                                    //display={{base:'none', lg:''}}
+                                    placeholder='Onde ?'
                                     fontSize={19}
                                     bg='white'
                                     w='100%'
@@ -556,10 +553,11 @@ export default function HomePage() {
                                         searchFunction(event, "menuWhere");
                                     }}
                                     onClick={() => {
-                                        setMenuWhere('onclick');
-                                        setSearchData({...searchData, location: ''})
+                                        setMenuWhere('');
+                                        setSearchData({...searchData, location: '', city:'', state:'', country:''});
                                     }}
                                 />
+
 
                                 {/* LOCATION MENU */}
                                 <Box 
@@ -577,39 +575,45 @@ export default function HomePage() {
                                     bg='brand.white'
                                     zIndex={5}
                                 >
-                                    
-                                    {
-                                        isMobileVersion
-                                        &&
-                                        <Flex justifyContent='center'
+                                    <Flex
+                                        direction='column'
+                                    >
+                                            
+                                        {/* MOBILE */}
+                                        <Flex
+                                            display={{base:'flex', lg:'none'}} 
+                                            justifyContent='center'
                                             direction='column'
-                                            h='15vh' w='100%'
+                                            h='15%' w='100%'
                                         >
                                             {/* Close button */}
-                                            <Flex justifyContent='space-between'
-                                                alignItems='center'
+                                            <Flex 
                                                 direction='row'
+                                                justifyContent='space-between'
+                                                alignItems='center'
                                                 w='100%'
                                                 px='4'
                                                 h='50%'
+                                                //minHeight={100}
                                             >
-                                                <Flex alignItems='center'>
+                                                <Flex alignItems='center'
+                                                    h='100%'
+                                                >
                                                     <Text
                                                         fontSize={20}
                                                         fontWeight={500}
-                                                        h='100%'
+                                                        h='auto'
                                                     >
                                                         Onde ?
                                                     </Text>
                                                 </Flex>
 
                                                 <Button 
-                                                    bg='brand.white'
                                                     h='100%'
+                                                    bg='brand.white'
                                                     py='2' px='2'
-                                                
-                                                    _hover={{bg:'none', textColor: 'brand.red'}}
-                                                    _focus={{outline:'none'}}
+                                                    //_hover={{bg:'none', textColor: 'brand.red'}}
+                                                    //_focus={{outline:'none'}}
                                                     onClick={() => {
                                                         setMenuWhere('none');
                                                     }}
@@ -623,7 +627,7 @@ export default function HomePage() {
                                                 fontSize={19}
                                                 mb='3'
                                                 mx='auto'
-                                                id='inputWhere'
+                                                id='inputWhere2'
                                                 bg='white'
                                                 w='90%'
                                                 py={{base:'3',lg:'0'}}
@@ -631,54 +635,55 @@ export default function HomePage() {
                                                 _focus={{outline:'none'}}
                                                 autoComplete='off'
                                                 value={searchData.location}
+                                                
                                                 onChange={(event: any) => {
-                                                    setSearchData({...searchData, location: event.currentTarget.value})
+                                                    console.log(event.currentTarget.value);
+                                                    setSearchData({...searchData, location: event.currentTarget.value});
                                                     searchFunction(event, "menuWhere");
                                                 }}
                                             />
                                         </Flex>
+                                            
                                         
-                                    }
 
-                                    <Flex direction="column" 
-                                        id="menuWhere"
-                                        h={{base:'85vh',lg:'100%'}}
-                                    >
-
-                                        {
-                                        
-                                        Object.values(locationMap).map((el, i) => {
-                                            return(
-                                                <Button
-                                                    key={i}
-                                                    py='6'
-                                                    px='5'
-                                                    bg='brand.white'
-                                                    borderBottom='1px solid rgba(0,0,0,0.2)'
-                                                    h={{base:'8%',lg:'25%'}}
-                                                    //py='4'
-                                                    borderRadius={0}
-                                                    _focus={{outline:'none'}}
-                                                    _hover={{bg:'rgba(0,0,0,0.1)'}}
-                                                    //name='partyType'
-                                                    //value={searchData.location}
-                                                    onClick={(event) => {
-                                                        setSearchData({...searchData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
-                                                        setMenuWhere('none');
-                                                    }}
-                                                >
-                                                    <Text
-                                                        width='100%'
-                                                        textAlign='left'
-                                                        fontWeight={400}
-                                                        fontSize={18}
+                                        <Flex direction="column" 
+                                            id="menuWhere"
+                                            h={{base:'85%',lg:'100%'}}
+                                        >
+                                            {
+                                            Object.values(locationMap).map((el, i) => {
+                                                return(
+                                                    <Button
+                                                        key={i}
+                                                        py='6'
+                                                        px='5'
+                                                        bg='brand.white'
+                                                        borderBottom='1px solid rgba(0,0,0,0.2)'
+                                                        h={{base:'8%',lg:'25%'}}
+                                                        //py='4'
+                                                        borderRadius={0}
+                                                        _focus={{outline:'none'}}
+                                                        _hover={{bg:'rgba(0,0,0,0.1)'}}
+                                                        //name='partyType'
+                                                        //value={searchData.location}
+                                                        onClick={(event) => {
+                                                            setSearchData({...searchData, location: el.textToShow, city: el.city, state: el.state, country: el.country});
+                                                            setMenuWhere('none');
+                                                        }}
                                                     >
-                                                        {el.textToShow}
-                                                    </Text>
-                                                </Button>
-                                            );
-                                        })
-                                        }
+                                                        <Text
+                                                            width='100%'
+                                                            textAlign='left'
+                                                            fontWeight={400}
+                                                            fontSize={18}
+                                                        >
+                                                            {el.textToShow}
+                                                        </Text>
+                                                    </Button>
+                                                );
+                                            })
+                                            }
+                                        </Flex>
                                     </Flex>
                                 </Box>
 
@@ -925,7 +930,8 @@ export default function HomePage() {
                                                     fontSize={42}
                                                 />
                                                 <Text
-                                                    
+                                                    w='90%'
+                                                   whiteSpace='break-spaces' 
                                                 >
                                                     {el.textToShow}
                                                 </Text>

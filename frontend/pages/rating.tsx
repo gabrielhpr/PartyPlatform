@@ -425,7 +425,13 @@ export default function Rating() {
                     showFooterMenu={true}
                     style="yellow"
                 >
-                    <Flex direction='column' w='60%' alignItems='center'>
+                    <Flex direction='column' 
+                        h={{base:'90%', lg:'80%'}}
+                        w={{base:'85%', lg:'60%'}} 
+                        alignItems='center'
+                        overflowY={{base:'scroll',lg:'hidden'}}
+                        px='1'
+                    >
                         
                         {/* Infos do prestador de serviço */}
                         {
@@ -452,7 +458,9 @@ export default function Rating() {
                                     
                                     w='55%'
                                 >
-                                    <Text fontSize={25} mb='1'>
+                                    <Text fontSize={25} mb='1'
+                                        textAlign='center'
+                                    >
                                         {service?.enterpriseName}
                                     </Text>
 
@@ -488,7 +496,8 @@ export default function Rating() {
                                                 {el.title}
                                             </Text>
 
-                                            <Tooltip label={el.subTitle} aria-label='A tooltip'
+                                            <Tooltip label={el.subTitle} 
+                                                aria-label='A tooltip'
                                                 w='100%' h='100%'
                                             >
                                                 <Text as='span'>
@@ -567,7 +576,13 @@ export default function Rating() {
                     //lastStep={authenticatedUser ? true : false}
                     style="yellow"
                 >
-                    <Flex direction='column' w='50%' alignItems='flex-start'>
+                    <Flex direction='column' 
+                        alignItems='flex-start'
+                        h={{base:'90%', lg:'70%'}}
+                        w={{base:'85%', lg:'60%'}} 
+                        overflowY={{base:'scroll',lg:'hidden'}}
+
+                    >
 
                         <Stack direction='column' spacing={3} w='100%'>
                             <Text fontSize={18} textAlign='center'>
@@ -659,9 +674,15 @@ export default function Rating() {
                     showFooterMenu={true}
                     style="yellow"
                 >
-                    <Flex direction='column' w='50%' justifyContent='center' 
+                    <Flex direction='column'  
+                        justifyContent='center' 
                         alignItems='center'
-                        h='100%'
+                        //h='100%'
+                        py='2'
+                        h={{base:'90%', lg:'100%'}}
+                        w={{base:'85%', lg:'80%'}} 
+                        overflowY={{base:'scroll',lg:'hidden'}}
+                        //overflowY={{base:'scroll',lg:'hidden'}}
                     >
                         {
                             authenticatedUser
@@ -688,19 +709,20 @@ export default function Rating() {
                             /* Form Register and Login */
                             <Flex 
                                 direction="column"
-                                h='90%'
-                                width={500} 
-                                py='6'
-                                px="10" 
+                                h={{base:'100%',lg:'90%'}}
+                                width={{base:'100%', lg:500}}
+                                py={{base:'1',lg:'6'}}
+                                px={{base:'0', lg:"10" }}
                                 justifyContent="center"
                                 bg="white" 
-                                boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                boxShadow={{base:'none', lg:"0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"}}
                                 borderRadius={8} 
                                 fontSize={20}
                             >
                                 {/* LOGIN */}
                                 <Flex
                                     mb='2'
+                                    mt={{base:'5',lg:'0'}}
                                     justifyContent='center'
                                     alignItems='center'
                                 >
@@ -725,7 +747,7 @@ export default function Rating() {
                                                 {/* Form Login */}
                                                 <Flex 
                                                     direction="column"
-                                                    width={400} 
+                                                    width={{base:'100%',lg:400}}
                                                     height='80%'
                                                     pt="1"
                                                     pb="1"
@@ -798,7 +820,6 @@ export default function Rating() {
                                     </Modal>
                                 </Flex>
 
-
                                 <Text textAlign='center'
                                     mb='2'
                                 >
@@ -833,7 +854,9 @@ export default function Rating() {
                                     />
                                 </Flex>
 
-                                <Flex direction="row" mt='3'>
+                                <Flex direction="row" mt='3'
+                                    alignItems='flex-end'
+                                >
                                     <Flex direction="column"
                                     >
                                         <Text color="brand.white_40" fontSize={19}>

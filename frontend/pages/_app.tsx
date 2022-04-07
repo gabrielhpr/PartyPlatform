@@ -8,14 +8,14 @@ function MyApp({ Component, pageProps }) {
   return (
     <UserProvider>
         <EnterpriseProvider>
-          <ChakraProvider theme={theme}>
-            <SidebarDrawerProvider>
-              <Component {...pageProps} />
-            </SidebarDrawerProvider>
+        <ChakraProvider theme={theme}>
+          <SidebarDrawerProvider>
+            <Component {...pageProps} />
+          </SidebarDrawerProvider>
           </ChakraProvider>
         </EnterpriseProvider>
-    </UserProvider>
+      </UserProvider>
   )
 }
 
-export default MyApp
+export default MyApp;

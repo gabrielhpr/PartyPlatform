@@ -41,7 +41,7 @@ export default function useUserAuth() {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("tokenUser");
         
         if(token) {
             api.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(token)}`;
@@ -81,7 +81,7 @@ export default function useUserAuth() {
     }
 
     async function userRate(rating: any) {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("tokenUser");
 
         try {
             await api.post("/user/rating", rating, {
@@ -100,7 +100,7 @@ export default function useUserAuth() {
     }
 
     async function userSendEmail(emailData: any) {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("tokenUser");
 
         try {
             await api.post("/user/sendEmail", emailData, {
@@ -120,7 +120,8 @@ export default function useUserAuth() {
 
     async function authUser(data: any, redirect: boolean) {
         setAuthenticatedUser(true);
-        localStorage.setItem("token", JSON.stringify(data.token));
+        localStorage.removeItem("tokenEnterprise");
+        localStorage.setItem("tokenUser", JSON.stringify(data.token));
         
         if( redirect == true ) {
             routerNext.push("/User/home");
@@ -133,7 +134,7 @@ export default function useUserAuth() {
         const msgType = "success";
 
         setAuthenticatedUser( false );
-        localStorage.removeItem("token");
+        localStorage.removeItem("tokenUser");
         api.defaults.headers.common["Authorization"] = "";
 
         routerNext.push("/User/userAccess");

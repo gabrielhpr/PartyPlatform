@@ -12,11 +12,11 @@ export function TopMenuEnterprise() {
         <Flex as="header"
             width="100%"
             bg="brand.white"
-            px="12"
+            px={{base:'0', lg:"12"}}
             alignItems="center"
             h={20}
             position='relative'
-            justifyContent="center"
+            justifyContent={{base:'space-evenly', md:"center"}}
         >
             <TopMenuItem
                 name='Visão geral'

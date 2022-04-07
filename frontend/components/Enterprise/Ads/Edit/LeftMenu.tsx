@@ -3,6 +3,8 @@ import { Flex, Stack, Link as NavLink, Icon, Text, Divider,
 import { ReactNode } from "react";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { LeftMenuItemEdit } from "./LeftMenuItem";
+import AliceCarousel from 'react-alice-carousel';
+import 'react-alice-carousel/lib/alice-carousel.css';
 import Image from 'next/image';
 
 interface LeftMenuEditProps {
@@ -13,18 +15,20 @@ interface LeftMenuEditProps {
 }
 
 
+
 export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: LeftMenuEditProps) {
     
+    const menuItems = ['Detalhes do anúncio', 'Preço', 'Políticas e Regras'];
     
     return (
         <Flex 
-            position='sticky'
+            position={{base:'relative', lg:'sticky'}}
             top={5}
-            h='90vh'
+            h={{base:'auto', lg:'90vh'}}
             bg="brand.dark_blue"
             color='brand.dark_blue'
-            borderTopLeftRadius={8}
-            borderBottomLeftRadius={8}
+            borderLeftRadius={8}
+            borderRightRadius={{base:8, lg:0}}
             direction='column'
             {...rest}
         >
@@ -50,12 +54,14 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: L
                 </Text>
             </Flex> 
 
+            {/* IMAGE */}
             <Flex
                 boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                 borderRadius={8} 
                 height={250}
                 width="100%"
                 position='relative'
+                display={{base:'none', lg:'flex'}}
             >
                 <Image 
                     src={srcImage}
@@ -64,36 +70,87 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: L
                 />
             </Flex>
 
+            {/* MOBILE MENU */}
+            <Flex
+                display={{base:'flex', lg:'none'}}
+                alignItems='center'
+                w={{base:'90%'}}
+                h={{base:'10vh'}}
+            >
+                <AliceCarousel
+                    autoPlay={false}
+                    autoHeight={true}
+                    responsive={{
+                        0: {items:1.5},
+                        1024: {items:5}
+                    }}
+                    disableDotsControls={true}
+                    disableButtonsControls={true}
+                    mouseTracking
+                    items={
+                        menuItems.map((el, index) => {
+                            return (
+                                <Button
+                                    h={{base:'5vh'}}
+                                    w='90%'
+                                    my='1'
+                                    mx='1'
+                                    key={index}
+                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                                    bg='rgba(255,255,255,0.95)'
+                                    _hover={{bg:'brand.yellow'}}
+                                    onClick={() => stateChanger(el)}
+                                    
+                                >
+                                    <Flex w='100%'
+                                        h='100%'
+                                        direction='column'
+                                        alignItems='center'
+                                        justifyContent='space-evenly'
+                                        py='4'
+                                    >
+                                        <Text
+                                            w='90%'
+                                            whiteSpace='break-spaces' 
+                                        >
+                                            {el}
+                                        </Text>
+                                    </Flex>
+                                </Button>
+                            );
+                        })
+                    }
+                />
+            
+            </Flex>
+
+
             <Flex bg="brand.red"  height={2}/>
             
+            {/* MENU ITEMS */}
             <Flex 
                 direction='column'
-
+                display={{base:'none', lg:'flex'}}
             >
                 <LeftMenuItemEdit
-                    title="Detalhes do anúncio"
-                    subMenu={["Fotos","Informações básicas do anúncio"
-                    ]}
+                    title={menuItems[0]}
+                    subMenu={["Fotos","Informações básicas do anúncio"]}
                     selectedState={true}
                 />
                 <Divider color="white"/>
-
-                
                 
                 <LeftMenuItemEdit 
-                    title="Preço"
+                    title={menuItems[1]}
                     subMenu={["Preço"]}
                 />
                 <Divider color="white"/>
 
-
                 <LeftMenuItemEdit 
-                    title="Políticas e Regras"
+                    title={menuItems[2]}
                     subMenu={["Políticas e Regras"]}
                 />
                 <Divider color="white"/>
                
-
             </Flex>
 
         </Flex>

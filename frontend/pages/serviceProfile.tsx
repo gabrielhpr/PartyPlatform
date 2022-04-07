@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
 //import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
@@ -283,9 +283,12 @@ export default function ServiceProfilePage() {
                             
                         </Flex>
                         
+                        
                         <Flex mt='2'>
                             <Text>{service.location}</Text>
+                            {/*
                             <Text ml='5'>Ver no mapa</Text>
+                            */}
                         </Flex>
                         
                         <Flex mt='2'>
@@ -346,20 +349,23 @@ export default function ServiceProfilePage() {
                             onClick={onOpen}
                             position='relative'
                         >
-
-                            <Button 
-                                bg='brand.white'
-                                color='brand.dark_blue'
-                                w='20%'
-                                position='absolute'
-                                right={0}
-                                bottom={0}
-                                transform='translate(-5%, -10%)'
-                                onClick={onOpen}
-                                borderRadius={8}
-                            >
-                                + Fotos
-                            </Button>                                    
+                            {
+                                isMobileVersion
+                                &&
+                                <Button 
+                                    bg='brand.white'
+                                    color='brand.dark_blue'
+                                    w='20%'
+                                    position='absolute'
+                                    right={0}
+                                    bottom={0}
+                                    transform='translate(-5%, -10%)'
+                                    onClick={onOpen}
+                                    borderRadius={8}
+                                >
+                                    + Fotos
+                                </Button>                                    
+                            }
 
                             <Img 
                                 borderLeftRadius={{base:0,lg:8}}
@@ -761,7 +767,7 @@ export default function ServiceProfilePage() {
                                 justifyContent='flex-end'
                             >
                                 <Flex 
-                                    h={420}
+                                    h={430}
                                     w='85%'
                                     position='sticky'
                                     top={20}
@@ -838,47 +844,134 @@ export default function ServiceProfilePage() {
                 {
                     isMobileVersion
                     &&
-                    <Flex
-                        position='fixed'
-                        bg='brand.white'
-                        bottom={0}
-                        h='9vh'
-                        w='100%'
-                        alignItems='center'
-                        justifyContent='space-evenly'
-                        borderTop='2px solid rgba(0,0,0,0.10)'
-                    >
-                        <Button
-                            bg='brand.red'
-                            color='white'
-                            //height={12}
-                            fontSize={18}
-                            h='70%'
-                            w='70%'
+                    <>
+                        <Flex
+                            position='fixed'
+                            bg='brand.white'
+                            bottom={0}
+                            h='9vh'
+                            w='100%'
+                            alignItems='center'
+                            justifyContent='space-evenly'
+                            borderTop='2px solid rgba(0,0,0,0.10)'
                         >
-                            Pedir orçamento grátis!
-                        </Button>
-
-                        {/* PHONE CALL */}
-                        <NavLink
-                            href={`tel:${service.phone}`}
-                            h='70%'
-                            w='20%'
-                            bg='gray'
-                            color='brand.white'
-                            borderRadius={8}
-                        >
-                            <Flex 
-                                h='100%'
-                                alignItems='center'
-                                justifyContent='center'
+                            <Button
+                                bg='brand.red'
+                                color='white'
+                                //height={12}
+                                fontSize={18}
+                                h='70%'
+                                w='70%'
+                                onClick={onOpen}
                             >
-                                <Icon as={RiPhoneFill}
-                                    fontSize={24}
-                                />
-                            </Flex>
-                        </NavLink>
-                    </Flex>
+                                Pedir orçamento grátis!
+                            </Button>
+
+                            {/* PHONE CALL */}
+                            <NavLink
+                                href={`tel:${service.phone}`}
+                                h='70%'
+                                w='20%'
+                                bg='gray'
+                                color='brand.white'
+                                borderRadius={8}
+                            >
+                                <Flex 
+                                    h='100%'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                >
+                                    <Icon as={RiPhoneFill}
+                                        fontSize={24}
+                                    />
+                                </Flex>
+                            </NavLink>
+                        </Flex>
+
+                        <Modal isOpen={isOpen} onClose={onClose} size='full'>
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader></ModalHeader>
+                                <ModalCloseButton />
+                                
+                                <ModalBody
+                                    h='100%'                            
+                                >
+                                    {/* Card */}
+                                    <Flex 
+                                    >
+                                        <Flex 
+                                            h={420}
+                                            w='100%'
+                                            px='3'
+                                            direction='column'
+                                            textAlign='center'
+                                        >
+
+                                            <Text as='h2'
+                                                fontSize={21}
+                                                fontWeight={500}
+                                                my='4'
+                                            >
+                                                Pedir um orçamento!
+                                            </Text>
+
+                                            <Flex 
+                                                direction='column'
+                                                textAlign='left'
+                                            >
+                                                
+                                                <Flex direction='column' mb='3'>
+                                                    <Text as='span'>Data do evento</Text>
+                                                    <Input type='date' 
+                                                        name='partyDate'
+                                                        onChange={handleEmailDataChange}
+                                                    />
+                                                </Flex>
+
+                                                <Flex direction='column' mb='3'>
+                                                    <Text as='span'>Número de convidados</Text>
+                                                    <Input type='number' 
+                                                        name='nOfPeople'
+                                                        onChange={handleEmailDataChange}
+                                                    />
+                                                </Flex>
+
+                                                <Flex direction='column' mb='3'>
+                                                    <Text as='span'>Mensagem</Text>
+                                                    <Textarea resize='none' 
+                                                        maxLength={300} h={100}
+                                                        name='messageContent'
+                                                        onChange={handleEmailDataChange}
+                                                    />
+                                                </Flex>
+
+                                                <Button
+                                                    bg='brand.red'
+                                                    color='white'
+                                                    height={12}
+                                                    fontSize={18}
+                                                    onClick={() => {
+                                                        handleSendEmail();
+                                                        // console.log('Service');
+                                                        //console.log(service);
+                                                        // console.log('Opinião');
+                                                        // console.log(opinions[0]);
+                                                    }}
+                                                >
+                                                    Pedir orçamento!
+                                                </Button>
+                                            </Flex>
+                                        </Flex>    
+                                    </Flex>
+                                </ModalBody>
+                                
+                                <ModalFooter>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
+                    </>
+
                 }
             </Flex>
             :

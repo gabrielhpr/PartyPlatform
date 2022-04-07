@@ -12,6 +12,8 @@ import { LeftMenuMyBusiness } from "../../components/Enterprise/MyBusiness/LeftM
 import { BusinessInfoMyBusiness } from "../../components/Enterprise/MyBusiness/BusinessInfo";
 import { Footer } from "../../components/Footer";
 import { LocationInfoMyBusiness } from "../../components/Enterprise/MyBusiness/LocationInfoMyBusiness";
+import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
+import { NotAuthorizedComponent } from "../../components/NotAuthorizedComponent";
 
 
 interface enterpriseDataInterf {
@@ -68,13 +70,17 @@ const enterpriseDataNullState = {
 }
 
 export default function MyBusinessEnterprise() {
+    const { authenticatedEnterprise } = useEnterpriseAuthContext();
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>(enterpriseDataNullState);
-    
     const [componentToLoad, setComponentToLoad] = useState("DadosDaEmpresa");
     const [hasToUpdate, setHasToUpdate] = useState(false);    
-    
+
     // Get Enterprise Data
     useEffect(() => {
+        if( !authenticatedEnterprise ) {
+            return;
+        }
+
         const token = localStorage.getItem("token");
 
         // Get enterprise data
@@ -91,11 +97,14 @@ export default function MyBusinessEnterprise() {
         catch( err ) {
             console.log( err );
         }
-    }, []);
+    }, [authenticatedEnterprise]);
 
 
     // Update Enterprise Data
     useEffect(() => {
+        if( !authenticatedEnterprise ) {
+            return;
+        }
 
         if ( !hasToUpdate ) {            
             return;
@@ -148,90 +157,98 @@ export default function MyBusinessEnterprise() {
         setComponentToLoad( event.currentTarget.value );
     }
 
-
-    return (
-
-        <Box>
-            <Header name="" position="relative" />
-            <TopMenuEnterprise />
-
-            {
-            enterpriseData.id != 0 
-            ?
-            <Flex 
-                mt="4"
-                boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                borderRadius={8} 
-                maxWidth={1200}
-                justifyContent="space-between"
-                mx="auto"
-                h='auto' 
-                w='80%'
-                mb='20'
-            >
-                {/* Left Menu 
-            */}
-                <LeftMenuMyBusiness 
-                    propertyName={enterpriseData.enterpriseName}
-                    //srcImage={`http://localhost:5000/images/enterprise/${adData?.photos.split(",")[0]}`}
-                    handleOnClick={handleClickMenu}
-                    menuOptions={{
-                        DadosDaEmpresa : {value: 'DadosDaEmpresa', textToShow: 'Dados da empresa'},
-                        Localizacao: {value: 'Localizacao', textToShow: 'Localização'}
-                    }}
-                    selectedOption={componentToLoad}
-                    w='25%'
-                />
-
-                {/* Forms */}
-                <Flex
-                    as="form"                    
-                    px="5" pb="5"
-                    w='75%'
+    if( authenticatedEnterprise ) {
+        return (
+            <Box>
+                <Header name="" position="relative" />
+                <TopMenuEnterprise />
+    
+                {
+                enterpriseData.id != 0 
+                ?
+                <Flex 
+                    mt="4"
+                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
+                    borderRadius={8} 
+                    maxWidth={1200}
+                    justifyContent="space-between"
+                    mx="auto"
+                    h='auto' 
+                    w={{base:'95%', lg:'80%'}}
+                    mb='20'
+                    direction={{base:'column', lg:'row'}}
                 >
+                    {/* Left Menu 
+                */}
+                    <LeftMenuMyBusiness 
+                        propertyName={enterpriseData.enterpriseName}
+                        //srcImage={`http://localhost:5000/images/enterprise/${adData?.photos.split(",")[0]}`}
+                        handleOnClick={handleClickMenu}
+                        menuOptions={{
+                            DadosDaEmpresa : {value: 'DadosDaEmpresa', textToShow: 'Dados da empresa'},
+                            Localizacao: {value: 'Localizacao', textToShow: 'Localização'}
+                        }}
+                        selectedOption={componentToLoad}
+                        w={{base:'100%', lg:'25%'}}
+                    />
+    
+                    {/* Forms */}
+                    <Flex
+                        as="form"                    
+                        px="5" pb="5"
+                        w={{base:'100%', lg:'75%'}}
+                    >
+                        
+                        {
+                            componentToLoad == "DadosDaEmpresa"
+                            ?
+                            <BusinessInfoMyBusiness
+                                email={enterpriseData.email}
+                                password={enterpriseData.password}
+                                fullName={enterpriseData.fullName}
+                                phone={enterpriseData.phone}
+                                whatsapp={enterpriseData.whatsapp}
+                                enterpriseName={enterpriseData.enterpriseName}
+                                enterpriseCategory={enterpriseData.enterpriseCategory}
+                                enterpriseSpecificCategory={enterpriseData.enterpriseSpecificCategory}
+                                instagram={enterpriseData.instagram}
+                                facebook={enterpriseData.facebook}
+                                website={enterpriseData.website}
+                                saveDataChanged={saveDataChanged}
+                            />
+                            :
+                            componentToLoad == "Localizacao"
+                            ?
+                            <LocationInfoMyBusiness
+                                country={enterpriseData.country}
+                                state={enterpriseData.state}
+                                city={enterpriseData.city}
+                                address={enterpriseData.address}
+                                addressNumber={enterpriseData.addressNumber}
+                                saveDataChanged={saveDataChanged}
+                            />
+                            :
+                            <>
+                            </>                                            
+                        }
+    
                     
-                    {
-                        componentToLoad == "DadosDaEmpresa"
-                        ?
-                        <BusinessInfoMyBusiness
-                            email={enterpriseData.email}
-                            password={enterpriseData.password}
-                            fullName={enterpriseData.fullName}
-                            phone={enterpriseData.phone}
-                            whatsapp={enterpriseData.whatsapp}
-                            enterpriseName={enterpriseData.enterpriseName}
-                            enterpriseCategory={enterpriseData.enterpriseCategory}
-                            enterpriseSpecificCategory={enterpriseData.enterpriseSpecificCategory}
-                            instagram={enterpriseData.instagram}
-                            facebook={enterpriseData.facebook}
-                            website={enterpriseData.website}
-                            saveDataChanged={saveDataChanged}
-                        />
-                        :
-                        componentToLoad == "Localizacao"
-                        ?
-                        <LocationInfoMyBusiness
-                            country={enterpriseData.country}
-                            state={enterpriseData.state}
-                            city={enterpriseData.city}
-                            address={enterpriseData.address}
-                            addressNumber={enterpriseData.addressNumber}
-                            saveDataChanged={saveDataChanged}
-                        />
-                        :
-                        <>
-                        </>                                            
-                    }
-
-                
+                    </Flex>
+    
                 </Flex>
-
-            </Flex>
-            :
-            <Text>Loading</Text>
-            }
-
-            <Footer/>
-        </Box>
-    );
+                :
+                <Text>Loading</Text>
+                }
+    
+                <Footer/>
+            </Box>
+        );
+    }
+    else {
+        return (
+            <Box w='100vw' h='100vh'> 
+                <NotAuthorizedComponent link='/Enterprise/enterpriseAccess' />
+            </Box>
+        )
+    }
 }

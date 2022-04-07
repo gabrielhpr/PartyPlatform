@@ -36,66 +36,41 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
             position='relative'
             _hover={{bg: 'rgba(0,0,0,0.1)'}}
         >
-            {/* 
-            <Flex 
-                h='21.3vw' 
-                //overflow='hidden'
-                borderTopRadius={8}
-            >
             
-            */}
-                <Carousel
-                    //height='21.3vw'
-                    //autoPlay={true}
-                    infiniteLoop
-                    transitionTime={400}
-                    //interval={4000}
-                    showThumbs={false}
-                    showArrows={true}
-                    showIndicators={true}
-                    
-                >
+            <Carousel
+                infiniteLoop
+                transitionTime={400}
+                showThumbs={false}
+                showArrows={true}
+                showIndicators={true}
+            >
+                {
+                    photos.map((image, i) => {
+                        return (
+                            <Box
+                                key={i}
+                                h={{base:'40vh', lg:'32vh'}}
+                                overflow='hidden'
+                                borderTopRadius={8}
+                                justifyContent='center'
+                                alignItems='center'
+                                position='relative'
+                                onClick={handleOnClick}
+                                cursor='pointer'
+                            >
+                                <Image
+                                    src={`http://localhost:5000/images/enterprise/${image}`}
+                                    layout='fill'
+                                    objectFit='cover'
+                                    priority={true}
+                                /> 
+                            </Box>
+                        )
+                    })
+                }
+            </Carousel>
+                
 
-                        {
-                            photos.map((image, i) => {
-                                return (
-                                        <Box
-                                            key={i}
-                                            h={{base:'40vh', lg:'32vh'}}
-                                            overflow='hidden'
-                                            borderTopRadius={8}
-                                            //w='100vw'
-                                            justifyContent='center'
-                                            alignItems='center'
-                                            position='relative'
-                                            onClick={handleOnClick}
-                                            cursor='pointer'
-                                        >
-                                            <Image
-                                                src={`http://localhost:5000/images/enterprise/${image}`}
-                                                //height={100}
-                                                //height={100}
-                                                //width='auto'
-                                                layout='fill'
-                                                objectFit='cover'
-                                                priority={true}
-                                                //objectPosition=
-                                            /> 
-                                        </Box>
-                                )
-                            })
-                        }
-                    
-                </Carousel>
-                {/*
-                <Image 
-                    src={picture}
-                    objectFit="cover"
-                />
-            </Flex>
-                */}
-
-        
 
             <Flex 
                 h={{base:'10vh',lg:'10vh'}}

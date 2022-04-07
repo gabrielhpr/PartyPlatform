@@ -18,9 +18,8 @@ export function LocationInfoMyBusiness({ country, state, city,
     address, addressNumber, saveDataChanged }: LocationInfoMyBusinessProps) 
     {
     return (
-        <Stack w='50vw'>
+        <Stack w={{base:'100%', lg:'50vw'}}>
 
-        
             <Box>
                 
                 {/* DADOS DE ACESSO */}

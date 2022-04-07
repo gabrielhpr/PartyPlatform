@@ -1,6 +1,6 @@
 import { Flex, Input, Text, Link as NavLink, Button, Icon, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverHeader, PopoverBody, useDisclosure, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useBreakpointValue } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ReactNode } from "react";
 import { RiCloseFill } from "react-icons/ri";
 import { Header } from "../Header";
@@ -24,15 +24,10 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
     handleNextStep, handlePreviousStep
 }: CreateAdLayoutProps) {
 
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = React.useRef();
     const routerNext = useRouter();
-    
-    const isMobileVersion = useBreakpointValue({
-        base: true,
-        lg: false,
-    });
-
     
     function handleRedirect() {
         if( routerNext.pathname == '/Enterprise/ads/create' ) {
@@ -47,168 +42,170 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
     }
 
     return (
-        <Flex direction='column'
+                  
+        <Flex
             h='100vh'
             w='100vw'
-            justifyContent='space-between'
-        >            
-            <Flex
-                h='100%'
-                w='100%'
+            //flexWrap='wrap'  
+            direction={{base:'column', lg:'row'}}
+            //justifyContent={{base:'space-between', lg:'space-between'}}
+        >
+            {/* Pergunta */}
+            <Flex 
+                height={{base:"30%", lg:"100%"}} 
+                width={{base:"100%", lg:"45%"}}
+                justifyContent={{base:"space-between", lg:"center"}}
                 alignItems="center"
-                justifyContent="center"   
-                flexWrap='wrap'         
+                direction="column"
+                bg={style=='yellow' ? 'brand.yellow' : 'brand.dark_blue'}
+                pb={{base:'10', lg:'0'}}
             >
-                {/* Pergunta */}
+                
+                {/* Close button - ONLY FOR MOBILE*/}
                 <Flex 
-                    height={{base:"30%", lg:"100%"}} 
-                    width={{base:"100%", lg:"45%"}}
-                    justifyContent={{base:"space-between", lg:"center"}}
-                    alignItems="center"
-                    direction="column"
-                    bg={style=='yellow' ? 'brand.yellow' : 'brand.dark_blue'}
-                    pb={{base:'10', lg:'0'}}
+                    w='100%'
+                    textAlign='right'
+                    display={{lg:'none'}}
                 >
-                    {
-                        isMobileVersion
-                        &&
-                        /* Close button */
-                        <Flex justifyContent='flex-end'
-                            w='100%'
-                        >
-                            <Button 
-                                bg='none'
-                                color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
-                                py='2' px='2'
-                                my='2' mx='2'
-                                _hover={{bg:'none', textColor: 'brand.red'}}
-                                _focus={{outline:'none'}}
-                                onClick={onOpen}
-                            >
-                                <Icon as={RiCloseFill} fontSize={32} />
-                            </Button>
-
-                            <AlertDialog
-                                isOpen={isOpen}
-                                leastDestructiveRef={cancelRef}
-                                onClose={onClose}
-                            >
-                                <AlertDialogOverlay>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                                            Tem certeza que deseja sair ?
-                                        </AlertDialogHeader>
-
-                                        <AlertDialogBody>
-                                            Você irá perder todo o
-                                            seu progresso
-                                        </AlertDialogBody>
-
-                                        <AlertDialogFooter>
-                                            <Button ref={cancelRef} onClick={onClose}>
-                                                Vou ficar
-                                            </Button>
-                                            <Button colorScheme='red' ml={3} 
-                                                onClick={() => {   
-                                                    handleRedirect()
-                                            }}
-                                            >
-                                                Sair
-                                            </Button>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialogOverlay>
-                            </AlertDialog>
-                        </Flex>
-                    }
-
-                    <Text as="h2"
+                    <Button 
+                        bg='none'
                         color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
-                        fontSize={{base:25,lg:40}}
-                        fontWeight={500}
-                        textAlign="center"
-                        width="70%"
+                        py='2' px='2'
+                        my='2' mx='2'
+                        //ml='50'//ml='auto'
+                        _hover={{bg:'none', textColor: 'brand.red'}}
+                        _focus={{outline:'none'}}
+                        onClick={onOpen}
                     >
-                        { question }
-                    </Text>
+                        <Icon as={RiCloseFill} fontSize={32} />
+                    </Button>
 
-                    <Text display={!subTitle ? "none" : ""}
-                        as="h4"
-                        color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
-                        fontSize={20}
-                        fontWeight={400}
-                        textAlign="center"
-                        width="60%"
-                        mt="4"
+                    <AlertDialog
+                        isOpen={isOpen}
+                        leastDestructiveRef={cancelRef}
+                        onClose={onClose}
                     >
-                        { subTitle }
-                    </Text>
+                        <AlertDialogOverlay>
+                            <AlertDialogContent>
+                                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                    Tem certeza que deseja sair ?
+                                </AlertDialogHeader>
+
+                                <AlertDialogBody>
+                                    Você irá perder todo o
+                                    seu progresso
+                                </AlertDialogBody>
+
+                                <AlertDialogFooter>
+                                    <Button ref={cancelRef} onClick={onClose}>
+                                        Vou ficar
+                                    </Button>
+                                    <Button colorScheme='red' ml={3} 
+                                        onClick={handleRedirect}
+                                    >
+                                        Sair
+                                    </Button>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialogOverlay>
+                    </AlertDialog>
                 </Flex>
+                
 
-                {/* Input */}
-                <Flex 
-                    height={{base:"70%", lg:"100%"}}
-                    width={{base:"100%", lg:"55%"}}
-                    justifyContent="space-between" 
-                    alignItems="space-between"
-                    direction="column"
-                    bg="brand.white"
+                <Text as="h2"
+                    color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
+                    fontSize={{base:25,lg:40}}
+                    fontWeight={500}
+                    textAlign="center"
+                    width={{base:"90%", lg:"70%"}}
                 >
-                    {   
-                        !isMobileVersion
-                        &&
-                        /* Close button */                        
-                        <Flex justifyContent='flex-end'
-                            h='4%'
+                    { question }
+                </Text>
+
+                <Text display={!subTitle ? "none" : ""}
+                    as="h4"
+                    color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
+                    fontSize={{base:17, lg:20}}
+                    fontWeight={400}
+                    textAlign="center"
+                    width={{base:"90%", lg:"60%"}}
+                    mt="4"
+                >
+                    { subTitle }
+                </Text>
+            </Flex>
+
+            {/* Input */}
+            <Flex 
+                height={{base:"70%", lg:"100%"}}
+                width={{base:"100%", lg:"55%"}}
+                bg="brand.white"
+                //justifyContent='center'
+                //alignItems='center'
+                //mx='auto'
+                
+            >
+                <Flex 
+                    w='100%'
+                    h='100%'
+                    justifyContent="space-between" 
+                    direction="column"
+                >
+                       
+                    {/* Close button - ONLY FOR DESKTOP*/}
+                    <Flex justifyContent='flex-end'
+                        h='4%'
+                        display={{base:'none', lg:'flex'}}
+                    >
+                        <Button 
+                            bg='none'
+                            py='2' px='2'
+                            my='2' mx='2'
+                            _hover={{bg:'none', textColor: 'brand.red'}}
+                            _focus={{outline:'none'}}
+                            onClick={onOpen}
                         >
-                            <Button 
-                                bg='none'
-                                py='2' px='2'
-                                my='2' mx='2'
-                                _hover={{bg:'none', textColor: 'brand.red'}}
-                                _focus={{outline:'none'}}
-                                onClick={onOpen}
-                            >
-                                <Icon as={RiCloseFill} fontSize={30} />
-                            </Button>
+                            <Icon as={RiCloseFill} fontSize={30} />
+                        </Button>
 
-                            <AlertDialog
-                                isOpen={isOpen}
-                                leastDestructiveRef={cancelRef}
-                                onClose={onClose}
-                            >
-                                <AlertDialogOverlay>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                                            Tem certeza que deseja sair ?
-                                        </AlertDialogHeader>
+                        <AlertDialog
+                            isOpen={isOpen}
+                            leastDestructiveRef={cancelRef}
+                            onClose={onClose}
+                        >
+                            <AlertDialogOverlay>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                        Tem certeza que deseja sair ?
+                                    </AlertDialogHeader>
 
-                                        <AlertDialogBody>
-                                            Você irá perder todo o
-                                            seu progresso
-                                        </AlertDialogBody>
+                                    <AlertDialogBody>
+                                        Você irá perder todo o
+                                        seu progresso
+                                    </AlertDialogBody>
 
-                                        <AlertDialogFooter>
-                                            <Button ref={cancelRef} onClick={onClose}>
-                                                Vou ficar
-                                            </Button>
-                                            <Button colorScheme='red' ml={3} 
-                                                onClick={() => {   
-                                                    handleRedirect()
-                                            }}
-                                            >
-                                                Sair
-                                            </Button>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialogOverlay>
-                            </AlertDialog>
-                        </Flex>
-                    }
+                                    <AlertDialogFooter>
+                                        <Button ref={cancelRef} onClick={onClose}>
+                                            Vou ficar
+                                        </Button>
+                                        <Button colorScheme='red' ml={3} 
+                                            onClick={handleRedirect}
+                                        >
+                                            Sair
+                                        </Button>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialogOverlay>
+                        </AlertDialog>
+                    </Flex>
+                    
 
-                    <Flex height={showFooterMenu ? "88%" : "100%"}
+                    <Flex 
+                        //height={showFooterMenu ? "88%" : "100%"}
+                        h={{base:'88%',lg:'84%'}}
                         alignItems="center"
                         justifyContent="center"
+                        //overflowY={{base:'scroll',lg:'hidden'}}
                     >
                         { children }
                     </Flex>
@@ -216,7 +213,7 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
                     {/* Footer - Voltar, Avançar */}
                     {
                         showFooterMenu
-                        ?
+                        &&
                         <Flex justifyContent="space-between"
                             alignItems="center"
                             height={{base:"12%",lg:"8%"}}
@@ -259,14 +256,11 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
                                 </Button>
                             </NavLink>
                         </Flex>
-                        :
-                        <>
-                        </>
                     }
-
                 </Flex>
             </Flex>
         </Flex>
+        
 
     );
 }

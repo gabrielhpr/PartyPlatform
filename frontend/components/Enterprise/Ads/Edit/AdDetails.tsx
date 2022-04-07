@@ -13,7 +13,9 @@ interface AdDetailsEditProps {
 
 export function AdDetailsEdit({ serviceDescription, photos, saveDataChanged}) {
     return (
-        <Stack w='50vw'>
+        <Stack w={{base:'90vw', lg:'50vw'}}
+            mt={{base:'8', lg:'0'}}
+        >
 
             {/* Fotos */}
             <Box mb="3" id="Fotos">

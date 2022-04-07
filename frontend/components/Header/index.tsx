@@ -9,6 +9,7 @@ import { RiBriefcaseLine, RiMenuLine, RiUserLine } from "react-icons/ri";
 import { useUserAuthContext } from "../../context/userContext";
 import { useRouter } from 'next/router';
 import { FaRegUser } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 
 interface HeaderProps {
     name: string;
@@ -25,7 +26,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
     const { onOpen } = useSidebarDrawer();
     const isMobileVersion = useBreakpointValue({
         base: true,
-        lg: false,
+        lg: false
     });
 
 
@@ -115,13 +116,6 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                 </NavLink>
             </Flex>
         
-            
-
-
-
-
-
-
 
             {   
                 /* USER AUTHENTICATED */
@@ -131,14 +125,17 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                         <Flex>
                             <Button
                                 bg='none'
-                                border="2px solid"
-                                borderColor={"brand.dark_blue"}
+                                //border="2px solid"
+                                //borderColor={"brand.dark_blue"}
                                 color={"brand.dark_blue"}
                                 transition="0.3s"
                                 _hover={{bg:"brand.yellow_60", color:"brand.dark_blue"}}
                                 onClick={handleLogoutUser}
                             >
-                                Logout
+                                <Icon
+                                    fontSize={25}
+                                    as={MdLogout}
+                                />
                             </Button>
                         </Flex>
 
@@ -152,14 +149,18 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                         <Flex>
                             <Button
                                 bg='none'
-                                border="2px solid"
-                                borderColor={"brand.dark_blue"}
+                                //border="2px solid"
+                                //borderColor={"brand.dark_blue"}
                                 color={"brand.dark_blue"}
                                 transition="0.3s"
                                 _hover={{bg:"brand.yellow_60", color:"brand.dark_blue"}}
                                 onClick={handleLogoutEnterprise}
                             >
-                                Logout
+                               
+                                <Icon
+                                    fontSize={25}
+                                    as={MdLogout}
+                                />
                             </Button>
                         </Flex>
 
@@ -267,9 +268,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                             </NavLink>
                         </Stack>
                     </Flex>
-
                     
-                
             }
             
             
