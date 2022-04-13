@@ -191,7 +191,8 @@ export default function ServiceProfilePage() {
         base: true,
         lg: false,
     });
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const modalGallery = useDisclosure();
+    const modalBudget = useDisclosure();
 
 
 
@@ -346,7 +347,7 @@ export default function ServiceProfilePage() {
                     >
                     
                         <Flex w={{base:'100%', lg:'50%'}}
-                            onClick={onOpen}
+                            onClick={modalGallery.onOpen}
                             position='relative'
                         >
                             {
@@ -360,7 +361,7 @@ export default function ServiceProfilePage() {
                                     right={0}
                                     bottom={0}
                                     transform='translate(-5%, -10%)'
-                                    onClick={onOpen}
+                                    onClick={modalGallery.onOpen}
                                     borderRadius={8}
                                 >
                                     + Fotos
@@ -374,66 +375,70 @@ export default function ServiceProfilePage() {
                             />
                         </Flex>
 
-                        {
-                            !isMobileVersion
-                            &&
-                            /* Other showed pictures */
-                            <Flex w='50%' h='100%' flexWrap='wrap' >
-                                <Flex w='50%' h='50%' pl='2' pb='1'
-                                    onClick={onOpen}
-                                >
-                                    <Img 
-                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[1]}`}
-                                        objectFit='cover'
-                                    />
-                                </Flex>
-                                <Flex w='50%' h='50%' pl='2' pb='1'
-                                    onClick={onOpen}
-                                >
-                                    <Img 
-                                        borderTopRightRadius={8}
-                                        objectFit='cover'
-                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[2]}`}
-                                    />
-                                </Flex>
-                                <Flex w='50%' h='50%' pl='2' pt='1'
-                                    onClick={onOpen}
-                                >
-                                    <Img 
-                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[3]}`}
-                                        objectFit='cover'
-                                    />
-                                </Flex>
-                                <Flex w='50%' h='50%' pl='2' pt='1' position='relative'>
 
-                                    <Button 
-                                        bg='brand.white'
-                                        color='brand.dark_blue'
-                                        w='70%'
-                                        position='absolute'
-                                        top='50%'
-                                        left='50%'
-                                        transform='translate(-50%, 80%)'
-                                        onClick={onOpen}
-                                    >
-                                        Ver todas as fotos
-                                    </Button>
-
-                                    
-
-                                    <Img 
-                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
-                                        borderBottomRightRadius={8}
-                                        objectFit='cover'
-                                    />
-                                </Flex>
+                        {/* DESKTOP VERSION */}
+                        {/* Other showed pictures */}
+                        <Flex w='50%' h='100%' flexWrap='wrap' 
+                            display={{base:'none', lg:'flex'}}
+                        >
+                            <Flex w='50%' h='50%' pl='2' pb='1'
+                                onClick={modalGallery.onOpen}
+                            >
+                                <Img 
+                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[1]}`}
+                                    objectFit='cover'
+                                />
                             </Flex>
-                        }
+
+                            <Flex w='50%' h='50%' pl='2' pb='1'
+                                onClick={modalGallery.onOpen}
+                            >
+                                <Img 
+                                    borderTopRightRadius={8}
+                                    objectFit='cover'
+                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[2]}`}
+                                />
+                            </Flex>
+
+                            <Flex w='50%' h='50%' pl='2' pt='1'
+                                onClick={modalGallery.onOpen}
+                            >
+                                <Img 
+                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[3]}`}
+                                    objectFit='cover'
+                                />
+                            </Flex>
+
+                            <Flex w='50%' h='50%' pl='2' pt='1' position='relative'>
+
+                                <Button 
+                                    bg='brand.white'
+                                    color='brand.dark_blue'
+                                    w='70%'
+                                    position='absolute'
+                                    top='50%'
+                                    left='50%'
+                                    transform='translate(-50%, 80%)'
+                                    onClick={modalGallery.onOpen}
+                                >
+                                    Ver todas as fotos
+                                </Button>
+
+                                
+
+                                <Img 
+                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
+                                    borderBottomRightRadius={8}
+                                    objectFit='cover'
+                                />
+                            </Flex>
+                        </Flex>
+
 
                         {/* Photo Gallery Modal */}
                         <ModalImageGallery
                             buttonText='Ver todas as fotos'
-                            handleFunctions={{isOpen, onOpen, onClose}}
+                            handleFunctions={modalGallery}
                             content={
                                 service.photos.split(',').map((image, index) => {
                                     return {
@@ -759,12 +764,12 @@ export default function ServiceProfilePage() {
                             </Flex>                           
                         </Flex>
 
+                        {/* DESKTOP VERSION */}
                         {
-                            isMobileVersion == false
-                            &&
                             /* Card */
                             <Flex w='30%' 
                                 justifyContent='flex-end'
+                                display={{base:'none', lg:'flex'}}
                             >
                                 <Flex 
                                     h={430}
@@ -862,7 +867,7 @@ export default function ServiceProfilePage() {
                                 fontSize={18}
                                 h='70%'
                                 w='70%'
-                                onClick={onOpen}
+                                onClick={modalBudget.onOpen}
                             >
                                 Pedir orçamento grátis!
                             </Button>
@@ -872,7 +877,9 @@ export default function ServiceProfilePage() {
                                 href={`tel:${service.phone}`}
                                 h='70%'
                                 w='20%'
-                                bg='gray'
+                                bg='brand.white'
+                                border='2px solid'
+                                borderColor='brand.dark_blue'
                                 color='brand.white'
                                 borderRadius={8}
                             >
@@ -888,7 +895,7 @@ export default function ServiceProfilePage() {
                             </NavLink>
                         </Flex>
 
-                        <Modal isOpen={isOpen} onClose={onClose} size='full'>
+                        <Modal isOpen={modalBudget.isOpen} onClose={modalBudget.onClose} size='full'>
                             <ModalOverlay />
                             <ModalContent>
                                 <ModalHeader></ModalHeader>

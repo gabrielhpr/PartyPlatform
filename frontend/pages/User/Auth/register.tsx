@@ -1,12 +1,13 @@
 import { Box, Flex, Text, Input, Link as NavLink, Button, Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, useBreakpointValue } from "@chakra-ui/react";
 import Image from 'next/image';
 import { useEffect, useState } from "react";
-import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
+import PessoasFesta from '../../../assets/imgs/pessoas-festa.jpg';
 import { useRouter } from "next/router";
 import { Header } from "../../../components/Header";
 import { useUserAuthContext } from "../../../context/userContext";
 import { locationMap, typeOfParties } from "../../../utils/typeOfParties";
 import { Footer } from "../../../components/Footer";
+import { Sidebar } from "../../../components/Sidebar";
 
 interface userRegisterDataProps {
     fullName: string;
@@ -93,24 +94,24 @@ export default function registerUser() {
             {/* Header */}
             <Header name="" position='relative' />
             
+            <Sidebar/>
+
             <Flex w='100vw' h='auto' position='relative' 
                 justifyContent='center'
             >
-                {/* 
-                <Image src={FotoDebutante}
+               
+                <Image src={PessoasFesta}
                     layout='fill'
                     objectFit='cover'
                     objectPosition='center'
                 />
-                
-                */}
                 
                 {/* Shadow */}
                 <Flex 
                     w='100%' 
                     h='100%'
                     justifyContent={{base:'flex-start', lg:'center'}}
-                    bg={{base:'brand.white', lg:'rgba(0,0,0,0.80)'}}
+                    bg={{base:'brand.white', lg:'rgba(0,0,0,0.20)'}}
                     zIndex={3}
                 >
 
@@ -121,27 +122,24 @@ export default function registerUser() {
                         my={{base:'0', lg:'10'}}
                     >
                         
-                        {
-                            isMobileVersion == false
-                            &&
-                            /* Text */
-                            <Flex direction='column' w='50%'
+                        {/* DESKTOP VERSION */}
+                        <Flex direction='column' w='50%'
+                            display={{base:'none', lg:'flex'}}
+                        >
+                            <Flex direction='column' mb='5'
+                                textColor='white'
                             >
-                                <Flex direction='column' mb='5'
-                                    textColor='white'
+                                <Text as='h2' fontSize={30} fontWeight={600}
+                                    mb='2'
                                 >
-                                    <Text as='h2' fontSize={30} fontWeight={600}
-                                        mb='2'
-                                    >
-                                        Cadastre-se para achar os melhores fornecedores do mercado!
-                                    </Text>
-                                    <Text as='h3' fontSize={20} fontWeight={500}>
-                                        Salve os fornecedores que gostou, peça orçamentos pela 
-                                        plataforma, avalie os prestadores de serviço
-                                    </Text>
-                                </Flex>
+                                    Cadastre-se para achar os melhores fornecedores do mercado!
+                                </Text>
+                                <Text as='h3' fontSize={20} fontWeight={500}>
+                                    Salve os fornecedores que gostou, peça orçamentos pela 
+                                    plataforma, avalie os prestadores de serviço
+                                </Text>
                             </Flex>
-                        }
+                        </Flex>
                         
                         {/* Form Login */}
                         <Flex 
@@ -152,7 +150,7 @@ export default function registerUser() {
                             px={{base:'0', lg:"10"}}
                             justifyContent='center'
                             //alignItems='center'
-                            bg="brand.white" 
+                            bg={{base:"brand.white", lg:'rgba(255,255,255,0.95)'}}
                             //boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                             borderRadius={8} 
                             fontSize={20}

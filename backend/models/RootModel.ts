@@ -16,19 +16,18 @@ module.exports = class RootModel {
             FROM Ads 
             INNER JOIN Enterprise AS Ent 
             ON Ads.enterpriseId = Ent.id            
-            WHERE Ads.partyMainFocus = '${partyType}' 
+            WHERE Ent.enterpriseCategory = '${serviceCategory}' 
         `;
 
-        // Service Category
-        if( serviceCategory != undefined && serviceCategory != '' ) {
-            query_select = query_select + ` AND Ent.enterpriseCategory = '${serviceCategory}' `;
+        // Party Type
+        if( partyType != undefined && partyType != '' ) {
+            query_select = query_select + ` AND Ads.partyMainFocus = '${partyType}' `;
         }
         // Service Specific Category
         if( serviceSpecificCategory != undefined && serviceSpecificCategory != '' ) {
             query_select = query_select + ` AND Ent.enterpriseSpecificCategory = '${serviceSpecificCategory}' `;
         }
-
-        // Location
+        /*--- LOCATION --*/
         // City
         if( city != undefined && city != '' ) {
             query_select = query_select + ` AND Ent.city = '${city}' `;

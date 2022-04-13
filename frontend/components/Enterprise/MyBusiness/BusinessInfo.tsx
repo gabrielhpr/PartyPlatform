@@ -8,6 +8,7 @@ import { EditDivider } from "../Ads/Edit/Divider";
 interface BusinessInfoMyBusinessProps {
     email: string;
     password: string;
+    passwordConfirmation: string;
     fullName: string;
     phone: string;
     whatsapp?: string;
@@ -17,12 +18,14 @@ interface BusinessInfoMyBusinessProps {
     instagram?: string;
     facebook?: string;
     website?: string;
+    formErrors: Object;
+    setData: Function;
     saveDataChanged: Function;
 }
 
-export function BusinessInfoMyBusiness({ email, password, fullName, phone,
+export function BusinessInfoMyBusiness({ email, password, passwordConfirmation, fullName, phone,
      whatsapp, enterpriseName, enterpriseCategory, enterpriseSpecificCategory,
-     instagram, facebook, website, saveDataChanged }: BusinessInfoMyBusinessProps) 
+     instagram, facebook, website, formErrors, setData, saveDataChanged }: BusinessInfoMyBusinessProps) 
     {
     return (
         <Stack w={{base:'100%', lg:'50vw'}}>
@@ -37,15 +40,22 @@ export function BusinessInfoMyBusiness({ email, password, fullName, phone,
                 />
                 <ItemEdit 
                     title="E-mail"
-                    name='email'
-                    itemValue={email}
+                    name={['email']}
+                    inputType="input"
+                    inputTypeSpecific="email"
+                    itemValue={[email]}
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
                 <EditDivider/>
                 <ItemEdit 
                     title="Senha"
-                    name='password'
-                    itemValue={password}
+                    name={['password', 'passwordConfirmation']}
+                    inputType="password"
+                    itemValue={[password, passwordConfirmation]}
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
 
@@ -60,22 +70,34 @@ export function BusinessInfoMyBusiness({ email, password, fullName, phone,
                 />
                 <ItemEdit 
                     title="Nome completo"
-                    name='fullName'
-                    itemValue={fullName}
+                    name={['fullName']}
+                    inputType="input"
+                    inputTypeSpecific="text"
+                    itemValue={[fullName]}
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
                 <EditDivider/>
                 <ItemEdit 
                     title="Telefone"
-                    name='phone'
-                    itemValue={phone}
+                    name={['phone']}
+                    inputType="input"
+                    inputTypeSpecific="phone"
+                    itemValue={[phone]}
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
                 <EditDivider/>
                 <ItemEdit 
                     title="Whatsapp"
-                    name='whatsapp'
-                    itemValue={whatsapp}
+                    name={['whatsapp']}
+                    inputType="input"
+                    inputTypeSpecific="phone"
+                    itemValue={[whatsapp]}
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
 
@@ -89,44 +111,47 @@ export function BusinessInfoMyBusiness({ email, password, fullName, phone,
                 />
                 <ItemEdit 
                     title="Nome da empresa"
-                    name='enterpriseName'
-                    itemValue={enterpriseName}
+                    name={['enterpriseName']}
+                    itemValue={[enterpriseName]}
+                    inputType="input"
+                    inputTypeSpecific="text"
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
 
                 />
                 <EditDivider/>
-                <ItemEdit 
-                    title="Categoria da empresa"
-                    name='enterpriseCategory'
-                    itemValue={enterpriseCategory}
-                    saveDataChanged={saveDataChanged}
-                />
-                <EditDivider/>
-                <ItemEdit 
-                    title="Categoria específica da empresa"
-                    name='enterpriseSpecificCategory'
-                    itemValue={enterpriseSpecificCategory}
-                    saveDataChanged={saveDataChanged}
-                />
-                <EditDivider/>
+                
                 <ItemEdit 
                     title="Instagram da empresa"
-                    name='instagram'
-                    itemValue={instagram}
+                    name={['instagram']}
+                    itemValue={[instagram]}
+                    inputType="input"
+                    inputTypeSpecific="text"
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
                 <EditDivider/>
                 <ItemEdit 
                     title="Facebook da empresa"
-                    name='facebook'
-                    itemValue={facebook}
+                    name={['facebook']}
+                    itemValue={[facebook]}
+                    inputType="input"
+                    inputTypeSpecific="text"
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
                 <EditDivider/>
                 <ItemEdit 
                     title="Website da empresa"
-                    name='website'
-                    itemValue={website}
+                    name={['website']}
+                    itemValue={[website]}
+                    inputType="input"
+                    inputTypeSpecific="text"
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
 

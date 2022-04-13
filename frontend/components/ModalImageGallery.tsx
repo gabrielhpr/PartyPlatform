@@ -4,11 +4,11 @@ import { ReactNode } from "react";
 import { IconType } from "react-icons";
 import { ImageGallery } from "./ImageGallery";
     
-    interface ModalImageGalleryProps {
-        buttonText: string;
-        content: ReactNode;
-        handleFunctions: any;
-    }
+interface ModalImageGalleryProps {
+    buttonText: string;
+    content: ReactNode;
+    handleFunctions: any;
+}
     
 export function ModalImageGallery( {buttonText, content, handleFunctions }: ModalImageGalleryProps ) {
     const { isOpen, onOpen, onClose } = handleFunctions;

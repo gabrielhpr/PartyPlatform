@@ -22,6 +22,7 @@ import { Footer } from '../components/Footer';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import { Sidebar } from '../components/Sidebar';
+import { FiSearch } from 'react-icons/fi';
 
 
 export default function HomePage() {
@@ -200,7 +201,9 @@ export default function HomePage() {
                                     w='100%'
                                     h='100%'
                                     py={{base:'3',lg:'0'}}
-                                    borderRightRadius={0}
+                                    borderRightRadius={{lg:0}}
+                                    borderBottomRightRadius={{base:0, lg:0}}
+                                    borderBottomLeftRadius={{base:0, lg:8}}
                                     _focus={{outline:'none'}}
                                     autoComplete='off'
                                     onChange={(event: any) => { 
@@ -695,12 +698,15 @@ export default function HomePage() {
                                 py={{base:'3',lg:'0'}}
                                 //py='7'
                                 borderLeftRadius={{lg:0}}
+                                borderTopLeftRadius={{base:0, lg:0}}
+                                borderTopRightRadius={{base:0, lg:8}}
                                 bg='brand.red'
                                 color='white'
                                 fontSize={18}
                                 fontWeight={900}
                                 _focus={{outline:'none'}}
                                 onClick={handleSearch}
+                                leftIcon={<Icon as={FiSearch} fontSize={20} fontWeight={900} />}
                             >
                                 Pesquisar
                             </Button>

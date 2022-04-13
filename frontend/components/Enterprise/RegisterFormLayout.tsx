@@ -97,14 +97,22 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
                                 </AlertDialogBody>
 
                                 <AlertDialogFooter>
-                                    <Button ref={cancelRef} onClick={onClose}>
-                                        Vou ficar
-                                    </Button>
-                                    <Button colorScheme='red' ml={3} 
-                                        onClick={handleRedirect}
-                                    >
-                                        Sair
-                                    </Button>
+                                        <Flex
+                                            w='100%'
+                                            justifyContent='space-between'
+                                        >
+                                            <Button ref={cancelRef} onClick={onClose}
+                                                w='75%'
+                                            >
+                                                Vou ficar
+                                            </Button>
+                                            <Button colorScheme='red' ml={3} 
+                                                onClick={handleRedirect}
+                                                w='25%'
+                                            >
+                                                Sair
+                                            </Button>
+                                        </Flex>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialogOverlay>
@@ -185,14 +193,22 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
                                     </AlertDialogBody>
 
                                     <AlertDialogFooter>
-                                        <Button ref={cancelRef} onClick={onClose}>
-                                            Vou ficar
-                                        </Button>
-                                        <Button colorScheme='red' ml={3} 
-                                            onClick={handleRedirect}
+                                        <Flex
+                                            w='100%'
+                                            justifyContent='space-between'
                                         >
-                                            Sair
-                                        </Button>
+                                            <Button ref={cancelRef} onClick={onClose}
+                                                w='75%'
+                                            >
+                                                Vou ficar
+                                            </Button>
+                                            <Button colorScheme='red' ml={3} 
+                                                onClick={handleRedirect}
+                                                w='25%'
+                                            >
+                                                Sair
+                                            </Button>
+                                        </Flex>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialogOverlay>

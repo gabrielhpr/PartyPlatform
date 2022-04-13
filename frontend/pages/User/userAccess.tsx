@@ -5,6 +5,7 @@ import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
 import { useUserAuthContext } from "../../context/userContext";
 import { useRouter } from "next/router";
 import { Header } from "../../components/Header";
+import { Sidebar } from "../../components/Sidebar";
 
 
 
@@ -32,6 +33,8 @@ export default function userAccess() {
             {/* Header */}
             <Header name="" position='relative' />
             
+            <Sidebar/>
+
             <Flex w='100%' h={500} position='relative' 
                 justifyContent='center'
             >
@@ -51,11 +54,13 @@ export default function userAccess() {
                     zIndex={3}
                 >
 
-                    <Flex w='70%' h='100%' justifyContent='space-between'
+                    <Flex w={{base:'100%', lg:'70%'}}
+                        h='100%' justifyContent='space-between'
                         alignItems='center' 
                     >
-
+                        {/* Texto User Access - DESKTOP */}
                         <Flex direction='column'
+                            display={{base:'none', lg:'flex'}}
                         >
                             <Flex color='white' direction='column' mb='5'>
                                 <Text as='h2' fontSize={30} fontWeight={600}
@@ -79,15 +84,15 @@ export default function userAccess() {
                         {/* Form Login */}
                         <Flex 
                             direction="column"
-                            width={400} 
-                            height='80%'
+                            width={{base:'100%', lg:400}}
+                            height={{base:'100%', lg:'80%'}}
                             pt="1"
                             pb="1"
                             px="10" 
                             justifyContent="center"
                             bg="white" 
-                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
-                            borderRadius={8} 
+                            boxShadow={{base:'0', lg:"0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"}}
+                            borderRadius={{base:0, lg:8}} 
                             fontSize={20}
                         >
                             <Text as="h2" textAlign="center" my="1" fontSize={22} 
@@ -134,13 +139,37 @@ export default function userAccess() {
 
                             <Flex direction="column" justifyContent="center" mt='4'>
                                 <NavLink href="/prices">
-                                    <Text textAlign="center" fontSize={16}
+                                    <Text textAlign="center" 
+                                        fontSize={{base:18, lg:16}}
                                         color="brand.light_blue_40"
                                     >
                                         Esqueceu sua senha ?
                                     </Text>
                                 </NavLink>
                             </Flex>
+
+                            {/* MOBILE */}
+                            <Flex direction="column" justifyContent="center" mt='4'
+                                display={{base:'flex', lg:'none'}}
+                            >
+                                <Text textAlign="center" 
+                                    fontSize={{base:17, lg:16}}
+                                    color="black"
+                                >
+                                    Não possui uma conta ? 
+                                </Text>
+                                
+                                <NavLink href="/User/Auth/register">
+                                    <Text textAlign="center" 
+                                        fontSize={{base:18, lg:16}}
+                                        color="brand.light_blue_40"
+                                    >
+                                        Cadastre-se gratuitamente
+                                    </Text>
+                                </NavLink>
+                            </Flex>
+
+
 
                         </Flex>
                     

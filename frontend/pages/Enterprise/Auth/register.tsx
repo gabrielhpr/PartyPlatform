@@ -12,78 +12,36 @@ locationMap} from "../../../utils/typeOfParties";
 import { TextSpanInput } from "../../../components/Enterprise/TextSpanInput";
 import { PriceCard } from "../../../components/Enterprise/priceCard";
 import * as yup from 'yup';
-import { yupResolver } from "@hookform/resolvers/yup";
+import { monetaryRegex, validTextRegex, invalidTextRegex } from "../../../utils/regexCustom";
 
-const monetaryRegex = /^([0-9]{1,3}\.([0-9]{3}\.)*[0-9]{3}|[0-9]+)(,[0-9][0-9])?$/;
-const validTextRegex = /^[^'"`]*$/;
-
-const invalidTextRegex = 'Texto inválido! Aspas não são permitidas!';
 
 function handleTestValidation(value:any, ctx: any, questionN: number) {
-    //if( value ) {
-        console.log('question number: ');
-        console.log( questionN );
+    console.log('question number: ');
+    console.log( questionN );
 
-        let schemaQ = yup.string().optional();
+    let schemaQ = yup.string().optional();
 
-        /* ESPACO */
-        if( ctx.parent.enterpriseCategory == 'Espaco' ) {
-            for(let i=0; i < specificQuestions.Espaco.length; i++) {
-                if( specificQuestions.Espaco[i].name[0] == ('q'+questionN) ) {
-                    //console.log('espaco caso 0');
-                    let qObj = specificQuestions.Espaco[i];
+    /* ESPACO */
+    if( ctx.parent.enterpriseCategory == 'Espaco' ) {
+        for(let i=0; i < specificQuestions.Espaco.length; i++) {
+            if( specificQuestions.Espaco[i].name[0] == ('q'+questionN) ) {
+                //console.log('espaco caso 0');
+                let qObj = specificQuestions.Espaco[i];
 
-                    if( (questionN >= 5 && questionN <=20) && ctx.parent.q3 == 'Não' ) {
-                        // optional
-                    }
-                    else if( (questionN >= 21 && questionN <= 23) && ctx.parent.q3 == 'Sim' ) {
-                        // optional
-                    }
-                    else {
-                        switch( qObj.type ) {
-                            case 'radio':
-                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                            .oneOf( qObj.options, 'Opção não válida');
-                            case 'textarea':
-                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                          .matches( validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
-                            case 'input':
-                                if( qObj.specific == 'price' ) {
-                                    schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                               .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
-                                }
-                                else if( qObj.specific == 'nOfPeople' ) {
-                                    schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                              .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
-                                }
-                        }
-                    }
+                if( (questionN >= 5 && questionN <=20) && ctx.parent.q3 == 'Não' ) {
+                    // optional
                 }
-                // Observations case
-                else if( specificQuestions.Espaco[i]?.name[1] == ('q'+questionN) ) {
-                    //console.log('espaco caso 1');
-                    schemaQ = yup.string().optional()
-                              .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+                else if( (questionN >= 21 && questionN <= 23) && ctx.parent.q3 == 'Sim' ) {
+                    // optional
                 }
-            }
-        }
-        /* SERVICO */
-        else if( ctx.parent.enterpriseCategory == 'Servico' ) {
-            let spcCat = ctx.parent.enterpriseSpecificCategory;
-
-            for(let i=0; i < specificQuestions.Servico[spcCat].length; i++) {
-                
-                if( specificQuestions.Servico[spcCat][i].name[0] == ('q'+questionN) ) {
-                    console.log('servico caso 0');
-                    let qObj = specificQuestions.Servico[spcCat][i];
-                    
+                else {
                     switch( qObj.type ) {
                         case 'radio':
                             schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
                                         .oneOf( qObj.options, 'Opção não válida');
                         case 'textarea':
                             schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+                                        .matches( validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
                         case 'input':
                             if( qObj.specific == 'price' ) {
                                 schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
@@ -93,44 +51,78 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
                                 schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
                                             .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
                             }
-                            else if( qObj.specific == 'float' ) {
-                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                          .matches(/^[0-9]+(,[0-9][0-9])?$/, {message:'Valor inválido - Exemplo válido: 1,5', excludeEmptyString: true });
-                            }
                     }
-                    
-                }
-                // Observations case
-                else if( specificQuestions.Espaco[i]?.name[1] == ('q'+questionN) ) {
-                    console.log('servico caso 1');
-                    schemaQ = yup.string().optional()
-                                .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
                 }
             }
+            // Observations case
+            else if( specificQuestions.Espaco[i]?.name[1] == ('q'+questionN) ) {
+                //console.log('espaco caso 1');
+                schemaQ = yup.string().optional()
+                            .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+            }
+        }
+    }
+    /* SERVICO */
+    else if( ctx.parent.enterpriseCategory == 'Servico' ) {
+        let spcCat = ctx.parent.enterpriseSpecificCategory;
+
+        for(let i=0; i < specificQuestions.Servico[spcCat].length; i++) {
+            
+            if( specificQuestions.Servico[spcCat][i].name[0] == ('q'+questionN) ) {
+                console.log('servico caso 0');
+                let qObj = specificQuestions.Servico[spcCat][i];
+                
+                switch( qObj.type ) {
+                    case 'radio':
+                        schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                    .oneOf( qObj.options, 'Opção não válida');
+                    case 'textarea':
+                        schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                    .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+                    case 'input':
+                        if( qObj.specific == 'price' ) {
+                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
+                        }
+                        else if( qObj.specific == 'nOfPeople' ) {
+                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
+                        }
+                        else if( qObj.specific == 'float' ) {
+                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .matches(/^[0-9]+(,[0-9][0-9])?$/, {message:'Valor inválido - Exemplo válido: 1,5', excludeEmptyString: true });
+                        }
+                }
+                
+            }
+            // Observations case
+            else if( specificQuestions.Servico[spcCat][i].name[1] == ('q'+questionN) ) {
+                console.log('servico caso 1');
+                schemaQ = yup.string().optional()
+                            .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
+            }
+        }
+    }
+    else {
+        console.log('chegou no else');
+        return false;
+    }
+
+    return schemaQ.isValid( value ).then( async (valid) => {
+        if( valid ) {
+            console.log(questionN);
+            console.log('valor valido');
+            return true;
         }
         else {
-            return false;
+            console.log(questionN);
+            console.log('valor nao valido');
+            let errMes = await schemaQ.validate(value).catch((err) => {return err});
+            return ctx.createError({
+                message: errMes,
+            }); 
         }
-    
-        return schemaQ.isValid( value ).then( async (valid) => {
-            if( valid ) {
-                console.log(questionN);
-                console.log('valor valido');
-                return true;
-            }
-            else {
-                console.log(questionN);
-                console.log('valor nao valido');
-                let errMes = await schemaQ.validate(value).catch((err) => {return err});
-                return ctx.createError({
-                    message: errMes,
-                }); 
-            }
-        })                    
-    //}
-    return ctx.createError({
-        message: 'Valor inválido',
-    })
+    })                    
 }
 
 interface enterpriseDataInterf {
@@ -220,7 +212,7 @@ interface enterpriseDataInterf {
 }
 
 const enterpriseDataNullState = {
-    step: 7,
+    step: 0,
     plan: 'Free',
     // Contact Data
     fullName: '',
@@ -470,26 +462,35 @@ const enterpriseDataFormErrorNullState = {
 }
 
 const enterpriseRegisterFormSchema = yup.object().shape({
-    fullName: yup.string().required('O nome completo é obrigatório'),
-    email: yup.string().required("O e-mail é obrigatório").email("E-mail inválido"),
+    fullName: yup.string().required('O nome completo é obrigatório')
+        .matches(validTextRegex, {message: 'O nome completo não pode apresentar aspas.', excludeEmptyString: true}),
+    email: yup.string().required("O e-mail é obrigatório").email("E-mail inválido")
+        .matches(validTextRegex, {message:'O email não pode apresentar aspas', excludeEmptyString: true}),
     phone: yup.string().required("O telefone é obrigatório").matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido', excludeEmptyString: true } ),
     whatsapp: yup.string().optional().matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido', excludeEmptyString: true } ),
-    enterpriseName: yup.string().required('O nome da empresa é obrigatório'),
+    enterpriseName: yup.string().required('O nome da empresa é obrigatório')
+        .matches(validTextRegex, {message:'O nome da empresa não pode apresentar aspas', excludeEmptyString: true}),
     location: yup.string().required('A localização é obrigatória').oneOf(
         Object.values(locationMap).map((el,index) => {return el.textToShow})
         , 'Opção não válida'),
-    address: yup.string().required('O endereço é obrigatório'),
-    addressNumber: yup.number().positive().required('O número do endereço é obrigatório'),
-    instagram: yup.string().optional(),
-    facebook: yup.string().optional(),
-    website: yup.string().optional(),
+    address: yup.string().required('O endereço é obrigatório')
+        .matches(validTextRegex, {message:'O endereço não pode apresentar aspas', excludeEmptyString: true}),
+    addressNumber: yup.string().required('O número de endereço é obrigatório')
+        .matches(/^[1-9]+[0-9]*$/, {message: 'Número de endereço inválido', excludeEmptyString: true}),
+    instagram: yup.string().optional()
+        .matches(validTextRegex, {message:'O instagram não pode apresentar aspas', excludeEmptyString: true}),
+    facebook: yup.string().optional()
+        .matches(validTextRegex, {message:'O facebook não pode apresentar aspas', excludeEmptyString: true}),
+    website: yup.string().optional()
+        .matches(validTextRegex, {message:'O website não pode apresentar aspas', excludeEmptyString: true}),
     partyMainFocus: yup.string().required('O principal tipo de festa é obrigatório')
         .oneOf(
             Object.values(typeOfParties).map((el,index) => {return el.value})
             , 'Opção não válida'
         ),
     serviceDescription: yup.string().required('A descrição do serviço é obrigatória')
-        .min(300, 'A descrição do serviço deve ter no mínimo 300 caracteres.'),
+        .min(300, 'A descrição do serviço deve ter no mínimo 300 caracteres.')
+        .matches(validTextRegex, {message:'A descrição do serviço não pode apresentar aspas', excludeEmptyString: true}),
 });
 
 const enterpriseRegisterPasswordSchema = yup.object().shape({
@@ -907,8 +908,7 @@ export default function RegisterEnterprise() {
         }
     }
 
-    async function handleSubmit( event: any ) {
-        event.preventDefault();
+    async function handleSubmit() {
         console.log('entrou no submit!');
 
         const formData = new FormData;
@@ -1194,13 +1194,12 @@ export default function RegisterEnterprise() {
                     // Validou bemmmm
                     console.log('Validou bemmm');
                     
+                    // Register enterprise
+                    handleSubmit();
                     //setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
                 }
             });
         }
-
-
-       
         else if(enterpriseData.step == 0) {
             setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
         }
@@ -1240,7 +1239,7 @@ export default function RegisterEnterprise() {
                     >
                         <Text
                             fontWeight={500}
-                            fontSize={30}
+                            fontSize={{base:25, lg:30}}
                             textAlign='center'
                         >
                             Fique visível para centenas de clientes!
@@ -1356,7 +1355,7 @@ export default function RegisterEnterprise() {
                     >
                         <Flex direction='column'>
                             <TextSpanInput
-                                textToShow="Usuário - Email cadastrado na página anterior"
+                                textToShow="Usuário ( E-mail cadastrado na página anterior )"
                             />
                             <Input type='text' value={enterpriseData.email}
                                 disabled={true} 
@@ -1444,17 +1443,18 @@ export default function RegisterEnterprise() {
                                         setMenuWhere('onclick')
                                     }}
                                 />
-                                <Box 
+                                <Flex 
                                     id='menuLocation'
                                     height={230} 
-                                    width={350}
+                                    width={{base:'100%', lg:350}}
                                     display={menuWhere}
                                     position='absolute'
                                     overflowY="scroll"
                                     bg='brand.white'
-                                    mt={20}
+                                    mt={{base:2, lg:2}}
                                     borderRadius={10}
                                     zIndex={3}
+                                    boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                 >
                                     <Flex direction="column" id="menuWhere"
                                         h='100%'
@@ -1490,7 +1490,7 @@ export default function RegisterEnterprise() {
                                         })
                                         }
                                     </Flex>
-                                </Box>
+                                </Flex>
                                 <FormErrorMessage>
                                     {formErrors.location}
                                 </FormErrorMessage>
@@ -1630,7 +1630,9 @@ export default function RegisterEnterprise() {
                                 <TextSpanInput
                                     textToShow="Descrição"
                                 />
-                                <Textarea h={300} resize='none' name='serviceDescription'
+                                <Textarea h={300} resize='none' 
+                                    name='serviceDescription'
+                                    value={enterpriseData.serviceDescription}
                                     onChange={handleChange} 
                                 />
                                 <FormErrorMessage>
@@ -1796,7 +1798,7 @@ export default function RegisterEnterprise() {
                     question={`Perguntas frequentes sobre ${enterpriseSpecificCategoryDict[enterpriseData.enterpriseSpecificCategory]}`}
                     subTitle="Responda essas perguntas para facilitar o 
                     entendimento do cliente sobre os seus serviços"
-                    lastStep={false}
+                    lastStep={true}
                     handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
                 >
@@ -1808,7 +1810,6 @@ export default function RegisterEnterprise() {
                         w={{base:'100vw', lg:'100%'}}
                         h={{base:'55vh', lg:'75vh'}}
                         py='5'
-                        //overflowWrap='wrap'
                     >
                         {
                         enterpriseData.enterpriseCategory == 'Espaco'
@@ -1823,10 +1824,6 @@ export default function RegisterEnterprise() {
                                 ['q21','q22','q23'].includes(el?.name[1])
                                 ) ) 
                             {
-                                //console.log('entrou no sim');
-                                //console.log(el.name);
-                                
-                                
                                 return (
                                     <>
                                     </>
@@ -1867,7 +1864,7 @@ export default function RegisterEnterprise() {
                                         {/* RADIO */}
                                         {
                                             el.type == 'radio'
-                                            ?
+                                            &&
                                             <Flex direction='column'>
                                                 <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
                                                     <Flex
@@ -1896,21 +1893,23 @@ export default function RegisterEnterprise() {
                                                     </FormErrorMessage>
                                                 </FormControl>
     
-                                                <Textarea name={el.name[1]} 
-                                                    placeholder={el.placeholder}
-                                                    value={enterpriseData?.[el.name[1]]}
-                                                    onChange={handleChange} 
-                                                />
+                                                <FormControl isInvalid={formErrors[el.name[1]] != '' ? true : false}>
+                                                    <Textarea name={el.name[1]} 
+                                                        placeholder={el.placeholder}
+                                                        value={enterpriseData?.[el.name[1]]}
+                                                        onChange={handleChange} 
+                                                    />
+                                                    <FormErrorMessage>
+                                                        {formErrors[el.name[1]]}
+                                                    </FormErrorMessage>
+                                                </FormControl>
                                             </Flex>
-                                            :
-                                            <>
-                                            </>
                                         }
     
                                         {/* TEXTAREA */}
                                         {
                                             el.type == 'textarea'  
-                                            ?
+                                            &&
                                             <Flex direction='column'>
                                                 <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
                                                     <Textarea 
@@ -1924,15 +1923,12 @@ export default function RegisterEnterprise() {
                                                     </FormErrorMessage>
                                                 </FormControl>
                                             </Flex>
-                                            :
-                                            <>
-                                            </>
                                         }       
     
                                         {/* INPUT */}
                                         {
                                             el.type == 'input'  
-                                            ?
+                                            &&
                                             <Flex direction='row'
                                                 alignItems='center'
                                                 //justifyContent='center'
@@ -1963,9 +1959,6 @@ export default function RegisterEnterprise() {
                                                 </FormControl>
 
                                             </Flex>
-                                            :
-                                            <>
-                                            </>
                                         }       
     
                                     </Flex>
@@ -1993,7 +1986,7 @@ export default function RegisterEnterprise() {
                                     {/* RADIO */}
                                     {
                                         el.type == 'radio'
-                                        ?
+                                        &&
                                         <Flex 
                                             direction='column'
                                         >
@@ -2026,21 +2019,23 @@ export default function RegisterEnterprise() {
                                                 </FormErrorMessage>
                                             </FormControl>
 
-                                            <Textarea name={el.name[1]} 
-                                                placeholder={el.placeholder}
-                                                value={enterpriseData?.[el.name[1]]}
-                                                onChange={handleChange} 
-                                            />
+                                            <FormControl isInvalid={formErrors[el.name[1]] != '' ? true : false}>
+                                                <Textarea name={el.name[1]} 
+                                                    placeholder={el.placeholder}
+                                                    value={enterpriseData?.[el.name[1]]}
+                                                    onChange={handleChange} 
+                                                />
+                                                <FormErrorMessage>
+                                                    {formErrors[el.name[1]]}
+                                                </FormErrorMessage>
+                                            </FormControl>
                                         </Flex>
-                                        :
-                                        <>
-                                        </>
                                     }
 
                                     {/* TEXTAREA */}
                                     {
                                         el.type == 'textarea'  
-                                        ?
+                                        &&
                                         <Flex direction='column'>
                                             <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
                                                 <Textarea 
@@ -2054,18 +2049,14 @@ export default function RegisterEnterprise() {
                                                 </FormErrorMessage>
                                             </FormControl>
                                         </Flex>
-                                        :
-                                        <>
-                                        </>
                                     }       
 
                                     {/* INPUT */}
                                     {
                                         el.type == 'input'  
-                                        ?
+                                        &&
                                         <Flex direction='row'
                                             alignItems='center'
-                                            //justifyContent='center'
                                         >                                     
                                             <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
                                                 {
@@ -2093,16 +2084,12 @@ export default function RegisterEnterprise() {
                                             </FormControl>
 
                                         </Flex>
-                                        :
-                                        <>
-                                        </>
                                     }       
 
                                 </Flex>
                             )
                         })
                         }
-                        
                     </Stack>
 
                 </RegisterFormLayout>

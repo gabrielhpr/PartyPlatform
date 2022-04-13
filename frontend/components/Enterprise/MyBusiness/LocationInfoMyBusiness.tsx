@@ -6,66 +6,59 @@ import { ItemEdit } from "../Ads/Edit/Item";
 import { EditDivider } from "../Ads/Edit/Divider";
 
 interface LocationInfoMyBusinessProps {
-    country: string;
-    state: string;
-    city: string;
+    location: string;
     address: string;
     addressNumber: number;
+    formErrors: Object;
+    setData: Function;
     saveDataChanged: Function;
 }
 
-export function LocationInfoMyBusiness({ country, state, city, 
-    address, addressNumber, saveDataChanged }: LocationInfoMyBusinessProps) 
+export function LocationInfoMyBusiness({ location, 
+    address, addressNumber, formErrors, setData, saveDataChanged }: LocationInfoMyBusinessProps) 
     {
     return (
         <Stack w={{base:'100%', lg:'50vw'}}>
-
             <Box>
-                
                 {/* DADOS DE ACESSO */}
                 <TitleEdit 
                     title="Dados de Localização" 
                     mb="5"
                     mt="10"
                     id="Dados de Localização"
-                    //handleData={handleData}
                 />
                 <ItemEdit 
-                    title="País"
-                    name='country'
-                    itemValue={country}
-                    saveDataChanged={saveDataChanged}
-                />
-                <EditDivider/>
-                <ItemEdit 
-                    title="Estado"
-                    name='state'
-                    itemValue={state}
-                    saveDataChanged={saveDataChanged}
-                />
-                <EditDivider/>
-                <ItemEdit 
-                    title="Cidade"
-                    name='city'
-                    itemValue={city}
+                    title="Localização"
+                    name={['location']}
+                    itemValue={[location]}
+                    inputType="location"
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
                 <EditDivider/>
                 <ItemEdit 
                     title="Endereço"
-                    name='address'
-                    itemValue={address}
+                    name={['address']}
+                    itemValue={[address]}
+                    inputType="input"
+                    inputTypeSpecific="text"
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />
                 <EditDivider/>
                 <ItemEdit 
                     title="Número de endereço"
-                    name='addressNumber'
-                    itemValue={addressNumber}
+                    name={['addressNumber']}
+                    itemValue={[addressNumber]}
+                    inputType="input"
+                    inputTypeSpecific="number"
+                    formErrors={formErrors}
+                    setData={setData}
                     saveDataChanged={saveDataChanged}
                 />               
             </Box>
         </Stack>
-
     );
 }

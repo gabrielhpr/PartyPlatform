@@ -305,7 +305,7 @@ export default function Rating() {
         if( authenticatedUser == true ) {
             console.log('authenticated user');
             try {
-                const token = localStorage.getItem("token");
+                const token = localStorage.getItem("tokenUser");
                 
                 api.get('/user/user', {
                     headers: {

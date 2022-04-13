@@ -10,6 +10,7 @@ import { CardService } from "../../../components/CardService";
 import { minPrice } from "../../../utils/typeOfParties";
 import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import { NotAuthorizedComponent } from "../../../components/NotAuthorizedComponent";
+import { Footer } from "../../../components/Footer";
 
 
 export default function AdsEnterprise() {
@@ -23,7 +24,7 @@ export default function AdsEnterprise() {
             return;
         }
 
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("tokenEnterprise");
 
         try {
             api.get("/enterprise/ads", {
@@ -67,6 +68,7 @@ export default function AdsEnterprise() {
                     borderRadius={8} 
                     mx={{base:'3',lg:"24"}}
                     mt="5"
+                    mb='14'
                     p={{base:'4', lg:"10"}}
                 >
     
@@ -172,6 +174,8 @@ export default function AdsEnterprise() {
                             */}
                     </Stack>
                 </Box>
+
+                <Footer/>
             </Box>
         );
     }

@@ -741,8 +741,9 @@ module.exports = class EnterpriseController {
             id = decoded.id;
         });
 
-        enterpriseData = await enterpriseModel.getEnterpriseById(id);                
-        
+        enterpriseData = await enterpriseModel.getEnterpriseById( id );                
+        enterpriseData.password = '';
+
         res.status(200).json({ enterpriseData });
     }
 
@@ -761,6 +762,7 @@ module.exports = class EnterpriseController {
             password,
             passwordConfirmation,
             enterpriseName,
+            location,
             country,
             state,
             city,
@@ -768,11 +770,12 @@ module.exports = class EnterpriseController {
             addressNumber,
             instagram,
             facebook,
-            website,
-            enterpriseCategory,
-            enterpriseSpecificCategory
+            website
         } = req.body;
         
+        
+        console.log('entrou no edit enterprise');
+        console.log(location);
         // New Enterprise Photo
         var photoName;
 
@@ -847,30 +850,28 @@ module.exports = class EnterpriseController {
         console.log(enterpriseData.whatsapp);
 
         // SENHA
-        if( !password ) {
-            res.status(422).json({ message: "A senha é obrigatória!" });
-            return;
+        if( password != '' ) {
+            // Transform password to hash password
+            const salt = await bcrypt.genSalt(12);
+            const passwordHash = await bcrypt.hash(password, salt);
+            
+            // Se a senha vinda do update é diferente da antiga, vamos 
+            // atualizar a senha
+            if( passwordHash != enterpriseData.password &&
+                 password != enterpriseData.password ) 
+            {
+                if( password.length < 6 ) {
+                    res.status(422).json({ message: "A senha deve ter no mínimo 6 caracteres!" });
+                    return;
+                }
+                if( password != passwordConfirmation ) {
+                    res.status(422).json({ message: "A confirmação de senha deve ser igual a senha!" });
+                    return;
+                }
+                enterpriseData.password = passwordHash;
+            }
         }
         
-        // Transform password to hash password
-        const salt = await bcrypt.genSalt(12);
-        const passwordHash = await bcrypt.hash(password, salt);
-        
-        // Se a senha vinda do update é diferente da antiga, vamos 
-        // atualizar a senha
-        if( passwordHash != enterpriseData.password &&
-             password != enterpriseData.password ) 
-        {
-            if( password.length < 6 ) {
-                res.status(422).json({ message: "A senha deve ter no mínimo 6 caracteres!" });
-                return;
-            }
-            if( password != passwordConfirmation ) {
-                res.status(422).json({ message: "A confirmação de senha deve ser igual a senha!" });
-                return;
-            }
-            enterpriseData.password = passwordHash;
-        }
 
         // ENTERPRISE NAME
         if( !enterpriseName ) {
@@ -878,6 +879,9 @@ module.exports = class EnterpriseController {
             return;
         }
         enterpriseData.enterpriseName = enterpriseName;
+
+        // LOCATION
+        enterpriseData.location = location;
 
         // PAÍS
         if( !country ) {

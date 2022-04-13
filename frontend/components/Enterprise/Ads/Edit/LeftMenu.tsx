@@ -18,13 +18,13 @@ interface LeftMenuEditProps {
 
 export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: LeftMenuEditProps) {
     
-    const menuItems = ['Detalhes do anúncio', 'Preço', 'Políticas e Regras'];
+    const menuItems = ['Detalhes do anúncio'];
     
     return (
         <Flex 
             position={{base:'relative', lg:'sticky'}}
             top={5}
-            h={{base:'auto', lg:'90vh'}}
+            h={{base:'auto', lg:'98vh'}}
             bg="brand.dark_blue"
             color='brand.dark_blue'
             borderLeftRadius={8}
@@ -134,23 +134,11 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: L
             >
                 <LeftMenuItemEdit
                     title={menuItems[0]}
-                    subMenu={["Fotos","Informações básicas do anúncio"]}
+                    subMenu={[]}
                     selectedState={true}
                 />
                 <Divider color="white"/>
-                
-                <LeftMenuItemEdit 
-                    title={menuItems[1]}
-                    subMenu={["Preço"]}
-                />
-                <Divider color="white"/>
-
-                <LeftMenuItemEdit 
-                    title={menuItems[2]}
-                    subMenu={["Políticas e Regras"]}
-                />
-                <Divider color="white"/>
-               
+                           
             </Flex>
 
         </Flex>

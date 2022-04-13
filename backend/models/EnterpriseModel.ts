@@ -175,6 +175,7 @@ module.exports = class EnterpriseModel {
                 whatsapp = '${data.whatsapp}',
                 password = '${data.password}',
                 enterpriseName = '${data.enterpriseName}',
+                location = '${data.location}',
                 country = '${data.country}',
                 state = '${data.state}',
                 city = '${data.city}',

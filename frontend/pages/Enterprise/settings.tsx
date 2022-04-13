@@ -1,5 +1,6 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { TopMenuEnterprise } from "../../components/Enterprise/TopMenuEnterprise";
+import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { NotAuthorizedComponent } from "../../components/NotAuthorizedComponent";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
@@ -14,6 +15,17 @@ export default function SettingsEnterprise() {
             <Box>
                 <Header name="" position="relative" />
                 <TopMenuEnterprise />
+                
+                <Flex 
+                    mt='5'
+                    mb='14'
+                >
+                    <Text>
+                        Settings
+                    </Text>
+                </Flex>
+
+                <Footer/>
             </Box>
         );
     }

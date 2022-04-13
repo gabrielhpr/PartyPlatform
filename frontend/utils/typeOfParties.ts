@@ -18,7 +18,7 @@ export const typeOfServices = {
             {value: 'Chacara', textToShow: 'Chácara', parent: 'Espaco', icon: GiBlockHouse },
             {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent: 'Espaco', icon: GiBlockHouse},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
+            {value: 'Buffet', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
             {value: 'Bolos', textToShow: 'Bolos', parent:'Servico', icon: FaBirthdayCake},
             {value: 'Doces', textToShow: 'Doces', parent:'Servico', icon: GiCupcake},
             // SERVIÇOS
@@ -34,7 +34,7 @@ export const typeOfServices = {
             {value: 'Chacara', textToShow: 'Chácara', parent: 'Espaco', icon: GiBlockHouse },
             {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent: 'Espaco', icon: GiBlockHouse},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
+            {value: 'Buffet', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
             {value: 'Bolos', textToShow: 'Bolos', parent:'Servico', icon: FaBirthdayCake},
             {value: 'Doces', textToShow: 'Doces', parent:'Servico', icon: GiCupcake},
             // SERVIÇOS
@@ -50,7 +50,7 @@ export const typeOfServices = {
             {value: 'Chacara', textToShow: 'Chácara', parent: 'Espaco', icon: GiBlockHouse },
             {value: 'SalaoDeFestas', textToShow: 'Salão de Festas', parent: 'Espaco', icon: GiBlockHouse},
             // ALIMENTAÇÃO
-            {value: 'BuffetTradicional', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
+            {value: 'Buffet', textToShow: 'Buffet Tradicional', parent:'Servico', icon: GiForkKnifeSpoon},
             {value: 'Bolos', textToShow: 'Bolos', parent:'Servico', icon: FaBirthdayCake},
             {value: 'Doces', textToShow: 'Doces', parent:'Servico', icon: GiCupcake},
             // SERVIÇOS
@@ -193,7 +193,6 @@ export const priceOptionsPerService = {
             {value: '2000-1000000', textToShow: '+R$2000'}
         ]
     }
-
 }
 
 export function minPrice(element : any) {
