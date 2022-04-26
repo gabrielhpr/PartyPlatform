@@ -12,10 +12,8 @@ import { typeOfParties } from "../../../utils/typeOfParties";
 import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import { NotAuthorizedComponent } from "../../../components/NotAuthorizedComponent";
 import { Footer } from "../../../components/Footer";
+import { enterpriseRegisterFormSchema, enterpriseRegisterQuestionsDataSchema } from '../../../utils/validations';
 import * as yup from 'yup';
-import { monetaryRegex, validTextRegex, invalidTextRegex } from "../../../utils/regexCustom";
-import { enterpriseCategory, enterpriseSpecificCategory, specificQuestions } from "../../../utils/typeOfParties";
-
 
 interface adDataInterf {
     id: number;
@@ -358,449 +356,6 @@ const enterpriseDataFormErrorNullState = {
     q50: ''
 }
 
-function handleTestValidation(value:any, ctx: any, questionN: number) {
-
-    let schemaQ = yup.string().optional();
-
-    /* ESPACO */
-    if( ctx.parent.enterpriseCategory == 'Espaco' ) {
-        for(let i=0; i < specificQuestions.Espaco.length; i++) {
-            if( specificQuestions.Espaco[i].name[0] == ('q'+questionN) ) {
-                //console.log('espaco caso 0');
-                let qObj = specificQuestions.Espaco[i];
-
-                if( (questionN >= 5 && questionN <=20) && ctx.parent.q3 == 'Não' ) {
-                    // optional
-                }
-                else if( (questionN >= 21 && questionN <= 23) && ctx.parent.q3 == 'Sim' ) {
-                    // optional
-                }
-                else {
-                    switch( qObj.type ) {
-                        case 'radio':
-                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                        .oneOf( qObj.options, 'Opção não válida');
-                        case 'textarea':
-                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                        .matches( validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
-                        case 'input':
-                            if( qObj.specific == 'price' ) {
-                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                            .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
-                            }
-                            else if( qObj.specific == 'nOfPeople' ) {
-                                schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                            .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
-                            }
-                    }
-                }
-            }
-            // Observations case
-            else if( specificQuestions.Espaco[i]?.name[1] == ('q'+questionN) ) {
-                //console.log('espaco caso 1');
-                schemaQ = yup.string().optional()
-                            .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
-            }
-        }
-    }
-    /* SERVICO */
-    else if( ctx.parent.enterpriseCategory == 'Servico' ) {
-        let spcCat = ctx.parent.enterpriseSpecificCategory;
-
-        for(let i=0; i < specificQuestions.Servico[spcCat].length; i++) {
-            
-            if( specificQuestions.Servico[spcCat][i].name[0] == ('q'+questionN) ) {
-                console.log('servico caso 0');
-                let qObj = specificQuestions.Servico[spcCat][i];
-                
-                switch( qObj.type ) {
-                    case 'radio':
-                        schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                    .oneOf( qObj.options, 'Opção não válida');
-                    case 'textarea':
-                        schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                    .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
-                    case 'input':
-                        if( qObj.specific == 'price' ) {
-                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                        .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
-                        }
-                        else if( qObj.specific == 'nOfPeople' ) {
-                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                        .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
-                        }
-                        else if( qObj.specific == 'float' ) {
-                            schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                        .matches(/^[0-9]+(,[0-9][0-9])?$/, {message:'Valor inválido - Exemplo válido: 1,5', excludeEmptyString: true });
-                        }
-                }
-                
-            }
-            // Observations case
-            else if( specificQuestions.Servico[spcCat][i].name[1] == ('q'+questionN) ) {
-                //console.log('servico caso 1');
-                schemaQ = yup.string().optional()
-                            .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
-            }
-        }
-    }
-    else {
-        console.log('entrou no else');
-        return false;
-    }
-
-    return schemaQ.isValid( value ).then( async (valid) => {
-        if( valid ) {
-            // console.log(questionN);
-            // console.log('valor valido');
-            return true;
-        }
-        else {
-            console.log(questionN);
-            console.log('valor nao valido');
-            console.log(value);
-            let errMes = await schemaQ.validate(value).catch((err) => {return err});
-            return ctx.createError({
-                message: errMes,
-            }); 
-        }
-    })                    
-}
-
-const enterpriseRegisterQuestionsDataSchema = yup.object().shape({
-    enterpriseCategory: yup.string().required('A categoria de atuação da empresa é obrigatória')
-        .oneOf(
-            Object.values(enterpriseCategory).map((el,index) => {return el.value})
-            , 'Opção não válida'
-        ),
-    enterpriseSpecificCategory: yup.string().required('A categoria específica da sua empresa é obrigatória')
-        .test({
-            name: 'specificCategoryTest',
-            test: function(value, ctx) {
-                if( value ) {
-                    let specificCategories = enterpriseSpecificCategory[ ctx.parent.enterpriseCategory ].map((el,index) => {
-                        return el.value;
-                    });
-                    if( specificCategories.includes(value) ) {
-                        return true;
-                    }
-                }
-                return this.createError({
-                    message: 'Categoria inválida',
-                })
-            }
-        }),  
-    q1: yup.string()
-        .test({
-            name: 'q1Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 1);
-            }
-        }),
-    q2: yup.string()
-        .test({
-            name: 'q2Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 2);
-            }
-        }),
-    q3: yup.string()
-        .test({
-            name: 'q3Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 3);
-            }
-        }),
-    q4: yup.string()
-        .test({
-            name: 'q4Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 4);
-            }
-        }),
-    q5: yup.string()
-        .test({
-            name: 'q5Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 5);
-            }
-        }),
-    q6: yup.string()
-        .test({
-            name: 'q6Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 6);
-            }
-        }),
-    q7: yup.string()
-        .test({
-            name: 'q7Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 7);
-            }
-        }),
-    q8: yup.string()
-        .test({
-            name: 'q8Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 8);
-            }
-        }),
-    q9: yup.string()
-        .test({
-            name: 'q9Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 9);
-            }
-        }),
-    q10: yup.string()
-        .test({
-            name: 'q10Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 10);
-            }
-        }),
-    q11: yup.string()
-        .test({
-            name: 'q11Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 11);
-            }
-        }),
-    q12: yup.string()
-        .test({
-            name: 'q12Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 12);
-            }
-        }),
-    q13: yup.string()
-        .test({
-            name: 'q13Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 13);
-            }
-        }),
-    q14: yup.string()
-        .test({
-            name: 'q14Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 14);
-            }
-        }),
-    q15: yup.string()
-        .test({
-            name: 'q15Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 15);
-            }
-        }),
-    q16: yup.string()
-        .test({
-            name: 'q16Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 16);
-            }
-        }),
-    q17: yup.string()
-        .test({
-            name: 'q17Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 17);
-            }
-        }),
-    q18: yup.string()
-        .test({
-            name: 'q18Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 18);
-            }
-        }),
-    q19: yup.string()
-        .test({
-            name: 'q19Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 19);
-            }
-        }),
-    q20: yup.string()
-        .test({
-            name: 'q20Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 20);
-            }
-        }),
-    q21: yup.string()
-        .test({
-            name: 'q21Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 21);
-            }
-        }),
-    q22: yup.string()
-        .test({
-            name: 'q22Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 22);
-            }
-        }),
-    q23: yup.string()
-        .test({
-            name: 'q23Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 23);
-            }
-        }),
-    q24: yup.string()
-        .test({
-            name: 'q24Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 24);
-            }
-        }),
-    q25: yup.string()
-        .test({
-            name: 'q25Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 25);
-            }
-        }),
-    q26: yup.string()
-        .test({
-            name: 'q26Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 26);
-            }
-        }),
-    q27: yup.string()
-        .test({
-            name: 'q27Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 27);
-            }
-        }),
-    q28: yup.string()
-        .test({
-            name: 'q28Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 28);
-            }
-        }),
-    q29: yup.string()
-        .test({
-            name: 'q29Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 29);
-            }
-        }),
-    q30: yup.string()
-        .test({
-            name: 'q30Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 30);
-            }
-        }),
-    q31: yup.string()
-        .test({
-            name: 'q31Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 31);
-            }
-        }),
-    q32: yup.string()
-        .test({
-            name: 'q32Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 32);
-            }
-        }),
-    q33: yup.string()
-        .test({
-            name: 'q33Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 33);
-            }
-        }),
-    q34: yup.string()
-        .test({
-            name: 'q34Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 34);
-            }
-        }),
-    q35: yup.string()
-        .test({
-            name: 'q35Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 35);
-            }
-        }),
-    q36: yup.string()
-        .test({
-            name: 'q36Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 36);
-            }
-        }),
-    q37: yup.string()
-        .test({
-            name: 'q37Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 37);
-            }
-        }),
-    q38: yup.string()
-        .test({
-            name: 'q38Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 38);
-            }
-        }),
-    q39: yup.string()
-        .test({
-            name: 'q39Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 39);
-            }
-        }),
-    q40: yup.string()
-        .test({
-            name: 'q40Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 40);
-            }
-        }),
-    q41: yup.string()
-        .test({
-            name: 'q41Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 41);
-            }
-        }),
-    q42: yup.string()
-        .test({
-            name: 'q42Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 42);
-            }
-        }),
-    q43: yup.string()
-        .test({
-            name: 'q43Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 43);
-            }
-        }),
-    q44: yup.string()
-        .test({
-            name: 'q44Test',
-            test: function(value, ctx) {
-                return handleTestValidation(value, ctx, 44);
-            }
-        }),
-
-});
-
 export default function EditAdsEnterprise() {
     const [componentToLoad, setComponentToLoad] = useState("Detalhes do anúncio");
     const [adData, setAdData] = useState<adDataInterf>( adDataNullState );
@@ -809,7 +364,6 @@ export default function EditAdsEnterprise() {
     const [formErrors, setFormErrors] = useState<enterpriseDataFormErrorInterf>( enterpriseDataFormErrorNullState );
     const routerNext = useRouter();
     const { authenticatedEnterprise } = useEnterpriseAuthContext();
-
 
     // GetData - Ads and enterprise
     useEffect(() => {
@@ -931,7 +485,6 @@ export default function EditAdsEnterprise() {
 
     }, [adData, hasToUpdate]);
 
-
     function getQuestionsObj( parentObj: Object ) {
         let obj = {};
         
@@ -943,7 +496,6 @@ export default function EditAdsEnterprise() {
         return obj;
     }
     
-
     async function saveDataChanged( data: Object ) {
         console.log( adData );
         console.log( enterpriseData.enterpriseCategory );
@@ -1000,17 +552,26 @@ export default function EditAdsEnterprise() {
         ];
 
         //Reset errors message
+        setFormErrors((formE) => ({...formE, 'serviceDescription': ''}));
         fields.map((el, index) => {
             setFormErrors((formE) => ({...formE, [el]:''}));
         })
 
-        // Error messages
+        // ERROR MESSAGES
+
+        // Service Description
+        await enterpriseRegisterFormSchema
+            .validateAt( 'serviceDescription', adData )
+            .catch((err) => {
+                setFormErrors((formE) => ({...formE, 'serviceDescription': err.errors[0]}));
+            });
+
+        // Questions
         await fields.map(async (el,index) => {
             await enterpriseRegisterQuestionsDataSchema
             .validateAt( el, adData )
             .catch((err) => {
                 setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                //console.log(err);
             });
         });
 
@@ -1070,6 +631,17 @@ export default function EditAdsEnterprise() {
             if( val == true ) {
                 // Validou bemmmm
                 console.log('Validou bemmm');
+                                
+
+                /* ------- VALIDATE SERVICE DESCRIPTION ------ */
+                let isValidField = yup.reach( enterpriseRegisterFormSchema, 'serviceDescription' )
+                .isValidSync( adData['serviceDescription'] );
+                console.log(isValidField);
+
+                if( isValidField == false ) {
+                    return false;
+                }                
+                /* ------------------------------------------ */
 
                 // Update the data in database
                 setHasToUpdate(true);

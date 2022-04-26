@@ -12,6 +12,7 @@ import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import { typeOfParties, typeOfServices } from "../../utils/typeOfParties";
 import { Sidebar } from "../../components/Sidebar";
+import { Footer } from "../../components/Footer";
 
 export default function enterpriseAccess() {
     const [enterpriseAccessData, setEnterpriseAccessData] = useState({email: '', password:''});
@@ -514,9 +515,7 @@ export default function enterpriseAccess() {
             </Flex>
 
 
-            <Flex py='20' bg='black'>
-
-            </Flex>
+            <Footer/>
         </Box>
     );
 }

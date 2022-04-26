@@ -1,4 +1,4 @@
-import { Flex, Stack, Textarea, Text, Input, Box } from "@chakra-ui/react";
+import { Flex, Stack, Textarea, Text, Input, Box, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ItemList } from "../../../components/Enterprise/ItemList";
 import { RegisterFormLayout } from "../../../components/Enterprise/RegisterFormLayout";
@@ -7,10 +7,15 @@ import api from "../../../utils/api";
 import { specificQuestions, typeOfParties } from "../../../utils/typeOfParties";
 import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import { NotAuthorizedComponent } from "../../../components/NotAuthorizedComponent";
+import { enterpriseRegisterFormSchema, enterpriseRegisterQuestionsDataSchema } from "../../../utils/validations";
+import * as yup from 'yup';
 
 interface adDataInterf {
     partyMainFocus: string;
     serviceDescription: string;
+
+    enterpriseCategory: string, 
+    enterpriseSpecificCategory: string, 
 
     photos: any[];
 
@@ -69,6 +74,9 @@ interface adDataInterf {
 const adDataNullState = {
     partyMainFocus: '',
     serviceDescription: '',
+
+    enterpriseCategory: '', 
+    enterpriseSpecificCategory: '', 
 
     photos: [],
 
@@ -177,11 +185,131 @@ const enterpriseDataNullState = {
     enterpriseSpecificCategory: ''    
 }
 
+interface enterpriseDataFormErrorInterf {
+    partyMainFocus: string;
+    serviceDescription: string;
+    enterpriseCategory: string;
+    enterpriseSpecificCategory: string;
+
+    photos: any[];
+
+    q1: string;
+    q2: string;
+    q3: string;
+    q4: string;
+    q5: string;
+    q6: string;
+    q7: string;
+    q8: string;
+    q9: string;
+    q10: string;
+    q11: string;
+    q12: string;
+    q13: string;
+    q14: string;
+    q15: string;
+    q16: string;
+    q17: string;
+    q18: string;
+    q19: string;
+    q20: string;
+    q21: string;
+    q22: string;
+    q23: string;
+    q24: string;
+    q25: string;
+    q26: string;
+    q27: string;
+    q28: string;
+    q29: string;
+    q30: string;
+    q31: string;
+    q32: string;
+    q33: string;
+    q34: string;
+    q35: string;
+    q36: string;
+    q37: string;
+    q38: string;
+    q39: string;
+    q40: string;
+    q41: string;
+    q42: string;
+    q43: string;
+    q44: string;
+    q45: string;
+    q46: string;
+    q47: string;
+    q48: string;
+    q49: string;
+    q50: string;
+}
+
+const enterpriseDataFormErrorNullState = {
+    partyMainFocus: '',
+    serviceDescription: '',
+    enterpriseCategory: '',
+    enterpriseSpecificCategory: '',
+
+    photos: [],
+
+    q1: '',
+    q2: '',
+    q3: '',
+    q4: '',
+    q5: '',
+    q6: '',
+    q7: '',
+    q8: '',
+    q9: '',
+    q10: '',
+    q11: '',
+    q12: '',
+    q13: '',
+    q14: '',
+    q15: '',
+    q16: '',
+    q17: '',
+    q18: '',
+    q19: '',
+    q20: '',
+    q21: '',
+    q22: '',
+    q23: '',
+    q24: '',
+    q25: '',
+    q26: '',
+    q27: '',
+    q28: '',
+    q29: '',
+    q30: '',
+    q31: '',
+    q32: '',
+    q33: '',
+    q34: '',
+    q35: '',
+    q36: '',
+    q37: '',
+    q38: '',
+    q39: '',
+    q40: '',
+    q41: '',
+    q42: '',
+    q43: '',
+    q44: '',
+    q45: '',
+    q46: '',
+    q47: '',
+    q48: '',
+    q49: '',
+    q50: ''
+}
 
 export default function CreateAdEnterprise() {
     const [newAdData, setNewAdData] = useState<adDataInterf>(adDataNullState);
     const [adsCreated, setAdsCreated] = useState([]);
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>(enterpriseDataNullState);
+    const [formErrors, setFormErrors] = useState<enterpriseDataFormErrorInterf>( enterpriseDataFormErrorNullState );
     const [step, setStep] = useState(0);
     const [preview, setPreview] = useState([]);
     const [partiesAdsAlreadyCreated, setPartiesAdsAlreadyCreated] = useState([]);
@@ -220,7 +348,6 @@ export default function CreateAdEnterprise() {
         catch( err ) {
             console.log( err );
         }
-        
 
         // Get enterprise data
         try {
@@ -231,6 +358,13 @@ export default function CreateAdEnterprise() {
             })
             .then((response) => {
                 setEnterpriseData( response.data.enterpriseData );
+                setNewAdData(
+                    {
+                        ...newAdData, 
+                        enterpriseCategory: response.data.enterpriseCategory,
+                        enterpriseSpecificCategory: response.data.enterpriseSpecificCategory 
+                    }
+                );
             });
         }
         catch( err ) {
@@ -252,8 +386,45 @@ export default function CreateAdEnterprise() {
         console.log( newAdData );
     }
 
-    async function handleSubmit( event: any ) {
-        event.preventDefault();
+    async function handleValidation( fields: Array<string>, schemaForm: any ) {
+        console.log(fields);
+
+        // Reset errors message
+        fields.map((el, index) => {
+            setFormErrors((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await schemaForm
+            .validateAt( el, newAdData)
+            .catch((err) => {
+                setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
+            });
+        });
+
+        let validForm = true;
+
+        // Check if can go to the next step
+        fields.map( (el, index) => {
+            
+            let isValidField = yup.reach( schemaForm, el )
+            .isValidSync( newAdData[el] );
+            console.log(isValidField);
+
+            validForm = validForm && isValidField;                
+        });
+
+        console.log('validForm');
+        console.log(validForm);
+        // If there is no error its validated
+        if( validForm ) {
+            setStep(step + 1);
+        }
+    }
+
+    async function handleSubmit() {
         console.log('entrou no submit!');
 
         const formData = new FormData;
@@ -275,8 +446,152 @@ export default function CreateAdEnterprise() {
         createAd( formData );
     }
 
-    function nextStep() { 
-        setStep(step + 1);
+    async function nextStep() { 
+        if( step == 0 ) {
+            console.log('entrou no step 0');       
+            await handleValidation(
+                ['partyMainFocus'],
+                enterpriseRegisterFormSchema
+            ); 
+        }
+        else if( step == 1 ) {
+            console.log('entrou no step 1');       
+            await handleValidation(
+                ['serviceDescription'],
+                enterpriseRegisterFormSchema
+            ); 
+        }
+        else if( step == 3 ) {
+            console.log('entrou no step 3');
+
+            let fields = [
+                'enterpriseCategory', 
+                'enterpriseSpecificCategory', 
+                'q1',
+                'q2',
+                'q3',
+                'q4',
+                'q5',
+                'q6',
+                'q7',
+                'q8',
+                'q9',
+                'q10',
+                'q11',
+                'q12',
+                'q13',
+                'q14',
+                'q15',
+                'q16',
+                'q17',
+                'q18',
+                'q19',
+                'q20',
+                'q21',
+                'q22',
+                'q23',
+                'q24',
+                'q25',
+                'q26',
+                'q27',
+                'q28',
+                'q29',
+                'q30',
+                'q31',
+                'q32',
+                'q33',
+                'q34',
+                'q35',
+                'q36',
+                'q37',
+                'q38',
+                'q39',
+                'q40',
+                'q41',
+                'q42',
+                'q43',
+                'q44'
+            ];
+
+            //Reset errors message
+            fields.map((el, index) => {
+                setFormErrors((formE) => ({...formE, [el]:''}));
+            })
+
+            // Error messages
+            await fields.map(async (el,index) => {
+                await enterpriseRegisterQuestionsDataSchema
+                .validateAt( el, newAdData)
+                .catch((err) => {
+                    setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
+                    console.log(err);
+                });
+            });
+
+            console.log( formErrors );
+
+            // Validate
+            await enterpriseRegisterQuestionsDataSchema
+            .isValid({
+                enterpriseCategory: newAdData.enterpriseCategory,
+                enterpriseSpecificCategory: newAdData.enterpriseSpecificCategory,
+                q1: newAdData.q1,
+                q2: newAdData.q2,
+                q3: newAdData.q3,
+                q4: newAdData.q4,
+                q5: newAdData.q5,
+                q6: newAdData.q6,
+                q7: newAdData.q7,
+                q8: newAdData.q8,
+                q9: newAdData.q9,
+                q10: newAdData.q10,
+                q11: newAdData.q11,
+                q12: newAdData.q12,
+                q13: newAdData.q13,
+                q14: newAdData.q14,
+                q15: newAdData.q15,
+                q16: newAdData.q16,
+                q17: newAdData.q17,
+                q18: newAdData.q18,
+                q19: newAdData.q19,
+                q20: newAdData.q20,
+                q21: newAdData.q21,
+                q22: newAdData.q22,
+                q23: newAdData.q23,
+                q24: newAdData.q24,
+                q25: newAdData.q25,
+                q26: newAdData.q26,
+                q27: newAdData.q27,
+                q28: newAdData.q28,
+                q29: newAdData.q29,
+                q30: newAdData.q30,
+                q31: newAdData.q31,
+                q32: newAdData.q32,
+                q33: newAdData.q33,
+                q34: newAdData.q34,
+                q35: newAdData.q35,
+                q36: newAdData.q36,
+                q37: newAdData.q37,
+                q38: newAdData.q38,
+                q39: newAdData.q39,
+                q40: newAdData.q40,
+                q41: newAdData.q41,
+                q42: newAdData.q42,
+                q43: newAdData.q43,
+                q44: newAdData.q44
+            })
+            .then((val) =>{
+                if( val ) {
+                    // Validou bemmmm
+                    console.log('Validou bemmm');
+                    
+                    // Register enterprise
+                    handleSubmit();
+                    //setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
+                }
+            });
+        }
+        
     }
 
     function previousStep() {
@@ -294,33 +609,42 @@ export default function CreateAdEnterprise() {
                         handleNextStep={nextStep}
                         handlePreviousStep={previousStep}
                     >
-                        <Stack direction="column"
-                            spacing={5}
+                        <FormControl 
+                            w={{base:'80%', lg:'50%'}}
+                            isInvalid={formErrors.partyMainFocus != '' ? true : false}
                         >
-                            {
-                            partiesAdsAlreadyCreated.length > 0 
-                            ?
-                            Object.values(typeOfParties).map((el, i) => {
-                                // The enterprise can only create a new ad 
-                                // which partyType wasnt used before
-                                if( !partiesAdsAlreadyCreated.includes( el.value ) ) {
-                                    return(
-                                        <ItemList
-                                            styleType={2}
-                                            name="partyMainFocus"
-                                            value={el.value}
-                                            textToShow={el.textToShow}
-                                            selectedName={newAdData.partyMainFocus}
-                                            handleOnClick={handleChange}
-                                        />                                    
-                                    );
+                            <Stack direction="column"
+                                spacing={5}
+                            >
+                                {
+                                partiesAdsAlreadyCreated.length > 0 
+                                ?
+                                Object.values(typeOfParties).map((el, i) => {
+                                    // The enterprise can only create a new ad 
+                                    // which partyType wasnt used before
+                                    if( !partiesAdsAlreadyCreated.includes( el.value ) ) {
+                                        return(
+                                            <ItemList
+                                                styleType={2}
+                                                name="partyMainFocus"
+                                                value={el.value}
+                                                textToShow={el.textToShow}
+                                                selectedName={newAdData.partyMainFocus}
+                                                handleOnClick={handleChange}
+                                            />                                    
+                                        );
+                                    }
+                                })
+                                :
+                                <>
+                                </>
                                 }
-                            })
-                            :
-                            <>
-                            </>
-                            }
-                        </Stack>
+                            </Stack>
+
+                            <FormErrorMessage>
+                                {formErrors.partyMainFocus}
+                            </FormErrorMessage>
+                        </FormControl>
                     </RegisterFormLayout>        
                 );
     
@@ -338,14 +662,22 @@ export default function CreateAdEnterprise() {
                             w={{base:'80%', lg:'50%'}}
                         >
                             <Flex direction='column'>
-                                <Text as='span'>
-                                    Descrição
-                                </Text>
-                                <Textarea h={300} resize='none' name='serviceDescription'
-                                    onChange={handleChange} value={newAdData.serviceDescription}
-                                />
+                                <FormControl isInvalid={formErrors.serviceDescription != '' ? true : false}>
+
+                                    <Text as='span'>
+                                        Descrição
+                                    </Text>
+
+                                    <Textarea h={300} resize='none' name='serviceDescription'
+                                        onChange={handleChange} value={newAdData.serviceDescription}
+                                    />
+
+                                    <FormErrorMessage>
+                                        {formErrors.serviceDescription}
+                                    </FormErrorMessage>
+
+                                </FormControl>
                             </Flex>
-    
                         </Flex>
                     </RegisterFormLayout>
                 );
@@ -418,7 +750,7 @@ export default function CreateAdEnterprise() {
                         subTitle="Responda essas perguntas para facilitar o 
                         entendimento do cliente sobre os seus serviços"
                         lastStep={true}
-                        handleNextStep={handleSubmit}
+                        handleNextStep={nextStep}
                         handlePreviousStep={previousStep}
                     >
                          <Stack direction='column' 
@@ -445,8 +777,6 @@ export default function CreateAdEnterprise() {
                                 {
                                     console.log('entrou no sim');
                                     console.log(el.name);
-                                    
-                                    
                                     return (
                                         <>
                                         </>
@@ -472,8 +802,7 @@ export default function CreateAdEnterprise() {
                                 else {
                                     return (
                                         <Flex direction='column' bg='white'
-                                            w={{base:'90%', lg:'60%'}}
-                                            p='5'
+                                            w={{base:'90%', lg:'60%'}}  p='5'
                                             justifyContent='center'
                                             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                             borderRadius={8} 
@@ -488,89 +817,101 @@ export default function CreateAdEnterprise() {
                                             {/* RADIO */}
                                             {
                                                 el.type == 'radio'
-                                                ?
+                                                &&
                                                 <Flex direction='column'>
-                                                    <Flex
-                                                        justifyContent='space-evenly'
-                                                        mb='4'
-                                                    >
-                                                        {
-                                                            el.options.map((element, index) => {
-                                                                return (
-                                                                    <ItemList
-                                                                        styleType={2}
-                                                                        width='40%'
-                                                                        name={el.name[0]}
-                                                                        textAlign='center'
-                                                                        value={element}
-                                                                        textToShow={element}
-                                                                        selectedName={newAdData?.[el.name[0]]}
-                                                                        handleOnClick={handleChange}
-                                                                    />
-                                                                )
-                                                            })
-                                                        }
-                                                    </Flex>
+                                                    <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                        <Flex
+                                                            justifyContent='space-evenly'
+                                                            mb='4'
+                                                        >
+                                                            {
+                                                                el.options.map((element, index) => {
+                                                                    return (
+                                                                        <ItemList
+                                                                            styleType={2}
+                                                                            width='40%'
+                                                                            name={el.name[0]}
+                                                                            textAlign='center'
+                                                                            value={element}
+                                                                            textToShow={element}
+                                                                            selectedName={newAdData?.[el.name[0]]}
+                                                                            handleOnClick={handleChange}
+                                                                        />
+                                                                    )
+                                                                })
+                                                            }
+                                                        </Flex>
+                                                        <FormErrorMessage>
+                                                            {formErrors[el.name[0]]}
+                                                        </FormErrorMessage>
+                                                    </FormControl>
         
-                                                    <Textarea name={el.name[1]} 
-                                                        placeholder={el.placeholder}
-                                                        value={newAdData?.[el.name[1]]}
-                                                        onChange={handleChange} 
-                                                    />
+                                                    <FormControl isInvalid={formErrors[el.name[1]] != '' ? true : false}>
+                                                        <Textarea name={el.name[1]} 
+                                                            placeholder={el.placeholder}
+                                                            value={newAdData?.[el.name[1]]}
+                                                            onChange={handleChange} 
+                                                        />
+                                                        <FormErrorMessage>
+                                                            {formErrors[el.name[1]]}
+                                                        </FormErrorMessage>
+                                                    </FormControl>
                                                 </Flex>
-                                                :
-                                                <>
-                                                </>
                                             }
         
                                             {/* TEXTAREA */}
                                             {
                                                 el.type == 'textarea'  
-                                                ?
+                                                &&
                                                 <Flex direction='column'>
-                                                    <Textarea 
-                                                        name={el.name[0]} 
-                                                        placeholder={el.placeholder}
-                                                        value={newAdData?.[el.name[0]]}
-                                                        onChange={handleChange} 
-                                                    />
+                                                    <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                        <Textarea 
+                                                            name={el.name[0]} 
+                                                            placeholder={el.placeholder}
+                                                            value={newAdData?.[el.name[0]]}
+                                                            onChange={handleChange} 
+                                                        />
+                                                        <FormErrorMessage>
+                                                            {formErrors[el.name[0]]}
+                                                        </FormErrorMessage>
+                                                    </FormControl>
                                                 </Flex>
-                                                :
-                                                <>
-                                                </>
                                             }       
         
                                             {/* INPUT */}
                                             {
                                                 el.type == 'input'  
-                                                ?
+                                                &&
                                                 <Flex direction='row'
                                                     alignItems='center'
                                                     //justifyContent='center'
                                                 >
-                                                    {
-                                                        el.span
-                                                        ?
-                                                        <Text as='span' mr='2'
-        
-                                                        >
-                                                            {el.span}
-                                                        </Text>
-                                                        :
-                                                        <>
-                                                        </>
-                                                    }
-                                                    <Input 
-                                                        name={el.name[0]} 
-                                                        type={el.inputType}
-                                                        width='40%'
-                                                        value={newAdData?.[el.name[0]]}
-                                                        onChange={handleChange} 
-                                                    />
+                                                    <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                        {
+                                                            el.span
+                                                            ?
+                                                            <Text as='span' mr='2'
+            
+                                                            >
+                                                                {el.span}
+                                                            </Text>
+                                                            :
+                                                            <>
+                                                            </>
+                                                        }
+                                                        <Input 
+                                                            name={el.name[0]} 
+                                                            type={el.inputType}
+                                                            width='40%'
+                                                            value={newAdData?.[el.name[0]]}
+                                                            onChange={handleChange} 
+                                                        />
+                                                        <FormErrorMessage>
+                                                            {formErrors[el.name[0]]}
+                                                        </FormErrorMessage>
+                                                    </FormControl>
+
                                                 </Flex>
-                                                :
-                                                <>
-                                                </>
                                             }       
         
                                         </Flex>
@@ -618,7 +959,7 @@ export default function CreateAdEnterprise() {
                                                                     textAlign='center'
                                                                     value={element}
                                                                     textToShow={element}
-                                                                    selectedName={enterpriseData?.[el.name[0]]}
+                                                                    selectedName={newAdData?.[el.name[0]]}
                                                                     handleOnClick={handleChange}
                                                                 />
                                                             )
@@ -628,7 +969,7 @@ export default function CreateAdEnterprise() {
     
                                                 <Textarea name={el.name[1]} 
                                                     placeholder={el.placeholder}
-                                                    value={enterpriseData?.[el.name[1]]}
+                                                    value={newAdData?.[el.name[1]]}
                                                     onChange={handleChange} 
                                                 />
                                             </Flex>
@@ -645,7 +986,7 @@ export default function CreateAdEnterprise() {
                                                 <Textarea 
                                                     name={el.name[0]} 
                                                     placeholder={el.placeholder}
-                                                    value={enterpriseData?.[el.name[0]]}
+                                                    value={newAdData?.[el.name[0]]}
                                                     onChange={handleChange} 
                                                 />
                                             </Flex>
@@ -678,7 +1019,7 @@ export default function CreateAdEnterprise() {
                                                     name={el.name[0]} 
                                                     type={el.inputType}
                                                     width='40%'
-                                                    value={enterpriseData?.[el.name[0]]}
+                                                    value={newAdData?.[el.name[0]]}
                                                     onChange={handleChange} 
                                                 />
                                             </Flex>

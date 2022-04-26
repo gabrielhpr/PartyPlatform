@@ -104,6 +104,7 @@ export default function AdsEnterprise() {
                                 >
                                     <Text
                                         fontSize={{base:22,lg:26}}
+                                        textAlign='center'
                                     >
                                         Criar novo anúncio
                                     </Text>
