@@ -222,6 +222,8 @@ export default function enterpriseAccess() {
                                             <NavLink
                                                 color='blue'
                                                 href='/Enterprise/Auth/register'
+                                                _hover={{textDecoration: 'none'}}
+
                                             > Cadastre-se gratuitamente
                                             </NavLink>
                                         
@@ -231,7 +233,10 @@ export default function enterpriseAccess() {
 
                                 </Flex>
                                 :
-                                <NavLink href='/Enterprise/Auth/register'>
+                                <NavLink 
+                                    href='/Enterprise/Auth/register'
+                                    _hover={{textDecoration: 'none'}}
+                                >
                                     <Button bg='brand.red'  py='7'
                                         
                                     >
@@ -306,7 +311,9 @@ export default function enterpriseAccess() {
                             </Button>
 
                             <Flex direction="column" justifyContent="center" mt='4'>
-                                <NavLink href="/prices">
+                                <NavLink href="/"
+                                    _hover={{textDecoration: 'none'}}
+                                >
                                     <Text textAlign="center" fontSize={16}
                                         color="brand.light_blue_40"
                                     >
@@ -486,6 +493,7 @@ export default function enterpriseAccess() {
                         }                       
                         <NavLink href='/Enterprise/Auth/register'
                             mt='5'
+                            _hover={{textDecoration: 'none'}}
                         >
                             <Button 
                                 variant='outline'

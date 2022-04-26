@@ -103,10 +103,12 @@ module.exports = class RootModel {
         const query_select = `
             SELECT  Ent.id,
                     User.fullName,
-                    Rat.*
+                    Rat.*,
+                    RatAns.answerContent
             FROM Enterprise as Ent
             INNER JOIN Rating AS Rat ON Ent.id = Rat.enterpriseId 
             INNER JOIN User ON User.id = Rat.userId
+            LEFT JOIN RatingAnswer AS RatAns ON Rat.id = RatAns.ratingId 
             WHERE Ent.id = ${enterpriseId}
             AND Rat.partyType = '${partyType}'
         `;

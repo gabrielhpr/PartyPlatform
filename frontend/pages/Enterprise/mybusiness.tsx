@@ -17,6 +17,7 @@ import { NotAuthorizedComponent } from "../../components/NotAuthorizedComponent"
 import * as yup from 'yup';
 import { monetaryRegex, validTextRegex, invalidTextRegex } from "../../utils/regexCustom";
 import { locationMap, typeOfParties } from "../../utils/typeOfParties";
+import { Sidebar } from "../../components/Sidebar";
 
 
 interface enterpriseDataInterf {
@@ -482,6 +483,7 @@ export default function MyBusinessEnterprise() {
             <Box>
                 <Header name="" position="relative" />
                 <TopMenuEnterprise />
+                <Sidebar/>
     
                 {
                 enterpriseData.id != 0 

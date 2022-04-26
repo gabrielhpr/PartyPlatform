@@ -6,11 +6,13 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@google-analytics/data": "^2.8.0",
     "@mailchimp/mailchimp_transactional": "^1.0.47",
     "@types/multer": "^1.4.7",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",
+    "googleapis": "^100.0.0",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.4",
     "mysql": "^2.18.1",

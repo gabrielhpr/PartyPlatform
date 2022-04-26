@@ -23,6 +23,8 @@ import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import { Sidebar } from '../components/Sidebar';
 import { FiSearch } from 'react-icons/fi';
+import Script from 'next/script'
+
 
 
 export default function HomePage() {
@@ -129,7 +131,33 @@ export default function HomePage() {
 
     return (
         <Box>
-        
+
+            {/* GOOGLE ANALYTICS */}
+            <Script
+                src="https://www.googletagmanager.com/gtag/js?id=G-RLBGWS0TCG"
+                strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+                {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){window.dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-RLBGWS0TCG', {
+                        send_page_view: false
+                    });
+
+                    gtag('event', 'page_view', {
+                        page_title: 'HomePageUser',
+                        page_location: '/',
+                        page_path: '/',
+                    })
+                `}
+            </Script>
+
+
+
+
             {/* Header */}
             {/*************/}
 

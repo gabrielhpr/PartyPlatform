@@ -92,4 +92,5 @@ module.exports = class RootController {
         console.log( service );
         res.status(200).json({ service: service, opinions: opinions });
     }
+    
 }

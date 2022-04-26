@@ -3,6 +3,7 @@ import { TopMenuEnterprise } from "../../components/Enterprise/TopMenuEnterprise
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { NotAuthorizedComponent } from "../../components/NotAuthorizedComponent";
+import { Sidebar } from "../../components/Sidebar";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 
 
@@ -15,6 +16,7 @@ export default function SettingsEnterprise() {
             <Box>
                 <Header name="" position="relative" />
                 <TopMenuEnterprise />
+                <Sidebar/>
                 
                 <Flex 
                     mt='5'

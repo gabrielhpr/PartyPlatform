@@ -11,6 +11,7 @@ import { minPrice } from "../../../utils/typeOfParties";
 import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import { NotAuthorizedComponent } from "../../../components/NotAuthorizedComponent";
 import { Footer } from "../../../components/Footer";
+import { Sidebar } from "../../../components/Sidebar";
 
 
 export default function AdsEnterprise() {
@@ -56,12 +57,12 @@ export default function AdsEnterprise() {
         });
     }
 
-
     if( authenticatedEnterprise ) {
         return (
             <Box>
                 <Header name="" position="relative" />
                 <TopMenuEnterprise />
+                <Sidebar/>
                
                 <Box
                     boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
@@ -86,6 +87,7 @@ export default function AdsEnterprise() {
                             <NavLink href="/Enterprise/ads/create"
                                 h={{base:'25vw', lg:'15.3vw'}}
                                 w={{base:'90vw',lg:'15.3vw'}}
+                                _hover={{textDecoration: 'none'}}
                             >
                                 <Flex 
                                     boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
@@ -103,7 +105,7 @@ export default function AdsEnterprise() {
                                     <Text
                                         fontSize={{base:22,lg:26}}
                                     >
-                                        Criar anúncio
+                                        Criar novo anúncio
                                     </Text>
                                     {/* 
                                     
@@ -127,10 +129,10 @@ export default function AdsEnterprise() {
                                 return(
                                     <Flex
                                         direction='column'
-                                        bg='brand.dark_blue'
+                                        bg='brand.white'
                                         px='2'
                                         py='2'
-                                        boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)" 
+                                        boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                         borderRadius={8}                                   
                                     >
                                         <Text
@@ -140,7 +142,8 @@ export default function AdsEnterprise() {
                                             fontSize={22}
                                             fontWeight={700}
                                             py='3'
-                                            bg='brand.dark_blue'
+                                            bg='rgba(0,0,0,0.4)'
+                                            boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                             borderTopRadius={8}
                                         >
                                             {el.partyMainFocus}
@@ -149,6 +152,7 @@ export default function AdsEnterprise() {
                                         <CardService 
                                             key={index}
                                             name={el.enterpriseName}
+                                            borderTop={false}
                                             location={el.location}
                                             classification={el.ratingQuantity != 0 ? `${(el.ratingSum / el.ratingQuantity).toFixed(1)} (${el.ratingQuantity})` : '0'}
                                             rangeOfPeople='10-100'

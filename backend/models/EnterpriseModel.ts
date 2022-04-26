@@ -63,7 +63,13 @@ module.exports = class EnterpriseModel {
 
     async getAllAds( enterpriseId: number ) {
 
-        var query_select_ads= `SELECT * FROM Ads WHERE enterpriseId = ${enterpriseId}`;    
+        var query_select_ads= `SELECT 
+                                   Ads.*,
+                                   Ent.*
+                               FROM Ads 
+                               INNER JOIN Enterprise AS Ent 
+                               ON Ads.enterpriseId = Ent.id    
+                               WHERE Ads.enterpriseId = ${enterpriseId}`;    
         
         var result_ads = await connQuery( query_select_ads ).catch( (err:any) => {throw err});
        
@@ -188,6 +194,39 @@ module.exports = class EnterpriseModel {
         `;
 
         await connQuery( query_update ).catch((err:any) => {throw err});
+    }
+
+    async selectOpinionsByEnterpriseId( enterpriseId: number, partyType: string ) {
+        const query_select = `
+            SELECT  Ent.id,
+                    User.fullName,
+                    Rat.*,
+                    RatAns.answerContent
+            FROM Enterprise as Ent
+            INNER JOIN Rating AS Rat ON Ent.id = Rat.enterpriseId 
+            INNER JOIN User ON User.id = Rat.userId
+            LEFT JOIN RatingAnswer AS RatAns ON Rat.id = RatAns.ratingId 
+            WHERE Ent.id = ${enterpriseId}
+            AND Rat.partyType = '${partyType}'
+        `;
+        
+        const result = await connQuery( query_select ).catch( (err:any) => {throw err} );
+        
+        return result; 
+    }
+
+    async insertAnswerRating( ratingAnswerData: any ) {
+        console.log('insert answer rating');
+        let objLength = Object.keys(ratingAnswerData).length;
+
+        const query_insert = `INSERT INTO RatingAnswer 
+            (${'??,'.repeat(objLength-1)}??) 
+            VALUES (${'?,'.repeat(objLength-1) }?)`;
+        
+        const data = Object.keys(ratingAnswerData).concat( Object.values(ratingAnswerData) );
+
+        // INSERT rating answer into table
+        await connQuery( query_insert, data ).catch((err:any) => {throw err});
     }
 
 }

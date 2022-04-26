@@ -1,11 +1,12 @@
 import { Stack, Flex, Divider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { FaBirthdayCake } from "react-icons/fa";
 import { GiBlockHouse, GiCupcake, GiForkKnifeSpoon, GiPartyFlags } from "react-icons/gi";
 import { ImCamera } from "react-icons/im";
-import { RiContactsLine, RiDashboardLine, RiGitMergeLine, RiInputMethodLine, RiSuitcaseLine } from "react-icons/ri";
+import { RiCompass3Line, RiContactsLine, RiDashboardLine, RiDraftFill, RiGitMergeLine, RiInputMethodLine, RiSettings3Line, RiStore3Fill, RiSuitcaseLine } from "react-icons/ri";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 import { useUserAuthContext } from "../../context/userContext";
 import { NavLink } from "./NavLink";
@@ -44,8 +45,13 @@ export function SidebarNav() {
                 :
                 authenticatedEnterprise
                 ?
-                <>
-                </>
+                <Stack spacing="8">
+                    <NavLink icon={RiCompass3Line} href="/Enterprise/home">Visão geral</NavLink>
+                    <NavLink icon={RiDraftFill} href="/Enterprise/ads">Meus anúncios</NavLink>
+                    <NavLink icon={RiStore3Fill} href="/Enterprise/mybusiness">Meu negócio</NavLink>
+                    <NavLink icon={AiOutlineStar} href="/Enterprise/rating">Avaliações</NavLink>
+                    <NavLink icon={RiSettings3Line} href="/Enterprise/settings">Minha conta</NavLink>
+                </Stack>
                 :
                 enterpriseArea
                 ?

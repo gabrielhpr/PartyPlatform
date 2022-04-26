@@ -18,6 +18,7 @@ router.post(
     imageUpload.array('photos'),
     EnterpriseController.createAd
 );
+router.post("/answerRating", EnterpriseController.answerRating);
 
 // PATCH
 router.patch(
@@ -26,7 +27,6 @@ router.patch(
     imageUpload.array("photos"), 
     EnterpriseController.editAd
 );
-// PATCH
 router.patch(
     "/myenterprise/edit",
     verifyToken, 
@@ -38,7 +38,9 @@ router.patch(
 router.get("/checkenterprise", EnterpriseController.checkEnterprise);
 router.get("/ads/:partyType", EnterpriseController.getSpecificAd);
 router.get("/ads", EnterpriseController.getAds);
+router.get("/opinions", EnterpriseController.getOpinions);
 router.get("/myenterprise", EnterpriseController.getEnterprise);
+router.get("/getGoogleAnalyticsData", EnterpriseController.getGoogleAnalyticsData);
 
 //router.get("/services", EnterpriseController.services);
 //router.get("/:id", UserController.getUserById);

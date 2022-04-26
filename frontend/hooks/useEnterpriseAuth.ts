@@ -117,6 +117,25 @@ export default function useEnterpriseAuth() {
         routerNext.push("/Enterprise/home");
     }
 
+    async function enterpriseAnswerRate(answerRating: any) {
+        const token = localStorage.getItem("tokenEnterprise");
+
+        try {
+            await api.post("/enterprise/answerRating", answerRating, {
+                headers: {
+                    'Authorization': `Bearer ${JSON.parse(token)}`
+                }
+            })
+            .then((response) => {
+                return response.data;
+            });
+        }
+        catch(err) {
+            // tratar o erro
+            console.log(err);
+        }
+    }
+
     async function logoutEnterprise() {
         const msgText = "Logout realizado com sucesso!";
         const msgType = "success";
@@ -129,6 +148,6 @@ export default function useEnterpriseAuth() {
         //setFlashMessage(msgText, msgType);
     }
 
-    return { authenticatedEnterprise, registerEnterprise, createAd, loginEnterprise, logoutEnterprise };
+    return { authenticatedEnterprise, registerEnterprise, createAd, loginEnterprise, logoutEnterprise, enterpriseAnswerRate };
 }
 

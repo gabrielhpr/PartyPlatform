@@ -97,6 +97,13 @@ module.exports = class EnterpriseController {
             res.status(422).json({ message: "O email é obrigatório!"});
             return;
         }
+        // Check if the email is already registered in database
+        let entEmail = await enterpriseModel.getEnterpriseByEmail( email );
+
+        if( entEmail != undefined ) {
+            res.status(422).json({ message: "Esse email já está em uso! Utilize outro email!" });
+            return;
+        }
 
         if( !phone ) {
             res.status(422).json({ message: "O telefone é obrigatório!"});
@@ -747,6 +754,84 @@ module.exports = class EnterpriseController {
         res.status(200).json({ enterpriseData });
     }
 
+    static async getOpinions(req: any, res: any) {
+        console.log('chegou getOpinions');
+        let opinions;
+        let id;
+        let partyType = req.query.partyType;
+
+        if(!req.headers.authorization) {
+            return res.status(500).send({message: "Não possui token!"});
+        }
+        
+        console.log('tem token');
+        const token = getToken(req);
+
+        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            if(err) {
+                return res.status(500).send({message: "Token inválido!"});
+            }
+            id = decoded.id;
+        });
+
+        opinions = await enterpriseModel.selectOpinionsByEnterpriseId( id, partyType );                
+
+        res.status(200).json({ opinions });
+    }
+
+    static async answerRating(req: any, res: any) {
+        console.log('entrou no answerRating');
+
+        const {
+            ratingId,
+            userId,
+            enterpriseId,
+            partyType,
+            answerContent
+        } = req.body;
+
+        if(!req.headers.authorization) {
+            return res.status(500).send({message: "Não possui token!"});
+        }
+        
+        console.log('tem token');
+        const token = getToken(req);
+
+        let enterpriseIdByToken;
+        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            if(err) {
+                return res.status(500).send({message: "Token inválido!"});
+            }
+            enterpriseIdByToken = decoded.id;
+        });
+
+        // Validations
+        // if( !enterpriseId ) {
+        //     res.status(422).json({ message: "É necessário ter o id da empresa que está sendo avaliada!"});
+        //     return;
+        // }
+
+        //console.log( ratingGeneral );
+
+        const ratingAnswerData = {
+            'ratingId': ratingId,
+            'userId': userId,
+            'enterpriseId': enterpriseId,
+            'partyType': partyType,
+            'answerContent': answerContent
+        }
+
+        try {
+            // Create Rating
+            await enterpriseModel.insertAnswerRating( ratingAnswerData );
+            res.status(200).send({message: 'Resposta de avaliação criada com sucesso!'});
+        }
+        catch(err) {
+            res.status(500).json({message: err});
+            return;
+        }
+    }
+
     // Update Enterprise data
     static async editEnterprise(req: any, res:any) {
        
@@ -829,6 +914,13 @@ module.exports = class EnterpriseController {
         // EMAIL
         if( !email ) {
             res.status(422).json({ message: "O email é obrigatório!" });
+            return;
+        }
+        // Check if the email is already registered in database
+        let entEmail = await enterpriseModel.getEnterpriseByEmail( email );
+
+        if( entEmail != undefined ) {
+            res.status(422).json({ message: "Esse email já está em uso! Utilize outro email!" });
             return;
         }
         enterpriseData.email = email;
@@ -958,6 +1050,190 @@ module.exports = class EnterpriseController {
         }
 
         res.status(200).send(currentEnterprise);
+    }
+
+    // Get Google Analytics Data
+    static async getGoogleAnalyticsData(req: any, res: any) {
+        let id:number;
+
+        if(req.headers.authorization) {
+            const token = getToken(req);
+            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+                if(err) {
+                    return res.status(500).send({message: "Token inválido!"});
+                }
+                id = decoded.id;
+            });
+        }
+        console.log('o id é: ');
+        console.log( id );
+
+        // Before running the sample:
+        // - Enable the API at:
+        //   https://console.developers.google.com/apis/api/analyticsdata.googleapis.com
+        // - Login into gcloud by running:
+        //   `$ gcloud auth application-default login`
+        // - Install the npm module by running:
+        //   `$ npm install googleapis`
+        const { google } = require('googleapis');
+
+        const analyticsdata = google.analyticsdata('v1beta');
+        
+        const service_account = require('../jwt/key.json');
+
+        async function main() {
+
+            //const auth = new google.auth.GoogleAuth({
+                // Scopes can be specified either as an array or as a single, space-delimited string.
+            //});
+            //https://www.googleapis.com/auth/analytics
+            let scopes = ['https://www.googleapis.com/auth/analytics https://www.googleapis.com/auth/analytics.readonly'];
+
+            const jwt = new google.auth.JWT(
+                service_account.client_email, 
+                null, 
+                service_account.private_key, 
+                scopes
+            );
+            // Acquire an auth client, and bind it to all future calls
+            //const authClient = await auth.getClient();
+            //google.options({auth: authClient});
+
+            await jwt.authorize();
+            //const authClient = ;
+            google.options({auth: jwt});
+
+            // Do the magic
+            const result = await analyticsdata.properties.batchRunReports({
+                //headers: {'Content-Type': 'application/json'}, 
+                //auth: jwt, 
+                // A Google Analytics GA4 property identifier whose events are tracked. Specified in the URL path and not the body. To learn more, see [where to find your Property ID](https://developers.google.com/analytics/devguides/reporting/data/v1/property-id). This property must be specified for the batch. The property within RunPivotReportRequest may either be unspecified or consistent with this property. Example: properties/1234
+                property: 'properties/311158295',
+                
+                //'resource': reports
+                // Request body metadata
+                requests: [
+                    // Number of visualizations
+                    {
+                        'property': 'properties/311158295',
+                        'dateRanges': [
+                            {'startDate': '2022-03-01', 'endDate': '2022-04-19'}
+                        ],
+                        'metrics': [
+                            {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
+                        ],
+                        'dimensions': [
+                            {"name": 'pagePath'}
+                        ],
+                        'dimensionFilter': 
+                            {
+                                'filter': 
+                                    {
+                                        'fieldName': 'pagePath',
+                                        'stringFilter': {
+                                            'matchType': 'EXACT',
+                                            'value': `enterprise-${id}`,
+                                            'caseSensitive': true
+                                        }
+                                    }
+                            }
+                    },
+                    // Clicks in show PHONE
+                    {
+                        'property': 'properties/311158295',
+                        'dateRanges': [
+                            {'startDate': '2022-03-01', 'endDate': '2022-04-19'}
+                        ],
+                        'metrics': [
+                            {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
+                        ],
+                        'dimensions': [
+                            {"name": 'pagePath'}
+                        ],
+                        'dimensionFilter': 
+                            {
+                                'filter': 
+                                    {
+                                        'fieldName': 'pagePath',
+                                        'stringFilter': {
+                                            'matchType': 'EXACT',
+                                            'value': `enterprise-${id}`,
+                                            'caseSensitive': true
+                                        }
+                                    }
+                            }
+                    },
+                    // Clicks in show Whatsapp if exists
+                    {
+                        'property': 'properties/311158295',
+                        'dateRanges': [
+                            {'startDate': '2022-03-01', 'endDate': '2022-04-19'}
+                        ],
+                        'metrics': [
+                            {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
+                        ],
+                        'dimensions': [
+                            {"name": 'pagePath'}
+                        ],
+                        'dimensionFilter': 
+                            {
+                                'filter': 
+                                    {
+                                        'fieldName': 'pagePath',
+                                        'stringFilter': {
+                                            'matchType': 'EXACT',
+                                            'value': `enterprise-${id}`,
+                                            'caseSensitive': true
+                                        }
+                                    }
+                            }
+                    },
+                    // Clicks in show E-mail
+                    {
+                        'property': 'properties/311158295',
+                        'dateRanges': [
+                            {'startDate': '2022-03-01', 'endDate': '2022-04-19'}
+                        ],
+                        'metrics': [
+                            {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
+                        ],
+                        'dimensions': [
+                            {"name": 'pagePath'}
+                        ],
+                        'dimensionFilter': 
+                            {
+                                'filter': 
+                                    {
+                                        'fieldName': 'pagePath',
+                                        'stringFilter': {
+                                            'matchType': 'EXACT',
+                                            'value': `enterprise-${id}`,
+                                            'caseSensitive': true
+                                        }
+                                    }
+                            }
+                    },
+
+                ],
+            });
+            console.log(result);
+            res.status(200).send( result );
+
+            // Example response
+          // {
+          //   "kind": "my_kind",
+          //   "pivotReports": []
+          // }
+        }
+        
+        await main().catch(e => {
+            console.log('error');
+            console.error(e);
+            throw e;
+        });
+
+        
+
     }
 
 }

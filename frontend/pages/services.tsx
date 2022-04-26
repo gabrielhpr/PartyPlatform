@@ -536,11 +536,19 @@ export default function ServicesPage() {
                                     
                                             </ModalBody>
 
-                                            <ModalFooter>
-                                                <Button colorScheme='blue' mr={3} onClick={onClose}>
-                                                    Save
+                                            <ModalFooter
+                                                justifyContent='space-between'
+                                            >
+                                                <Button onClick={onClose}
+                                                    w='30%'
+                                                >
+                                                    Cancelar
                                                 </Button>
-                                                <Button onClick={onClose}>Cancel</Button>
+                                                <Button colorScheme='blue' mr={3} onClick={onClose}
+                                                    w='50%'
+                                                >
+                                                    Salvar
+                                                </Button>
                                             </ModalFooter>
                                         </ModalContent>
                                     </Modal>

@@ -12,8 +12,10 @@ import { Footer } from "../components/Footer";
 import { specificQuestions } from "../utils/typeOfParties";
 import { useUserAuthContext } from "../context/userContext";
 import { Sidebar } from "../components/Sidebar";
+import Script from "next/script";
 
 interface serviceDataInterf {
+    id: number;
     // Contact Data
     fullName: string;
     email: string;
@@ -98,6 +100,7 @@ interface serviceDataInterf {
 }
 
 const serviceNullState = {
+    id: 0,
     // Contact Data
     fullName: '',
     email: '',
@@ -214,18 +217,25 @@ export default function ServiceProfilePage() {
         console.log( emailData );
 
         userSendEmail( emailData );
-
     }
 
     function handleShowAllImages() {
         setShowAllImages(true);
     }
-
     useEffect(() => {
         if( !routerNext.isReady ) {
             return;
         }
+        
         const {id, partyType} = routerNext.query;
+
+        if (typeof window !== 'undefined') {
+            window.gtag('event', 'page_view', {
+                page_title: 'serviceProfilePage',
+                page_location: 'serviceProfilePage',
+                page_path: `enterprise-${id}`,
+            });
+        }
 
         // Save the enterprise id and party type, for email sending
         setEmailData({...emailData, enterpriseId: id, partyType: partyType});
@@ -249,6 +259,25 @@ export default function ServiceProfilePage() {
 
     return (
         <Box>
+            {/* GOOGLE ANALYTICS */}
+            <Script
+                src="https://www.googletagmanager.com/gtag/js?id=G-RLBGWS0TCG"
+                strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+                {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){window.dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-RLBGWS0TCG', {
+                        send_page_view: false
+                    });
+                    
+                `}
+            </Script>
+           
+                       
             <Header name="" position="relative" />
 
             <Sidebar/>
@@ -340,7 +369,6 @@ export default function ServiceProfilePage() {
                         </Flex>
                     </Flex>                        
 
-
                     {/* Photos */}
                     <Flex w='100%' pb='10' pt='5' 
                         h={{base:400,lg:500}}
@@ -424,8 +452,6 @@ export default function ServiceProfilePage() {
                                     Ver todas as fotos
                                 </Button>
 
-                                
-
                                 <Img 
                                     src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
                                     borderBottomRightRadius={8}
@@ -456,7 +482,6 @@ export default function ServiceProfilePage() {
                     <Flex direction='row'
                         px={{base:'5',lg:'0'}}
                     >
-                        
                         {/* Service Description, Common Douts and Send Message */}
                         <Flex w={{base:'100%',lg:'70%'}} 
                             direction='column' 
@@ -749,6 +774,26 @@ export default function ServiceProfilePage() {
                                                         >
                                                             {el.opinionContent}
                                                         </Text>
+
+                                                        {/* Answer */}
+                                                        {
+                                                            el.answerContent != null
+                                                            &&
+                                                            <Flex
+                                                                bg='rgba(0,0,0,0.07)'
+                                                                borderRadius={4}
+                                                                px='6'
+                                                                py='4'
+                                                                mt='5'
+
+                                                            >
+                                                                <Text>
+                                                                    RESPOSTA: <br/>
+                                                                    {el.answerContent}
+                                                                </Text>
+                                                            </Flex>
+                                                        }
+
 
                                                     </Flex>
                                                 )

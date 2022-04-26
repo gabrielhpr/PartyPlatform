@@ -15,18 +15,20 @@ interface CardServiceProps {
     rangeOfPeople: string;
     price: string;
     photos: string[];
+    borderTop?: boolean;
     handleOnClick: (ev: any) => void;
 }
 
 
 
-export function CardService( { name, location, classification, rangeOfPeople, price, photos, handleOnClick } : CardServiceProps ) {
+export function CardService( { name, location, classification, rangeOfPeople, price, photos, borderTop=true, handleOnClick } : CardServiceProps ) {
     //let photo = [FotoDebutante, FotoInfantilFem, FotoInfantilMasc];
     
     return (
         <Flex
             boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
             borderRadius={8} 
+            borderTopRadius={borderTop==true ? 8 : 0}
             direction='column'
             //justifyContent='center'
             //alignItems='flex-start'
@@ -51,7 +53,7 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                                 key={i}
                                 h={{base:'40vh', lg:'32vh'}}
                                 overflow='hidden'
-                                borderTopRadius={8}
+                                borderTopRadius={borderTop==true ? 8 : 0}
                                 justifyContent='center'
                                 alignItems='center'
                                 position='relative'
@@ -98,12 +100,16 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                         { name }
                     </Text>
 
-                    <Flex alignItems='center' w='25%'>
-                        <Icon as={RiStarSFill}/>
-                        <Text>
-                            { classification }
-                        </Text>
-                    </Flex>
+                    {
+                        classification != '0'
+                        &&
+                        <Flex alignItems='center' w='25%'>
+                            <Icon as={RiStarSFill}/>
+                            <Text>
+                                { classification }
+                            </Text>
+                        </Flex>
+                    }
 
                     <Flex alignItems='center' w='100%'>
                         <Text 
