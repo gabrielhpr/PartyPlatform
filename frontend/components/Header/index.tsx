@@ -101,7 +101,9 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
 
 
             {/* Logo and enterprise name */}
-            <Flex width={{base:"80%",lg:"30%"}}>
+            <Flex width={{base:"80%",lg:"30%"}}
+                ml='3'
+            >
                 <NavLink width='100%' href='/'
                     _hover={{outline: 'none'}}
                     _focus={{border:'none'}}
@@ -111,7 +113,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                         fontSize={25}
                         fontWeight={500}
                     >
-                        {enterpriseArea ? 'Festafy Business': 'Festafy'}
+                        {authenticatedEnterprise ? 'Festafy Business': 'Festafy'}
                     </Text>
                 </NavLink>
             </Flex>
@@ -145,7 +147,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                 /* ENTERPRISE AUTHENTICATED */
                 authenticatedEnterprise
                 ?
-                    <Flex width="70%" justifyContent="flex-end">
+                    <Flex width="20%" justifyContent="flex-end">
                         <Flex>
                             <Button
                                 bg='none'
@@ -170,18 +172,21 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                 /* ENTERPRISE AREA (NOT AUTHENTICATED) */
                 enterpriseArea
                 ?
+                    <>
+                    </>
                     /* USER BUTTON */
-                    <NavLink
-                        href="/Enterprise/enterpriseAccess"
-                    >
-                        <IconButton
-                            aria-label="Open navigation"
-                            icon={<Icon as={FaRegUser} />}
-                            fontSize="24"
-                            variant="unstyled"
-                            //onClick={}
-                        />
-                    </NavLink>
+
+                    // <NavLink
+                    //     href="/Enterprise/enterpriseAccess"
+                    // >
+                    //     <IconButton
+                    //         aria-label="Open navigation"
+                    //         icon={<Icon as={FaRegUser} />}
+                    //         fontSize="24"
+                    //         variant="unstyled"
+                    //         //onClick={}
+                    //     />
+                    // </NavLink>
 
                 :
                     /* GENERAL */
@@ -201,14 +206,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                         />
                     </NavLink>
                 :
-                    <Flex width="70%" justifyContent="flex-end">
-                        {/* Menu */}
-                        <Stack direction="row" spacing={10}
-                            justifyContent="center" alignItems="center"
-                        > 
-                            <HeaderMenuItem title="Home" pathTo="/" scroll={scrollHeader}/>
-                    
-                        </Stack>
+                    <Flex width="70%" justifyContent="flex-end">                        
 
                         {/* Demo and Login */}
                         <Stack direction="row" mx={50}>

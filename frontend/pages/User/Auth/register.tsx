@@ -132,11 +132,12 @@ export default function registerUser() {
                                 <Text as='h2' fontSize={30} fontWeight={600}
                                     mb='2'
                                 >
-                                    Cadastre-se para achar os melhores fornecedores do mercado!
+                                    Cadastre-se e planeje a sua festa conosco
                                 </Text>
                                 <Text as='h3' fontSize={20} fontWeight={500}>
-                                    Salve os fornecedores que gostou, peça orçamentos pela 
-                                    plataforma, avalie os prestadores de serviço
+                                    Peça orçamentos pela 
+                                    plataforma, avalie os prestadores de serviço, ache o melhor
+                                    fornecedor para o que a sua festa precisa
                                 </Text>
                             </Flex>
                         </Flex>

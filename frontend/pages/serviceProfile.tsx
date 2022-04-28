@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton } from "@chakra-ui/react";
 //import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
@@ -9,10 +9,11 @@ import { ModalServiceProfile } from "../components/ModalServiceProfile";
 import { ModalImageGallery } from "../components/ModalImageGallery";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
-import { specificQuestions } from "../utils/typeOfParties";
+import { enterpriseSpecificCategoryDict, specificQuestions } from "../utils/typeOfParties";
 import { useUserAuthContext } from "../context/userContext";
 import { Sidebar } from "../components/Sidebar";
 import Script from "next/script";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 interface serviceDataInterf {
     id: number;
@@ -298,12 +299,40 @@ export default function ServiceProfilePage() {
                     borderRadius={{lg:8}}
                     mt={{base:'0',lg:'10'}}
                 >
+                    {/* Details about the search */}
+                    <Flex
+                        px={{base:'5',lg:'0'}}
+                        mt='3'
+                        alignItems='center'
+                    >
+                        <IconButton 
+                            aria-label='back' 
+                            icon={<Icon as={IoMdArrowRoundBack}/>}
+                            bg='rgba(0,0,0,0)'
+                            onClick={() => {
+                                if( localStorage.getItem('previousRoute') != null ) {
+                                    routerNext.push( localStorage.getItem('previousRoute') );
+                                }
+                                else {
+                                    routerNext.push('/');
+                                }
+                            }}
+                        />
+                        
+                        <Text
+                            color='rgba(0,0,0,0.5)'
+                            fontWeight={600}
+                            ml='2'
+                        >
+                            {service.partyMainFocus} / {service.enterpriseCategory == 'Servico' ? 'Serviço' : 'Espaço'} / {enterpriseSpecificCategoryDict[ service.enterpriseSpecificCategory ]}
+                        </Text>
+                    </Flex>
 
                     {/* Details about the service */}
                     <Flex direction='column'
                         px={{base:'5',lg:'0'}}
                     >
-                        <Flex alignItems='flex-end' mt='5'>
+                        <Flex alignItems='flex-end' mt='1'>
                             <Text as='h1'
                                 fontSize={30}
                                 fontWeight={500}
@@ -925,7 +954,7 @@ export default function ServiceProfilePage() {
                                 bg='brand.white'
                                 border='2px solid'
                                 borderColor='brand.dark_blue'
-                                color='brand.white'
+                                color='brand.dark_blue'
                                 borderRadius={8}
                             >
                                 <Flex 

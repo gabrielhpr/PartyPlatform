@@ -315,11 +315,6 @@ export default function CreateAdEnterprise() {
     const [partiesAdsAlreadyCreated, setPartiesAdsAlreadyCreated] = useState([]);
     const { createAd, authenticatedEnterprise } = useEnterpriseAuthContext();
 
-    // 1) Puxar os dados da empresa - Para saber qual o ramo 
-    // de atuação da empresa para saber quais perguntas fazer.
-    // 2) Puxar o id da empresa para saber quais anúncios ela já tem
-    // e quais ela pode criar (tipoDeFesta).
-
     useEffect(() => {
         if( authenticatedEnterprise == false ) {
             return;
@@ -361,8 +356,8 @@ export default function CreateAdEnterprise() {
                 setNewAdData(
                     {
                         ...newAdData, 
-                        enterpriseCategory: response.data.enterpriseCategory,
-                        enterpriseSpecificCategory: response.data.enterpriseSpecificCategory 
+                        enterpriseCategory: response.data.enterpriseData.enterpriseCategory,
+                        enterpriseSpecificCategory: response.data.enterpriseData.enterpriseSpecificCategory 
                     }
                 );
             });
@@ -372,7 +367,6 @@ export default function CreateAdEnterprise() {
         }
 
     }, [authenticatedEnterprise]);
-
 
     function handleFileChange( event: any ) {
         console.log( 'event files images' );
@@ -461,8 +455,12 @@ export default function CreateAdEnterprise() {
                 enterpriseRegisterFormSchema
             ); 
         }
+        else if( step == 2 ) {
+            setStep( step + 1 );
+        }
         else if( step == 3 ) {
             console.log('entrou no step 3');
+            console.log( newAdData );
 
             let fields = [
                 'enterpriseCategory', 
@@ -581,7 +579,7 @@ export default function CreateAdEnterprise() {
                 q44: newAdData.q44
             })
             .then((val) =>{
-                if( val ) {
+                if( val == true ) {
                     // Validou bemmmm
                     console.log('Validou bemmm');
                     
@@ -939,93 +937,104 @@ export default function CreateAdEnterprise() {
                                         {/* RADIO */}
                                         {
                                             el.type == 'radio'
-                                            ?
+                                            &&
                                             <Flex 
                                                 direction='column'
                                             >
-                                                <Stack
-                                                    justifyContent='space-evenly'
-                                                    alignItems='center'
-                                                    mb='4'
-                                                    direction={el.options.length < 3 ? 'row' : 'column'}
-                                                >
-                                                    {
-                                                        el.options.map((element, index) => {
-                                                            return (
-                                                                <ItemList
-                                                                    styleType={2}
-                                                                    width={el.options.length < 3 ? '40%' : '70%'}
-                                                                    name={el.name[0]}
-                                                                    textAlign='center'
-                                                                    value={element}
-                                                                    textToShow={element}
-                                                                    selectedName={newAdData?.[el.name[0]]}
-                                                                    handleOnClick={handleChange}
-                                                                />
-                                                            )
-                                                        })
-                                                    }
-                                                </Stack>
+                                                <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                    <Stack
+                                                        justifyContent='space-evenly'
+                                                        alignItems='center'
+                                                        mb='4'
+                                                        direction={el.options.length < 3 ? 'row' : 'column'}
+                                                    >
+                                                        {
+                                                            el.options.map((element, index) => {
+                                                                return (
+                                                                    <ItemList
+                                                                        styleType={2}
+                                                                        width={el.options.length < 3 ? '40%' : '70%'}
+                                                                        name={el.name[0]}
+                                                                        textAlign='center'
+                                                                        value={element}
+                                                                        textToShow={element}
+                                                                        selectedName={newAdData?.[el.name[0]]}
+                                                                        handleOnClick={handleChange}
+                                                                    />
+                                                                )
+                                                            })
+                                                        }
+                                                    </Stack>
+                                                    <FormErrorMessage>
+                                                        {formErrors[el.name[0]]}
+                                                    </FormErrorMessage>
+                                                </FormControl>
     
-                                                <Textarea name={el.name[1]} 
-                                                    placeholder={el.placeholder}
-                                                    value={newAdData?.[el.name[1]]}
-                                                    onChange={handleChange} 
-                                                />
+                                                <FormControl isInvalid={formErrors[el.name[1]] != '' ? true : false}>
+                                                    <Textarea name={el.name[1]} 
+                                                        placeholder={el.placeholder}
+                                                        value={newAdData?.[el.name[1]]}
+                                                        onChange={handleChange} 
+                                                    />
+                                                    <FormErrorMessage>
+                                                        {formErrors[el.name[1]]}
+                                                    </FormErrorMessage>
+                                                </FormControl>
                                             </Flex>
-                                            :
-                                            <>
-                                            </>
                                         }
     
                                         {/* TEXTAREA */}
                                         {
                                             el.type == 'textarea'  
-                                            ?
+                                            &&
                                             <Flex direction='column'>
-                                                <Textarea 
-                                                    name={el.name[0]} 
-                                                    placeholder={el.placeholder}
-                                                    value={newAdData?.[el.name[0]]}
-                                                    onChange={handleChange} 
-                                                />
+                                                <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                    <Textarea 
+                                                        name={el.name[0]} 
+                                                        placeholder={el.placeholder}
+                                                        value={newAdData?.[el.name[0]]}
+                                                        onChange={handleChange} 
+                                                    />
+                                                    <FormErrorMessage>
+                                                        {formErrors[el.name[0]]}
+                                                    </FormErrorMessage>
+                                                </FormControl>
                                             </Flex>
-                                            :
-                                            <>
-                                            </>
                                         }       
     
                                         {/* INPUT */}
                                         {
                                             el.type == 'input'  
-                                            ?
+                                            &&
                                             <Flex direction='row'
                                                 alignItems='center'
-                                                //justifyContent='center'
-                                            >
-                                                {
-                                                    el.span
-                                                    ?
-                                                    <Text as='span' mr='2'
+                                            >                                     
+                                                <FormControl isInvalid={formErrors[el.name[0]] != '' ? true : false}>
+                                                    {
+                                                        el.span
+                                                        ?
+                                                        <Text as='span' mr='2'
     
-                                                    >
-                                                        {el.span}
-                                                    </Text>
-                                                    :
-                                                    <>
-                                                    </>
-                                                }
-                                                <Input 
-                                                    name={el.name[0]} 
-                                                    type={el.inputType}
-                                                    width='40%'
-                                                    value={newAdData?.[el.name[0]]}
-                                                    onChange={handleChange} 
-                                                />
+                                                        >
+                                                            {el.span}
+                                                        </Text>
+                                                        :
+                                                        <>
+                                                        </>
+                                                    }
+                                                    <Input 
+                                                        name={el.name[0]} 
+                                                        type={el.inputType}
+                                                        width='40%'
+                                                        value={newAdData?.[el.name[0]]}
+                                                        onChange={handleChange} 
+                                                    />
+                                                    <FormErrorMessage>
+                                                        {formErrors[el.name[0]]}
+                                                    </FormErrorMessage>
+                                                </FormControl>
+    
                                             </Flex>
-                                            :
-                                            <>
-                                            </>
                                         }       
     
                                     </Flex>

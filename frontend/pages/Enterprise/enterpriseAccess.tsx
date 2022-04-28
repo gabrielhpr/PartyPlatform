@@ -224,6 +224,7 @@ export default function enterpriseAccess() {
                                                 color='blue'
                                                 href='/Enterprise/Auth/register'
                                                 _hover={{textDecoration: 'none'}}
+                                                fontSize={18}
 
                                             > Cadastre-se gratuitamente
                                             </NavLink>

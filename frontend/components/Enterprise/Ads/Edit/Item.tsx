@@ -292,7 +292,8 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
                                     searchFunction(event, "menuWhere");
                                 }}
                                 onClick={() => {
-                                    setMenuWhere('onclick')
+                                    setMenuWhere('onclick');
+                                    setData((prevData) => ({...prevData, location: ''}));
                                 }}
                             />
                             <Flex 

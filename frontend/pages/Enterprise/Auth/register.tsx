@@ -13,6 +13,10 @@ import { TextSpanInput } from "../../../components/Enterprise/TextSpanInput";
 import { PriceCard } from "../../../components/Enterprise/priceCard";
 import { enterpriseRegisterFormSchema, enterpriseRegisterPasswordSchema, enterpriseRegisterCategoryDataSchema, enterpriseRegisterQuestionsDataSchema } from '../../../utils/validations';
 import * as yup from 'yup';
+// Add style manually
+import 'react-upload-gallery/dist/style.css' // or scss
+import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery'
+
 
 interface enterpriseDataInterf {
     step: number;
@@ -101,7 +105,7 @@ interface enterpriseDataInterf {
 }
 
 const enterpriseDataNullState = {
-    step: 0,
+    step: 9,
     plan: 'Free',
     // Contact Data
     fullName: '',
@@ -357,7 +361,13 @@ export default function RegisterEnterprise() {
     const { registerEnterprise } = useEnterpriseAuthContext();
     const [preview, setPreview] = useState([]);
     const [menuWhere, setMenuWhere] = useState('none');
-    
+
+    const onImageChange = (imageList: any, addUpdateIndex: any) => {
+        // data for submit
+        console.log(imageList, addUpdateIndex);
+        setEnterpriseData({...enterpriseData, photos: imageList});
+    };
+
     //   Close dropdown menu on click outside
     useEffect(() => {
         document.addEventListener('mouseup', function (e) {
@@ -375,6 +385,7 @@ export default function RegisterEnterprise() {
         console.log( event.currentTarget.files );
         setPreview(Array.from(event.currentTarget.files));
         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: [...event.currentTarget.files]});
+        
     }
 
     function handleChange( event: any ) {
@@ -409,7 +420,7 @@ export default function RegisterEnterprise() {
             if(key == 'photos') {
                 console.log('entrou no photos object key');
                 for(let i = 0; i < enterpriseData[key].length; i++) {
-                    formData.append('photos', enterpriseData[key][i]);
+                    formData.append('photos', enterpriseData[key][i].file);
                 }
             }
             else {
@@ -682,7 +693,7 @@ export default function RegisterEnterprise() {
                 q44: enterpriseData.q44
             })
             .then((val) =>{
-                if( val ) {
+                if( val == true ) {
                     // Validou bemmmm
                     console.log('Validou bemmm');
                     
@@ -1228,7 +1239,7 @@ export default function RegisterEnterprise() {
                     handlePreviousStep={previousStep}
                 >
                     <Flex direction='column' alignItems='center'
-
+                        display='flex'
                     >
                         <Flex 
                             w='100%'
@@ -1279,6 +1290,19 @@ export default function RegisterEnterprise() {
                         </Flex>
 
                     </Flex>
+
+                    <RUG 
+                        w='80%'
+                        action="http://example.com/upload"  
+                        autoUpload={false}
+                        onChange={(images) => {
+                            console.log( enterpriseData );
+                            setEnterpriseData({...enterpriseData, photos: images});
+                        }}
+                    
+                    />
+
+
 
                 </RegisterFormLayout>
 

@@ -52,12 +52,7 @@ export function SidebarNav() {
                     <NavLink icon={AiOutlineStar} href="/Enterprise/rating">Avaliações</NavLink>
                     <NavLink icon={RiSettings3Line} href="/Enterprise/settings">Minha conta</NavLink>
                 </Stack>
-                :
-                enterpriseArea
-                ?
-                <>
-                </>
-                :
+                :               
                 <Stack spacing="8">
                     <NavLink icon={GiBlockHouse} href="/services?serviceCategory=Espaco">Espaços</NavLink>
                     <NavLink icon={GiForkKnifeSpoon} href="/services?serviceCategory=Servico&serviceSpecificCategory=Buffet">Buffets</NavLink>

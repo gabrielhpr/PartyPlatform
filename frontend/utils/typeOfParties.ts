@@ -104,12 +104,13 @@ export const enterpriseSpecificCategoryDict = {
 
 export const locationMap = {
     l1: {city: 'osasco', state: 'sp', country: 'brasil', textToShow: 'Osasco - SP, Brasil'},
-    l2: {city: 'saopaulo', state: 'sp', country: 'brasil', textToShow: 'São Paulo - SP, Brasil'},
-    l3: {city: 'carapicuiba', state: 'sp', country: 'brasil', textToShow: 'Carapicuíba - SP, Brasil'},
-    l4: {city: 'barueri', state: 'sp', country: 'brasil', textToShow: 'Barueri - SP, Brasil'},
-    l5: {city: 'cotia', state: 'sp', country: 'brasil', textToShow: 'Cotia - SP, Brasil'},
-    l6: {city: 'itapevi', state: 'sp', country: 'brasil', textToShow: 'Itapevi - SP, Brasil'},
 }
+
+// l2: {city: 'saopaulo', state: 'sp', country: 'brasil', textToShow: 'São Paulo - SP, Brasil'},
+// l3: {city: 'carapicuiba', state: 'sp', country: 'brasil', textToShow: 'Carapicuíba - SP, Brasil'},
+// l4: {city: 'barueri', state: 'sp', country: 'brasil', textToShow: 'Barueri - SP, Brasil'},
+// l5: {city: 'cotia', state: 'sp', country: 'brasil', textToShow: 'Cotia - SP, Brasil'},
+// l6: {city: 'itapevi', state: 'sp', country: 'brasil', textToShow: 'Itapevi - SP, Brasil'},
 
 export const priceOptionsPerService = {
     Espaco: {

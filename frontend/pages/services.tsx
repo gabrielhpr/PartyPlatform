@@ -27,6 +27,8 @@ export default function ServicesPage() {
         const id = el.id;
         const partyType = el.partyMainFocus;
 
+        localStorage.setItem("previousRoute", routerNext.asPath);
+    
         routerNext.push({
             pathname: '/serviceProfile',
             query: { 
@@ -34,6 +36,7 @@ export default function ServicesPage() {
                 partyType: partyType
             }
         });
+        
     }
 
     useEffect(() => {
@@ -299,6 +302,7 @@ export default function ServicesPage() {
                                         </>
                                     }
                                     
+                                    {/* 
                                     <Button
                                         leftIcon={<Icon as={RiFilter2Fill}/>}
                                         borderRadius={11}
@@ -309,6 +313,7 @@ export default function ServicesPage() {
                                     >
                                         Filtros
                                     </Button>
+                                    */}
                                 </Stack>
                                     
 

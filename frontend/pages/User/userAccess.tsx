@@ -1,15 +1,12 @@
 import { Box, Flex, Text, Input, Link as NavLink, Button } from "@chakra-ui/react";
 import Image from 'next/image';
 import { useState } from "react";
-import FotoDebutante from '../../assets/imgs/festaDebutante.jpg';
 import { useUserAuthContext } from "../../context/userContext";
 import { useRouter } from "next/router";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
-
-
-
-
+import FotoFestaEntregaPresente from '../../assets/imgs/entrega-presente.png';
+import { Footer } from "../../components/Footer";
 
 export default function userAccess() {
     const [userAccessData, setUserAccessData] = useState({email: '', password:''});
@@ -35,22 +32,23 @@ export default function userAccess() {
             
             <Sidebar/>
 
-            <Flex w='100%' h={500} position='relative' 
+            <Flex 
+                w='100%' 
+                h={600} 
+                position='relative' 
                 justifyContent='center'
             >
-                {/* 
-                <Image src={FotoDebutante}
+                <Image src={FotoFestaEntregaPresente}
                     layout='fill'
                     objectFit='cover'
                     objectPosition='center'
                 />
                 
-                */}
                 
                 {/* Shadow */}
                 <Flex w='100%' h='100%'
                     justifyContent='center'
-                    bg='rgba(0,0,0,0.80)' 
+                    bg={{base:'brand.white', lg:'rgba(0,0,0,0.20)'}}
                     zIndex={3}
                 >
 
@@ -66,11 +64,16 @@ export default function userAccess() {
                                 <Text as='h2' fontSize={30} fontWeight={600}
                                     mb='2'
                                 >
-                                    Cadastre-se
+                                    Planeje sua festa
                                 </Text>
 
                                 <Text as='h3' fontSize={20} fontWeight={500}>
-                                    Encontre diversos fornecedores
+                                    * Encontre o melhor fornecedor para a sua 
+                                    festa
+                                </Text>
+
+                                <Text as='h3' fontSize={20} fontWeight={500}>
+                                    * Peça orçamentos
                                 </Text>
 
                             </Flex>
@@ -178,6 +181,8 @@ export default function userAccess() {
                 </Flex>
 
             </Flex>
+
+            <Footer/>
         </Box>
     );
 }

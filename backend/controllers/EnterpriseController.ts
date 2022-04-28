@@ -916,16 +916,21 @@ module.exports = class EnterpriseController {
             res.status(422).json({ message: "O email é obrigatório!" });
             return;
         }
-        // Check if the email is already registered in database
-        let entEmail = await enterpriseModel.getEnterpriseByEmail( email );
 
-        if( entEmail != undefined ) {
-            res.status(422).json({ message: "Esse email já está em uso! Utilize outro email!" });
-            return;
+        // If the received email is different from the previous one, 
+        // we will updated it
+        if( enterpriseData.email != email ) {
+            // Check if the email is already registered in database
+            let entEmail = await enterpriseModel.getEnterpriseByEmail( email );
+    
+            if( entEmail != undefined ) {
+                res.status(422).json({ message: "Esse email já está em uso! Utilize outro email!" });
+                return;
+            }
+            enterpriseData.email = email;
+            console.log('Email');
+            console.log(enterpriseData.email);
         }
-        enterpriseData.email = email;
-        console.log('Email');
-        console.log(enterpriseData.email);
         
         // PHONE
         if( !phone ) {
