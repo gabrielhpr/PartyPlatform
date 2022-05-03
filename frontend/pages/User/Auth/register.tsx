@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Link as NavLink, Button, Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Link as NavLink, Button, Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, useBreakpointValue, FormErrorMessage, FormControl } from "@chakra-ui/react";
 import Image from 'next/image';
 import { useEffect, useState } from "react";
 import PessoasFesta from '../../../assets/imgs/pessoas-festa.jpg';
@@ -8,39 +8,15 @@ import { useUserAuthContext } from "../../../context/userContext";
 import { locationMap, typeOfParties } from "../../../utils/typeOfParties";
 import { Footer } from "../../../components/Footer";
 import { Sidebar } from "../../../components/Sidebar";
-
-interface userRegisterDataProps {
-    fullName: string;
-    email: string;
-    phone: string;
-    password: string;
-    passwordConfirmation: string;
-    partyType: string;
-    partyTypeTextToShow: string;
-    partyDate: string;
-    location: string;
-    city: string;
-    state: string;
-    country: string;
-}
-
-const userRegisterDataNullState = {
-    fullName: '',
-    email: '',
-    phone: '',
-    password: '',
-    passwordConfirmation: '',
-    partyType: '',
-    partyTypeTextToShow: '',
-    partyDate: '',
-    location: '',
-    city: '',
-    state: '',
-    country: ''
-}
+import { FlashMessageComponent } from "../../../components/FlashMessageComponent";
+import { userRegisterDataFormErrorNullState, userRegisterDataFormErrorProps, userRegisterDataNullState, userRegisterDataProps } from "../../../utils/userInterface";
+import * as yup from 'yup';
+import { userRegisterFormSchema, userRegisterPasswordSchema } from "../../../utils/validations";
 
 export default function registerUser() {
     const [userRegisterData, setUserRegisterData] = useState<userRegisterDataProps>(userRegisterDataNullState);
+    const [formErrorsUserRegister, setFormErrorsUserRegister] = useState<userRegisterDataFormErrorProps>(userRegisterDataFormErrorNullState);
+
     const { registerUser } = useUserAuthContext();
     const [menuWhere, setMenuWhere] = useState('none');
     const routerNext = useRouter();
@@ -64,12 +40,84 @@ export default function registerUser() {
         setUserRegisterData({...userRegisterData, [event.currentTarget.name]: event.currentTarget.value });
         console.log( userRegisterData );
     }
+
+    async function handleValidation( fields: Array<string>, schemaForm: any, setErrorFunction: any, data: any ) {
+        console.log(fields);
+
+        // Reset errors message
+        fields.map((el, index) => {
+            setErrorFunction((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await schemaForm
+            .validateAt( el, data)
+            .catch((err) => {
+                setErrorFunction((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
+            });
+        });
+
+        let validForm = true;
+
+        // Check if can go to the next step
+        fields.map( (el, index) => {
+            
+            let isValidField = yup.reach( schemaForm, el )
+            .isValidSync( data[el] );
+            console.log(isValidField);
+
+            validForm = validForm && isValidField;                
+        });
+
+        console.log('validForm');
+        console.log(validForm);
+        // If there is no error its validated
+        return validForm;       
+    }
     
-    function handleSubmit( event: any ) {
-        event.preventDefault();
-        console.log('entrou no submit');
-        console.log( userRegisterData );
-        registerUser( userRegisterData );
+    async function handleSubmit( event: any ) {
+
+        // VALIDATE GENERAL
+        let isValidGeneral = await handleValidation(
+            ['fullName', 'email', 'phone', 'whatsapp', 'location'],
+            userRegisterFormSchema,
+            setFormErrorsUserRegister,
+            userRegisterData
+        );
+
+        // VALIDATE PASSWORD
+        let fields = ['password', 'passwordConfirmation'];
+
+        //Reset errors message
+        fields.map((el, index) => {
+            setFormErrorsUserRegister((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await userRegisterPasswordSchema
+            .validateAt( el, userRegisterData)
+            .catch((err) => {
+                setFormErrorsUserRegister((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
+            });
+        });
+
+        // Validate
+        let isValidPassword = await userRegisterPasswordSchema
+        .isValid({password:userRegisterData.password, passwordConfirmation:userRegisterData.passwordConfirmation})
+        .then((val) =>{
+            return val;
+        });
+
+        if( isValidGeneral && isValidPassword ) {
+            console.log('Entrou handleSubmitRegister');
+            await registerUser( userRegisterData, true );
+            console.log('Saiu handleSubmitRegister');
+        }
+
     }
 
     // Used in Menu search
@@ -94,6 +142,8 @@ export default function registerUser() {
             {/* Header */}
             <Header name="" position='relative' />
             
+            <FlashMessageComponent/>
+
             <Sidebar/>
 
             <Flex w='100vw' h='auto' position='relative' 
@@ -164,59 +214,106 @@ export default function registerUser() {
                             </Text>
 
 
-                            <Flex direction="column" mt="3"
-                            >
-                                <Text color="brand.white_40" fontSize={19}
-                                >
+                            {/* Full name */}
+                            <Flex direction="column" mt="3">
+                                <Text color="brand.white_40" fontSize={19}>
                                     Nome completo
                                 </Text>
 
-                                <Input 
-                                    name="fullName"
-                                    onChange={handleChange}
-                                />
+                                <FormControl 
+                                    isInvalid={formErrorsUserRegister.fullName != '' ? true : false}
+                                >
+                                    <Input 
+                                        name="fullName"
+                                        value={userRegisterData.fullName}
+                                        onChange={(event: any) => {
+                                            handleChange(event);
+                                            setFormErrorsUserRegister({...formErrorsUserRegister, fullName: ''});
+                                        }}
+                                    />
+                                    <FormErrorMessage>
+                                        {formErrorsUserRegister.fullName}
+                                    </FormErrorMessage> 
+                                </FormControl>
                             </Flex>
-
-
+                            
+                            {/* E-mail */}
                             <Flex direction="column" mt="3">
                                 <Text color="brand.white_40" fontSize={19}>
                                     E-mail
                                 </Text>
 
-                                <Input placeholder="email@example.com"
-                                    name="email"
-                                    onChange={handleChange}
-                                />
+                                <FormControl 
+                                    isInvalid={formErrorsUserRegister.email != '' ? true : false}
+                                >
+                                    <Input placeholder="email@example.com"
+                                        name="email"
+                                        value={userRegisterData.email}
+                                        onChange={(event: any) => {
+                                            handleChange(event);
+                                            setFormErrorsUserRegister({...formErrorsUserRegister, email: ''});
+                                        }}
+                                    />
+                                    <FormErrorMessage>
+                                        {formErrorsUserRegister.email}
+                                    </FormErrorMessage> 
+                                </FormControl>
                             </Flex>
 
-                            <Flex direction="column"
-                                mt="3"
+                            {/* Password */}
+                            <Flex direction="row" mt='3'
+                                alignItems='flex-end'
                             >
-                                <Text color="brand.white_40" fontSize={19}>
-                                    Senha
-                                </Text>
+                                <Flex direction="column"
+                                >
+                                    <Text color="brand.white_40" fontSize={19}>
+                                        Senha
+                                    </Text>
 
-                                <Input placeholder="********"
-                                    name="password"
-                                    type="password"
-                                    onChange={handleChange}
-                                />
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.password != '' ? true : false}
+                                    >
+                                        <Input placeholder="********"
+                                            name="password"
+                                            type="password"
+                                            value={userRegisterData.password}
+                                            onChange={(event: any) => {
+                                                handleChange(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, password: ''});
+                                            }}
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.password}
+                                        </FormErrorMessage> 
+                                    </FormControl>                                        
+                                </Flex>
+
+                                <Flex direction="column" ml='2'
+                                >
+                                    <Text color="brand.white_40" fontSize={19}>
+                                        Confirmação da Senha
+                                    </Text>
+
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.passwordConfirmation != '' ? true : false}
+                                    >
+                                        <Input placeholder="********"
+                                            name="passwordConfirmation"
+                                            type="password"
+                                            value={userRegisterData.passwordConfirmation}
+                                            onChange={(event: any) => {
+                                                handleChange(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, passwordConfirmation: ''});
+                                            }}
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.passwordConfirmation}
+                                        </FormErrorMessage> 
+                                    </FormControl>                                         
+                                </Flex>
                             </Flex>
 
-                            <Flex direction="column"
-                                mt="3"
-                            >
-                                <Text color="brand.white_40" fontSize={19}>
-                                    Confirmação da Senha
-                                </Text>
-
-                                <Input placeholder="********"
-                                    name="passwordConfirmation"
-                                    type="password"
-                                    onChange={handleChange}
-                                />
-                            </Flex>
-
+                            {/* Phone */}
                             <Flex direction="column"
                                 mt="3"
                             >
@@ -224,13 +321,52 @@ export default function registerUser() {
                                     Telefone
                                 </Text>
 
-                                <Input 
-                                    name="phone"
-                                    type="text"
-                                    onChange={handleChange}
-                                />
+                                <FormControl 
+                                    isInvalid={formErrorsUserRegister.phone != '' ? true : false}
+                                >
+                                    <Input 
+                                        name="phone"
+                                        type="text"
+                                        value={userRegisterData.phone}
+                                        onChange={(event: any) => {
+                                            handleChange(event);
+                                            setFormErrorsUserRegister({...formErrorsUserRegister, phone: ''});
+                                        }}
+                                        
+                                    />
+                                    <FormErrorMessage>
+                                        {formErrorsUserRegister.phone}
+                                    </FormErrorMessage> 
+                                </FormControl>  
                             </Flex>
 
+                            {/* Whatsapp */}
+                            <Flex direction="column"
+                                mt="3"
+                            >
+                                <Text color="brand.white_40" fontSize={19}>
+                                    Whatsapp
+                                </Text>
+
+                                <FormControl 
+                                    isInvalid={formErrorsUserRegister.whatsapp != '' ? true : false}
+                                >
+                                    <Input 
+                                        name="whatsapp"
+                                        type="text"
+                                        value={userRegisterData.whatsapp}
+                                        onChange={(event: any) => {
+                                            handleChange(event);
+                                            setFormErrorsUserRegister({...formErrorsUserRegister, whatsapp: ''});
+                                        }}
+                                    />
+                                    <FormErrorMessage>
+                                        {formErrorsUserRegister.whatsapp}
+                                    </FormErrorMessage> 
+                                </FormControl> 
+                            </Flex>
+
+                            {/* Location */}
                             <Flex direction="column"
                                 mt="3"
                             >
@@ -238,119 +374,77 @@ export default function registerUser() {
                                     Onde reside
                                 </Text>
 
-                                <Flex direction='column'
+                                <FormControl 
+                                    isInvalid={formErrorsUserRegister.location != '' ? true : false}
                                 >
-                                    {/* Onde - Localização */}
-                                    <Input 
-                                        _focus={{outline:'none'}}
-                                        value={userRegisterData.location}
-                                        onChange={(event: any) => {
-                                            setUserRegisterData({...userRegisterData, location: event.currentTarget.value});
-                                            searchFunction(event, "menuWhere");
-                                        }}
-                                        onClick={() => {
-                                            setMenuWhere('onclick')
-                                        }}
-                                    />
-                                    <Box 
-                                        id='menuLocation'
-                                        height={230} 
-                                        width={350}
-                                        display={menuWhere}
-                                        position='absolute'
-                                        overflowY="scroll"
-                                        bg='brand.white'
-                                        mt={10}
-                                        borderRadius={10}
-                                        zIndex={3}
+                                    <Flex direction='column'
                                     >
-                                        <Flex direction="column" id="menuWhere"
-                                            h='100%'
+                                        {/* Onde - Localização */}
+                                        <Input 
+                                            _focus={{outline:'none'}}
+                                            value={userRegisterData.location}
+                                            onChange={(event: any) => {
+                                                setUserRegisterData({...userRegisterData, location: event.currentTarget.value});
+                                                searchFunction(event, "menuWhere");
+                                            }}
+                                            onClick={() => {
+                                                setMenuWhere('onclick')
+                                            }}
+                                        />
+                                        <Box 
+                                            id='menuLocation'
+                                            height={230} 
+                                            width={350}
+                                            display={menuWhere}
+                                            position='absolute'
+                                            overflowY="scroll"
+                                            bg='brand.white'
+                                            mt={{base:1, lg: 5}}
+                                            borderRadius={10}
+                                            zIndex={3}
                                         >
-                                            {
-                                            Object.values(locationMap).map((el, i) => {
-                                                return(
-                                                    <Button
-                                                        bg='white'
-                                                        h='25%'
-                                                        py='4'
-                                                        px='5'
-                                                        borderRadius={0}
-                                                        _focus={{outline:'none'}}
-                                                        _hover={{bg:'rgba(0,0,0,0.1)'}}
-                                                        //name='partyType'
-                                                        //value={el.value}
-                                                        onClick={(event) => {
-                                                            setUserRegisterData({...userRegisterData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
-                                                            setMenuWhere('none');
-                                                        }}
-                                                    >
-                                                        <Text
-                                                            width='100%'
-                                                            textAlign='left'
-                                                            fontWeight={400}
-                                                            fontSize={18}
-                                                        >
-                                                            {el.textToShow}
-                                                        </Text>
-                                                    </Button>
-                                                );
-                                            })
-                                            }
-                                        </Flex>
-                                    </Box>
-                                </Flex>       
-                            </Flex>
-
-                            <Flex direction="row"
-                                mt="3"
-                                justifyContent='space-between'
-                            >
-                                <Flex direction='column'
-                                    w='50%'
-                                >
-                                    <Text color="brand.white_40" fontSize={19}>
-                                        Tipo de festa
-                                    </Text>
-
-                                    <Menu>
-                                        <MenuButton as={Button} colorScheme='gray'>
-                                            {userRegisterData.partyTypeTextToShow || 'Selecione'}
-                                        </MenuButton>
-                                        <MenuList minWidth='240px'>
-                                            <MenuOptionGroup type='radio'
-                                            >         
+                                            <Flex direction="column" id="menuWhere"
+                                                h='100%'
+                                            >
                                                 {
-                                                    Object.values( typeOfParties ).map((el, index) => {
-                                                        return (
-                                                            <MenuItemOption value={el.value}
-                                                                onClick={() => {
-                                                                    setUserRegisterData({...userRegisterData, partyType: el.value, partyTypeTextToShow: el.textToShow });
-                                                                }}
+                                                Object.values(locationMap).map((el, i) => {
+                                                    return(
+                                                        <Button
+                                                            bg='white'
+                                                            h='25%'
+                                                            py='4'
+                                                            px='5'
+                                                            borderRadius={0}
+                                                            _focus={{outline:'none'}}
+                                                            _hover={{bg:'rgba(0,0,0,0.1)'}}
+                                                            //name='partyType'
+                                                            //value={el.value}
+                                                            onClick={(event) => {
+                                                                setUserRegisterData({...userRegisterData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
+                                                                setFormErrorsUserRegister({...formErrorsUserRegister, location: ''});
+                                                                setMenuWhere('none');
+                                                            }}
+                                                        >
+                                                            <Text
+                                                                width='100%'
+                                                                textAlign='left'
+                                                                fontWeight={400}
+                                                                fontSize={18}
                                                             >
                                                                 {el.textToShow}
-                                                            </MenuItemOption>
-                                                        )
-                                                    })
-                                                }                                       
-                                            </MenuOptionGroup>
-                                        </MenuList>
-                                    </Menu>
-
-                                </Flex>
-
-                                <Flex direction='column' ml='2'
-                                    w='50%'
-                                >
-                                    <Text color="brand.white_40" fontSize={19}>
-                                        Data da festa
-                                    </Text>
-                                    <Input
-                                        name="partyDate"
-                                        type="date"
-                                        onChange={handleChange}
-                                    />
-                                </Flex>
+                                                            </Text>
+                                                        </Button>
+                                                    );
+                                                })
+                                                }
+                                            </Flex>
+                                        </Box>
+                                    </Flex>      
+                                    
+                                    <FormErrorMessage>
+                                        {formErrorsUserRegister.location}
+                                    </FormErrorMessage> 
+                                </FormControl> 
                             </Flex>
 
                             <Button 

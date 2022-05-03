@@ -131,6 +131,9 @@ export const theme = extendTheme({
             '.carousel .control-arrow, .carousel.carousel-slider .control-arrow': {
                 opacity: 1,
             },
+            '.rug-card .rug-card-upload-button': {
+                display: 'none'
+            }
         }
     }
 })

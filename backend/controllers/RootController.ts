@@ -1,6 +1,8 @@
 const RootModel = require('../models/RootModel');
 const rootModel = new RootModel();
-
+const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.js");
+const mailchimpClient = mailchimpFactory("rcUfsa5vVBpbmJlzbkjF0A");
+import bcrypt = require("bcrypt");
 
 module.exports = class RootController {
 
@@ -92,5 +94,122 @@ module.exports = class RootController {
         console.log( service );
         res.status(200).json({ service: service, opinions: opinions });
     }
-    
+
+    static async sendEmailResetPasswordEnterprise(req: any, res: any) {
+        const { email } = req.body;
+
+        // Check if email exists
+        let enterprise = await rootModel.getEnterpriseByEmail( email );
+        console.log('enterpriseId é: ');
+        console.log( enterprise );
+        console.log( enterprise.id );
+
+        if( enterprise == undefined ) {
+            res.status(422).json({ message: "E-mail não cadastrado!"});
+            return;
+        }
+
+        let randomToken = require('random-token').create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+        let token = randomToken(64); 
+        console.log('o token é');
+        console.log( token );
+
+        enterprise.tokenResetPassword = token;
+        enterprise.tokenCreatedAt = Date.now().toString();
+
+        await rootModel.updateEnterprise( enterprise );
+
+
+        // Sending the email using Mandril
+        const run = async () => {
+            const response = await mailchimpClient.messages.send({ message: 
+                {
+                    subject: '[Redefinição de senha]',
+                    text: `
+                        Olá!
+
+                        O link para redefinição da sua senha é:
+                        localhost:3000/Enterprise/Auth/resetPassword?token=${enterprise.tokenResetPassword}
+                    `,
+                    from_email: 'festafy@festafy.com.br',
+                    to: [ {email: enterprise.email, name: 'Fornecedor', type:'to'} ]
+                } 
+            });
+            console.log(response);
+        };
+
+        run();
+
+        return res.status(200).json({message: "Email enviado com sucesso!"});
+
+
+    }
+
+    static async checkResetPasswordValidity(req: any, res: any) {
+        const { token } = req.query;
+
+        if( token == undefined ) {
+            res.status(422).json({ message: "Token não encontrado!"});
+            return;
+        }
+
+        let enterprise = await rootModel.getEnterpriseByToken( token );
+        console.log( enterprise );
+
+        if( enterprise.length == 0 ) {
+            res.status(422).json({ message: "Token não encontrado!"});
+            return;
+        }
+
+        let dateNow = Date.now();
+
+        let diff = dateNow - parseInt( enterprise.tokenCreatedAt );
+        diff = diff / 1000;
+
+        // User is just allowed to reset password between the first hour of
+        // token creation
+        if( diff > 3600 ) {
+            res.status(422).json({ message: "Token expirado!"});
+            return;
+        }
+
+        return res.status(200).json({message: "Token válido!"});
+    }
+
+    static async resetPassword(req: any, res: any) {
+        const { password, passwordConfirmation, token } = req.body;
+        console.log( token );
+
+        let result = await rootModel.getEnterpriseByToken( token );
+        console.log('id');
+        console.log(result.id);
+        let enterprise = await rootModel.getEnterpriseById( result.id );
+
+        console.log( enterprise );
+        // SENHA
+        if( !password ) {
+            res.status(422).json({ message: "A senha é obrigatória!" });
+            return;
+        }
+        // Tamanho da senha
+        if( password.length < 6 ) {
+            res.status(422).json({ message: "A senha deve ter no mínimo 6 caracteres!" });
+            return;
+        }
+        // Senha deve ser igual a sua confirmação
+        if( password != passwordConfirmation ) {
+            res.status(422).json({ message: "A confirmação de senha deve ser igual a senha!" });
+            return;
+        }
+
+        // Transform password to hash password
+        const salt = await bcrypt.genSalt(12);
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        enterprise.password = passwordHash;
+        enterprise.tokenResetPassword = '';
+        enterprise.tokenCreatedAt = '';
+
+        await rootModel.updateEnterprise( enterprise );
+    }
 }

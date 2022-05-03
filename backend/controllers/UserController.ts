@@ -18,15 +18,28 @@ module.exports = class UserController {
             fullName,
             email,
             phone,
+            whatsapp,
             password,
             passwordConfirmation,
-            partyType,
-            partyDate,
+            location,
             city,
             state,
             country
         } = req.body;
         
+        // EMAIL
+        if( !email ) {
+            res.status(422).json({ message: "O email é obrigatório!" });
+            return;
+        }
+
+        let userEmail = await userModel.getUserByEmail( email );
+
+        if( userEmail != undefined ) {
+            res.status(422).json({ message: "Esse email já está em uso! Utilize outro email!" });
+            return;
+        }
+
         if( !password ) {
             res.status(422).json({ message: "A senha é obrigatória!"});
             return;
@@ -41,9 +54,9 @@ module.exports = class UserController {
             'fullName': fullName,
             'email': email,
             'phone': phone,
+            'whatsapp': whatsapp,
             'password': passwordHash,
-            'partyType': partyType,
-            'partyDate': partyDate,
+            'location': location,
             'city': city,
             'state': state,
             'country': country
@@ -323,13 +336,22 @@ module.exports = class UserController {
             opinionTitle,
             opinionContent,
             recommendToAFriend,
-            recommendToAFriendObservation,
+            recommendToAFriendObservation
+        } = req.body;
+
+        let {
             ratingServiceQuality,
             ratingPrice,
             ratingAnswerTime,
             ratingFlexibility,
-            ratingProfessionalism,
+            ratingProfessionalism
         } = req.body;
+
+        ratingServiceQuality = parseInt( ratingServiceQuality );
+        ratingPrice = parseInt( ratingPrice );
+        ratingAnswerTime = parseInt( ratingAnswerTime );
+        ratingFlexibility = parseInt( ratingFlexibility );
+        ratingProfessionalism = parseInt( ratingProfessionalism );
 
         if(!req.headers.authorization) {
             return res.status(500).send({message: "Não possui token!"});
@@ -358,7 +380,6 @@ module.exports = class UserController {
 
         const ratingData = {
             'userId': userId,
-            'type': 'opinion',
             'enterpriseId': enterpriseId,
             'partyType': partyType,
             'partyDate': partyDate, 
@@ -399,12 +420,14 @@ module.exports = class UserController {
             enterpriseId,
             partyType,
             partyDate,
-            nOfPeople,
             messageContent
         } = req.body;
 
+        let { nOfPeople } = req.body;
+        nOfPeople = parseInt( nOfPeople );
+
         if(!req.headers.authorization) {
-            return res.status(500).send({message: "Não possui token!"});
+            return res.status(500).json({message: "Não possui token!"});
         }
         
         let userId;
@@ -413,7 +436,7 @@ module.exports = class UserController {
 
         jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
             if(err) {
-                return res.status(500).send({message: "Token inválido!"});
+                return res.status(500).json({message: "Token inválido!"});
             }
             userId = decoded.id;
         });
@@ -464,7 +487,7 @@ module.exports = class UserController {
 
         run();
 
-        return res.status(200).send({message: "Email enviado com sucesso!"});
+        return res.status(200).json({message: "Email enviado com sucesso!"});
 
 
     }

@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { TopMenuEnterprise } from "../../components/Enterprise/TopMenuEnterprise";
+import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { NotAuthorizedComponent } from "../../components/NotAuthorizedComponent";
@@ -15,6 +16,7 @@ export default function SettingsEnterprise() {
         return (
             <Box>
                 <Header name="" position="relative" />
+                <FlashMessageComponent/>
                 <TopMenuEnterprise />
                 <Sidebar/>
                 

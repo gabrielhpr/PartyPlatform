@@ -1,5 +1,6 @@
 import { Flex, Text, Button, Icon, Box } from "@chakra-ui/react";
 import Image from 'next/image'
+import { AiOutlinePicture } from "react-icons/ai";
 import { RiMapPin2Fill, RiMoneyDollarCircleFill, RiPriceTag3Fill, RiStarSFill } from 'react-icons/ri';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -40,7 +41,7 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
         >
             
             <Carousel
-                infiniteLoop
+                infiniteLoop={false}
                 transitionTime={400}
                 showThumbs={false}
                 showArrows={true}
@@ -48,28 +49,86 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
             >
                 {
                     photos.map((image, i) => {
-                        return (
-                            <Box
-                                key={i}
-                                h={{base:'40vh', lg:'32vh'}}
-                                overflow='hidden'
-                                borderTopRadius={borderTop==true ? 8 : 0}
-                                justifyContent='center'
-                                alignItems='center'
-                                position='relative'
-                                onClick={handleOnClick}
-                                cursor='pointer'
-                            >
-                                <Image
-                                    src={`http://localhost:5000/images/enterprise/${image}`}
-                                    layout='fill'
-                                    objectFit='cover'
-                                    priority={true}
-                                /> 
-                            </Box>
-                        )
+                        // The last picture
+                        if( (photos.length - 1) == i ) {
+                            console.log('entrou no last');
+                            return (
+                                <Box
+                                    key={i}
+                                    h={{base:'40vh', lg:'32vh'}}
+                                    overflow='hidden'
+                                    borderTopRadius={borderTop==true ? 8 : 0}
+                                    justifyContent='center'
+                                    alignItems='center'
+                                    position='relative'
+                                    onClick={handleOnClick}
+                                    cursor='pointer'
+                                    bg='rgba(0,0,0,0.5)'
+                                >
+                                    <Flex
+                                        w='100%'
+                                        h='100%'
+                                        bg='rgba(0,0,0,0.4)'
+                                        position='relative'
+                                        zIndex={4}
+                                        direction='column'
+                                        alignItems='center'
+                                        justifyContent='center'
+                                        //zIndex={4}
+                                    >
+                                        <Icon as={AiOutlinePicture}
+                                            fontSize={52}
+                                            color='brand.white'
+                                        />
+                                        <Button 
+                                            bg='rgba(0,0,0,0)'
+                                            color='brand.white'
+                                            w='70%'
+                                            position='absolute'
+                                            top='50%'
+                                            left='50%'
+                                            transform='translate(-50%, 80%)'
+                                            fontSize={18}
+                                            _hover={{bg:'rgba(0,0,0,0)'}}
+                                        >
+                                            Ver mais fotos
+                                        </Button>
+                                    </Flex>
+
+                                    <Image
+                                        src={`http://localhost:5000/images/enterprise/${image}`}
+                                        layout='fill'
+                                        objectFit='cover'
+                                        priority={true}
+                                    /> 
+                                </Box>
+                            )
+                        }
+                        else {
+                            return (
+                                <Box
+                                    key={i}
+                                    h={{base:'40vh', lg:'32vh'}}
+                                    overflow='hidden'
+                                    borderTopRadius={borderTop==true ? 8 : 0}
+                                    justifyContent='center'
+                                    alignItems='center'
+                                    position='relative'
+                                    onClick={handleOnClick}
+                                    cursor='pointer'
+                                >
+                                    <Image
+                                        src={`http://localhost:5000/images/enterprise/${image}`}
+                                        layout='fill'
+                                        objectFit='cover'
+                                        priority={true}
+                                    /> 
+                                </Box>
+                            )
+                        }
                     })
                 }
+                
             </Carousel>
                 
 

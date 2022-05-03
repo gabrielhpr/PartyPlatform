@@ -189,7 +189,9 @@ module.exports = class EnterpriseModel {
                 addressNumber = '${data.addressNumber}',
                 instagram = '${data.instagram}',
                 facebook = '${data.facebook}',
-                website = '${data.website}'
+                website = '${data.website}',
+                tokenResetPassword = '',
+                tokenCreatedAt = ''
             WHERE id = ${enterpriseId}
         `;
 

@@ -4,7 +4,7 @@ import { Button, Flex, Icon, Input, Menu, MenuButton, MenuItem,
     ModalOverlay, Popover, PopoverArrow, PopoverBody, 
     PopoverCloseButton, PopoverContent, PopoverHeader, 
     PopoverTrigger, Stack, Text, Textarea, 
-    Tooltip, useDisclosure, Link as NavLink, Img, Box } from "@chakra-ui/react";
+    Tooltip, useDisclosure, Link as NavLink, Img, Box, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { RegisterFormLayout } from "../components/Enterprise/RegisterFormLayout";
 import { RiInformationLine } from 'react-icons/ri';
@@ -12,6 +12,11 @@ import { useUserAuthContext } from "../context/userContext";
 import { locationMap, typeOfParties } from "../utils/typeOfParties";
 import { useRouter } from "next/router";
 import api from "../utils/api";
+import * as yup from 'yup';
+import { dateRegex, invalidTextRegex, validTextRegex } from "../utils/regexCustom";
+import { FlashMessageComponent } from "../components/FlashMessageComponent";
+import { userRegisterDataFormErrorNullState, userRegisterDataFormErrorProps, userRegisterDataNullState, userRegisterDataProps } from "../utils/userInterface";
+import { userRegisterFormSchema, userRegisterPasswordSchema } from "../utils/validations";
 
 
 interface ratingDataInterf {
@@ -19,16 +24,15 @@ interface ratingDataInterf {
     enterpriseId: string;
     partyType: string;
     partyDate: string;
-    ratingServiceQuality: number;
-    ratingPrice: number;
-    ratingAnswerTime: number;
-    ratingFlexibility: number;
-    ratingProfessionalism: number;
+    ratingServiceQuality: string;
+    ratingPrice: string;
+    ratingAnswerTime: string;
+    ratingFlexibility: string;
+    ratingProfessionalism: string;
     recommendToAFriend: string;
     recommendToAFriendObservation: string;
     opinionTitle: string;
     opinionContent: string;
-
 }
 
 const ratingDataNullState = {
@@ -36,45 +40,15 @@ const ratingDataNullState = {
     enterpriseId: '',
     partyType: '',
     partyDate: '',
-    ratingServiceQuality: 0,
-    ratingPrice: 0,
-    ratingAnswerTime: 0,
-    ratingFlexibility: 0,
-    ratingProfessionalism: 0,
+    ratingServiceQuality: '',
+    ratingPrice: '',
+    ratingAnswerTime: '',
+    ratingFlexibility: '',
+    ratingProfessionalism: '',
     recommendToAFriend: '',
     recommendToAFriendObservation: '',
     opinionTitle: '',
     opinionContent: '',
-}
-
-interface userRegisterDataProps {
-    fullName: string;
-    email: string;
-    phone: string;
-    password: string;
-    passwordConfirmation: string;
-    partyType: string;
-    partyTypeTextToShow: string;
-    partyDate: string;
-    location: string;
-    city: string;
-    state: string;
-    country: string;
-}
-
-const userRegisterDataNullState = {
-    fullName: '',
-    email: '',
-    phone: '',
-    password: '',
-    passwordConfirmation: '',
-    partyType: '',
-    partyTypeTextToShow: '',
-    partyDate: '',
-    location: '',
-    city: '',
-    state: '',
-    country: ''
 }
 
 interface serviceDataInterf {
@@ -243,11 +217,64 @@ const serviceNullState = {
     q50: ''
 }
 
+interface ratingDataFormErrorInterf {
+    partyType: string;
+    partyDate: string;
+    ratingServiceQuality: number;
+    ratingPrice: number;
+    ratingAnswerTime: number;
+    ratingFlexibility: number;
+    ratingProfessionalism: number;
+    recommendToAFriend: string;
+    recommendToAFriendObservation: string;
+    opinionTitle: string;
+    opinionContent: string;
+}
+
+const ratingDataFormErrorNullState = {
+    partyType: '',
+    partyDate: '',
+    ratingServiceQuality: 0,
+    ratingPrice: 0,
+    ratingAnswerTime: 0,
+    ratingFlexibility: 0,
+    ratingProfessionalism: 0,
+    recommendToAFriend: '',
+    recommendToAFriendObservation: '',
+    opinionTitle: '',
+    opinionContent: ''
+}
+
+const RatingFormSchema = yup.object().shape({
+    partyType: yup.string().required('O tipo da festa é obrigatório').oneOf(
+        Object.values(typeOfParties).map((el,index) => {return el.value})
+        , 'Opção não válida'),
+    partyDate: yup.string().required("A data da festa é obrigatória").matches(dateRegex, { message: 'Data inválida. A data deve ter o formato dd/mm/yyyy.', excludeEmptyString: true } ),
+    ratingServiceQuality: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    ratingPrice: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    ratingAnswerTime: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    ratingFlexibility: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    ratingProfessionalism: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    recommendToAFriend: yup.string().required('Esse quesito é obrigatório').oneOf(['Sim', 'Não'], 'Opção inválida'),
+    recommendToAFriendObservation: yup.string().optional()
+        .max(500, 'A observação deve ter no máximo 500 caracteres')
+        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true}),                       
+    opinionTitle: yup.string().required('O título da opinião é obrigatório')
+        .max(60, 'O título da opinião deve ter no máximo 60 caracteres')
+        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true}),                       
+    opinionContent: yup.string().required('O conteúdo da opinião é obrigatório')
+        .max(500, 'A opinião deve ter no máximo 500 caracteres')
+        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true})                      
+});
+
+
 export default function Rating() {
     // RATING
     const [ratingData, setRatingData] = useState<ratingDataInterf>( ratingDataNullState );
+    const [formErrorsRating, setFormErrorsRating] = useState<ratingDataFormErrorInterf>( ratingDataFormErrorNullState );
     // REGISTER
     const [userRegisterData, setUserRegisterData] = useState<userRegisterDataProps>(userRegisterDataNullState);
+    const [formErrorsUserRegister, setFormErrorsUserRegister] = useState<userRegisterDataFormErrorProps>(userRegisterDataFormErrorNullState);
     // LOGIN
     const [userLoginData, setUserLoginData] = useState({email: '', password:''});
     // USER DATA FROM DB
@@ -337,8 +364,31 @@ export default function Rating() {
         }.bind(this));
     },[]);
 
-    function nextStep() {
-        setRatingData({...ratingData, step: ratingData.step + 1});
+    async function nextStep() {
+        if( ratingData.step == 1 ) {
+            console.log('entrou no step 1');       
+            let isValid = await handleValidation(
+                ['ratingServiceQuality', 'ratingPrice', 'ratingAnswerTime', 'ratingFlexibility', 'ratingProfessionalism'],
+                RatingFormSchema,
+                setFormErrorsRating,
+                ratingData
+            );
+            if( isValid ) {
+                setRatingData({...ratingData, step: ratingData.step + 1});
+            }
+        }
+        else if( ratingData.step == 2 ) {
+            console.log('entrou no step 2');       
+            let isValid = await handleValidation(
+                ['recommendToAFriend', 'recommendToAFriendObservation', 'opinionTitle', 'opinionContent', 'partyDate', 'partyType'],
+                RatingFormSchema,
+                setFormErrorsRating,
+                ratingData
+            );
+            if( isValid ) {
+                setRatingData({...ratingData, step: ratingData.step + 1});
+            }
+        }       
     }
 
     function previousStep() {       
@@ -362,6 +412,46 @@ export default function Rating() {
         console.log( userRegisterData );
     }
 
+    async function handleValidation( fields: Array<string>, schemaForm: any, setErrorFunction: any, data: any ) {
+        console.log(fields);
+
+        // Reset errors message
+        fields.map((el, index) => {
+            setErrorFunction((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await schemaForm
+            .validateAt( el, data)
+            .catch((err) => {
+                setErrorFunction((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
+            });
+        });
+
+        let validForm = true;
+
+        // Check if can go to the next step
+        fields.map( (el, index) => {
+            
+            let isValidField = yup.reach( schemaForm, el )
+            .isValidSync( data[el] );
+            console.log(isValidField);
+
+            validForm = validForm && isValidField;                
+        });
+
+        console.log('validForm');
+        console.log(validForm);
+        // If there is no error its validated
+        return validForm;
+
+        // if( validForm ) {
+        //     setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
+        // }
+    }
+
     async function handleSubmitLogin() {
         console.log('Entrou handleSubmitLogin');
         await loginUser( userLoginData, false );
@@ -370,15 +460,52 @@ export default function Rating() {
     }
 
     async function handleSubmitRegister() {
-        console.log('Entrou handleSubmitRegister');
-        await registerUser( userRegisterData, false );
-        console.log('Saiu handleSubmitRegister');
-    }
+        
+        // VALIDATE GENERAL
+        let isValidGeneral = await handleValidation(
+            ['fullName', 'email', 'phone', 'whatsapp', 'location'],
+            userRegisterFormSchema,
+            setFormErrorsUserRegister,
+            userRegisterData
+        );
+
+        // VALIDATE PASSWORD
+        let fields = ['password', 'passwordConfirmation'];
+
+        //Reset errors message
+        fields.map((el, index) => {
+            setFormErrorsUserRegister((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await userRegisterPasswordSchema
+            .validateAt( el, userRegisterData)
+            .catch((err) => {
+                setFormErrorsUserRegister((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
+            });
+        });
+
+        // Validate
+        let isValidPassword = await userRegisterPasswordSchema
+        .isValid({password:userRegisterData.password, passwordConfirmation:userRegisterData.passwordConfirmation})
+        .then((val) =>{
+            return val;
+        });
+
+        if( isValidGeneral && isValidPassword ) {
+            console.log('Entrou handleSubmitRegister');
+            await registerUser( userRegisterData, false );
+            console.log('Saiu handleSubmitRegister');
+        }
+    } 
     
     async function handleSubmitRating() {
         console.log('Entrou handleSubmitRating');
         console.log( ratingData );
         await userRate( ratingData );
+        routerNext.push('/');
         console.log('Saiu handleSubmitRating');
     }
 
@@ -428,6 +555,7 @@ export default function Rating() {
                     <Flex direction='column' 
                         h={{base:'90%', lg:'80%'}}
                         w={{base:'85%', lg:'60%'}} 
+                        justifyContent='flex-start'
                         alignItems='center'
                         overflowY={{base:'scroll',lg:'hidden'}}
                         px='1'
@@ -508,52 +636,61 @@ export default function Rating() {
                                                             
                                         
 
-                                        <Flex justifyContent='space-between'
-                                            alignItems='center'
-                                            mb='2'
+                                        <FormControl 
+                                            isInvalid={formErrorsRating[el.name] != '' ? true : false}
                                         >
-                                            <Text as='span'>
-                                                Nota
-                                            </Text>
+                                            <Flex justifyContent='space-between'
+                                                alignItems='center'
+                                                mb='2'
+                                            >
+                                                <Text as='span'>
+                                                    Nota
+                                                </Text>
 
-                                            <Menu>
-                                                <MenuButton as={Button} >
-                                                    {ratingData[el.name] != 0 ? ratingData[el.name] : 'Nota'}
-                                                </MenuButton>
-                                                <MenuList>
-                                                    <MenuOptionGroup type='radio'
-                                                        onChange={(event: any) => {
-                                                            setRatingData({...ratingData, [el.name]: parseInt(event)});
-                                                            console.log( ratingData );
-                                                        }}
+                                                <Menu>
+                                                    <MenuButton as={Button} >
+                                                        {ratingData[el.name] != 0 ? ratingData[el.name] : 'Nota'}
+                                                    </MenuButton>
+                                                    <MenuList
+                                                        w={{base:'80vw', lg:'20vw'}}
+                                                        //h={{base:'20vh', lg:'25vh'}}
                                                     >
-                                                        <MenuItemOption value='5'>
-                                                            5 - Excelente
-                                                        </MenuItemOption>
-                                                        
-                                                        <MenuItemOption value='4'>
-                                                            4 - Ótimo
-                                                        </MenuItemOption>
-                                                        
-                                                        <MenuItemOption value='3'>
-                                                            3 - Bom
-                                                        </MenuItemOption>
+                                                        <MenuOptionGroup type='radio'
+                                                            onChange={(event: any) => {
+                                                                setRatingData({...ratingData, [el.name]: event});
+                                                                setFormErrorsRating({...formErrorsRating, [el.name]: ''});
+                                                                console.log( ratingData );
+                                                            }}
+                                                        >
+                                                            <MenuItemOption value='5'>
+                                                                5 - Excelente
+                                                            </MenuItemOption>
+                                                            
+                                                            <MenuItemOption value='4'>
+                                                                4 - Ótimo
+                                                            </MenuItemOption>
+                                                            
+                                                            <MenuItemOption value='3'>
+                                                                3 - Bom
+                                                            </MenuItemOption>
 
-                                                        <MenuItemOption value='2'>
-                                                            2 - Regular
-                                                        </MenuItemOption>
+                                                            <MenuItemOption value='2'>
+                                                                2 - Regular
+                                                            </MenuItemOption>
 
-                                                        <MenuItemOption value='1'>
-                                                            1 - Ruim
-                                                        </MenuItemOption>
-                                                    </MenuOptionGroup>
-                                                </MenuList>
-                                            </Menu>
-                                        </Flex>
+                                                            <MenuItemOption value='1'>
+                                                                1 - Ruim
+                                                            </MenuItemOption>
+                                                        </MenuOptionGroup>
+                                                    </MenuList>
+                                                </Menu>
+                                            </Flex>
+                                            <FormErrorMessage>
+                                                {formErrorsRating[el.name]}
+                                            </FormErrorMessage>
+                                        </FormControl>
 
-                                        <Flex border='0.5px solid rgba(0,0,0,0.4)'
-                                            
-                                        ></Flex>
+                                        <Flex border='0.5px solid rgba(0,0,0,0.4)'></Flex>
                                     </Flex>
                                 )
                             })
@@ -588,75 +725,147 @@ export default function Rating() {
                             <Text fontSize={18} textAlign='center'>
                                 Você recomendaria o serviço a um amigo ?
                             </Text>
-                            <Flex justifyContent='space-evenly'>
-                                <Button w='45%' 
-                                    bg={ratingData.recommendToAFriend == 'Sim' ? 'brand.red' : 'brand.white'}
-                                    textColor={ratingData.recommendToAFriend == 'Sim' ? 'brand.white' : 'brand.dark_blue'}
-                                    name='recommendToAFriend' 
-                                    value='Sim'
-                                    onClick={handleChange} 
-                                >
-                                    Sim
-                                </Button>
-                                <Button w='45%' 
-                                    bg={ratingData.recommendToAFriend == 'Não' ? 'brand.red' : 'brand.white'}
-                                    textColor={ratingData.recommendToAFriend == 'Não' ? 'brand.white' : 'brand.dark_blue'}
-                                    name='recommendToAFriend' 
-                                    value='Não'
-                                    onClick={handleChange} 
-                                >
-                                    Não
-                                </Button>
-                            </Flex>
-                            <Input placeholder="Observações: " 
-                                name='recommendToAFriendObservation' 
-                                onChange={handleChange}
-                            />
+
+                            <FormControl 
+                                isInvalid={formErrorsRating.recommendToAFriend != '' ? true : false}
+                            >
+                                <Flex justifyContent='space-evenly'>
+                                    <Button w='45%' 
+                                        bg={ratingData.recommendToAFriend == 'Sim' ? 'brand.red' : 'brand.white'}
+                                        textColor={ratingData.recommendToAFriend == 'Sim' ? 'brand.white' : 'brand.dark_blue'}
+                                        name='recommendToAFriend' 
+                                        value='Sim'
+                                        onClick={(event: any) => {
+                                            handleChange( event );
+                                            setFormErrorsRating({...formErrorsRating, recommendToAFriend: ''});
+                                        }}
+                                    >
+                                        Sim
+                                    </Button>
+                                    <Button w='45%' 
+                                        bg={ratingData.recommendToAFriend == 'Não' ? 'brand.red' : 'brand.white'}
+                                        textColor={ratingData.recommendToAFriend == 'Não' ? 'brand.white' : 'brand.dark_blue'}
+                                        name='recommendToAFriend' 
+                                        value='Não'
+                                        onClick={(event: any) => {
+                                            handleChange( event );
+                                            setFormErrorsRating({...formErrorsRating, recommendToAFriend: ''});
+                                        }}
+                                    >
+                                        Não
+                                    </Button>
+                                </Flex>
+
+                                <FormErrorMessage>
+                                    {formErrorsRating.recommendToAFriend}
+                                </FormErrorMessage>
+                            </FormControl>
+                            
+                            <FormControl 
+                                isInvalid={formErrorsRating.recommendToAFriendObservation != '' ? true : false}
+                            >
+                                <Input placeholder="Observações: " 
+                                    name='recommendToAFriendObservation' 
+                                    value={ratingData.recommendToAFriendObservation}
+                                    onChange={(event: any) => {
+                                        handleChange( event );
+                                        setFormErrorsRating({...formErrorsRating, recommendToAFriendObservation: ''});
+                                    }}
+                                />
+                                <FormErrorMessage>
+                                    {formErrorsRating.recommendToAFriendObservation}
+                                </FormErrorMessage>
+                            </FormControl>
                         </Stack>
 
                         <Flex direction='column' mt='10' mb='3' w='100%'>
                             <Text fontSize={18}>Título da sua opinião</Text>
-                            <Input placeholder="Escreva aqui o título da sua opinião"
-                                name='opinionTitle'
-                                onChange={handleChange}
-                            />
+                            <FormControl 
+                                isInvalid={formErrorsRating.opinionTitle != '' ? true : false}
+                            >
+                                <Input placeholder="Escreva aqui o título da sua opinião"
+                                    name='opinionTitle'
+                                    value={ratingData.opinionTitle}
+                                    onChange={(event: any) => {
+                                        handleChange( event );
+                                        setFormErrorsRating({...formErrorsRating, opinionTitle: ''});
+                                    }}
+                                />
+                                <FormErrorMessage>
+                                    {formErrorsRating.opinionTitle}
+                                </FormErrorMessage>
+                            </FormControl>
                         </Flex>
 
                         <Flex direction='column' w='100%' mb='3'>
                             <Text fontSize={18}>Opinião</Text>
-                            <Textarea placeholder="Descreva em detalhes as suas impressões sobre o serviço prestado pelo fornecedor" 
-                                name='opinionContent'
-                                onChange={handleChange}
-                            />
+                            <FormControl 
+                                isInvalid={formErrorsRating.opinionContent != '' ? true : false}
+                            >
+                                <Textarea placeholder="Descreva em detalhes as suas impressões sobre o serviço prestado pelo fornecedor" 
+                                    name='opinionContent'
+                                    value={ratingData.opinionContent}
+                                    onChange={(event: any) => {
+                                        handleChange( event );
+                                        setFormErrorsRating({...formErrorsRating, opinionContent: ''});
+                                    }}
+                                />
+                                <FormErrorMessage>
+                                    {formErrorsRating.opinionContent}
+                                </FormErrorMessage>
+                            </FormControl>
                         </Flex>
 
                         <Flex direction='column' w='100%' mb='3'>
                             <Text fontSize={18}>Quando foi a sua festa ?</Text>
 
-                            <Input type='date' onChange={(event:any) => setRatingData({...ratingData, partyDate: event.currentTarget.value})}/>
+                            <FormControl 
+                                isInvalid={formErrorsRating.partyDate != '' ? true : false}
+                            >
+                                <Input type='text' 
+                                    value={ratingData.partyDate}
+                                    onChange={(event:any) => {
+                                        setRatingData({...ratingData, partyDate: event.currentTarget.value});
+                                        setFormErrorsRating({...formErrorsRating, partyDate: ''});
+                                    }}
+                                />
+                                <FormErrorMessage>
+                                    {formErrorsRating.partyDate}
+                                </FormErrorMessage> 
+                            </FormControl>
                         </Flex>
 
                         <Flex direction='column' w='100%'>
                             <Text fontSize={18}>Qual foi o tipo da sua festa ?</Text>
 
-                            <Menu>
-                                <MenuButton as={Button} colorScheme='blue'>
-                                    {typeOfParties[ratingData?.partyType]?.textToShow || 'Tipo da festa'}
-                                </MenuButton>
-                                <MenuList minWidth='240px'>
-                                    <MenuOptionGroup
-                                        onChange={(event: any) => setRatingData({...ratingData, partyType: event})}
-                                    >
-                                        {
-                                            Object.values(typeOfParties).map((el, i) => {
-                                                return (
-                                                    <MenuItemOption value={el.value}>{el.textToShow}</MenuItemOption>
-                                                )
-                                            })
-                                        }
-                                    </MenuOptionGroup>
-                                </MenuList>
-                            </Menu>
+                            <FormControl 
+                                isInvalid={formErrorsRating.partyType != '' ? true : false}
+                            >
+                                <Menu>
+                                    <MenuButton as={Button} colorScheme='blue'>
+                                        {typeOfParties[ratingData?.partyType]?.textToShow || 'Tipo da festa'}
+                                    </MenuButton>
+                                    <MenuList minWidth='240px'>
+                                        <MenuOptionGroup
+                                            onChange={(event: any) => {
+                                                setRatingData({...ratingData, partyType: event});
+                                                setFormErrorsRating({...formErrorsRating, partyType: ''});
+                                            }}
+                                        >
+                                            {
+                                                Object.values(typeOfParties).map((el, i) => {
+                                                    return (
+                                                        <MenuItemOption value={el.value}>{el.textToShow}</MenuItemOption>
+                                                    )
+                                                })
+                                            }
+                                        </MenuOptionGroup>
+                                    </MenuList>
+                                </Menu>
+                                <FormErrorMessage>
+                                    {formErrorsRating.partyType}
+                                </FormErrorMessage> 
+                            </FormControl>
                             
                         </Flex>
 
@@ -674,8 +883,10 @@ export default function Rating() {
                     showFooterMenu={true}
                     style="yellow"
                 >
+                    <FlashMessageComponent/>
+
                     <Flex direction='column'  
-                        justifyContent='center' 
+                        //justifyContent='flex-end' 
                         alignItems='center'
                         //h='100%'
                         py='2'
@@ -713,7 +924,7 @@ export default function Rating() {
                                 width={{base:'100%', lg:500}}
                                 py={{base:'1',lg:'6'}}
                                 px={{base:'0', lg:"10" }}
-                                justifyContent="center"
+                                justifyContent="flex-start"
                                 bg="white" 
                                 boxShadow={{base:'none', lg:"0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"}}
                                 borderRadius={8} 
@@ -832,28 +1043,53 @@ export default function Rating() {
                                     INSCREVA-SE
                                 </Text>
 
+                                {/* Full name */}
                                 <Flex direction="column" mt="3">
                                     <Text color="brand.white_40" fontSize={19}>
                                         Nome completo
                                     </Text>
 
-                                    <Input 
-                                        name="fullName"
-                                        onChange={handleChangeRegister}
-                                    />
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.fullName != '' ? true : false}
+                                    >
+                                        <Input 
+                                            name="fullName"
+                                            value={userRegisterData.fullName}
+                                            onChange={(event: any) => {
+                                                handleChangeRegister(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, fullName: ''});
+                                            }}
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.fullName}
+                                        </FormErrorMessage> 
+                                    </FormControl>
                                 </Flex>
-
+                                
+                                {/* E-mail */}
                                 <Flex direction="column" mt="3">
                                     <Text color="brand.white_40" fontSize={19}>
                                         E-mail
                                     </Text>
 
-                                    <Input placeholder="email@example.com"
-                                        name="email"
-                                        onChange={handleChangeRegister}
-                                    />
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.email != '' ? true : false}
+                                    >
+                                        <Input placeholder="email@example.com"
+                                            name="email"
+                                            value={userRegisterData.email}
+                                            onChange={(event: any) => {
+                                                handleChangeRegister(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, email: ''});
+                                            }}
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.email}
+                                        </FormErrorMessage> 
+                                    </FormControl>
                                 </Flex>
 
+                                {/* Password */}
                                 <Flex direction="row" mt='3'
                                     alignItems='flex-end'
                                 >
@@ -863,11 +1099,22 @@ export default function Rating() {
                                             Senha
                                         </Text>
 
-                                        <Input placeholder="********"
-                                            name="password"
-                                            type="password"
-                                            onChange={handleChangeRegister}
-                                        />
+                                        <FormControl 
+                                            isInvalid={formErrorsUserRegister.password != '' ? true : false}
+                                        >
+                                            <Input placeholder="********"
+                                                name="password"
+                                                type="password"
+                                                value={userRegisterData.password}
+                                                onChange={(event: any) => {
+                                                    handleChangeRegister(event);
+                                                    setFormErrorsUserRegister({...formErrorsUserRegister, password: ''});
+                                                }}
+                                            />
+                                            <FormErrorMessage>
+                                                {formErrorsUserRegister.password}
+                                            </FormErrorMessage> 
+                                        </FormControl>                                        
                                     </Flex>
 
                                     <Flex direction="column" ml='2'
@@ -876,15 +1123,26 @@ export default function Rating() {
                                             Confirmação da Senha
                                         </Text>
 
-                                        <Input placeholder="********"
-                                            name="passwordConfirmation"
-                                            type="password"
-                                            onChange={handleChangeRegister}
-                                        />
+                                        <FormControl 
+                                            isInvalid={formErrorsUserRegister.passwordConfirmation != '' ? true : false}
+                                        >
+                                            <Input placeholder="********"
+                                                name="passwordConfirmation"
+                                                type="password"
+                                                value={userRegisterData.passwordConfirmation}
+                                                onChange={(event: any) => {
+                                                    handleChangeRegister(event);
+                                                    setFormErrorsUserRegister({...formErrorsUserRegister, passwordConfirmation: ''});
+                                                }}
+                                            />
+                                            <FormErrorMessage>
+                                                {formErrorsUserRegister.passwordConfirmation}
+                                            </FormErrorMessage> 
+                                        </FormControl>                                         
                                     </Flex>
                                 </Flex>
 
-
+                                {/* Phone */}
                                 <Flex direction="column"
                                     mt="3"
                                 >
@@ -892,13 +1150,52 @@ export default function Rating() {
                                         Telefone
                                     </Text>
 
-                                    <Input 
-                                        name="phone"
-                                        type="text"
-                                        onChange={handleChangeRegister}
-                                    />
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.phone != '' ? true : false}
+                                    >
+                                        <Input 
+                                            name="phone"
+                                            type="text"
+                                            value={userRegisterData.phone}
+                                            onChange={(event: any) => {
+                                                handleChangeRegister(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, phone: ''});
+                                            }}
+                                            
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.phone}
+                                        </FormErrorMessage> 
+                                    </FormControl>  
                                 </Flex>
 
+                                {/* Whatsapp */}
+                                <Flex direction="column"
+                                    mt="3"
+                                >
+                                    <Text color="brand.white_40" fontSize={19}>
+                                        Whatsapp
+                                    </Text>
+
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.whatsapp != '' ? true : false}
+                                    >
+                                        <Input 
+                                            name="whatsapp"
+                                            type="text"
+                                            value={userRegisterData.whatsapp}
+                                            onChange={(event: any) => {
+                                                handleChangeRegister(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, whatsapp: ''});
+                                            }}
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.whatsapp}
+                                        </FormErrorMessage> 
+                                    </FormControl> 
+                                </Flex>
+
+                                {/* Location */}
                                 <Flex direction="column"
                                     mt="3"
                                 >
@@ -906,71 +1203,80 @@ export default function Rating() {
                                         Onde reside
                                     </Text>
 
-                                    <Flex direction='column'
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.location != '' ? true : false}
                                     >
-                                        {/* Onde - Localização */}
-                                        <Input 
-                                            _focus={{outline:'none'}}
-                                            value={userRegisterData.location}
-                                            onChange={(event: any) => {
-                                                setUserRegisterData({...userRegisterData, location: event.currentTarget.value});
-                                                searchFunction(event, "menuWhere");
-                                            }}
-                                            onClick={() => {
-                                                setMenuWhere('onclick')
-                                            }}
-                                        />
-                                        <Box 
-                                            id='menuLocation'
-                                            height={230} 
-                                            width={350}
-                                            display={menuWhere}
-                                            position='absolute'
-                                            overflowY="scroll"
-                                            bg='brand.white'
-                                            mt={10}
-                                            borderRadius={10}
-                                            zIndex={3}
+                                        <Flex direction='column'
                                         >
-                                            <Flex direction="column" id="menuWhere"
-                                                h='100%'
+                                            {/* Onde - Localização */}
+                                            <Input 
+                                                _focus={{outline:'none'}}
+                                                value={userRegisterData.location}
+                                                onChange={(event: any) => {
+                                                    setUserRegisterData({...userRegisterData, location: event.currentTarget.value});
+                                                    searchFunction(event, "menuWhere");
+                                                }}
+                                                onClick={() => {
+                                                    setMenuWhere('onclick')
+                                                }}
+                                            />
+                                            <Box 
+                                                id='menuLocation'
+                                                height={230} 
+                                                width={350}
+                                                display={menuWhere}
+                                                position='absolute'
+                                                overflowY="scroll"
+                                                bg='brand.white'
+                                                mt={{base:1, lg: 5}}
+                                                borderRadius={10}
+                                                zIndex={3}
                                             >
-                                                {
-                                                Object.values(locationMap).map((el, i) => {
-                                                    return(
-                                                        <Button
-                                                            bg='white'
-                                                            h='25%'
-                                                            py='4'
-                                                            px='5'
-                                                            borderRadius={0}
-                                                            _focus={{outline:'none'}}
-                                                            _hover={{bg:'rgba(0,0,0,0.1)'}}
-                                                            //name='partyType'
-                                                            //value={el.value}
-                                                            onClick={(event) => {
-                                                                setUserRegisterData({...userRegisterData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
-                                                                setMenuWhere('none');
-                                                            }}
-                                                        >
-                                                            <Text
-                                                                width='100%'
-                                                                textAlign='left'
-                                                                fontWeight={400}
-                                                                fontSize={18}
+                                                <Flex direction="column" id="menuWhere"
+                                                    h='100%'
+                                                >
+                                                    {
+                                                    Object.values(locationMap).map((el, i) => {
+                                                        return(
+                                                            <Button
+                                                                bg='white'
+                                                                h='25%'
+                                                                py='4'
+                                                                px='5'
+                                                                borderRadius={0}
+                                                                _focus={{outline:'none'}}
+                                                                _hover={{bg:'rgba(0,0,0,0.1)'}}
+                                                                //name='partyType'
+                                                                //value={el.value}
+                                                                onClick={(event) => {
+                                                                    setUserRegisterData({...userRegisterData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
+                                                                    setFormErrorsUserRegister({...formErrorsUserRegister, location: ''});
+                                                                    setMenuWhere('none');
+                                                                }}
                                                             >
-                                                                {el.textToShow}
-                                                            </Text>
-                                                        </Button>
-                                                    );
-                                                })
-                                                }
-                                            </Flex>
-                                        </Box>
-                                    </Flex>      
+                                                                <Text
+                                                                    width='100%'
+                                                                    textAlign='left'
+                                                                    fontWeight={400}
+                                                                    fontSize={18}
+                                                                >
+                                                                    {el.textToShow}
+                                                                </Text>
+                                                            </Button>
+                                                        );
+                                                    })
+                                                    }
+                                                </Flex>
+                                            </Box>
+                                        </Flex>      
+                                        
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.location}
+                                        </FormErrorMessage> 
+                                    </FormControl> 
                                 </Flex>
 
-                                <Flex direction="row"
+                                {/* <Flex direction="row"
                                     mt="3"
                                     justifyContent='space-between'
                                 >
@@ -1009,11 +1315,11 @@ export default function Rating() {
                                         </Text>
                                         <Input
                                             name="partyDate"
-                                            type="date"
+                                            type="text"
                                             onChange={handleChangeRegister}
                                         />
                                     </Flex>
-                                </Flex>
+                                </Flex> */}
 
                                 <Button 
                                     mt="8"

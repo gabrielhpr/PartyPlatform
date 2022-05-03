@@ -13,15 +13,19 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import { typeOfParties, typeOfServices } from "../../utils/typeOfParties";
 import { Sidebar } from "../../components/Sidebar";
 import { Footer } from "../../components/Footer";
+import { FlashMessageComponent } from "../../components/FlashMessageComponent";
+import api from "../../utils/api";
 
 export default function enterpriseAccess() {
     const [enterpriseAccessData, setEnterpriseAccessData] = useState({email: '', password:''});
+    const [emailResetPassword, setEmailResetPassword] = useState('');
     const { loginEnterprise } = useEnterpriseAuthContext();
     const routerNext = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const modalResetPassword = useDisclosure();
+
     const handleDragStart = (e) => e.preventDefault();
 
-    
     const isMobileVersion = useBreakpointValue({
         base: true,
         lg: false,
@@ -29,6 +33,23 @@ export default function enterpriseAccess() {
 
     function handleChange( event: any ) {
         setEnterpriseAccessData({...enterpriseAccessData, [event.currentTarget.name]: event.currentTarget.value });
+    }
+
+    async function handleSendEmailResetPassword() {
+        let msgText = 'Acesse o seu e-mail e clique no link enviado!';
+        let msgType = "success";
+
+        try {
+            const data = await api.post("/sendEmailResetPasswordEnterprise", {email: emailResetPassword}).then((response) => {
+                return response.data;
+            });
+        }   
+        catch(err) {
+            console.log( err );
+            msgText = err.response.data.message;
+            msgType = "error";
+        }
+        //setFlashMessage( msgText, msgType );
     }
     
     function handleSubmit( event: any ) {
@@ -45,6 +66,8 @@ export default function enterpriseAccess() {
             <Header name="" position='relative' />
             
             <Sidebar/>
+
+            <FlashMessageComponent/>
 
             {/* Top Picture */}
             <Flex w='100%' h='55vh' position='relative' 
@@ -197,13 +220,16 @@ export default function enterpriseAccess() {
                                                         </Button>
 
                                                         <Flex direction="column" justifyContent="center" mt='4'>
-                                                            <NavLink href="/prices">
+                                                            <Button onClick={modalResetPassword.onOpen}
+                                                                bg='brand.white'
+                                                            >
                                                                 <Text textAlign="center" fontSize={16}
                                                                     color="brand.light_blue_40"
                                                                 >
                                                                     Esqueceu sua senha ?
                                                                 </Text>
-                                                            </NavLink>
+                                                            </Button>
+                                                            
                                                         </Flex>
 
                                                     </Flex>
@@ -313,19 +339,71 @@ export default function enterpriseAccess() {
                             </Button>
 
                             <Flex direction="column" justifyContent="center" mt='4'>
-                                <NavLink href="/"
-                                    _hover={{textDecoration: 'none'}}
+                                <Button 
+                                    onClick={modalResetPassword.onOpen}
+                                    bg='brand.white'
                                 >
                                     <Text textAlign="center" fontSize={16}
                                         color="brand.light_blue_40"
                                     >
                                         Esqueceu sua senha ?
                                     </Text>
-                                </NavLink>
+                                </Button>
                             </Flex>
 
                         </Flex>
                     
+                        {/* MODAL - RESET PASSWORD */}
+                        <Modal blockScrollOnMount={true} 
+                            isOpen={modalResetPassword.isOpen} 
+                            onClose={modalResetPassword.onClose}
+                            size='xl'
+                        >
+                            <ModalOverlay />
+                            <ModalContent
+                                bg='brand.white'
+                                h={{base: '40%',lg:'35%'}}
+                            >
+                                <ModalHeader></ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody
+                                >
+                                    <Flex
+                                        h='100%'
+                                        direction='column'
+                                        alignItems='center'
+                                        justifyContent='center'
+                                    >
+                                        <Text
+                                            textAlign='center'
+                                            fontSize={18}
+                                            w={{base:'95%', lg:'70%'}}
+                                        >
+                                            Digite abaixo o seu e-mail cadastrado. Enviaremos um link para 
+                                            prosseguir com a criação de uma nova senha.
+                                        </Text>
+                                        <Input 
+                                            mt='4'
+                                            w={{base:'90%', lg:'60%'}}
+                                            placeholder="email@example.com"
+                                            name="email"
+                                            onChange={(event: any) => {
+                                                setEmailResetPassword( event.currentTarget.value );
+                                            }}
+                                        />
+                                        <Button
+                                            onClick={handleSendEmailResetPassword}
+                                            w={{base:'90%', lg:'60%'}}
+                                            bg='brand.red'
+                                            color='brand.white'
+                                            mt='4'
+                                        >
+                                            Redefinir senha
+                                        </Button>
+                                    </Flex>
+                                </ModalBody>
+                            </ModalContent>
+                        </Modal>
                     </Flex>
 
                 </Flex>
@@ -520,3 +598,5 @@ export default function enterpriseAccess() {
         </Box>
     );
 }
+
+

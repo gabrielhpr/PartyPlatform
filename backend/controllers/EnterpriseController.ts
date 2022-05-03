@@ -1137,7 +1137,7 @@ module.exports = class EnterpriseController {
                                         'fieldName': 'pagePath',
                                         'stringFilter': {
                                             'matchType': 'EXACT',
-                                            'value': `enterprise-${id}`,
+                                            'value': `serviceProfile/enterprise-${id}`,
                                             'caseSensitive': true
                                         }
                                     }
@@ -1147,13 +1147,14 @@ module.exports = class EnterpriseController {
                     {
                         'property': 'properties/311158295',
                         'dateRanges': [
-                            {'startDate': '2022-03-01', 'endDate': '2022-04-19'}
+                            {'startDate': '2022-03-01', 'endDate': '2022-05-02'}
                         ],
                         'metrics': [
-                            {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
+                            {"name": "uniqueClicks", 'expression': 'eventCount'}
                         ],
                         'dimensions': [
-                            {"name": 'pagePath'}
+                            {"name": 'eventName'},
+                            {"name": 'eventCategory'}
                         ],
                         'dimensionFilter': 
                             {

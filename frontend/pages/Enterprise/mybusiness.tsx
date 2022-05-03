@@ -18,6 +18,7 @@ import * as yup from 'yup';
 import { monetaryRegex, validTextRegex, invalidTextRegex } from "../../utils/regexCustom";
 import { locationMap, typeOfParties } from "../../utils/typeOfParties";
 import { Sidebar } from "../../components/Sidebar";
+import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 
 
 interface enterpriseDataInterf {
@@ -482,6 +483,7 @@ export default function MyBusinessEnterprise() {
         return (
             <Box>
                 <Header name="" position="relative" />
+                <FlashMessageComponent/>
                 <TopMenuEnterprise />
                 <Sidebar/>
     

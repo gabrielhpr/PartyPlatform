@@ -3,7 +3,7 @@ import {
         specificQuestions, enterpriseSpecificCategoryDict, locationMap 
         } from "./typeOfParties";
 import * as yup from 'yup';
-import { monetaryRegex, validTextRegex, invalidTextRegex } from "./regexCustom";
+import { monetaryRegex, validTextRegex, invalidTextRegex, dateRegex } from "./regexCustom";
 
 function handleTestValidation(value:any, ctx: any, questionN: number) {
     console.log('question number: ');
@@ -510,4 +510,30 @@ export const enterpriseRegisterQuestionsDataSchema = yup.object().shape({
             }
         }),
 
+});
+
+export const userRegisterFormSchema = yup.object().shape({
+    fullName: yup.string().required('O nome completo é obrigatório')
+        .matches(validTextRegex, {message: 'O nome completo não pode apresentar aspas.', excludeEmptyString: true}),
+    email: yup.string().required("O e-mail é obrigatório").email("E-mail inválido")
+        .matches(validTextRegex, {message:'O email não pode apresentar aspas', excludeEmptyString: true}),
+    phone: yup.string().required("O telefone é obrigatório").matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido. Digite somente os números, não inclua (), - ou espaços.', excludeEmptyString: true } ),
+    whatsapp: yup.string().optional().matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido. Digite somente os números, não inclua (), - ou espaços.', excludeEmptyString: true } ),
+    location: yup.string().required('A localização é obrigatória').oneOf(
+        Object.values(locationMap).map((el,index) => {return el.textToShow})
+        , 'Opção não válida'),
+});
+
+export const userRegisterPasswordSchema = yup.object().shape({
+    password: yup.string().required("Senha obrigatória").min(6, "No mínimo 6 caracteres"),
+    passwordConfirmation: yup.string().oneOf([null,yup.ref("password")], 
+        "As senhas precisam ser iguais")
+});
+
+export const askBudgetSchema = yup.object().shape({
+    partyDate: yup.string().required("A data da festa é obrigatória").matches(dateRegex, { message: 'Data inválida. A data deve ter o formato dd/mm/yyyy.', excludeEmptyString: true } ),    
+    nOfPeople: yup.string().required("A quantidade de pessoas é obrigatória")
+               .matches(/^[1-9]+[0-9]*$/, {message: 'Deve ser um número inteiro e positivo, sem vírgulas ou pontos', excludeEmptyString: true}),
+    messageContent: yup.string().required("O conteúdo da mensagem é obrigatório")
+                    .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString: true})    
 });

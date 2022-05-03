@@ -2,6 +2,7 @@
 import api from "../utils/api";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import useFlashMessage from "./useFlashMessage";
 //import { useHistory } from "react-router-dom";
 
 interface UserData {
@@ -31,8 +32,8 @@ interface AdData {
 }
 
 export default function useUserAuth() {
-
     const [authenticatedUser, setAuthenticatedUser] = useState(false);
+    const { setFlashMessage } = useFlashMessage();
     // Next Router
     const routerNext = useRouter();
 
@@ -50,6 +51,9 @@ export default function useUserAuth() {
     }, []);
 
     async function registerUser(user: UserData, redirect: boolean = true) {
+        let msgText = 'Cadastro realizado com sucesso';
+        let msgType = 'success';
+
         try {
             const data = await api.post("/user/register", user)
             .then((response) => {
@@ -60,7 +64,10 @@ export default function useUserAuth() {
         catch(err) {
             // tratar o erro
             console.log(err);
+            msgText = err.response.data.message;
+            msgType = "error";
         }
+        setFlashMessage( msgText, msgType );
     }
 
     async function loginUser(user: any, redirect: boolean = true) {
@@ -75,12 +82,16 @@ export default function useUserAuth() {
         }   
         catch(err) {
             console.log( err );
-            // msgText = err.response.data.message;
-            // msgType = "error";
+            msgText = err.response.data.message;
+            msgType = "error";
         }
+        setFlashMessage( msgText, msgType );
     }
 
     async function userRate(rating: any) {
+        let msgText = 'Avaliação registrada com sucesso';
+        let msgType = "success";
+
         const token = localStorage.getItem("tokenUser");
 
         try {
@@ -96,10 +107,16 @@ export default function useUserAuth() {
         catch(err) {
             // tratar o erro
             console.log(err);
+            msgText = err.response.data.message;
+            msgType = "error";
         }
+        setFlashMessage( msgText, msgType );
     }
 
     async function userSendEmail(emailData: any) {
+        let msgText = 'E-mail enviado com sucesso';
+        let msgType = "success";
+
         const token = localStorage.getItem("tokenUser");
 
         try {
@@ -115,7 +132,10 @@ export default function useUserAuth() {
         catch(err) {
             // tratar o erro
             console.log(err);
+            msgText = err.response.data.message;
+            msgType = "error";
         }
+        setFlashMessage( msgText, msgType );
     }
 
     async function authUser(data: any, redirect: boolean) {
@@ -133,12 +153,15 @@ export default function useUserAuth() {
         const msgText = "Logout realizado com sucesso!";
         const msgType = "success";
 
-        setAuthenticatedUser( false );
-        localStorage.removeItem("tokenUser");
-        api.defaults.headers.common["Authorization"] = "";
-
-        routerNext.push("/User/userAccess");
         //setFlashMessage(msgText, msgType);
+        setFlashMessage( msgText, msgType );
+
+        setTimeout(() => {
+            setAuthenticatedUser( false );
+            localStorage.removeItem("tokenUser");
+            api.defaults.headers.common["Authorization"] = "";
+            routerNext.push("/User/userAccess");
+        }, 1500);
     }
 
     return { authenticatedUser, registerUser, loginUser, logoutUser, userRate, userSendEmail };

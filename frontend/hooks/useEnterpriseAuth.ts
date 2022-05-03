@@ -3,7 +3,9 @@ import api from "../utils/api";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useToast } from "@chakra-ui/react";
 //import { useHistory } from "react-router-dom";
+import useFlashMessage from './useFlashMessage';
 
 interface EnterpriseData {
     // Contact Data
@@ -48,8 +50,8 @@ interface AdData {
 }
 
 export default function useEnterpriseAuth() {
-
     const [authenticatedEnterprise, setAuthenticatedEnterprise] = useState(false);
+    const { setFlashMessage } = useFlashMessage();
     // Next Router
     const routerNext = useRouter();
 
@@ -67,6 +69,8 @@ export default function useEnterpriseAuth() {
     }, []);
 
     async function createAd(adData: AdData) {
+        let msgText = 'Anúncio cadastrado com sucesso';
+        let msgType = 'success';
         try {
             await api.post("/enterprise/ads/create", adData, options)
             .then((response) => {
@@ -76,10 +80,16 @@ export default function useEnterpriseAuth() {
         }
         catch( err ) {
             console.log( err );
+            msgText = err.response.data.message;
+            msgType = "error";
         }
+        setFlashMessage( msgText, msgType );
     }
 
     async function registerEnterprise(enterprise: EnterpriseData) {
+        let msgText = 'Cadastro realizado com sucesso';
+        let msgType = 'success';
+
         try {
             const data = await api.post("/enterprise/register", enterprise, options)
             .then((response) => {
@@ -90,12 +100,16 @@ export default function useEnterpriseAuth() {
         catch(err) {
             // tratar o erro
             console.log(err);
+            msgText = err.response.data.message;
+            msgType = "error";
         }
+        setFlashMessage( msgText, msgType );
     }
 
     async function loginEnterprise(enterprise: any) {
         let msgText = 'Login realizado com sucesso';
-        let msgType = "success";
+        let msgType = 'success';
+        console.log(' entrou no login enterprise ');
 
         try {
             const data = await api.post("/enterprise/login", enterprise).then((response) => {
@@ -105,9 +119,10 @@ export default function useEnterpriseAuth() {
         }   
         catch(err) {
             console.log( err );
-            // msgText = err.response.data.message;
-            // msgType = "error";
+            msgText = err.response.data.message;
+            msgType = "error";
         }
+        setFlashMessage( msgText, msgType );
     }
 
     async function authEnterprise(data: any) {
@@ -118,6 +133,9 @@ export default function useEnterpriseAuth() {
     }
 
     async function enterpriseAnswerRate(answerRating: any) {
+        let msgText = 'Resposta cadastrada com sucesso';
+        let msgType = 'success';
+
         const token = localStorage.getItem("tokenEnterprise");
 
         try {
@@ -133,19 +151,24 @@ export default function useEnterpriseAuth() {
         catch(err) {
             // tratar o erro
             console.log(err);
+            msgText = err.response.data.message;
+            msgType = "error";
         }
+        setFlashMessage( msgText, msgType );
     }
 
     async function logoutEnterprise() {
         const msgText = "Logout realizado com sucesso!";
         const msgType = "success";
 
-        setAuthenticatedEnterprise( false );
-        localStorage.removeItem("tokenEnterprise");
-        api.defaults.headers.common["Authorization"] = "";
+        setFlashMessage( msgText, msgType );
 
-        routerNext.push("/Enterprise/enterpriseAccess");
-        //setFlashMessage(msgText, msgType);
+        setTimeout(() => {
+            setAuthenticatedEnterprise( false );
+            localStorage.removeItem("tokenEnterprise");
+            api.defaults.headers.common["Authorization"] = "";
+            routerNext.push("/Enterprise/enterpriseAccess");
+        }, 1500);
     }
 
     return { authenticatedEnterprise, registerEnterprise, createAd, loginEnterprise, logoutEnterprise, enterpriseAnswerRate };

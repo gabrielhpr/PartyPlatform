@@ -117,5 +117,69 @@ module.exports = class RootModel {
         
         return result; 
     }
+
+    async getEnterpriseByEmail( email: string ) {
+        const query_select = `
+            SELECT  Ent.*
+            FROM Enterprise as Ent    
+            WHERE Ent.email = '${email}'
+        `;
+        
+        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        
+        return result[0]; 
+    }
+    async getEnterpriseById( id: number ) {
+        const query_select = `
+            SELECT  Ent.*
+            FROM Enterprise as Ent    
+            WHERE Ent.id = ${id}
+        `;
+        
+        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        
+        return result[0]; 
+    }
+
+    async updateEnterprise( data: any ) {
+        console.log('insert enterprise - Model');
+
+        const query_update = `
+            UPDATE Enterprise
+            SET fullName = '${data.fullName}',
+                email = '${data.email}',
+                phone = '${data.phone}',
+                whatsapp = '${data.whatsapp}',
+                password = '${data.password}',
+                enterpriseName = '${data.enterpriseName}',
+                location = '${data.location}',
+                country = '${data.country}',
+                state = '${data.state}',
+                city = '${data.city}',
+                address = '${data.address}',
+                addressNumber = '${data.addressNumber}',
+                instagram = '${data.instagram}',
+                facebook = '${data.facebook}',
+                website = '${data.website}',
+                tokenResetPassword = '${data.tokenResetPassword}',
+                tokenCreatedAt = '${data.tokenCreatedAt}'
+            WHERE id = ${data.id}
+        `;
+
+        await connQuery( query_update ).catch((err:any) => {throw err});
+    }
+
+    async getEnterpriseByToken( token: string ) {
+        const query_select = `
+            SELECT  Ent.id 
+                    ,Ent.tokenCreatedAt 
+            FROM Enterprise as Ent    
+            WHERE Ent.tokenResetPassword = '${token}'
+        `;
+        
+        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        
+        return result[0]; 
+    }
 }
    

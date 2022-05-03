@@ -12,6 +12,7 @@ import { useEnterpriseAuthContext } from "../../../context/enterpriseContext";
 import { NotAuthorizedComponent } from "../../../components/NotAuthorizedComponent";
 import { Footer } from "../../../components/Footer";
 import { Sidebar } from "../../../components/Sidebar";
+import { FlashMessageComponent } from "../../../components/FlashMessageComponent";
 
 
 export default function AdsEnterprise() {
@@ -61,6 +62,7 @@ export default function AdsEnterprise() {
         return (
             <Box>
                 <Header name="" position="relative" />
+                <FlashMessageComponent/>
                 <TopMenuEnterprise />
                 <Sidebar/>
                

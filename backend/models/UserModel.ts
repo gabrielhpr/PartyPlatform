@@ -90,7 +90,6 @@ module.exports = class UserModel {
     }
 
     async insertRating( ratingData: ratingObjProps ) {
-
         console.log('insert rating');
         let objLength = Object.keys(ratingData).length;
 

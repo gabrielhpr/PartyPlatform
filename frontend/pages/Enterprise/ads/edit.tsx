@@ -14,6 +14,7 @@ import { NotAuthorizedComponent } from "../../../components/NotAuthorizedCompone
 import { Footer } from "../../../components/Footer";
 import { enterpriseRegisterFormSchema, enterpriseRegisterQuestionsDataSchema } from '../../../utils/validations';
 import * as yup from 'yup';
+import { FlashMessageComponent } from "../../../components/FlashMessageComponent";
 
 interface adDataInterf {
     id: number;
@@ -666,6 +667,7 @@ export default function EditAdsEnterprise() {
             return (    
                 <Box>
                     <Header name="" position="relative" />
+                    <FlashMessageComponent/>
                     <TopMenuEnterprise />
                     <Flex 
                         mt="5"

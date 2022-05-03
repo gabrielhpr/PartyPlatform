@@ -1,6 +1,7 @@
 import { Button, Modal, ModalOverlay, ModalContent, Text,
 ModalHeader, ModalCloseButton, ModalFooter, ModalBody, useDisclosure, Flex, Icon } from "@chakra-ui/react";
 import { IconType } from "react-icons";
+import Script from "next/script";
 
 interface ModalServiceProfileProps {
     buttonText: string;
@@ -9,15 +10,39 @@ interface ModalServiceProfileProps {
     icon: IconType;
     iconColor: string;
     content: string;
+    handleClick: () => void;
 }
 
 
-export function ModalServiceProfile( {buttonText, title, subtitle, icon, iconColor, content }: ModalServiceProfileProps ) {
+export function ModalServiceProfile( {buttonText, title, subtitle, icon, iconColor, content, handleClick }: ModalServiceProfileProps ) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <>
-            <Button ml='0' onClick={onOpen} variant='outline'
+            {/* GOOGLE ANALYTICS */}
+            <Script
+                src="https://www.googletagmanager.com/gtag/js?id=G-RLBGWS0TCG"
+                strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+                {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){window.dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-RLBGWS0TCG', {
+                        send_page_view: false
+                    });
+                    
+                `}
+            </Script>
+
+            <Button ml='0' 
+                onClick={() => {
+                    onOpen();
+                    handleClick();
+                }}
+                variant='outline'
                 _focus={{outline:'none'}}
                 border='none'
                 leftIcon={<Icon as={icon} color={iconColor} />}

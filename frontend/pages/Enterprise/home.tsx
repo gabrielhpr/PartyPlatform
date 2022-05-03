@@ -16,6 +16,7 @@ import { typeOfParties } from "../../utils/typeOfParties";
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import { useRouter } from "next/router";
+import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 
 export default function HomePageEnterprise() {
     const { authenticatedEnterprise } = useEnterpriseAuthContext();
@@ -119,6 +120,7 @@ export default function HomePageEnterprise() {
         return (
             <Box>
                 <Header name="" position="relative" />
+                <FlashMessageComponent/>
                 <TopMenuEnterprise />
                 <Sidebar/>
                 
@@ -304,7 +306,7 @@ export default function HomePageEnterprise() {
                                                                         {el.fullName.split(' ')?.slice(0,2).join(' ')}
                                                                     </Text>
                                                                     <Text>
-                                                                        Data da Festa: {el.partyDate.substring(8,10)+'/'+el.partyDate.substring(5,7)+'/'+el.partyDate.substring(0,4)}
+                                                                        Data da Festa: {el.partyDate}
                                                                     </Text>
                                                                 </Flex>
 

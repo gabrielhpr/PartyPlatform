@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, Input, Stack, Text, Textarea, useBreakpointValue } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, Input, Stack, Text, Textarea, Icon, useBreakpointValue, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ItemList } from "../../../components/Enterprise/ItemList";
 import { RegisterFormLayout } from "../../../components/Enterprise/RegisterFormLayout";
@@ -16,6 +16,7 @@ import * as yup from 'yup';
 // Add style manually
 import 'react-upload-gallery/dist/style.css' // or scss
 import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery'
+import { FiUpload } from "react-icons/fi";
 
 
 interface enterpriseDataInterf {
@@ -105,7 +106,7 @@ interface enterpriseDataInterf {
 }
 
 const enterpriseDataNullState = {
-    step: 9,
+    step: 0,
     plan: 'Free',
     // Contact Data
     fullName: '',
@@ -218,7 +219,14 @@ interface enterpriseDataFormErrorInterf {
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
 
-    photos: any[];
+    photos: {
+        accept: string;
+        minLimit: string;
+        maxLimit: string;
+        size: string;
+        minDim: string;
+        maxDim: string;
+    };
 
     q1: string;
     q2: string;
@@ -300,7 +308,14 @@ const enterpriseDataFormErrorNullState = {
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
 
-    photos: [],
+    photos: {
+        accept: '',
+        minLimit: '',
+        maxLimit: '',
+        size: '', 
+        minDim: '',
+        maxDim: '' 
+    },
 
     q1: '',
     q2: '',
@@ -379,6 +394,8 @@ export default function RegisterEnterprise() {
         }.bind(this));
     },[]);
 
+    // Toast Feedback for Image Upload
+    
 
     function handleFileChange( event: any ) {
         console.log( 'event files images' );
@@ -571,6 +588,15 @@ export default function RegisterEnterprise() {
                     setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
                 }
             });
+        }
+        else if( enterpriseData.step == 9 ) {
+            if( enterpriseData.photos.length < 5 ) {
+                console.log('min images error');
+                setFormErrors((formE) => ({...formE, photos: {...formE.photos, minLimit: 'Você deve adicionar no mínimo 5 imagens.'}}));
+            }
+            else {
+                setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
+            }
         }
         else if( enterpriseData.step == 10 ) {
             console.log('entrou no step 10');
@@ -913,7 +939,9 @@ export default function RegisterEnterprise() {
                         autoComplete='off'
                     >
                         <Flex direction='column'>
-                            <FormControl isInvalid={formErrors.enterpriseName != '' ? true : false}>
+                            <FormControl 
+                                isInvalid={formErrors.enterpriseName != '' ? true : false}
+                            >
                                 <TextSpanInput
                                     textToShow="Nome da empresa"
                                 />
@@ -1238,69 +1266,125 @@ export default function RegisterEnterprise() {
                     handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
                 >
-                    <Flex direction='column' alignItems='center'
-                        display='flex'
+                   
+
+                    <Flex
+                        direction='column'
+                        w='100%'
+                        h='100%'
+                        alignItems='center'
+                        justifyContent='space-evenly'
                     >
-                        <Flex 
+                        {
+                            Object.values( formErrors.photos ).some( value => value != '')
+                            &&
+                            Object.values(formErrors.photos).map((el, index) => {
+                                if( el != '' ) {
+                                    return (
+                                        <Alert status='error'
+                                            justifyContent='center'
+                                        >
+                                            <AlertIcon />
+                                            <AlertTitle>{el}</AlertTitle>
+                                        </Alert>
+                                    );
+                                }
+                            })
+                        }
+
+                        <Text
+                            h='10%'
+                            fontSize={18}
+                            my='3'
+                        >
+                            Clique e segure na foto para reordenar
+                        </Text>
+
+                        <Flex
                             w='100%'
+                            h='80%'
+                            //h={{ base:'40vh', lg:'80vh' }}
+                            //alignItems='center'
                             justifyContent='center'
-                        >
-                            <Input
-                                w={{base:'80%', lg:'60%'}}
-                                type='file'
-                                name='photos'
-                                onChange={handleFileChange}
-                                multiple={true}
-                            />
-                        </Flex>
-
-                        <Flex 
-                            w='100%' 
-                            mt='5'
-                            mx='1'
-                            h={{ base:'50vh', lg:'80vh' }}
-                            alignItems='center'
-                            justifyContent='center'
-                            flexWrap='wrap'
+                            //flexWrap='wrap'
                             overflowY='scroll'
+                            pt='2'
+                            //direction='column'
                         >
-                            {
-                                preview.length > 0
-                                ?
-                                preview.map((image, index) => (
-                                    <Flex 
-                                        position='relative'
-                                        h={{base:'60vw', lg:'23vw'}}
-                                        w={{base:'60vw', lg:'23vw'}}
-                                        mx='2'
-                                        my='2'
-                                    >
-                                        <Image 
-                                            src={URL.createObjectURL(image)} 
-                                            key={`${enterpriseData.enterpriseName}
-                                            +${index}`} 
-                                            layout="fill"
-                                            objectFit="cover"
-                                        />
-                                    </Flex>    
-                                ))
-                                :
-                                <></>
-                            }
-                        </Flex>
+                            
+                            <RUG 
+                                //w='100%'
+                                action="http://example.com/upload"  
+                                autoUpload={false}
+                                rules={{
+                                    limit: 25,
+                                    size: 1024,
+                                    width: {
+                                        min: 600
+                                    },
+                                    height: {
+                                        min: 400
+                                    }
+                                }}
+                                accept={['jpg', 'jpeg', 'png']}
+                                onChange={(images) => {
+                                    console.log( enterpriseData );
+                                    setEnterpriseData({...enterpriseData, photos: images});
+                                    
+                                }}
+                                onWarning={(type, rules) => {
+                                    switch(type) {
+                                        case 'accept':
+                                            console.log(`Only ${rules.accept.join(', ')}`);
+                                            setFormErrors((formE) => ({...formE, photos: {...formE.photos, accept: `Formato inválido. Os formatos permitidos são ${rules.accept.join(', ')}`}}));
 
+                                        case 'limit':
+                                            console.log('limit <= ', rules.limit);
+                                            setFormErrors((formE) => ({...formE, photos: {...formE.photos, maxLimit: `O limite de fotos é ${rules.limit}`}}));
+
+                                        case 'size':
+                                            console.log('max size <= ', rules.size);
+                                            setFormErrors((formE) => ({...formE, photos: {...formE.photos, size: `O tamanho da imagem deve ser menor do que 1Mb.`}}));
+                                    
+                                        case 'minWidth': case 'minHeight':
+                                            console.log('Dimensions > ', `${rules.width.min}x${rules.height.min}`);
+                                            setFormErrors((formE) => ({...formE, photos: {...formE.photos, minDim: `A largura mínima deve ser 600px e a altura mínima deve ser 400px.`}}));
+                                    
+                                        case 'maxWidth': case 'maxHeight':
+                                            console.log('Dimensions < ', `${rules.width.max}x${rules.height.max}`);
+                                            //setFormErrors((formE) => ({...formE, photos: {...formE.photos, maxDim: `A largura máxima deve ser xx e a altura máxima deve ser yy.`}}));
+                                    
+                                        default:
+                                    }
+                                }}
+                                header={({ openDialogue }) => (
+                                    <DropArea
+                                    >
+                                    {
+                                        (isDrag) => 
+                                        <Flex style={{ background: isDrag ? 'yellow' : '#fff' }}
+                                            w='100%'
+                                        >
+                                            <Button 
+                                                onClick={() => {
+                                                    openDialogue();
+                                                    setFormErrors((formE) => ({...formE, photos: {accept: '', minLimit: '', maxLimit: '', size: '', minDim: '', maxDim: ''}}));
+                                                }}
+                                                rightIcon={<Icon as={FiUpload}/>}
+                                            >
+                                                Upload de Fotos
+                                            </Button>
+                                        </Flex>
+                                    }
+                                    </DropArea>
+                                )}
+                            >                                
+                            </RUG>
+                            
+                            
+                        </Flex>
                     </Flex>
 
-                    <RUG 
-                        w='80%'
-                        action="http://example.com/upload"  
-                        autoUpload={false}
-                        onChange={(images) => {
-                            console.log( enterpriseData );
-                            setEnterpriseData({...enterpriseData, photos: images});
-                        }}
-                    
-                    />
 
 
 

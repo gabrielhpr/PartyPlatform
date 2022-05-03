@@ -8,6 +8,9 @@ const RootController = require("../controllers/RootController");
 
 router.get("/services", RootController.getServices);
 router.get("/serviceProfile", RootController.getServiceById);
+router.get("/checkResetPasswordValidity", RootController.checkResetPasswordValidity);
+router.post("/sendEmailResetPasswordEnterprise", RootController.sendEmailResetPasswordEnterprise);
+router.patch("/resetPassword", RootController.resetPassword);
 //partyType='.+'&service='.+'&location='.+'
 //router.get("/services", EnterpriseController.services);
 //router.post("/login", UserController.login);

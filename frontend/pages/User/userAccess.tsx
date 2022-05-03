@@ -7,6 +7,7 @@ import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import FotoFestaEntregaPresente from '../../assets/imgs/entrega-presente.png';
 import { Footer } from "../../components/Footer";
+import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 
 export default function userAccess() {
     const [userAccessData, setUserAccessData] = useState({email: '', password:''});
@@ -29,7 +30,9 @@ export default function userAccess() {
         <Box>
             {/* Header */}
             <Header name="" position='relative' />
-            
+
+            <FlashMessageComponent/>
+
             <Sidebar/>
 
             <Flex 

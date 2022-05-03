@@ -91,7 +91,7 @@ export const enterpriseSpecificCategory = {
 }
 
 export const enterpriseSpecificCategoryDict = {
-    'SalaoDeFesta': 'Salão de Festa',
+    'SalaoDeFestas': 'Salão de Festas',
     'Chacara': 'Chácara',
     'Buffet': 'Buffet',
     'AnimacaoDeFesta': 'Animação de Festa',

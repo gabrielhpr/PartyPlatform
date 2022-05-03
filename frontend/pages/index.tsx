@@ -16,7 +16,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { MenuServicesOnClick } from '../components/MenuServicesOnClick';
 import { RiBriefcaseLine, RiCake2Fill, RiCloseFill, RiArrowGoBackFill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
-import { locationMap, typeOfParties, typeOfServices } from '../utils/typeOfParties';
+import { enterpriseSpecificCategoryDict, locationMap, typeOfParties, typeOfServices } from '../utils/typeOfParties';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import AliceCarousel from 'react-alice-carousel';
@@ -165,7 +165,7 @@ export default function HomePage() {
 
             <Sidebar/>
             
-            {/* Carroussel and Menu */}
+            {/* Menu */}
             <Flex 
                 height='92vh'
                 w='100vw'
@@ -276,7 +276,7 @@ export default function HomePage() {
                                     value={ 
                                         ( searchData.partyType !== '' && searchData.serviceCategory !== '' )
                                         ?
-                                        searchData.partyType + ' / ' + searchData.serviceCategory + ' / ' + searchData.serviceSpecificCategory
+                                        searchData.partyType + ' / ' + (searchData.serviceCategory == 'Espaco' ? 'Espaço':'Serviço') + ' / ' + enterpriseSpecificCategoryDict[searchData.serviceSpecificCategory]
                                         :
                                         searchInputValueFirst
                                     }
@@ -311,8 +311,8 @@ export default function HomePage() {
                                             justifyContent='space-between'
                                         >
                                             <Text
-                                                fontSize={19}
-                                                fontWeight={400}
+                                                fontSize={20}
+                                                fontWeight={500}
                                                 color='black'
                                             >
                                                 Qual o tipo da festa ?
@@ -345,11 +345,13 @@ export default function HomePage() {
                                                     bg='white'
                                                     h={{base:'10%',lg:'25%'}}
                                                     px='5'
+                                                    py='1'
                                                     borderRadius={0}
                                                     _focus={{outline:'none'}}
                                                     _hover={{bg:'rgba(0,0,0,0.1)'}}
                                                     name='partyType'
                                                     value={el.value}
+                                                    borderBottom='0.5px solid rgba(0,0,0,0.4)'
                                                     onClick={(event) => {
                                                         handleSearchData(event);
                                                         setSearchInputValueFirst('');
@@ -469,20 +471,23 @@ export default function HomePage() {
                                                     <Button
                                                         key={i}
                                                         w='100%'
-                                                        py='6'
+                                                        py='7'
                                                         bg='brand.white'
                                                         borderBottom='1px solid rgba(0,0,0,0.2)'
                                                         borderRadius={0}
                                                         name='service'
                                                         value={el.parent+'-'+el.value}
+                                                        leftIcon={<Icon as={el.icon} fontSize={18} mr='2' />}
                                                         onClick={(event) => {
                                                             setSearchData({...searchData, serviceCategory: el.parent, serviceSpecificCategory: el.value});
                                                             setMenuService('none');
                                                         }}
+                                                        
                                                     >
                                                         <Text
                                                             textAlign='left'
                                                             w='80%'
+                                                            fontSize={18}
                                                             fontWeight={400}
                                                         >
                                                             {el.textToShow}

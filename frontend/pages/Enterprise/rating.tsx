@@ -17,6 +17,7 @@ import { Sidebar } from "../../components/Sidebar";
 import { typeOfParties } from "../../utils/typeOfParties";
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
+import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 
 export default function RatingEnterprise() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -111,6 +112,7 @@ export default function RatingEnterprise() {
         return (
             <Box>
                 <Header name="" position="relative" />
+                <FlashMessageComponent/>
                 <TopMenuEnterprise />
                 <Sidebar/>
                 

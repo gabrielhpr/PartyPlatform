@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton, FormControl, FormErrorMessage } from "@chakra-ui/react";
 //import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
@@ -9,11 +9,15 @@ import { ModalServiceProfile } from "../components/ModalServiceProfile";
 import { ModalImageGallery } from "../components/ModalImageGallery";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
-import { enterpriseSpecificCategoryDict, specificQuestions } from "../utils/typeOfParties";
+import { enterpriseSpecificCategoryDict, locationMap, specificQuestions } from "../utils/typeOfParties";
 import { useUserAuthContext } from "../context/userContext";
 import { Sidebar } from "../components/Sidebar";
 import Script from "next/script";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { userRegisterDataNullState, userRegisterDataProps, userRegisterDataFormErrorProps, userRegisterDataFormErrorNullState } from "../utils/userInterface";
+import { FlashMessageComponent } from "../components/FlashMessageComponent";
+import { askBudgetSchema, userRegisterFormSchema, userRegisterPasswordSchema } from "../utils/validations";
+import * as yup from 'yup';
 
 interface serviceDataInterf {
     id: number;
@@ -183,22 +187,82 @@ const serviceNullState = {
     q50: ''
 }
 
-export default function ServiceProfilePage() {
+interface askBudgetInterf {
+    enterpriseId: number;
+    partyType: string;
+    partyDate: string;
+    nOfPeople: string;
+    messageContent: string;
+}
 
+const askBudgetNullState = {
+    enterpriseId: 0,
+    partyType: '',
+    partyDate: '',
+    nOfPeople: '',
+    messageContent: ''
+}
+
+interface askBudgetFormErrorInterf {
+    enterpriseId: number;
+    partyType: string;
+    partyDate: string;
+    nOfPeople: string;
+    messageContent: string;
+}
+
+const askBudgetFormErrorNullState = {
+    enterpriseId: 0,
+    partyType: '',
+    partyDate: '',
+    nOfPeople: '',
+    messageContent: ''
+}
+
+
+export default function ServiceProfilePage() {
     const routerNext = useRouter();
     const [service, setService] = useState<serviceDataInterf>(serviceNullState);
     const [opinions, setOpinions] = useState([]);
     const [showAllImages, setShowAllImages] = useState(false);
-    const [emailData, setEmailData] = useState({});
-    const { userSendEmail } = useUserAuthContext();
+    // EMAIL DATA
+    const [emailData, setEmailData] = useState<askBudgetInterf>(askBudgetNullState);
+    const [formErrorsEmailData, setFormErrorsEmailData] = useState<askBudgetFormErrorInterf>(askBudgetFormErrorNullState);
+    // REGISTER
+    const [userRegisterData, setUserRegisterData] = useState<userRegisterDataProps>(userRegisterDataNullState);
+    const [formErrorsUserRegister, setFormErrorsUserRegister] = useState<userRegisterDataFormErrorProps>(userRegisterDataFormErrorNullState);
+    // LOGIN
+    const [userLoginData, setUserLoginData] = useState({email: '', password:''});
+    // HOOKS - EMAIL, LOGIN, REGISTER
+    const { userSendEmail, authenticatedUser, loginUser, registerUser } = useUserAuthContext();
     const isMobileVersion = useBreakpointValue({
         base: true,
         lg: false,
     });
+    // MODAL
     const modalGallery = useDisclosure();
     const modalBudget = useDisclosure();
-
-
+    const modalRegister = useDisclosure();
+    const modalLogin = useDisclosure();
+    // MENU LOCATION
+    const [menuWhere, setMenuWhere] = useState('none');
+    
+    // MENU SEARCH
+    function searchFunction( event: any, menuId: string ) {
+        console.log( event.currentTarget.value );
+        let inputValue = event.currentTarget.value.toUpperCase();
+        let menu = document.getElementById( menuId );
+        let itemList = menu.getElementsByTagName("button");
+        
+        for (let i = 0; i < itemList.length; i++) {
+            if (itemList[i].innerHTML.toUpperCase().indexOf(inputValue) > -1) {
+                itemList[i].style.display = "";
+            } 
+            else {
+                itemList[i].style.display = "none";
+            }
+        }
+    }
 
     function handleOpinion() {
         routerNext.push({
@@ -209,15 +273,132 @@ export default function ServiceProfilePage() {
             }
         });
     }
+    async function handleValidation( fields: Array<string>, schemaForm: any, setErrorFunction: any, data: any ) {
+        console.log(fields);
+
+        // Reset errors message
+        fields.map((el, index) => {
+            setErrorFunction((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await schemaForm
+            .validateAt( el, data)
+            .catch((err) => {
+                setErrorFunction((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
+            });
+        });
+
+        let validForm = true;
+
+        // Check if can go to the next step
+        fields.map( (el, index) => {
+            
+            let isValidField = yup.reach( schemaForm, el )
+            .isValidSync( data[el] );
+            console.log(isValidField);
+
+            validForm = validForm && isValidField;                
+        });
+
+        console.log('validForm');
+        console.log(validForm);
+        // If there is no error its validated
+        return validForm;
+
+        // if( validForm ) {
+        //     setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
+        // }
+    }
 
     function handleEmailDataChange( event: any ) {
         setEmailData({...emailData, [event.currentTarget.name]: event.currentTarget.value});
     }
 
-    function handleSendEmail() {
+    // HANDLE CHANGE
+    function handleChangeLogin( event: any ) {
+        setUserLoginData({...userLoginData, [event.currentTarget.name]: event.currentTarget.value});
+        console.log( userLoginData );
+    }
+    function handleChangeRegister( event: any ) {
+        setUserRegisterData({...userRegisterData, [event.currentTarget.name]: event.currentTarget.value});
+        console.log( userRegisterData );
+    }
+
+    // HANDLE SUBMIT
+    async function handleSubmitLogin() {
+        console.log('Entrou handleSubmitLogin');
+        await loginUser( userLoginData, false );
+        console.log('O resultado de loginUser é');
+        console.log('Saiu handleSubmitLogin');
+    }
+    async function handleSubmitRegister() {
+        
+        // VALIDATE GENERAL
+        let isValidGeneral = await handleValidation(
+            ['fullName', 'email', 'phone', 'whatsapp', 'location'],
+            userRegisterFormSchema,
+            setFormErrorsUserRegister,
+            userRegisterData
+        );
+
+        // VALIDATE PASSWORD
+        let fields = ['password', 'passwordConfirmation'];
+
+        //Reset errors message
+        fields.map((el, index) => {
+            setFormErrorsUserRegister((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await userRegisterPasswordSchema
+            .validateAt( el, userRegisterData)
+            .catch((err) => {
+                setFormErrorsUserRegister((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
+            });
+        });
+
+        // Validate
+        let isValidPassword = await userRegisterPasswordSchema
+        .isValid({password:userRegisterData.password, passwordConfirmation:userRegisterData.passwordConfirmation})
+        .then((val) =>{
+            return val;
+        });
+
+        if( isValidGeneral && isValidPassword ) {
+            console.log('Entrou handleSubmitRegister');
+            await registerUser( userRegisterData, false );
+            console.log('Saiu handleSubmitRegister');
+        }
+    }
+
+    async function handleSendEmail() {
         console.log( emailData );
 
-        userSendEmail( emailData );
+        if( authenticatedUser ) {
+            console.log('vai enviar o email');
+
+            // VALIDATE
+            let isValid = await handleValidation(
+                ['partyDate', 'nOfPeople', 'messageContent'],
+                askBudgetSchema,
+                setFormErrorsEmailData,
+                emailData
+            );
+           
+            if( isValid ) {
+                console.log('Entrou handleSendEmail');
+                userSendEmail( emailData );
+                console.log('Saiu handleSendEmail');
+            }
+        }
+        else {
+            modalRegister.onOpen();
+        }
     }
 
     function handleShowAllImages() {
@@ -234,7 +415,7 @@ export default function ServiceProfilePage() {
             window.gtag('event', 'page_view', {
                 page_title: 'serviceProfilePage',
                 page_location: 'serviceProfilePage',
-                page_path: `enterprise-${id}`,
+                page_path: `serviceProfile/enterprise-${id}`,
             });
         }
 
@@ -258,6 +439,13 @@ export default function ServiceProfilePage() {
             })
     }, [routerNext.query]);
 
+    useEffect(() => {
+        if( authenticatedUser == true ) {
+            modalRegister.onClose();
+            modalLogin.onClose();
+        }
+    }, [authenticatedUser]);
+
     return (
         <Box>
             {/* GOOGLE ANALYTICS */}
@@ -280,6 +468,8 @@ export default function ServiceProfilePage() {
            
                        
             <Header name="" position="relative" />
+
+            <FlashMessageComponent/>
 
             <Sidebar/>
 
@@ -366,33 +556,61 @@ export default function ServiceProfilePage() {
                                 icon={RiPhoneFill}
                                 iconColor='black'
                                 content={service.phone}
+                                handleClick={() => {
+                                    console.log('entrou no handle click');
+                                    if (typeof window !== 'undefined') {
+                                        window.gtag('event', 'modalClick', {
+                                            'event_category': 'verTelefone',
+                                            'event_label': `enterprise-${service.id}`,
+                                            'value': 1,
+                                        });
+                                    }
+                                }}              
+
                             />
 
                             {
                                 service.whatsapp != ''
-                                ?
+                                &&
                                 <ModalServiceProfile 
                                     buttonText="Ver Whatsapp"
-                                    title="Mande Mensagem"
+                                    title="Envie uma mensagem"
                                     subtitle="Conte ao fornecedor que você
                                     o encontrou pelo Festafy"
                                     icon={RiWhatsappFill}
                                     iconColor='green'
                                     content={service.whatsapp}
+                                    handleClick={() => {
+                                        console.log('entrou no handle click');
+                                        if (typeof window !== 'undefined') {
+                                            window.gtag('event', 'modalClick', {
+                                                'event_category': 'verWhatsapp',
+                                                'event_label': `enterprise-${service.id}`,
+                                                'value': 1,
+                                            });
+                                        }
+                                    }}
                                 />
-                                :
-                                <>
-                                </>
                             }
 
                             <ModalServiceProfile 
                                 buttonText="Ver E-mail"
-                                title="Mande um e-mail"
+                                title="Envie um e-mail"
                                 subtitle="Conte ao fornecedor que você
                                 o encontrou pelo Festafy"
                                 icon={RiMailFill}
                                 iconColor='black'
                                 content={service.email}
+                                handleClick={() => {
+                                    console.log('entrou no handle click');
+                                    if (typeof window !== 'undefined') {
+                                        window.gtag('event', 'modalClick', {
+                                            'event_category': 'verEmail',
+                                            'event_label': `enterprise-${service.id}`,
+                                            'value': 1,
+                                        });
+                                    }
+                                }}
                             />
 
                         </Flex>
@@ -495,7 +713,7 @@ export default function ServiceProfilePage() {
                             buttonText='Ver todas as fotos'
                             handleFunctions={modalGallery}
                             content={
-                                service.photos.split(',').map((image, index) => {
+                                service.photos?.split(',').map((image, index) => {
                                     return {
                                         'id': `service_${index}`,
                                         'src': `http://localhost:5000/images/enterprise/${image}`,
@@ -782,7 +1000,7 @@ export default function ServiceProfilePage() {
                                                                     {el.fullName.split(' ')?.slice(0,2).join(' ')}
                                                                 </Text>
                                                                 <Text>
-                                                                    Data da Festa: {el.partyDate.substring(8,10)+'/'+el.partyDate.substring(5,7)+'/'+el.partyDate.substring(0,4)}
+                                                                    Data da Festa: {el.partyDate}
                                                                 </Text>
                                                             </Flex>
 
@@ -872,27 +1090,61 @@ export default function ServiceProfilePage() {
                                         
                                         <Flex direction='column' mb='3'>
                                             <Text as='span'>Data do evento</Text>
-                                            <Input type='date' 
-                                                name='partyDate'
-                                                onChange={handleEmailDataChange}
-                                            />
+                                            <FormControl 
+                                                isInvalid={formErrorsEmailData.partyDate != '' ? true : false}
+                                            >
+                                                <Input 
+                                                    type='text' 
+                                                    name='partyDate'
+                                                    value={emailData.partyDate}
+                                                    onChange={(event: any) => {
+                                                        setFormErrorsEmailData({...formErrorsEmailData, partyDate: ''});
+                                                        handleEmailDataChange( event );
+                                                    }}
+                                                />
+                                                <FormErrorMessage>
+                                                    {formErrorsEmailData.partyDate}
+                                                </FormErrorMessage> 
+                                            </FormControl>
                                         </Flex>
 
                                         <Flex direction='column' mb='3'>
                                             <Text as='span'>Número de convidados</Text>
-                                            <Input type='number' 
-                                                name='nOfPeople'
-                                                onChange={handleEmailDataChange}
-                                            />
+                                            <FormControl 
+                                                isInvalid={formErrorsEmailData.nOfPeople != '' ? true : false}
+                                            >
+                                                <Input type='number' 
+                                                    name='nOfPeople'
+                                                    value={emailData.nOfPeople}
+                                                    onChange={(event: any) => {
+                                                        setFormErrorsEmailData({...formErrorsEmailData, nOfPeople: ''});
+                                                        handleEmailDataChange( event );
+                                                    }}
+                                                />
+                                                <FormErrorMessage>
+                                                    {formErrorsEmailData.nOfPeople}
+                                                </FormErrorMessage> 
+                                            </FormControl>
                                         </Flex>
 
                                         <Flex direction='column' mb='3'>
                                             <Text as='span'>Mensagem</Text>
-                                            <Textarea resize='none' 
-                                                maxLength={300} h={100}
-                                                name='messageContent'
-                                                onChange={handleEmailDataChange}
-                                            />
+                                            <FormControl 
+                                                isInvalid={formErrorsEmailData.messageContent != '' ? true : false}
+                                            >
+                                                <Textarea resize='none' 
+                                                    maxLength={300} h={100}
+                                                    name='messageContent'
+                                                    value={emailData.messageContent}
+                                                    onChange={(event: any) => {
+                                                        setFormErrorsEmailData({...formErrorsEmailData, messageContent: ''});
+                                                        handleEmailDataChange( event );
+                                                    }}
+                                                />
+                                                <FormErrorMessage>
+                                                    {formErrorsEmailData.messageContent}
+                                                </FormErrorMessage> 
+                                            </FormControl>
                                         </Flex>
 
                                         <Button
@@ -972,7 +1224,9 @@ export default function ServiceProfilePage() {
                         <Modal isOpen={modalBudget.isOpen} onClose={modalBudget.onClose} size='full'>
                             <ModalOverlay />
                             <ModalContent>
-                                <ModalHeader></ModalHeader>
+                                <ModalHeader>
+                                    <FlashMessageComponent/>
+                                </ModalHeader>
                                 <ModalCloseButton />
                                 
                                 <ModalBody
@@ -988,7 +1242,6 @@ export default function ServiceProfilePage() {
                                             direction='column'
                                             textAlign='center'
                                         >
-
                                             <Text as='h2'
                                                 fontSize={21}
                                                 fontWeight={500}
@@ -1001,30 +1254,63 @@ export default function ServiceProfilePage() {
                                                 direction='column'
                                                 textAlign='left'
                                             >
-                                                
                                                 <Flex direction='column' mb='3'>
                                                     <Text as='span'>Data do evento</Text>
-                                                    <Input type='date' 
-                                                        name='partyDate'
-                                                        onChange={handleEmailDataChange}
-                                                    />
+                                                    <FormControl 
+                                                        isInvalid={formErrorsEmailData.partyDate != '' ? true : false}
+                                                    >
+                                                        <Input 
+                                                            type='text' 
+                                                            name='partyDate'
+                                                            value={emailData.partyDate}
+                                                            onChange={(event: any) => {
+                                                                setFormErrorsEmailData({...formErrorsEmailData, partyDate: ''});
+                                                                handleEmailDataChange( event );
+                                                            }}
+                                                        />
+                                                        <FormErrorMessage>
+                                                            {formErrorsEmailData.partyDate}
+                                                        </FormErrorMessage> 
+                                                    </FormControl>
                                                 </Flex>
 
                                                 <Flex direction='column' mb='3'>
                                                     <Text as='span'>Número de convidados</Text>
-                                                    <Input type='number' 
-                                                        name='nOfPeople'
-                                                        onChange={handleEmailDataChange}
-                                                    />
+                                                    <FormControl 
+                                                        isInvalid={formErrorsEmailData.nOfPeople != '' ? true : false}
+                                                    >
+                                                        <Input type='number' 
+                                                            name='nOfPeople'
+                                                            value={emailData.nOfPeople}
+                                                            onChange={(event: any) => {
+                                                                setFormErrorsEmailData({...formErrorsEmailData, nOfPeople: ''});
+                                                                handleEmailDataChange( event );
+                                                            }}
+                                                        />
+                                                        <FormErrorMessage>
+                                                            {formErrorsEmailData.nOfPeople}
+                                                        </FormErrorMessage> 
+                                                    </FormControl>
                                                 </Flex>
 
                                                 <Flex direction='column' mb='3'>
                                                     <Text as='span'>Mensagem</Text>
-                                                    <Textarea resize='none' 
-                                                        maxLength={300} h={100}
-                                                        name='messageContent'
-                                                        onChange={handleEmailDataChange}
-                                                    />
+                                                    <FormControl 
+                                                        isInvalid={formErrorsEmailData.messageContent != '' ? true : false}
+                                                    >
+                                                        <Textarea resize='none' 
+                                                            maxLength={300} h={100}
+                                                            name='messageContent'
+                                                            value={emailData.messageContent}
+                                                            onChange={(event: any) => {
+                                                                setFormErrorsEmailData({...formErrorsEmailData, messageContent: ''});
+                                                                handleEmailDataChange( event );
+                                                            }}
+                                                        />
+                                                        <FormErrorMessage>
+                                                            {formErrorsEmailData.messageContent}
+                                                        </FormErrorMessage> 
+                                                    </FormControl>
                                                 </Flex>
 
                                                 <Button
@@ -1034,15 +1320,13 @@ export default function ServiceProfilePage() {
                                                     fontSize={18}
                                                     onClick={() => {
                                                         handleSendEmail();
-                                                        // console.log('Service');
-                                                        //console.log(service);
-                                                        // console.log('Opinião');
-                                                        // console.log(opinions[0]);
                                                     }}
                                                 >
                                                     Pedir orçamento!
                                                 </Button>
+
                                             </Flex>
+                                            
                                         </Flex>    
                                     </Flex>
                                 </ModalBody>
@@ -1054,6 +1338,399 @@ export default function ServiceProfilePage() {
                     </>
 
                 }
+
+                {/* Cadastro ou Login Modal */}
+                <Modal isOpen={modalRegister.isOpen} onClose={modalRegister.onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader></ModalHeader>
+                    
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Flex 
+                                direction="column"
+                                h={{base:'100%',lg:'90%'}}
+                                //width={{base:'100%', lg:500}}
+                                w='auto'
+                                py={{base:'1',lg:'6'}}
+                                px={{base:'0', lg:"10" }}
+                                justifyContent="flex-start"
+                                bg="white" 
+                                //boxShadow={{base:'none', lg:"0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"}}
+                                borderRadius={8} 
+                                fontSize={20}
+                            >
+                                {/* LOGIN */}
+                                <Flex
+                                    mb='2'
+                                    mt={{base:'5',lg:'0'}}
+                                    justifyContent='center'
+                                    alignItems='center'
+                                >
+                                    <Text>
+                                        Já possui uma conta ?
+                                    </Text>
+
+                                    <Button ml='3' 
+                                        onClick={() => {
+                                            modalLogin.onOpen();
+                                        }}
+                                        bg='white'
+                                        color='blue'
+                                    > 
+                                        Entre
+                                    </Button>
+                                    
+                                    {/* LOGIN - MODAL */}
+                                    <Modal isOpen={modalLogin.isOpen} onClose={modalLogin.onClose}>
+                                        <ModalOverlay />
+                                        <ModalContent>
+                                            <ModalHeader>
+                                                <FlashMessageComponent/>
+                                            </ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                {/* Form Login */}
+                                                <Flex 
+                                                    direction="column"
+                                                    width={{base:'100%',lg:400}}
+                                                    height='80%'
+                                                    pt="1"
+                                                    pb="1"
+                                                    px="10" 
+                                                    justifyContent="center"
+                                                    bg="white" 
+                                                    fontSize={20}
+                                                >
+                                                    <Text as="h2" textAlign="center" my="1" fontSize={22} 
+                                                        fontWeight={500}
+                                                    >
+                                                        SEJA BEM-VINDO!
+                                                    </Text>
+
+                                                    <Flex direction="column" mt="3">
+                                                        <Text color="brand.white_40" fontSize={19}>
+                                                            E-mail
+                                                        </Text>
+
+                                                        <Input placeholder="email@example.com"
+                                                            name="email"
+                                                            onChange={handleChangeLogin}
+                                                        />
+                                                    </Flex>
+
+                                                    <Flex direction="column"
+                                                        mt="3"
+                                                    >
+                                                        <Text color="brand.white_40" fontSize={19}>
+                                                            Senha
+                                                        </Text>
+
+                                                        <Input placeholder="********"
+                                                            name="password"
+                                                            type="password"
+                                                            onChange={handleChangeLogin}
+                                                        />
+                                                    </Flex>
+
+                                                    <Button 
+                                                        mt="8"
+                                                        bg="brand.red"
+                                                        color="brand.white"
+                                                        fontSize={18}
+                                                        py="6"
+                                                        onClick={() => {
+                                                            handleSubmitLogin();
+                                                            //modalLogin.onClose();
+                                                        }}
+                                                    >
+                                                        LOGIN
+                                                    </Button>
+
+                                                    <Flex direction="column" justifyContent="center" mt='4'>
+                                                        <NavLink href="/prices">
+                                                            <Text textAlign="center" fontSize={16}
+                                                                color="brand.light_blue_40"
+                                                            >
+                                                                Esqueceu sua senha ?
+                                                            </Text>
+                                                        </NavLink>
+                                                    </Flex>
+
+                                                </Flex>
+                                            </ModalBody>
+
+                                            <ModalFooter>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </Modal>
+                                </Flex>
+
+                                <Text textAlign='center'
+                                    mb='2'
+                                >
+                                    ou
+                                </Text>
+
+                                <Text as="h2" textAlign="center" mb="1" fontSize={22} 
+                                    fontWeight={500}
+                                >
+                                    INSCREVA-SE
+                                </Text>
+
+                                {/* Full name */}
+                                <Flex direction="column" mt="3">
+                                    <Text color="brand.white_40" fontSize={19}>
+                                        Nome completo
+                                    </Text>
+
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.fullName != '' ? true : false}
+                                    >
+                                        <Input 
+                                            name="fullName"
+                                            value={userRegisterData.fullName}
+                                            onChange={(event: any) => {
+                                                handleChangeRegister(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, fullName: ''});
+                                            }}
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.fullName}
+                                        </FormErrorMessage> 
+                                    </FormControl>
+                                </Flex>
+                                
+                                {/* E-mail */}
+                                <Flex direction="column" mt="3">
+                                    <Text color="brand.white_40" fontSize={19}>
+                                        E-mail
+                                    </Text>
+
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.email != '' ? true : false}
+                                    >
+                                        <Input placeholder="email@example.com"
+                                            name="email"
+                                            value={userRegisterData.email}
+                                            onChange={(event: any) => {
+                                                handleChangeRegister(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, email: ''});
+                                            }}
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.email}
+                                        </FormErrorMessage> 
+                                    </FormControl>
+                                </Flex>
+
+                                {/* Password */}
+                                <Flex direction="row" mt='3'
+                                    alignItems='flex-end'
+                                >
+                                    <Flex direction="column"
+                                    >
+                                        <Text color="brand.white_40" fontSize={19}>
+                                            Senha
+                                        </Text>
+
+                                        <FormControl 
+                                            isInvalid={formErrorsUserRegister.password != '' ? true : false}
+                                        >
+                                            <Input placeholder="********"
+                                                name="password"
+                                                type="password"
+                                                value={userRegisterData.password}
+                                                onChange={(event: any) => {
+                                                    handleChangeRegister(event);
+                                                    setFormErrorsUserRegister({...formErrorsUserRegister, password: ''});
+                                                }}
+                                            />
+                                            <FormErrorMessage>
+                                                {formErrorsUserRegister.password}
+                                            </FormErrorMessage> 
+                                        </FormControl>                                        
+                                    </Flex>
+
+                                    <Flex direction="column" ml='2'
+                                    >
+                                        <Text color="brand.white_40" fontSize={19}>
+                                            Confirmação da Senha
+                                        </Text>
+
+                                        <FormControl 
+                                            isInvalid={formErrorsUserRegister.passwordConfirmation != '' ? true : false}
+                                        >
+                                            <Input placeholder="********"
+                                                name="passwordConfirmation"
+                                                type="password"
+                                                value={userRegisterData.passwordConfirmation}
+                                                onChange={(event: any) => {
+                                                    handleChangeRegister(event);
+                                                    setFormErrorsUserRegister({...formErrorsUserRegister, passwordConfirmation: ''});
+                                                }}
+                                            />
+                                            <FormErrorMessage>
+                                                {formErrorsUserRegister.passwordConfirmation}
+                                            </FormErrorMessage> 
+                                        </FormControl>                                         
+                                    </Flex>
+                                </Flex>
+
+                                {/* Phone */}
+                                <Flex direction="column"
+                                    mt="3"
+                                >
+                                    <Text color="brand.white_40" fontSize={19}>
+                                        Telefone
+                                    </Text>
+
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.phone != '' ? true : false}
+                                    >
+                                        <Input 
+                                            name="phone"
+                                            type="text"
+                                            value={userRegisterData.phone}
+                                            onChange={(event: any) => {
+                                                handleChangeRegister(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, phone: ''});
+                                            }}
+                                            
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.phone}
+                                        </FormErrorMessage> 
+                                    </FormControl>  
+                                </Flex>
+
+                                {/* Whatsapp */}
+                                <Flex direction="column"
+                                    mt="3"
+                                >
+                                    <Text color="brand.white_40" fontSize={19}>
+                                        Whatsapp
+                                    </Text>
+
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.whatsapp != '' ? true : false}
+                                    >
+                                        <Input 
+                                            name="whatsapp"
+                                            type="text"
+                                            value={userRegisterData.whatsapp}
+                                            onChange={(event: any) => {
+                                                handleChangeRegister(event);
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, whatsapp: ''});
+                                            }}
+                                        />
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.whatsapp}
+                                        </FormErrorMessage> 
+                                    </FormControl> 
+                                </Flex>
+
+                                {/* Location */}
+                                <Flex direction="column"
+                                    mt="3"
+                                >
+                                    <Text color="brand.white_40" fontSize={19}>
+                                        Onde reside
+                                    </Text>
+
+                                    <FormControl 
+                                        isInvalid={formErrorsUserRegister.location != '' ? true : false}
+                                    >
+                                        <Flex direction='column'
+                                        >
+                                            {/* Onde - Localização */}
+                                            <Input 
+                                                _focus={{outline:'none'}}
+                                                value={userRegisterData.location}
+                                                onChange={(event: any) => {
+                                                    setUserRegisterData({...userRegisterData, location: event.currentTarget.value});
+                                                    searchFunction(event, "menuWhere");
+                                                }}
+                                                onClick={() => {
+                                                    setMenuWhere('onclick')
+                                                }}
+                                            />
+                                            <Box 
+                                                id='menuLocation'
+                                                height={230} 
+                                                width={350}
+                                                display={menuWhere}
+                                                position='absolute'
+                                                overflowY="scroll"
+                                                bg='brand.white'
+                                                mt={{base:1, lg: 5}}
+                                                borderRadius={10}
+                                                zIndex={3}
+                                            >
+                                                <Flex direction="column" id="menuWhere"
+                                                    h='100%'
+                                                >
+                                                    {
+                                                    Object.values(locationMap).map((el, i) => {
+                                                        return(
+                                                            <Button
+                                                                bg='white'
+                                                                h='25%'
+                                                                py='4'
+                                                                px='5'
+                                                                borderRadius={0}
+                                                                _focus={{outline:'none'}}
+                                                                _hover={{bg:'rgba(0,0,0,0.1)'}}
+                                                                //name='partyType'
+                                                                //value={el.value}
+                                                                onClick={(event) => {
+                                                                    setUserRegisterData({...userRegisterData, location: el.textToShow, city: el.city, state: el.state, country: el.country})
+                                                                    setFormErrorsUserRegister({...formErrorsUserRegister, location: ''});
+                                                                    setMenuWhere('none');
+                                                                }}
+                                                            >
+                                                                <Text
+                                                                    width='100%'
+                                                                    textAlign='left'
+                                                                    fontWeight={400}
+                                                                    fontSize={18}
+                                                                >
+                                                                    {el.textToShow}
+                                                                </Text>
+                                                            </Button>
+                                                        );
+                                                    })
+                                                    }
+                                                </Flex>
+                                            </Box>
+                                        </Flex>      
+                                        
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.location}
+                                        </FormErrorMessage> 
+                                    </FormControl> 
+                                </Flex>
+
+                                <Button 
+                                    mt="8"
+                                    bg="brand.red"
+                                    color="brand.white"
+                                    fontSize={18}
+                                    py="6"
+                                    onClick={handleSubmitRegister}
+                                >
+                                    Cadastrar
+                                </Button>
+                                
+                            </Flex>
+                        </ModalBody>
+
+                        <ModalFooter>
+                            
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+
             </Flex>
             :
             <>
