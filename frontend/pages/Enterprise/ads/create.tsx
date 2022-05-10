@@ -323,48 +323,46 @@ export default function CreateAdEnterprise() {
 
         // Get all ads created by the enterprise - To check which
         // ads the enterprise can create
-        try {
-            api.get("/enterprise/ads", {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(token)}`
-                }
-            })
-            .then((response) => {
-                console.log('createAd - /enterprise/ads');
-                console.log( response.data.ads );
-                setAdsCreated( response.data.ads );
-                setPartiesAdsAlreadyCreated( response.data.ads.map((el, index) => {
-                    return el.partyMainFocus;
-                }));
-                console.log('partiesAdsAlreadyCreated');
-                console.log( partiesAdsAlreadyCreated );
-            });
-        }
-        catch( err ) {
+        api.get("/enterprise/ads", {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(token)}`
+            }
+        })
+        .then((response) => {
+            console.log('createAd - /enterprise/ads');
+            console.log( response.data.ads );
+            setAdsCreated( response.data.ads );
+            setPartiesAdsAlreadyCreated( response.data.ads.map((el, index) => {
+                return el.partyMainFocus;
+            }));
+            console.log('partiesAdsAlreadyCreated');
+            console.log( partiesAdsAlreadyCreated );
+        })
+        .catch( err => {
             console.log( err );
-        }
+        });
+        
 
         // Get enterprise data
-        try {
-            api.get("/enterprise/myenterprise", {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(token)}`
+        api.get("/enterprise/myenterprise", {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(token)}`
+            }
+        })
+        .then((response) => {
+            setEnterpriseData( response.data.enterpriseData );
+            setNewAdData(
+                {
+                    ...newAdData, 
+                    enterpriseCategory: response.data.enterpriseData.enterpriseCategory,
+                    enterpriseSpecificCategory: response.data.enterpriseData.enterpriseSpecificCategory 
                 }
-            })
-            .then((response) => {
-                setEnterpriseData( response.data.enterpriseData );
-                setNewAdData(
-                    {
-                        ...newAdData, 
-                        enterpriseCategory: response.data.enterpriseData.enterpriseCategory,
-                        enterpriseSpecificCategory: response.data.enterpriseData.enterpriseSpecificCategory 
-                    }
-                );
-            });
-        }
-        catch( err ) {
+            );
+        })
+        .catch(err => {
             console.log( err );
-        }
+        })
+       
 
     }, [authenticatedEnterprise]);
 

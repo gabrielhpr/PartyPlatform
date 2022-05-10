@@ -289,19 +289,18 @@ export default function MyBusinessEnterprise() {
         const token = localStorage.getItem("tokenEnterprise");
 
         // Get enterprise data
-        try {
-            api.get("/enterprise/myenterprise", {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(token)}`
-                }
-            })
-            .then((response) => {
-                setEnterpriseData( response.data.enterpriseData );
-            });
-        }
-        catch( err ) {
+        api.get("/enterprise/myenterprise", {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(token)}`
+            }
+        })
+        .then((response) => {
+            setEnterpriseData( response.data.enterpriseData );
+        })
+        .catch( err => {
             console.log( err );
-        }
+        })
+        
     }, [authenticatedEnterprise]);
 
 
@@ -329,21 +328,20 @@ export default function MyBusinessEnterprise() {
             }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
         })
 
-        try {
-            api.patch(
-            '/enterprise/myenterprise/edit',
-             formData, 
-             {
+        api.patch(
+        '/enterprise/myenterprise/edit',
+            formData, 
+            {
                 headers: {
                     "content-type": "multipart/form-data",
                     "Authorization": `Bearer ${JSON.parse(token)}`
                 }
-             });
-        }
-        catch(err) {
-            // tratar o erro
-            console.log(err);
-        }
+            }
+        )
+        .catch( err => {
+            console.log( err );
+        });
+        
         setHasToUpdate(false);
 
     }, [enterpriseData, hasToUpdate]);

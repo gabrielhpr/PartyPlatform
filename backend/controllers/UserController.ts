@@ -19,6 +19,7 @@ module.exports = class UserController {
             email,
             phone,
             whatsapp,
+            accept,
             password,
             passwordConfirmation,
             location,
@@ -40,6 +41,11 @@ module.exports = class UserController {
             return;
         }
 
+        if( !accept || accept != 'true' ) {
+            res.status(422).json({ message: "É necesário aceitar os termos de uso e de privacidade!" });
+            return;
+        }
+
         if( !password ) {
             res.status(422).json({ message: "A senha é obrigatória!"});
             return;
@@ -51,6 +57,7 @@ module.exports = class UserController {
 
         // Insert User
         const userData = {
+            'accept': accept,
             'fullName': fullName,
             'email': email,
             'phone': phone,

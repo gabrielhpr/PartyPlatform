@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton, FormControl, FormErrorMessage, Checkbox } from "@chakra-ui/react";
 import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
@@ -9,7 +9,7 @@ import { ModalServiceProfile } from "../components/ModalServiceProfile";
 import { ModalImageGallery } from "../components/ModalImageGallery";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
-import { enterpriseSpecificCategoryDict, locationMap, specificQuestions } from "../utils/typeOfParties";
+import { enterpriseSpecificCategoryDict, locationMap, locationMapUser, specificQuestions } from "../utils/typeOfParties";
 import { useUserAuthContext } from "../context/userContext";
 import { Sidebar } from "../components/Sidebar";
 import Script from "next/script";
@@ -334,11 +334,12 @@ export default function ServiceProfilePage() {
         console.log('O resultado de loginUser é');
         console.log('Saiu handleSubmitLogin');
     }
+    
     async function handleSubmitRegister() {
         
         // VALIDATE GENERAL
         let isValidGeneral = await handleValidation(
-            ['fullName', 'email', 'phone', 'whatsapp', 'location'],
+            ['fullName', 'email', 'phone', 'whatsapp', 'location', 'accept'],
             userRegisterFormSchema,
             setFormErrorsUserRegister,
             userRegisterData
@@ -427,16 +428,19 @@ export default function ServiceProfilePage() {
                     id: id,
                     partyType: partyType
                 }
-            })
-            .then((response) => {
-                console.log('Service');
-                console.log(response.data.service);
-                console.log('Opinions');
-                console.log(response.data.opinions);
-                
-                setService(response.data.service[0]);
-                setOpinions(response.data.opinions);
-            })
+        })
+        .then((response) => {
+            console.log('Service');
+            console.log(response.data.service);
+            console.log('Opinions');
+            console.log(response.data.opinions);
+            
+            setService(response.data.service[0]);
+            setOpinions(response.data.opinions);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }, [routerNext.query]);
 
     useEffect(() => {
@@ -465,7 +469,6 @@ export default function ServiceProfilePage() {
                     
                 `}
             </Script>
-           
                        
             <Header name="" position="relative" />
 
@@ -540,11 +543,13 @@ export default function ServiceProfilePage() {
                             */}
                         </Flex>
                         
-                        <Flex mt='2'>
+                        <Flex mt='2'
+                            justifyContent={{base:'space-between', lg:'flex-start'}}
+                        >
                             <Flex alignItems='center'>
                                 <Icon as={RiStarSFill} color='red' />
                                 <Text ml='1'>
-                                    5,0
+                                    {Number(opinions?.reduce((acc:any, curr:any) => acc + curr.ratingGeneral, 0) / opinions.length).toFixed(2)}
                                 </Text>
                             </Flex>
                             
@@ -560,13 +565,12 @@ export default function ServiceProfilePage() {
                                     console.log('entrou no handle click');
                                     if (typeof window !== 'undefined') {
                                         window.gtag('event', 'verTelefone', {
-                                            'typeOfParty': `${service.partyMainFocus}`,
-                                            'enterpriseId': `${service.id}`,
+                                            'event_category': `${service.partyMainFocus}`,
+                                            'event_label': `${service.id}`,
                                             'value': 1,
                                         });
                                     }
                                 }}              
-
                             />
 
                             {
@@ -574,7 +578,7 @@ export default function ServiceProfilePage() {
                                 &&
                                 <ModalServiceProfile 
                                     buttonText="Ver Whatsapp"
-                                    title="Envie uma mensagem"
+                                    title="Envie uma mensagem!"
                                     subtitle="Conte ao fornecedor que você
                                     o encontrou pelo Festafy"
                                     icon={RiWhatsappFill}
@@ -584,8 +588,8 @@ export default function ServiceProfilePage() {
                                         console.log('entrou no handle click');
                                         if (typeof window !== 'undefined') {
                                             window.gtag('event', 'verWhatsapp', {
-                                                'typeOfParty': `${service.partyMainFocus}`,
-                                                'enterpriseId': `${service.id}`,
+                                                'event_category': `${service.partyMainFocus}`,
+                                                'event_label': `${service.id}`,
                                                 'value': 1,
                                             });
                                         }
@@ -595,7 +599,7 @@ export default function ServiceProfilePage() {
 
                             <ModalServiceProfile 
                                 buttonText="Ver E-mail"
-                                title="Envie um e-mail"
+                                title="Envie um e-mail!"
                                 subtitle="Conte ao fornecedor que você
                                 o encontrou pelo Festafy"
                                 icon={RiMailFill}
@@ -605,8 +609,8 @@ export default function ServiceProfilePage() {
                                     console.log('entrou no handle click');
                                     if (typeof window !== 'undefined') {
                                         window.gtag('event', 'verEmail', {
-                                            'typeOfParty': `${service.partyMainFocus}`,
-                                            'enterpriseId': `${service.id}`,
+                                            'event_category': `${service.partyMainFocus}`,
+                                            'event_label': `${service.id}`,
                                             'value': 1,
                                         });
                                     }
@@ -642,6 +646,7 @@ export default function ServiceProfilePage() {
                                     transform='translate(-5%, -10%)'
                                     onClick={modalGallery.onOpen}
                                     borderRadius={8}
+                                    zIndex={1}
                                 >
                                     + Fotos
                                 </Button>                                    
@@ -1693,7 +1698,7 @@ export default function ServiceProfilePage() {
                                                     h='100%'
                                                 >
                                                     {
-                                                    Object.values(locationMap).map((el, i) => {
+                                                    Object.values(locationMapUser).map((el, i) => {
                                                         return(
                                                             <Button
                                                                 bg='white'
@@ -1732,6 +1737,26 @@ export default function ServiceProfilePage() {
                                         </FormErrorMessage> 
                                     </FormControl> 
                                 </Flex>
+
+                                {/* ACEITE */}
+                                <Flex direction='column' mt='3'>
+                                    <FormControl isInvalid={formErrorsUserRegister.accept != '' ? true : false}>                                
+                                        <Checkbox
+                                            name='accept'
+                                            onChange={(event: any) => {
+                                                setUserRegisterData({...userRegisterData, [event.currentTarget.name]: String(event.currentTarget.checked)});
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, [event.currentTarget.name]: ''});
+                                            }}
+                                            isChecked={userRegisterData.accept == 'true' ? true : false}
+                                        >
+                                            Aceito os <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>Termos de uso</NavLink> e de <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>privacidade</NavLink>.
+                                        </Checkbox>
+                                        
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.accept}
+                                        </FormErrorMessage>
+                                    </FormControl>
+                                </Flex>   
 
                                 <Button 
                                     mt="8"

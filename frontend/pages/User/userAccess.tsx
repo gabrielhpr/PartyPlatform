@@ -173,6 +173,25 @@ export default function userAccess() {
                                         Cadastre-se gratuitamente
                                     </Text>
                                 </NavLink>
+
+                                <Text 
+                                    mt='5'
+                                    textAlign="center" 
+                                    fontSize={{base:17, lg:16}}
+                                    color="black"
+                                    fontWeight={500}
+                                >
+                                    É um prestador de serviço ?
+                                </Text>
+                                
+                                <NavLink href="/Enterprise/enterpriseAccess">
+                                    <Text textAlign="center" 
+                                        fontSize={{base:18, lg:16}}
+                                        color="brand.light_blue_40"
+                                    >
+                                        Acesso empresas
+                                    </Text>
+                                </NavLink>
                             </Flex>
 
 

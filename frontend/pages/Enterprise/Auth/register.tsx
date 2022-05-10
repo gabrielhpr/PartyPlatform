@@ -1,4 +1,4 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, Input, Stack, Text, Textarea, Icon, useBreakpointValue, useToast } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, Input, Stack, Text, Textarea, Icon, useBreakpointValue, useToast, Checkbox, Link as NavLink } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ItemList } from "../../../components/Enterprise/ItemList";
 import { RegisterFormLayout } from "../../../components/Enterprise/RegisterFormLayout";
@@ -27,6 +27,7 @@ interface enterpriseDataInterf {
     email: string;
     phone: string;
     whatsapp?: string;
+    accept: string;
     // Access Data
     password: string;
     passwordConfirmation: string;
@@ -113,6 +114,7 @@ const enterpriseDataNullState = {
     email: '',
     phone: '',
     whatsapp: '',
+    accept: 'false',
     // Access Data
     password: '',
     passwordConfirmation: '',
@@ -195,6 +197,7 @@ interface enterpriseDataFormErrorInterf {
     email: string;
     phone: string;
     whatsapp?: string;
+    accept: string;
     // Access Data
     password: string;
     passwordConfirmation: string;
@@ -286,6 +289,7 @@ const enterpriseDataFormErrorNullState = {
     email: '',
     phone: '',
     whatsapp: '',
+    accept: '',
     // Access Data
     password: '',
     passwordConfirmation: '',
@@ -492,7 +496,7 @@ export default function RegisterEnterprise() {
         if( enterpriseData.step == 1 ) {     
             console.log('entrou no step 1');       
             await handleValidation(
-                ['fullName', 'email', 'phone', 'whatsapp'],
+                ['fullName', 'email', 'phone', 'whatsapp', 'accept'],
                 enterpriseRegisterFormSchema
             );
         }
@@ -748,7 +752,6 @@ export default function RegisterEnterprise() {
     }
 
     switch( enterpriseData.step ) {
-
         case 0:
             return (
                 <RegisterFormLayout 
@@ -799,7 +802,9 @@ export default function RegisterEnterprise() {
                 >
                     <Stack direction='column' spacing={4} 
                         w={{base:'80%', lg:'50%'}}
-                        //h='100%'
+                        h={{base:'100%', lg:'auto'}}
+                        py='2'
+                        overflowY='scroll'
                         mx='auto'
                         //my='auto'
                         //alignItems='center'
@@ -862,6 +867,27 @@ export default function RegisterEnterprise() {
                                 <FormHelperText>Digite somente os números do whatsapp com o DDD </FormHelperText>
                                 <FormErrorMessage>
                                     {formErrors.whatsapp}
+                                </FormErrorMessage>
+                            </FormControl>
+                        </Flex>  
+
+                        <Flex direction='column'>
+                            <FormControl isInvalid={formErrors.accept != '' ? true : false}>                                
+                                <Checkbox
+                                    name='accept'
+                                    //value={}
+                                    onChange={(event: any) => {
+                                        setEnterpriseData({...enterpriseData, [event.currentTarget.name]: String(event.currentTarget.checked)});
+                                        setFormErrors({...formErrors, [event.currentTarget.name]: ''});
+                                        console.log(event.currentTarget.checked);
+                                    }}
+                                    isChecked={enterpriseData.accept == 'true' ? true : false}
+                                >
+                                    Aceito os <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>Termos de uso</NavLink> e de <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>privacidade</NavLink>.
+                                </Checkbox>
+                                
+                                <FormErrorMessage>
+                                    {formErrors.accept}
                                 </FormErrorMessage>
                             </FormControl>
                         </Flex>                        

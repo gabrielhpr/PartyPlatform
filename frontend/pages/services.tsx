@@ -128,26 +128,25 @@ export default function ServicesPage() {
         }
         const { partyType, serviceCategory, serviceSpecificCategory, city, state, country, price } = routerNext.query;
 
-        try {
-            api.get('/services', {
-                    params: {
-                        partyType: partyType,
-                        serviceCategory: serviceCategory,
-                        serviceSpecificCategory: serviceSpecificCategory,
-                        city: city,
-                        state: state,
-                        country: country,
-                        price: price
-                    }
-                })
-                .then((response) => {
-                    setServices(response.data.services);
-                    console.log(services[0]);
-                })
-        }
-        catch( err ) {
-            console.log( err );
-        }
+        api.get('/services', {
+                params: {
+                    partyType: partyType,
+                    serviceCategory: serviceCategory,
+                    serviceSpecificCategory: serviceSpecificCategory,
+                    city: city,
+                    state: state,
+                    country: country,
+                    price: price
+                }
+        })
+        .then((response) => {
+            setServices(response.data.services);
+            console.log(services[0]);
+        })
+        .catch((err) => {
+            console.log(err);
+        }) 
+
     }, [routerNext.query]);
 
     return (

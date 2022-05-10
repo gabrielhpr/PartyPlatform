@@ -403,20 +403,18 @@ export default function EditAdsEnterprise() {
         const token = localStorage.getItem("tokenEnterprise");
         const { partyType } = routerNext.query;
 
-        try {
-            api.get(`/enterprise/ads/${partyType}`, {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(token)}`
-                }
-            })
-            .then((response) => {
-                setAdData( Object.assign(adData, response.data.ad) );  
-                console.log( response.data.ad );             
-            });
-        }
-        catch( err ) {
+        api.get(`/enterprise/ads/${partyType}`, {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(token)}`
+            }
+        })
+        .then((response) => {
+            setAdData( Object.assign(adData, response.data.ad) );  
+            console.log( response.data.ad );             
+        })
+        .catch(err => {
             console.log( err );
-        }
+        });
 
     }, [routerNext.query, authenticatedEnterprise]);
 
@@ -430,20 +428,19 @@ export default function EditAdsEnterprise() {
         const token = localStorage.getItem("tokenEnterprise");
 
         // Get enterprise data
-        try {
-            api.get("/enterprise/myenterprise", {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(token)}`
-                }
-            })
-            .then((response) => {
-                console.log( response.data.enterpriseData );
-                setEnterpriseData( response.data.enterpriseData );
-            });
-        }
-        catch( err ) {
+        api.get("/enterprise/myenterprise", {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(token)}`
+            }
+        })
+        .then((response) => {
+            console.log( response.data.enterpriseData );
+            setEnterpriseData( response.data.enterpriseData );
+        })
+        .catch(err => {
             console.log( err );
-        }
+        });
+        
     }, [routerNext.query, authenticatedEnterprise]);
 
     // Enterprise Category and Specific Category are
@@ -489,23 +486,22 @@ export default function EditAdsEnterprise() {
         console.log('formData');
         console.log(formData);
         
-        try {
-            const { partyType } = routerNext.query;
+        const { partyType } = routerNext.query;
 
-            api.patch(
+        api.patch(
             `/enterprise/ads/edit/${partyType}`,
-             formData, 
-             {
+            formData, 
+            {
                 headers: {
                     "content-type": "multipart/form-data",
                     'Authorization': `Bearer ${JSON.parse(token)}`
                 }
-             });
-        }
-        catch(err) {
-            // tratar o erro
-            console.log(err);
-        }
+            }
+        )
+        .catch(err => {
+            console.log( err );
+        });
+        
         setHasToUpdate(false);
 
     }, [adData, hasToUpdate]);

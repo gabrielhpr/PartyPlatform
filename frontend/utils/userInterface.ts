@@ -1,5 +1,6 @@
 
 export interface userRegisterDataProps {
+    accept: string;
     fullName: string;
     email: string;
     phone: string;
@@ -13,6 +14,7 @@ export interface userRegisterDataProps {
 }
 
 export const userRegisterDataNullState = {
+    accept: '',
     fullName: '',
     email: '',
     phone: '',
@@ -29,6 +31,7 @@ export interface userRegisterDataFormErrorProps extends userRegisterDataProps {
 }
 
 export const userRegisterDataFormErrorNullState = {
+    accept: '',
     fullName: '',
     email: '',
     phone: '',

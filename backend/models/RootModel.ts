@@ -23,33 +23,33 @@ module.exports = class RootModel {
             ON Ads.enterpriseId = Ent.id            
             WHERE Ent.enterpriseCategory = ?
         `;
-        values.append( serviceCategory );
+        values.push( ...[serviceCategory] );
 
         // Party Type
         if( partyType != undefined && partyType != '' ) {
             query_select = query_select + ` AND Ads.partyMainFocus = ? `;
-            values.append( partyType );
+            values.push( ...[partyType] );
         }
         // Service Specific Category
         if( serviceSpecificCategory != undefined && serviceSpecificCategory != '' ) {
             query_select = query_select + ` AND Ent.enterpriseSpecificCategory = ? `;
-            values.append( serviceSpecificCategory );
+            values.push( ...[serviceSpecificCategory] );
         }
         /*--- LOCATION --*/
         // City
         if( city != undefined && city != '' ) {
             query_select = query_select + ` AND Ent.city = ? `;
-            values.append( city );
+            values.push( ...[city] );
         }
         // State
         if( state != undefined && state != '' ) {
             query_select = query_select + ` AND Ent.state = ? `;
-            values.append( state );
+            values.push( ...[state] );
         }
         // Country
         if( country != undefined && country != '' ) {
             query_select = query_select + ` AND Ent.country = ? `;
-            values.append( country );
+            values.push( ...[country] );
         }
         
         // Number of People

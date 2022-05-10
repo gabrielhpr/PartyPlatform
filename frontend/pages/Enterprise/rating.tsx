@@ -51,26 +51,24 @@ export default function RatingEnterprise() {
 
         const token = localStorage.getItem("tokenEnterprise");
 
-        try {
-            api.get("/enterprise/ads", {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(token)}`
-                }
-            })
-            .then((response) => {
-                setAds( response.data.ads );
-                setPartyTypeSelected( response.data.ads[0].partyMainFocus );
-                setPartyTypeOptions( response.data.ads.map((el, index) => {
-                    return el.partyMainFocus;
-                }));
-                console.log( 'O tipo de festa que será carregado no party type é: ' );
-                console.log( response.data.ads[0].partyMainFocus );
-                console.log( response.data.ads );                
-            });
-        }
-        catch( err ) {
+        api.get("/enterprise/ads", {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(token)}`
+            }
+        })
+        .then((response) => {
+            setAds( response.data.ads );
+            setPartyTypeSelected( response.data.ads[0].partyMainFocus );
+            setPartyTypeOptions( response.data.ads.map((el, index) => {
+                return el.partyMainFocus;
+            }));
+            console.log( 'O tipo de festa que será carregado no party type é: ' );
+            console.log( response.data.ads[0].partyMainFocus );
+            console.log( response.data.ads );                
+        })
+        .catch( err => {
             console.log( err );
-        }
+        });
 
     }, [authenticatedEnterprise]);
 
@@ -87,18 +85,21 @@ export default function RatingEnterprise() {
         const token = localStorage.getItem("tokenEnterprise");
        
         api.get('/enterprise/opinions', {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(token)}`
-                },
-                params: {
-                    partyType: partyTypeSelected
-                }
-            })
-            .then((response) => {
-                console.log('Opinions');
-                console.log(response.data.opinions);
-                setOpinions(response.data.opinions);
-            })
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(token)}`
+            },
+            params: {
+                partyType: partyTypeSelected
+            }
+        })
+        .then((response) => {
+            console.log('Opinions');
+            console.log(response.data.opinions);
+            setOpinions(response.data.opinions);
+        })
+        .catch( err => {
+            console.log( err );
+        });
     }, [partyTypeSelected]);
 
 

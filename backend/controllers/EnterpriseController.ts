@@ -17,6 +17,7 @@ module.exports = class EnterpriseController {
             email,
             phone,
             whatsapp,
+            accept,
             password,
             passwordConfirmation,
             enterpriseName,
@@ -102,6 +103,11 @@ module.exports = class EnterpriseController {
 
         if( entEmail != undefined ) {
             res.status(422).json({ message: "Esse email já está em uso! Utilize outro email!" });
+            return;
+        }
+
+        if( !accept || accept != 'true' ) {
+            res.status(422).json({ message: "É necesário aceitar os termos de uso e de privacidade!" });
             return;
         }
 
@@ -191,6 +197,7 @@ module.exports = class EnterpriseController {
             'email': email,
             'phone': phone,
             'whatsapp': whatsapp,
+            'accept': accept,
             'password': passwordHash,
             'enterpriseName': enterpriseName,
             'country': country,
@@ -1181,8 +1188,8 @@ module.exports = class EnterpriseController {
                             ],
                             'dimensions': [
                                 {"name": 'eventName'},
-                                // {"name": 'customEvent:enterpriseId'},
-                                // {"name": 'customEvent:typeOfParty'}
+                                {"name": 'customEvent:event_label'},
+                                {"name": 'customEvent:event_category'}
                             ],
                             'dimensionFilter': {
                                 'andGroup': {
@@ -1197,132 +1204,132 @@ module.exports = class EnterpriseController {
                                                 }
                                             }
                                         },
-                                        // {
-                                        //     'filter': { 
-                                        //         'fieldName': 'customEvent:enterpriseId',
-                                        //         'stringFilter': {
-                                        //             'matchType': 'EXACT',
-                                        //             'value': `${id}`,
-                                        //             'caseSensitive': true
-                                        //         }
-                                        //     }
-                                        // },
-                                        // {
-                                        //     'filter': { 
-                                        //         'fieldName': 'customEvent:typeOfParty',
-                                        //         'stringFilter': {
-                                        //             'matchType': 'EXACT',
-                                        //             'value': `${partyType}`,
-                                        //             'caseSensitive': true
-                                        //         }
-                                        //     }
-                                        // }
+                                        {
+                                            'filter': { 
+                                                'fieldName': 'customEvent:event_label',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': `${id}`,
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        },
+                                        {
+                                            'filter': { 
+                                                'fieldName': 'customEvent:event_category',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': `${partyType}`,
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        }
                                     ]
                                 }
                             }
                         },
                         // Clicks in show Whatsapp if exists
-                        // {
-                        //     'property': 'properties/311158295',
-                        //     'dateRanges': [
-                        //         {'startDate': '365daysAgo', 'endDate': 'today'}
-                        //     ],
-                        //     'metrics': [
-                        //         {"name": "uniqueClicks", 'expression': 'eventCount'}
-                        //     ],
-                        //     'dimensions': [
-                        //         {"name": 'eventName'},
-                        //         {"name": 'enterpriseId'},
-                        //         {"name": 'typeOfParty'}
-                        //     ],
-                        //     'dimensionFilter': {
-                        //         'andGroup': {
-                        //             'expressions': [
-                        //                 {
-                        //                     'filter': {
-                        //                         'fieldName': 'eventName',
-                        //                         'stringFilter': {
-                        //                             'matchType': 'EXACT',
-                        //                             'value': 'verWhatsapp',
-                        //                             'caseSensitive': true
-                        //                         }
-                        //                     }
-                        //                 },
-                        //                 {
-                        //                     'filter': { 
-                        //                         'fieldName': 'enterpriseId',
-                        //                         'stringFilter': {
-                        //                             'matchType': 'EXACT',
-                        //                             'value': `${id}`,
-                        //                             'caseSensitive': true
-                        //                         }
-                        //                     }
-                        //                 },
-                        //                 {
-                        //                     'filter': { 
-                        //                         'fieldName': 'typeOfParty',
-                        //                         'stringFilter': {
-                        //                             'matchType': 'EXACT',
-                        //                             'value': `${partyType}`,
-                        //                             'caseSensitive': true
-                        //                         }
-                        //                     }
-                        //                 }
-                        //             ]
-                        //         }
-                        //     }
-                        // },
+                        {
+                            'property': 'properties/311158295',
+                            'dateRanges': [
+                                {'startDate': '365daysAgo', 'endDate': 'today'}
+                            ],
+                            'metrics': [
+                                {"name": "uniqueClicks", 'expression': 'eventCount'}
+                            ],
+                            'dimensions': [
+                                {"name": 'eventName'},
+                                {"name": 'customEvent:event_label'},
+                                {"name": 'customEvent:event_category'}
+                            ],
+                            'dimensionFilter': {
+                                'andGroup': {
+                                    'expressions': [
+                                        {
+                                            'filter': {
+                                                'fieldName': 'eventName',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': 'verWhatsapp',
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        },
+                                        {
+                                            'filter': { 
+                                                'fieldName': 'customEvent:event_label',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': `${id}`,
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        },
+                                        {
+                                            'filter': { 
+                                                'fieldName': 'customEvent:event_category',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': `${partyType}`,
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        },
                         // Clicks in show E-mail
-                        // {
-                        //     'property': 'properties/311158295',
-                        //     'dateRanges': [
-                        //         {'startDate': '365daysAgo', 'endDate': 'today'}
-                        //     ],
-                        //     'metrics': [
-                        //         {"name": "uniqueClicks", 'expression': 'eventCount'}
-                        //     ],
-                        //     'dimensions': [
-                        //         {"name": 'eventName'},
-                        //         {"name": 'enterpriseId'},
-                        //         {"name": 'typeOfParty'}
-                        //     ],
-                        //     'dimensionFilter': {
-                        //         'andGroup': {
-                        //             'expressions': [
-                        //                 {
-                        //                     'filter': {
-                        //                         'fieldName': 'eventName',
-                        //                         'stringFilter': {
-                        //                             'matchType': 'EXACT',
-                        //                             'value': 'verEmail',
-                        //                             'caseSensitive': true
-                        //                         }
-                        //                     }
-                        //                 },
-                        //                 {
-                        //                     'filter': { 
-                        //                         'fieldName': 'enterpriseId',
-                        //                         'stringFilter': {
-                        //                             'matchType': 'EXACT',
-                        //                             'value': `${id}`,
-                        //                             'caseSensitive': true
-                        //                         }
-                        //                     }
-                        //                 },
-                        //                 {
-                        //                     'filter': { 
-                        //                         'fieldName': 'typeOfParty',
-                        //                         'stringFilter': {
-                        //                             'matchType': 'EXACT',
-                        //                             'value': `${partyType}`,
-                        //                             'caseSensitive': true
-                        //                         }
-                        //                     }
-                        //                 }
-                        //             ]
-                        //         }
-                        //     }
-                        // },
+                        {
+                            'property': 'properties/311158295',
+                            'dateRanges': [
+                                {'startDate': '365daysAgo', 'endDate': 'today'}
+                            ],
+                            'metrics': [
+                                {"name": "uniqueClicks", 'expression': 'eventCount'}
+                            ],
+                            'dimensions': [
+                                {"name": 'eventName'},
+                                {"name": 'customEvent:event_label'},
+                                {"name": 'customEvent:event_category'}
+                            ],
+                            'dimensionFilter': {
+                                'andGroup': {
+                                    'expressions': [
+                                        {
+                                            'filter': {
+                                                'fieldName': 'eventName',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': 'verEmail',
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        },
+                                        {
+                                            'filter': { 
+                                                'fieldName': 'customEvent:event_label',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': `${id}`,
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        },
+                                        {
+                                            'filter': { 
+                                                'fieldName': 'customEvent:event_category',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': `${partyType}`,
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        },
                     ], 
                 },
             });
@@ -1346,4 +1353,32 @@ module.exports = class EnterpriseController {
 
     }
 
+    static async getStatistics(req: any, res: any) {
+        let id:number;
+        const partyType = req.query.partyType;
+
+        if(req.headers.authorization) {
+            const token = getToken(req);
+            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+                if(err) {
+                    return res.status(500).send({message: "Token inválido!"});
+                }
+                id = decoded.id;
+            });
+        }
+        console.log('o id é: ');
+        console.log( id );
+
+        // Get the number of orders (emails) received in the last 12 months        
+        let nEmailsOrders = await enterpriseModel.selectNEmailsOrders( id );
+        console.log('Vamos exibir a quantidade de pedidos de emails nos ultimos 12 meses - Controller');
+        console.log( nEmailsOrders.quantity );
+
+        // Get the number of reviews received in the last 12 months
+        let nReviews = await enterpriseModel.selectNReviews( id );
+        console.log('Vamos exibir a quantidade de reviews dos ultimos 12 meses - Controller');
+        console.log( nReviews );
+
+        res.status(200).json({ nEmailsOrders: nEmailsOrders.quantity, nReviews: nReviews.quantity });
+    }
 }

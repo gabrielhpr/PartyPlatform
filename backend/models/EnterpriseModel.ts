@@ -311,4 +311,32 @@ module.exports = class EnterpriseModel {
         await connQuery( query_insert, data ).catch((err:any) => {throw err});
     }
 
+    async selectNEmailsOrders( enterpriseId: number ) {
+        const query_select = `
+            SELECT  
+                COUNT( id ) as quantity
+            FROM BudgetEmails 
+            WHERE enterpriseId = ?
+            AND created_at > now() - INTERVAL 12 month
+        `;
+        
+        const result = await connQuery( query_select, [enterpriseId] ).catch( (err:any) => {throw err} );
+        
+        return result[0]; 
+    }
+
+    async selectNReviews( enterpriseId: number ) {
+        const query_select = `
+            SELECT  
+                COUNT( id ) as quantity
+            FROM Rating 
+            WHERE enterpriseId = ?
+            AND created_at > now() - INTERVAL 12 month
+        `;
+        
+        const result = await connQuery( query_select, [enterpriseId] ).catch( (err:any) => {throw err} );
+        
+        return result[0]; 
+    }
+
 }

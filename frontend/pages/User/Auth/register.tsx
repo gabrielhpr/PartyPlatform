@@ -1,11 +1,11 @@
-import { Box, Flex, Text, Input, Link as NavLink, Button, Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, useBreakpointValue, FormErrorMessage, FormControl } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Link as NavLink, Button, Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, useBreakpointValue, FormErrorMessage, FormControl, Checkbox } from "@chakra-ui/react";
 import Image from 'next/image';
 import { useEffect, useState } from "react";
 import PessoasFesta from '../../../assets/imgs/pessoas-festa.jpg';
 import { useRouter } from "next/router";
 import { Header } from "../../../components/Header";
 import { useUserAuthContext } from "../../../context/userContext";
-import { locationMap, typeOfParties } from "../../../utils/typeOfParties";
+import { locationMap, locationMapUser, typeOfParties } from "../../../utils/typeOfParties";
 import { Footer } from "../../../components/Footer";
 import { Sidebar } from "../../../components/Sidebar";
 import { FlashMessageComponent } from "../../../components/FlashMessageComponent";
@@ -81,7 +81,7 @@ export default function registerUser() {
 
         // VALIDATE GENERAL
         let isValidGeneral = await handleValidation(
-            ['fullName', 'email', 'phone', 'whatsapp', 'location'],
+            ['fullName', 'email', 'phone', 'whatsapp', 'location', 'accept'],
             userRegisterFormSchema,
             setFormErrorsUserRegister,
             userRegisterData
@@ -378,6 +378,7 @@ export default function registerUser() {
                                     isInvalid={formErrorsUserRegister.location != '' ? true : false}
                                 >
                                     <Flex direction='column'
+                                        position='relative'
                                     >
                                         {/* Onde - Localização */}
                                         <Input 
@@ -394,12 +395,13 @@ export default function registerUser() {
                                         <Box 
                                             id='menuLocation'
                                             height={230} 
-                                            width={350}
+                                            width={{base:'85vw', lg:350}}
                                             display={menuWhere}
                                             position='absolute'
                                             overflowY="scroll"
                                             bg='brand.white'
-                                            mt={{base:1, lg: 5}}
+                                            top={10}
+                                            //mt={{base:4, lg: 6}}
                                             borderRadius={10}
                                             zIndex={3}
                                         >
@@ -407,7 +409,7 @@ export default function registerUser() {
                                                 h='100%'
                                             >
                                                 {
-                                                Object.values(locationMap).map((el, i) => {
+                                                Object.values(locationMapUser).map((el, i) => {
                                                     return(
                                                         <Button
                                                             bg='white'
@@ -446,6 +448,26 @@ export default function registerUser() {
                                     </FormErrorMessage> 
                                 </FormControl> 
                             </Flex>
+
+                            {/* ACEITE */}
+                            <Flex direction='column' mt='3'>
+                                <FormControl isInvalid={formErrorsUserRegister.accept != '' ? true : false}>                                
+                                    <Checkbox
+                                        name='accept'
+                                        onChange={(event: any) => {
+                                            setUserRegisterData({...userRegisterData, [event.currentTarget.name]: String(event.currentTarget.checked)});
+                                            setFormErrorsUserRegister({...formErrorsUserRegister, [event.currentTarget.name]: ''});
+                                        }}
+                                        isChecked={userRegisterData.accept == 'true' ? true : false}
+                                    >
+                                        Aceito os <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>Termos de uso</NavLink> e de <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>privacidade</NavLink>.
+                                    </Checkbox>
+                                    
+                                    <FormErrorMessage>
+                                        {formErrorsUserRegister.accept}
+                                    </FormErrorMessage>
+                                </FormControl>
+                            </Flex>     
 
                             <Button 
                                 mt="8"

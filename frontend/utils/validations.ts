@@ -1,6 +1,6 @@
 import { 
         enterpriseCategory, enterpriseSpecificCategory, typeOfParties,
-        specificQuestions, enterpriseSpecificCategoryDict, locationMap 
+        specificQuestions, enterpriseSpecificCategoryDict, locationMap, locationMapUser 
         } from "./typeOfParties";
 import * as yup from 'yup';
 import { monetaryRegex, validTextRegex, invalidTextRegex, dateRegex } from "./regexCustom";
@@ -122,6 +122,7 @@ export const enterpriseRegisterFormSchema = yup.object().shape({
         .matches(validTextRegex, {message:'O email não pode apresentar aspas', excludeEmptyString: true}),
     phone: yup.string().required("O telefone é obrigatório").matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido', excludeEmptyString: true } ),
     whatsapp: yup.string().optional().matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido', excludeEmptyString: true } ),
+    accept: yup.string().oneOf(['true'], 'Você deve aceitar os termos de uso e de privacidade para prosseguir!'),
     enterpriseName: yup.string().required('O nome da empresa é obrigatório')
         .matches(validTextRegex, {message:'O nome da empresa não pode apresentar aspas', excludeEmptyString: true}),
     location: yup.string().required('A localização é obrigatória').oneOf(
@@ -520,8 +521,9 @@ export const userRegisterFormSchema = yup.object().shape({
     phone: yup.string().required("O telefone é obrigatório").matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido. Digite somente os números, não inclua (), - ou espaços.', excludeEmptyString: true } ),
     whatsapp: yup.string().optional().matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido. Digite somente os números, não inclua (), - ou espaços.', excludeEmptyString: true } ),
     location: yup.string().required('A localização é obrigatória').oneOf(
-        Object.values(locationMap).map((el,index) => {return el.textToShow})
+        Object.values(locationMapUser).map((el,index) => {return el.textToShow})
         , 'Opção não válida'),
+    accept: yup.string().oneOf(['true'], 'Você deve aceitar os termos de uso e de privacidade para prosseguir!')
 });
 
 export const userRegisterPasswordSchema = yup.object().shape({

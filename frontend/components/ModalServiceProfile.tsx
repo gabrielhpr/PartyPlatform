@@ -1,5 +1,5 @@
 import { Button, Modal, ModalOverlay, ModalContent, Text,
-ModalHeader, ModalCloseButton, ModalFooter, ModalBody, useDisclosure, Flex, Icon } from "@chakra-ui/react";
+ModalHeader, ModalCloseButton, ModalFooter, ModalBody, useDisclosure, Flex, Icon, useBreakpointValue } from "@chakra-ui/react";
 import { IconType } from "react-icons";
 import Script from "next/script";
 
@@ -13,9 +13,12 @@ interface ModalServiceProfileProps {
     handleClick: () => void;
 }
 
-
 export function ModalServiceProfile( {buttonText, title, subtitle, icon, iconColor, content, handleClick }: ModalServiceProfileProps ) {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const isMobileVersion = useBreakpointValue({
+        base: true,
+        lg: false,
+    });
 
     return (
         <>
@@ -45,10 +48,14 @@ export function ModalServiceProfile( {buttonText, title, subtitle, icon, iconCol
                 variant='outline'
                 _focus={{outline:'none'}}
                 border='none'
-                leftIcon={<Icon as={icon} color={iconColor} />}
+                leftIcon={
+                    <Icon as={icon} color={iconColor} 
+                        fontSize={{base:23, lg:18}}
+                    />
+                }
                 fontWeight={500}
             >
-                {buttonText}
+                {isMobileVersion ? buttonText.substring(0,3) : buttonText }
             </Button>
 
             <Modal isOpen={isOpen} onClose={onClose}>

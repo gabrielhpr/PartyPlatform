@@ -19,14 +19,14 @@ export default function ResetPasswordEnterprise() {
         setFormErrorsEnterprisePassword({...formErrorsEnterprisePassword, [event.currentTarget.name]: ''});
     }
 
-    function handleSubmitNewPassword() {
+    async function handleSubmitNewPassword() {
         let { token } = routerNext.query;
         if( token == undefined ) {
             return;
         }
 
         try {
-            api.patch(
+            await api.patch(
             '/resetPassword',
             {
                 password: enterprisePassword.password,

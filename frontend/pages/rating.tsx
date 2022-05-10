@@ -4,7 +4,7 @@ import { Button, Flex, Icon, Input, Menu, MenuButton, MenuItem,
     ModalOverlay, Popover, PopoverArrow, PopoverBody, 
     PopoverCloseButton, PopoverContent, PopoverHeader, 
     PopoverTrigger, Stack, Text, Textarea, 
-    Tooltip, useDisclosure, Link as NavLink, Img, Box, FormControl, FormErrorMessage } from "@chakra-ui/react";
+    Tooltip, useDisclosure, Link as NavLink, Img, Box, FormControl, FormErrorMessage, Checkbox } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { RegisterFormLayout } from "../components/Enterprise/RegisterFormLayout";
 import { RiInformationLine } from 'react-icons/ri';
@@ -56,6 +56,7 @@ interface serviceDataInterf {
     email: string;
     phone: string;
     whatsapp?: string;
+    accept: string;
     // Access Data
     password: string;
     passwordConfirmation: string;
@@ -140,6 +141,7 @@ const serviceNullState = {
     email: '',
     phone: '',
     whatsapp: '',
+    accept: '',
     // Access Data
     password: '',
     passwordConfirmation: '',
@@ -265,7 +267,6 @@ const RatingFormSchema = yup.object().shape({
         .max(500, 'A opinião deve ter no máximo 500 caracteres')
         .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true})                      
 });
-
 
 export default function Rating() {
     // RATING
@@ -462,7 +463,7 @@ export default function Rating() {
         
         // VALIDATE GENERAL
         let isValidGeneral = await handleValidation(
-            ['fullName', 'email', 'phone', 'whatsapp', 'location'],
+            ['fullName', 'email', 'phone', 'whatsapp', 'location', 'accept'],
             userRegisterFormSchema,
             setFormErrorsUserRegister,
             userRegisterData
@@ -933,6 +934,7 @@ export default function Rating() {
                                 boxShadow={{base:'none', lg:"0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"}}
                                 borderRadius={8} 
                                 fontSize={20}
+                                overflowY='scroll'
                             >
                                 {/* LOGIN */}
                                 <Flex
@@ -1279,6 +1281,27 @@ export default function Rating() {
                                         </FormErrorMessage> 
                                     </FormControl> 
                                 </Flex>
+
+                                {/* ACEITE */}
+                                <Flex direction='column' mt='3'>
+                                    <FormControl isInvalid={formErrorsUserRegister.accept != '' ? true : false}>                                
+                                        <Checkbox
+                                            name='accept'
+                                            onChange={(event: any) => {
+                                                setUserRegisterData({...userRegisterData, [event.currentTarget.name]: String(event.currentTarget.checked)});
+                                                setFormErrorsUserRegister({...formErrorsUserRegister, [event.currentTarget.name]: ''});
+                                            }}
+                                            isChecked={userRegisterData.accept == 'true' ? true : false}
+                                        >
+                                            Aceito os <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>Termos de uso</NavLink> e de <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>privacidade</NavLink>.
+                                        </Checkbox>
+                                        
+                                        <FormErrorMessage>
+                                            {formErrorsUserRegister.accept}
+                                        </FormErrorMessage>
+                                    </FormControl>
+                                </Flex>     
+
 
                                 {/* <Flex direction="row"
                                     mt="3"

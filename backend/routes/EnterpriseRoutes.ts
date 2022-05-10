@@ -41,6 +41,7 @@ router.get("/ads", EnterpriseController.getAds);
 router.get("/opinions", EnterpriseController.getOpinions);
 router.get("/myenterprise", EnterpriseController.getEnterprise);
 router.get("/getGoogleAnalyticsData", EnterpriseController.getGoogleAnalyticsData);
+router.get("/getStatistics", EnterpriseController.getStatistics);
 
 //router.get("/services", EnterpriseController.services);
 //router.get("/:id", UserController.getUserById);

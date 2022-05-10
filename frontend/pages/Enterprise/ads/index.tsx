@@ -28,23 +28,21 @@ export default function AdsEnterprise() {
 
         const token = localStorage.getItem("tokenEnterprise");
 
-        try {
-            api.get("/enterprise/ads", {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(token)}`
-                }
-            })
-            .then((response) => {
-                setAds( response.data.ads );
-                console.log( response.data.ads );
-                console.log( ads.length );
-                
-            });
-        }
-        catch( err ) {
+        api.get("/enterprise/ads", {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(token)}`
+            }
+        })
+        .then((response) => {
+            setAds( response.data.ads );
+            console.log( response.data.ads );
+            console.log( ads.length );
+            
+        })
+        .catch( err => {
             console.log( err );
-        }
-
+        });
+    
     }, [authenticatedEnterprise]);
 
 
