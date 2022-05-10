@@ -409,6 +409,7 @@ module.exports = class EnterpriseController {
         const { 
             serviceDescription, 
             photos,
+            photosRemoved,
             q1,
             q2,
             q3,
@@ -461,11 +462,17 @@ module.exports = class EnterpriseController {
             q50
         } = req.body;
         
+        let {photosNewOrder} = req.body;
+        photosNewOrder = photosNewOrder.split(',');
+        console.log('photosNewOrder');
+        console.log( photosNewOrder );
+        console.log( typeof(photosNewOrder) );
+
         console.log('serviceDescription');
         console.log(serviceDescription);
         
-
-        var allPhotos;
+        //*---------- PHOTOS ---------*//
+        let allPhotos;
 
         // New Photos
         const newPhotos = req.files;
@@ -474,9 +481,28 @@ module.exports = class EnterpriseController {
             newPhotosName.push( photo.filename );
         });
 
-        // Gather editted photos and new photos
-        allPhotos = photos + ',' + newPhotosName.toString();
+        let index = 0;
+        allPhotos = photosNewOrder.map((photo: string) => {
+            if( photo == 'novaImagem' ) {
+                let rename = newPhotosName[index];
+                index = index + 1;
+                return rename;
+            }
+            else {
+                return photo;
+            }
+        });
+        console.log('allphotos');
+        console.log(allPhotos);
 
+        allPhotos = allPhotos.join(',');
+        console.log(allPhotos);
+
+        // Remove from db old PHOTOS
+        //
+        //
+
+        /*------------------------------------------*/
 
         if(!req.headers.authorization) {
             return res.status(500).send({message: "Não possui token!"});
@@ -508,7 +534,7 @@ module.exports = class EnterpriseController {
         // Photos
         ad.photos = allPhotos;
 
-        console.log('photos');
+        console.log('photos - Nova ordem');
         console.log(ad.photos);
         
         
@@ -1060,6 +1086,7 @@ module.exports = class EnterpriseController {
     // Get Google Analytics Data
     static async getGoogleAnalyticsData(req: any, res: any) {
         let id:number;
+        const partyType = req.query.partyType;
 
         if(req.headers.authorization) {
             const token = getToken(req);
@@ -1117,21 +1144,21 @@ module.exports = class EnterpriseController {
                 
                 //'resource': reports
                 // Request body metadata
-                requests: [
-                    // Number of visualizations
-                    {
-                        'property': 'properties/311158295',
-                        'dateRanges': [
-                            {'startDate': '2022-03-01', 'endDate': '2022-04-19'}
-                        ],
-                        'metrics': [
-                            {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
-                        ],
-                        'dimensions': [
-                            {"name": 'pagePath'}
-                        ],
-                        'dimensionFilter': 
-                            {
+                requestBody: {
+                    'requests': [
+                        // Number of visualizations
+                        {
+                            'property': 'properties/311158295',
+                            'dateRanges': [
+                                {'startDate': '365daysAgo', 'endDate': 'today'}
+                            ],
+                            'metrics': [
+                                {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
+                            ],
+                            'dimensions': [
+                                {"name": 'pagePath'}
+                            ],
+                            'dimensionFilter': {
                                 'filter': 
                                     {
                                         'fieldName': 'pagePath',
@@ -1142,88 +1169,165 @@ module.exports = class EnterpriseController {
                                         }
                                     }
                             }
-                    },
-                    // Clicks in show PHONE
-                    {
-                        'property': 'properties/311158295',
-                        'dateRanges': [
-                            {'startDate': '2022-03-01', 'endDate': '2022-05-02'}
-                        ],
-                        'metrics': [
-                            {"name": "uniqueClicks", 'expression': 'eventCount'}
-                        ],
-                        'dimensions': [
-                            {"name": 'eventName'},
-                            {"name": 'eventCategory'}
-                        ],
-                        'dimensionFilter': 
-                            {
-                                'filter': 
-                                    {
-                                        'fieldName': 'pagePath',
-                                        'stringFilter': {
-                                            'matchType': 'EXACT',
-                                            'value': `enterprise-${id}`,
-                                            'caseSensitive': true
-                                        }
-                                    }
+                        },
+                        // Clicks in show PHONE
+                        {
+                            'property': 'properties/311158295',
+                            'dateRanges': [
+                                {'startDate': '365daysAgo', 'endDate': 'today'}
+                            ],
+                            'metrics': [
+                                {"name": "uniqueClicks", 'expression': 'eventCount'}
+                            ],
+                            'dimensions': [
+                                {"name": 'eventName'},
+                                // {"name": 'customEvent:enterpriseId'},
+                                // {"name": 'customEvent:typeOfParty'}
+                            ],
+                            'dimensionFilter': {
+                                'andGroup': {
+                                    'expressions': [
+                                        {
+                                            'filter': {
+                                                'fieldName': 'eventName',
+                                                'stringFilter': {
+                                                    'matchType': 'EXACT',
+                                                    'value': 'verTelefone',
+                                                    'caseSensitive': true
+                                                }
+                                            }
+                                        },
+                                        // {
+                                        //     'filter': { 
+                                        //         'fieldName': 'customEvent:enterpriseId',
+                                        //         'stringFilter': {
+                                        //             'matchType': 'EXACT',
+                                        //             'value': `${id}`,
+                                        //             'caseSensitive': true
+                                        //         }
+                                        //     }
+                                        // },
+                                        // {
+                                        //     'filter': { 
+                                        //         'fieldName': 'customEvent:typeOfParty',
+                                        //         'stringFilter': {
+                                        //             'matchType': 'EXACT',
+                                        //             'value': `${partyType}`,
+                                        //             'caseSensitive': true
+                                        //         }
+                                        //     }
+                                        // }
+                                    ]
+                                }
                             }
-                    },
-                    // Clicks in show Whatsapp if exists
-                    {
-                        'property': 'properties/311158295',
-                        'dateRanges': [
-                            {'startDate': '2022-03-01', 'endDate': '2022-04-19'}
-                        ],
-                        'metrics': [
-                            {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
-                        ],
-                        'dimensions': [
-                            {"name": 'pagePath'}
-                        ],
-                        'dimensionFilter': 
-                            {
-                                'filter': 
-                                    {
-                                        'fieldName': 'pagePath',
-                                        'stringFilter': {
-                                            'matchType': 'EXACT',
-                                            'value': `enterprise-${id}`,
-                                            'caseSensitive': true
-                                        }
-                                    }
-                            }
-                    },
-                    // Clicks in show E-mail
-                    {
-                        'property': 'properties/311158295',
-                        'dateRanges': [
-                            {'startDate': '2022-03-01', 'endDate': '2022-04-19'}
-                        ],
-                        'metrics': [
-                            {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
-                        ],
-                        'dimensions': [
-                            {"name": 'pagePath'}
-                        ],
-                        'dimensionFilter': 
-                            {
-                                'filter': 
-                                    {
-                                        'fieldName': 'pagePath',
-                                        'stringFilter': {
-                                            'matchType': 'EXACT',
-                                            'value': `enterprise-${id}`,
-                                            'caseSensitive': true
-                                        }
-                                    }
-                            }
-                    },
-
-                ],
+                        },
+                        // Clicks in show Whatsapp if exists
+                        // {
+                        //     'property': 'properties/311158295',
+                        //     'dateRanges': [
+                        //         {'startDate': '365daysAgo', 'endDate': 'today'}
+                        //     ],
+                        //     'metrics': [
+                        //         {"name": "uniqueClicks", 'expression': 'eventCount'}
+                        //     ],
+                        //     'dimensions': [
+                        //         {"name": 'eventName'},
+                        //         {"name": 'enterpriseId'},
+                        //         {"name": 'typeOfParty'}
+                        //     ],
+                        //     'dimensionFilter': {
+                        //         'andGroup': {
+                        //             'expressions': [
+                        //                 {
+                        //                     'filter': {
+                        //                         'fieldName': 'eventName',
+                        //                         'stringFilter': {
+                        //                             'matchType': 'EXACT',
+                        //                             'value': 'verWhatsapp',
+                        //                             'caseSensitive': true
+                        //                         }
+                        //                     }
+                        //                 },
+                        //                 {
+                        //                     'filter': { 
+                        //                         'fieldName': 'enterpriseId',
+                        //                         'stringFilter': {
+                        //                             'matchType': 'EXACT',
+                        //                             'value': `${id}`,
+                        //                             'caseSensitive': true
+                        //                         }
+                        //                     }
+                        //                 },
+                        //                 {
+                        //                     'filter': { 
+                        //                         'fieldName': 'typeOfParty',
+                        //                         'stringFilter': {
+                        //                             'matchType': 'EXACT',
+                        //                             'value': `${partyType}`,
+                        //                             'caseSensitive': true
+                        //                         }
+                        //                     }
+                        //                 }
+                        //             ]
+                        //         }
+                        //     }
+                        // },
+                        // Clicks in show E-mail
+                        // {
+                        //     'property': 'properties/311158295',
+                        //     'dateRanges': [
+                        //         {'startDate': '365daysAgo', 'endDate': 'today'}
+                        //     ],
+                        //     'metrics': [
+                        //         {"name": "uniqueClicks", 'expression': 'eventCount'}
+                        //     ],
+                        //     'dimensions': [
+                        //         {"name": 'eventName'},
+                        //         {"name": 'enterpriseId'},
+                        //         {"name": 'typeOfParty'}
+                        //     ],
+                        //     'dimensionFilter': {
+                        //         'andGroup': {
+                        //             'expressions': [
+                        //                 {
+                        //                     'filter': {
+                        //                         'fieldName': 'eventName',
+                        //                         'stringFilter': {
+                        //                             'matchType': 'EXACT',
+                        //                             'value': 'verEmail',
+                        //                             'caseSensitive': true
+                        //                         }
+                        //                     }
+                        //                 },
+                        //                 {
+                        //                     'filter': { 
+                        //                         'fieldName': 'enterpriseId',
+                        //                         'stringFilter': {
+                        //                             'matchType': 'EXACT',
+                        //                             'value': `${id}`,
+                        //                             'caseSensitive': true
+                        //                         }
+                        //                     }
+                        //                 },
+                        //                 {
+                        //                     'filter': { 
+                        //                         'fieldName': 'typeOfParty',
+                        //                         'stringFilter': {
+                        //                             'matchType': 'EXACT',
+                        //                             'value': `${partyType}`,
+                        //                             'caseSensitive': true
+                        //                         }
+                        //                     }
+                        //                 }
+                        //             ]
+                        //         }
+                        //     }
+                        // },
+                    ], 
+                },
             });
             console.log(result);
-            res.status(200).send( result );
+            res.status(200).json({ result });
 
             // Example response
           // {

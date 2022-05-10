@@ -374,6 +374,17 @@ module.exports = class UserController {
             return;
         }
 
+        let ratingExists = await userModel.checkRatingExists(userId, enterpriseId, partyType, partyDate);
+
+        console.log('O valor de rating exists in controller é: ');
+        console.log(ratingExists);
+        console.log( typeof(ratingExists) );
+
+        if( ratingExists.length != 0 ) {
+            res.status(422).json({ message: "Já existe uma avaliação sua para esse prestador de serviço para o tipo de festa e data inserida!"});
+            return;
+        }
+
         const ratingGeneral = (ratingServiceQuality + ratingPrice + ratingAnswerTime + ratingFlexibility + ratingProfessionalism) / 5;
         
         //console.log( ratingGeneral );
@@ -488,7 +499,5 @@ module.exports = class UserController {
         run();
 
         return res.status(200).json({message: "Email enviado com sucesso!"});
-
-
     }
 }

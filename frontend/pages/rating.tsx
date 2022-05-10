@@ -18,7 +18,6 @@ import { FlashMessageComponent } from "../components/FlashMessageComponent";
 import { userRegisterDataFormErrorNullState, userRegisterDataFormErrorProps, userRegisterDataNullState, userRegisterDataProps } from "../utils/userInterface";
 import { userRegisterFormSchema, userRegisterPasswordSchema } from "../utils/validations";
 
-
 interface ratingDataInterf {
     step: number;
     enterpriseId: string;
@@ -504,8 +503,13 @@ export default function Rating() {
     async function handleSubmitRating() {
         console.log('Entrou handleSubmitRating');
         console.log( ratingData );
-        await userRate( ratingData );
-        routerNext.push('/');
+        let result = await userRate( ratingData );
+        console.log( result );
+        if( result == 'success' ) {
+            window.setTimeout(() => {
+                routerNext.push('/');
+            }, 1000);
+        }
         console.log('Saiu handleSubmitRating');
     }
 

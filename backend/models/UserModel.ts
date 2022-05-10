@@ -56,37 +56,54 @@ module.exports = class UserModel {
     }
 
     async getUserByEmail( email: string ) {
-        const query_select = `SELECT * FROM User WHERE email = '${email}'`;
+        const query_select = `SELECT * 
+                              FROM User 
+                              WHERE email = ?`;
             
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [email] ).catch( (err:any) => {throw err});
         
         return result[0];
     }
 
     async getUserById( id: number ) {
-        const query_select = `SELECT * FROM User WHERE id = ${id}`;
+        const query_select = `SELECT * 
+                              FROM User 
+                              WHERE id = ?`;
             
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [id] ).catch( (err:any) => {throw err});
         
         return result[0];
     }
 
     async updateUser( id: number, data: any ){
+        let values = [
+            data.fullName,
+            data.email,
+            data.phone,
+            data.password,
+            data.partyType,
+            data.partyDate,
+            data.city,
+            data.state,
+            data.country,
+            id
+        ];
+
         const query_update = `
             UPDATE User
-            SET fullName = '${data.fullName}',
-                email = '${data.email}',
-                phone = '${data.phone}',
-                password = '${data.password}',
-                partyType = '${data.partyType}',
-                partyDate = '${data.partyDate}',
-                city = '${data.city}',
-                state = '${data.state}',
-                country = '${data.country}'
-            WHERE id = ${id}
+            SET fullName = ?,
+                email = ?,
+                phone = ?,
+                password = ?,
+                partyType = ?,
+                partyDate = ?,
+                city = ?,
+                state = ?,
+                country = ?
+            WHERE id = ?
         `;
 
-        await connQuery( query_update ).catch((err:any) => {throw err});
+        await connQuery( query_update, values ).catch((err:any) => {throw err});
     }
 
     async insertRating( ratingData: ratingObjProps ) {
@@ -101,6 +118,29 @@ module.exports = class UserModel {
 
         // INSERT rating in table
         await connQuery( query_insert, data ).catch((err:any) => {throw err});    
+    }
+
+    async checkRatingExists( userId: number, enterpriseId: number, partyType: string, partyDate: string) {
+        console.log('entrou no checkRatingExists');
+        
+        const query_select = `
+            SELECT  Ent.id,
+                    User.fullName,
+                    Rat.*,
+                    RatAns.answerContent
+            FROM Enterprise as Ent
+            INNER JOIN Rating AS Rat ON Ent.id = Rat.enterpriseId 
+            INNER JOIN User ON User.id = Rat.userId
+            LEFT JOIN RatingAnswer AS RatAns ON Rat.id = RatAns.ratingId 
+            WHERE User.id = ?
+            AND Ent.id = ?
+            AND Rat.partyType = ?
+            AND Rat.partyDate = ?
+        `;
+        
+        const result = await connQuery( query_select, [userId, enterpriseId, partyType, partyDate] ).catch( (err:any) => {throw err} );
+        
+        return result; 
     }
 
     async insertEmail( emailData: any ) {
@@ -125,11 +165,11 @@ module.exports = class UserModel {
                                     ratingQuantity,
                                     ratingSum 
                              FROM Ads 
-                             WHERE enterpriseId = ${enterpriseId}
-                             AND partyMainFocus = '${partyType}'
+                             WHERE enterpriseId = ?
+                             AND partyMainFocus = ?
                             `;
             
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});        
+        const result = await connQuery( query_select, [enterpriseId, partyType] ).catch( (err:any) => {throw err});        
 
         return result[0];
     }
@@ -140,27 +180,25 @@ module.exports = class UserModel {
         
         console.log(ratingQuantity);
         console.log(ratingSum);
-        
-        
-        
+                
         const query_update = `
             UPDATE Ads
-            SET ratingQuantity = '${ratingQuantity}',
-                ratingSum = '${ratingSum}'
-            WHERE id = ${adId}
+            SET ratingQuantity = ?,
+                ratingSum = ?
+            WHERE id = ?
         `;
 
-        await connQuery( query_update ).catch((err:any) => {throw err});  
+        await connQuery( query_update, [ratingQuantity, ratingSum, adId] ).catch((err:any) => {throw err});  
     }
 
     async getEntepriseEmail( enterpriseId: number ) {
         const query_select = `
                                 SELECT email as enterpriseEmail
                                 FROM Enterprise 
-                                WHERE id = ${enterpriseId}
+                                WHERE id = ?
                              `;
             
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [enterpriseId] ).catch( (err:any) => {throw err});
         
         return result[0];
     }

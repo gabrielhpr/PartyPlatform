@@ -69,9 +69,9 @@ module.exports = class EnterpriseModel {
                                FROM Ads 
                                INNER JOIN Enterprise AS Ent 
                                ON Ads.enterpriseId = Ent.id    
-                               WHERE Ads.enterpriseId = ${enterpriseId}`;    
+                               WHERE Ads.enterpriseId = ?`;    
         
-        var result_ads = await connQuery( query_select_ads ).catch( (err:any) => {throw err});
+        var result_ads = await connQuery( query_select_ads, [enterpriseId] ).catch( (err:any) => {throw err});
        
         console.log('ads no model');
         console.log( result_ads );
@@ -83,28 +83,32 @@ module.exports = class EnterpriseModel {
         console.log('entrou getAd');
         
         var query_select = `SELECT * FROM Ads 
-                            WHERE enterpriseId = ${enterpriseId}
-                            AND partyMainFocus = '${partyType}'
+                            WHERE enterpriseId = ?
+                            AND partyMainFocus = ?
                            `;
     
-        var result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        var result = await connQuery( query_select, [enterpriseId, partyType] ).catch( (err:any) => {throw err});
         console.log('saiu getAd');
         
         return result[0];
     }
 
     async getEnterpriseByEmail( email: string ) {
-        const query_select = `SELECT * FROM Enterprise WHERE email = '${email}'`;
+        const query_select = `SELECT * 
+                              FROM Enterprise 
+                              WHERE email = ?`;
             
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [email] ).catch( (err:any) => {throw err});
         
         return result[0];
     }
 
     async getEnterpriseById( enterpriseId: number ) {
-        const query_select = `SELECT * FROM Enterprise WHERE id = ${enterpriseId}`;
+        const query_select = `SELECT * 
+                              FROM Enterprise 
+                              WHERE id = ?`;
             
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [enterpriseId] ).catch( (err:any) => {throw err});
         
         return result[0];
     }
@@ -112,90 +116,166 @@ module.exports = class EnterpriseModel {
     async updateAd( adId:number, data: any ){
         let objKeys = Object.keys(data);
 
+        let values = [
+            data.serviceDescription,
+            data.photos,
+            data.q1,
+            data.q2,
+            data.q3,
+            data.q4,
+            data.q5,
+            data.q6,
+            data.q7,
+            data.q8,
+            data.q9,
+            data.q10,
+            data.q11,
+            data.q12,
+            data.q13,
+            data.q14,
+            data.q15,
+            data.q16,
+            data.q17,
+            data.q18,
+            data.q19,
+            data.q20,
+            data.q21,
+            data.q22,
+            data.q23,
+            data.q24,
+            data.q25,
+            data.q26,
+            data.q27,
+            data.q28,
+            data.q29,
+            data.q30,
+            data.q31,
+            data.q32,
+            data.q33,
+            data.q34,
+            data.q35,
+            data.q36,
+            data.q37,
+            data.q38,
+            data.q39,
+            data.q40,
+            data.q41,
+            data.q42,
+            data.q43,
+            data.q44,
+            data.q45,
+            data.q46,
+            data.q47,
+            data.q48,
+            data.q49,
+            data.q50,
+            data.adId
+        ];
+
         const query_update = `
             UPDATE Ads
-            SET serviceDescription = '${data.serviceDescription}',
-                q1 = '${data.q1}',
-                q2 = '${data.q2}',
-                q3 = '${data.q3}',
-                q4 = '${data.q4}',
-                q5 = '${data.q5}',
-                q6 = '${data.q6}',
-                q7 = '${data.q7}',
-                q8 = '${data.q8}',
-                q9 = '${data.q9}',
-                q10 = '${data.q10}',
-                q11 = '${data.q11}',
-                q12 = '${data.q12}',
-                q13 = '${data.q13}',
-                q14 = '${data.q14}',
-                q15 = '${data.q15}',
-                q16 = '${data.q16}',
-                q17 = '${data.q17}',
-                q18 = '${data.q18}',
-                q19 = '${data.q19}',
-                q20 = '${data.q20}',
-                q21 = '${data.q21}',
-                q22 = '${data.q22}',
-                q23 = '${data.q23}',
-                q24 = '${data.q24}',
-                q25 = '${data.q25}',
-                q26 = '${data.q26}',
-                q27 = '${data.q27}',
-                q28 = '${data.q28}',
-                q29 = '${data.q29}',
-                q30 = '${data.q30}',
-                q31 = '${data.q31}',
-                q32 = '${data.q32}',
-                q33 = '${data.q33}',
-                q34 = '${data.q34}',
-                q35 = '${data.q35}',
-                q36 = '${data.q36}',
-                q37 = '${data.q37}',
-                q38 = '${data.q38}',
-                q39 = '${data.q39}',
-                q40 = '${data.q40}',
-                q41 = '${data.q41}',
-                q42 = '${data.q42}',
-                q43 = '${data.q43}',
-                q44 = '${data.q44}',
-                q45 = '${data.q45}',
-                q46 = '${data.q46}',
-                q47 = '${data.q47}',
-                q48 = '${data.q48}',
-                q49 = '${data.q49}',
-                q50 = '${data.q50}'
-            WHERE id = ${adId}
+            SET serviceDescription = ?,
+                photos = ?,
+                q1 = ?,
+                q2 = ?,
+                q3 = ?,
+                q4 = ?,
+                q5 = ?,
+                q6 = ?,
+                q7 = ?,
+                q8 = ?,
+                q9 = ?,
+                q10 = ?,
+                q11 = ?,
+                q12 = ?,
+                q13 = ?,
+                q14 = ?,
+                q15 = ?,
+                q16 = ?,
+                q17 = ?,
+                q18 = ?,
+                q19 = ?,
+                q20 = ?,
+                q21 = ?,
+                q22 = ?,
+                q23 = ?,
+                q24 = ?,
+                q25 = ?,
+                q26 = ?,
+                q27 = ?,
+                q28 = ?,
+                q29 = ?,
+                q30 = ?,
+                q31 = ?,
+                q32 = ?,
+                q33 = ?,
+                q34 = ?,
+                q35 = ?,
+                q36 = ?,
+                q37 = ?,
+                q38 = ?,
+                q39 = ?,
+                q40 = ?,
+                q41 = ?,
+                q42 = ?,
+                q43 = ?,
+                q44 = ?,
+                q45 = ?,
+                q46 = ?,
+                q47 = ?,
+                q48 = ?,
+                q49 = ?,
+                q50 = ?,
+            WHERE id = ?
         `;
 
-        await connQuery( query_update ).catch((err:any) => {throw err});
-    
+        await connQuery( query_update, values ).catch((err:any) => {throw err});
     }
 
     async updateEnterprise( enterpriseId: number, data: any ){
+
+        let values = [
+            data.fullName,
+            data.email,
+            data.phone,
+            data.whatsapp,
+            data.password,
+            data.enterpriseName,
+            data.location,
+            data.country,
+            data.state,
+            data.city,
+            data.address,
+            data.addressNumber,
+            data.instagram,
+            data.facebook,
+            data.website,
+            enterpriseId
+        ];
+
         const query_update = `
             UPDATE Enterprise
-            SET fullName = '${data.fullName}',
-                email = '${data.email}',
-                phone = '${data.phone}',
-                whatsapp = '${data.whatsapp}',
-                password = '${data.password}',
-                enterpriseName = '${data.enterpriseName}',
-                location = '${data.location}',
-                country = '${data.country}',
-                state = '${data.state}',
-                city = '${data.city}',
-                address = '${data.address}',
-                addressNumber = '${data.addressNumber}',
-                instagram = '${data.instagram}',
-                facebook = '${data.facebook}',
-                website = '${data.website}',
+            SET fullName = ?
+                email = ?
+                phone = ?
+                whatsapp = ?
+                password = ?
+                enterpriseName = ?
+                location = ?
+                country = ?
+                state = ?
+                city = ?
+                address = ?
+                addressNumber = ?
+                instagram = ?
+                facebook = ?
+                website = ?
                 tokenResetPassword = '',
                 tokenCreatedAt = ''
-            WHERE id = ${enterpriseId}
+            WHERE id = ?
         `;
 
-        await connQuery( query_update ).catch((err:any) => {throw err});
+        await connQuery( query_update, values ).catch((err:any) => {throw err});
     }
 
     async selectOpinionsByEnterpriseId( enterpriseId: number, partyType: string ) {
@@ -208,11 +288,11 @@ module.exports = class EnterpriseModel {
             INNER JOIN Rating AS Rat ON Ent.id = Rat.enterpriseId 
             INNER JOIN User ON User.id = Rat.userId
             LEFT JOIN RatingAnswer AS RatAns ON Rat.id = RatAns.ratingId 
-            WHERE Ent.id = ${enterpriseId}
-            AND Rat.partyType = '${partyType}'
+            WHERE Ent.id = ?
+            AND Rat.partyType = ?
         `;
         
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err} );
+        const result = await connQuery( query_select, [enterpriseId, partyType] ).catch( (err:any) => {throw err} );
         
         return result; 
     }

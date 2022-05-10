@@ -1,5 +1,5 @@
 import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton, FormControl, FormErrorMessage } from "@chakra-ui/react";
-//import Image from 'next/image'
+import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
 import { useEffect, useState } from "react";
@@ -559,9 +559,9 @@ export default function ServiceProfilePage() {
                                 handleClick={() => {
                                     console.log('entrou no handle click');
                                     if (typeof window !== 'undefined') {
-                                        window.gtag('event', 'modalClick', {
-                                            'event_category': 'verTelefone',
-                                            'event_label': `enterprise-${service.id}`,
+                                        window.gtag('event', 'verTelefone', {
+                                            'typeOfParty': `${service.partyMainFocus}`,
+                                            'enterpriseId': `${service.id}`,
                                             'value': 1,
                                         });
                                     }
@@ -583,9 +583,9 @@ export default function ServiceProfilePage() {
                                     handleClick={() => {
                                         console.log('entrou no handle click');
                                         if (typeof window !== 'undefined') {
-                                            window.gtag('event', 'modalClick', {
-                                                'event_category': 'verWhatsapp',
-                                                'event_label': `enterprise-${service.id}`,
+                                            window.gtag('event', 'verWhatsapp', {
+                                                'typeOfParty': `${service.partyMainFocus}`,
+                                                'enterpriseId': `${service.id}`,
                                                 'value': 1,
                                             });
                                         }
@@ -604,9 +604,9 @@ export default function ServiceProfilePage() {
                                 handleClick={() => {
                                     console.log('entrou no handle click');
                                     if (typeof window !== 'undefined') {
-                                        window.gtag('event', 'modalClick', {
-                                            'event_category': 'verEmail',
-                                            'event_label': `enterprise-${service.id}`,
+                                        window.gtag('event', 'verEmail', {
+                                            'typeOfParty': `${service.partyMainFocus}`,
+                                            'enterpriseId': `${service.id}`,
                                             'value': 1,
                                         });
                                     }
@@ -619,11 +619,15 @@ export default function ServiceProfilePage() {
                     {/* Photos */}
                     <Flex w='100%' pb='10' pt='5' 
                         h={{base:400,lg:500}}
+                        justifyContent='space-between'
+                        alignItems='space-between'
                     >
                     
                         <Flex w={{base:'100%', lg:'50%'}}
                             onClick={modalGallery.onOpen}
                             position='relative'
+                            borderLeftRadius={{base:0,lg:8}}
+                            overflowY='hidden'
                         >
                             {
                                 isMobileVersion
@@ -643,8 +647,8 @@ export default function ServiceProfilePage() {
                                 </Button>                                    
                             }
 
-                            <Img 
-                                borderLeftRadius={{base:0,lg:8}}
+                            <Image
+                                layout='fill'
                                 objectFit='cover'
                                 src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[0]}`}
                             />
@@ -653,38 +657,55 @@ export default function ServiceProfilePage() {
 
                         {/* DESKTOP VERSION */}
                         {/* Other showed pictures */}
-                        <Flex w='50%' h='100%' flexWrap='wrap' 
+                        <Flex w='49%' h='100%' flexWrap='wrap' 
+                            justifyContent='space-between'
+                            alignItems='space-between'
                             display={{base:'none', lg:'flex'}}
                         >
-                            <Flex w='50%' h='50%' pl='2' pb='1'
+                            <Flex w='49%' h='49%' //ml='2' mb='1'
                                 onClick={modalGallery.onOpen}
-                            >
-                                <Img 
+                                position='relative'
+                            > 
+                                <Image
+                                    layout='fill'
                                     src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[1]}`}
                                     objectFit='cover'
                                 />
                             </Flex>
 
-                            <Flex w='50%' h='50%' pl='2' pb='1'
+                            <Flex w='49%' h='49%' //ml='2' mb='1'
                                 onClick={modalGallery.onOpen}
+                                borderTopRightRadius={8}
+                                overflowY='hidden'
+                                position='relative'
                             >
-                                <Img 
-                                    borderTopRightRadius={8}
+                                <Image
+                                    layout='fill'
                                     objectFit='cover'
                                     src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[2]}`}
                                 />
                             </Flex>
 
-                            <Flex w='50%' h='50%' pl='2' pt='1'
+                            <Flex w='49%' h='49%' //ml='2' mt='1'
                                 onClick={modalGallery.onOpen}
+                                position='relative'
+                                alignSelf='flex-end'
+
                             >
-                                <Img 
+                                <Image
+                                    layout='fill'
                                     src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[3]}`}
                                     objectFit='cover'
                                 />
                             </Flex>
 
-                            <Flex w='50%' h='50%' pl='2' pt='1' position='relative'>
+                            <Flex w='49%' h='49%' 
+                                //ml='2' mt='1' 
+                                position='relative'
+                                borderBottomRightRadius={8}
+                                overflowY='hidden'
+                                alignSelf='flex-end'
+                            >
 
                                 <Button 
                                     bg='brand.white'
@@ -695,13 +716,14 @@ export default function ServiceProfilePage() {
                                     left='50%'
                                     transform='translate(-50%, 80%)'
                                     onClick={modalGallery.onOpen}
+                                    zIndex={5}
                                 >
                                     Ver todas as fotos
                                 </Button>
 
-                                <Img 
+                                <Image
+                                    layout='fill'
                                     src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
-                                    borderBottomRightRadius={8}
                                     objectFit='cover'
                                 />
                             </Flex>

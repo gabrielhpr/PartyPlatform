@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, Box, Button, Flex, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { TopMenuEnterprise } from "../../../components/Enterprise/TopMenuEnterprise";
 import { Header } from "../../../components/Header";
@@ -15,6 +15,10 @@ import { Footer } from "../../../components/Footer";
 import { enterpriseRegisterFormSchema, enterpriseRegisterQuestionsDataSchema } from '../../../utils/validations';
 import * as yup from 'yup';
 import { FlashMessageComponent } from "../../../components/FlashMessageComponent";
+import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery';
+import { FiUpload } from "react-icons/fi";
+import 'react-upload-gallery/dist/style.css' // or scss
+
 
 interface adDataInterf {
     id: number;
@@ -23,6 +27,9 @@ interface adDataInterf {
     enterpriseSpecificCategory: string;
 
     photos: any[];
+    photosRemoved: any[];
+    photosNew: any[];
+    photosNewOrder: any[];
 
     q1: string;
     q2: string;
@@ -83,6 +90,9 @@ const adDataNullState = {
     enterpriseSpecificCategory: '',
 
     photos: [],
+    photosRemoved: [],
+    photosNew: [],
+    photosNewOrder: [],
 
     q1: '',
     q2: '',
@@ -221,7 +231,14 @@ interface enterpriseDataFormErrorInterf {
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
 
-    photos: any[];
+    photos: {
+        accept: string;
+        minLimit: string;
+        maxLimit: string;
+        size: string;
+        minDim: string;
+        maxDim: string;
+    };
 
     q1: string;
     q2: string;
@@ -303,7 +320,14 @@ const enterpriseDataFormErrorNullState = {
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
 
-    photos: [],
+    photos: {
+        accept: '',
+        minLimit: '',
+        maxLimit: '',
+        size: '', 
+        minDim: '',
+        maxDim: '' 
+    },
 
     q1: '',
     q2: '',
@@ -386,7 +410,7 @@ export default function EditAdsEnterprise() {
                 }
             })
             .then((response) => {
-                setAdData( response.data.ad );  
+                setAdData( Object.assign(adData, response.data.ad) );  
                 console.log( response.data.ad );             
             });
         }
@@ -422,13 +446,11 @@ export default function EditAdsEnterprise() {
         }
     }, [routerNext.query, authenticatedEnterprise]);
 
-
     // Enterprise Category and Specific Category are
     // used for validation in schema
     useEffect(() => {
         setAdData({...adData, enterpriseCategory: enterpriseData.enterpriseCategory, enterpriseSpecificCategory: enterpriseData.enterpriseSpecificCategory });
     }, [enterpriseData, authenticatedEnterprise]);
-
 
     // Update Ad
     useEffect(() => {
@@ -454,7 +476,9 @@ export default function EditAdsEnterprise() {
             if(key == 'photosNew') {
                 console.log('entrou no photos object key');
                 for(let i = 0; i < adData[key].length; i++) {
-                    formData.append('photosNew', adData[key][i]);
+                    if( adData[key][i].file != undefined ) {
+                        formData.append('photosNew', adData[key][i].file);
+                    } 
                 }
             }
             else {
@@ -496,7 +520,15 @@ export default function EditAdsEnterprise() {
         })
         return obj;
     }
-    
+
+    function saveImagesChanged() {
+        console.log( adData );
+        if( adData.photosNewOrder.length < 5 ) {
+            return;
+        }
+        setHasToUpdate( true );
+    }
+
     async function saveDataChanged( data: Object ) {
         console.log( adData );
         console.log( enterpriseData.enterpriseCategory );
@@ -705,12 +737,16 @@ export default function EditAdsEnterprise() {
                                     enterpriseCategory={enterpriseData?.enterpriseCategory}
                                     enterpriseSpecificCategory={enterpriseData?.enterpriseSpecificCategory}
                                     questions={getQuestionsObj( adData )} 
-                                    formErrors={formErrors}     
+                                    formErrors={formErrors}   
+                                    setFormErrors={setFormErrors}  
                                     setData={setAdData}                              
                                     saveDataChanged={saveDataChanged}
+                                    saveImagesChanged={saveImagesChanged}
+                                    handleComponentToLoad={setComponentToLoad}
                                 />                            
                                 :
-                                <h2>afsdfas</h2>
+                                <>
+                                </>
                             }    
                         </Flex>
                     </Flex>

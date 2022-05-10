@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, FormControl, FormErrorMessage, Grid, GridItem, Icon, Input, Stack, Text, Textarea } from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, Box, Button, Divider, Flex, FormControl, FormErrorMessage, Grid, GridItem, Icon, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, Textarea, useDisclosure } from "@chakra-ui/react";
 import { RiArrowRightSLine } from "react-icons/ri";
 import Image from 'next/image';
 import { TitleEdit } from "./Title";
@@ -7,6 +7,8 @@ import { EditDivider } from "./Divider";
 import { specificQuestions } from "../../../../utils/typeOfParties";
 import { ItemList } from "../../ItemList";
 import { useState } from "react";
+import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery';
+import { FiUpload } from "react-icons/fi";
 
 interface AdDetailsEditProps {
     serviceDescription: string;
@@ -16,11 +18,15 @@ interface AdDetailsEditProps {
     questions: Object;
     formErrors: Object;
     setData: Function;
+    setFormErrors: Function;
     saveDataChanged: Function;
+    saveImagesChanged: Function;
+    handleComponentToLoad: Function;
 }
 
-export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, enterpriseSpecificCategory, questions, formErrors, setData, saveDataChanged}: AdDetailsEditProps) {
+export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, enterpriseSpecificCategory, questions, formErrors, setData, setFormErrors, saveDataChanged, saveImagesChanged, handleComponentToLoad}: AdDetailsEditProps) {
     //console.log( questions );
+    const modalPhotos = useDisclosure();
    
     return (
         <Stack w={{base:'100%', lg:'50vw'}}
@@ -41,14 +47,20 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                         Fotos
                     </Text>
                 
-                    <Flex alignItems="center">
-                        <Text as="p">Editar</Text>
-                        <Icon as={RiArrowRightSLine}
-                            fontSize={25}
-                        />
-                    </Flex>
-                    
+                    <Flex alignItems="center">                        
+                        <Button 
+                            onClick={() => {
+                                modalPhotos.onOpen();
+                                //handleComponentToLoad('photos');
+                            }}
+                            rightIcon={<Icon as={RiArrowRightSLine} fontSize={25}/>}
+                            bg='brand.white'
+                        >
+                            Editar
+                        </Button>
+                    </Flex>                    
                 </Flex>
+
 
                 {/* Carroussel de fotos */}
                 <Flex>
@@ -98,14 +110,188 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                             height={150}
                             alignItems="center"
                         >
-                            <Text>
+                            <Button
+                                onClick={modalPhotos.onOpen}
+                            >
                                 Editar fotos
-                            </Text>
+                            </Button>
                         </Flex>
                     </Flex>
                 </Flex>
             </Box>
+                
+            {/* Edit photos */}
+            <Modal isOpen={modalPhotos.isOpen} onClose={modalPhotos.onClose}
+                size='full'
+            >
+                <ModalOverlay />
+                <ModalContent
+                    //w='100vw'
+                    //h='100vh'
+                >
+                    <ModalHeader>Alteração das fotos</ModalHeader>
+                    <ModalCloseButton />
+                    
+                    <ModalBody>
+                        <Flex
+                            direction='column'
+                            //w='100vw'
+                            h='80vh'
+                            alignItems='center'
+                            justifyContent='space-evenly'
+                        >
+                            {
+                                Object.values( formErrors.photos ).some( value => value != '')
+                                &&
+                                Object.values(formErrors.photos).map((el, index) => {
+                                    if( el != '' ) {
+                                        return (
+                                            <Alert status='error'
+                                                justifyContent='center'
+                                            >
+                                                <AlertIcon />
+                                                <AlertTitle>{el}</AlertTitle>
+                                            </Alert>
+                                        );
+                                    }
+                                })
+                            }
 
+                            <Flex
+                                h='20%'
+                                alignItems='center'
+                                direction='column'
+                            >
+                                <Text
+                                    fontSize={18}
+                                    my='3'
+                                >
+                                    Clique e segure na foto para reordenar
+                                </Text>
+                                <Button
+                                    ml='3'
+                                    bg='brand.blue'
+                                    color='brand.white'
+                                    onClick={() => {
+                                        saveImagesChanged();
+                                    }}
+                                >
+                                    Salvar Alterações
+                                </Button>
+                            </Flex>
+
+                            <Flex
+                                w='100%'
+                                h='80%'
+                                //h={{ base:'40vh', lg:'80vh' }}
+                                //alignItems='center'
+                                justifyContent='center'
+                                //flexWrap='wrap'
+                                overflowY='scroll'
+                                pt='2'
+                                //direction='column'
+                            >
+                                
+                                <RUG 
+                                    //zIndex={10}
+                                    //w='100%'
+                                    initialState={photos.map((el, index) => {
+                                        console.log(index);
+                                        return (
+                                            {source:`http://localhost:5000/images/enterprise/${photos[photos.length-index-1]}`, name: photos[photos.length-index-1]}
+                                        )
+                                    })
+                                    }
+                                    action="http://example.com/upload"  
+                                    autoUpload={false}
+                                    rules={{
+                                        limit: 25,
+                                        size: 1024,
+                                        width: {
+                                            min: 600
+                                        },
+                                        height: {
+                                            min: 400
+                                        }
+                                    }}
+                                    accept={['jpg', 'jpeg', 'png']}
+                                    onSortEnd={(images, {oldIndex, newIndex}) => {
+                                        //console.log(images);
+                                        console.log(oldIndex);
+                                        console.log(newIndex);
+                                    }}
+                                    onChange={(images) => {
+                                        let newOrder = images.map((el, index) => {
+                                            if( el.file == undefined) {
+                                                return el.name;
+                                            }
+                                            else {
+                                                return 'novaImagem';
+                                            }
+                                        })
+                                        setData((prevData) => ({...prevData, photosNew: images}));
+                                        setData((prevData) => ({...prevData, photosNewOrder: newOrder}));
+                                    }}
+                                    onDeleted={(image) => {
+                                        // File undefined a imagem já existe no db
+                                        // Save removed image in images removed array
+                                        if( image.file == undefined ) {
+                                            setData((prevData) => ({...prevData, photosRemoved: [prevData.photosRemoved, image.name]}));//[...prevData['photosRemoved'], image.name]})); //[...prevData.photosRemoved, image.name] }));
+                                        }
+                                    }}
+                                    onWarning={(type, rules) => {
+                                        switch(type) {
+                                            case 'accept':
+                                                console.log(`Only ${rules.accept.join(', ')}`);
+                                                setFormErrors((formE) => ({...formE, photos: {...formE.photos, accept: `Formato inválido. Os formatos permitidos são ${rules.accept.join(', ')}`}}));
+
+                                            case 'limit':
+                                                console.log('limit <= ', rules.limit);
+                                                setFormErrors((formE) => ({...formE, photos: {...formE.photos, maxLimit: `O limite de fotos é ${rules.limit}`}}));
+
+                                            case 'size':
+                                                console.log('max size <= ', rules.size);
+                                                setFormErrors((formE) => ({...formE, photos: {...formE.photos, size: `O tamanho da imagem deve ser menor do que 1Mb.`}}));
+                                        
+                                            case 'minWidth': case 'minHeight':
+                                                console.log('Dimensions > ', `${rules.width.min}x${rules.height.min}`);
+                                                setFormErrors((formE) => ({...formE, photos: {...formE.photos, minDim: `A largura mínima deve ser 600px e a altura mínima deve ser 400px.`}}));
+                                        
+                                            case 'maxWidth': case 'maxHeight':
+                                                console.log('Dimensions < ', `${rules.width.max}x${rules.height.max}`);
+                                                //setFormErrors((formE) => ({...formE, photos: {...formE.photos, maxDim: `A largura máxima deve ser xx e a altura máxima deve ser yy.`}}));
+                                        
+                                            default:
+                                        }
+                                    }}
+                                    header={({ openDialogue }) => (
+                                        <DropArea
+                                        >
+                                        {
+                                            (isDrag) => 
+                                            <Flex style={{ background: isDrag ? 'yellow' : '#fff' }}
+                                                w='100%'
+                                            >
+                                                <Button 
+                                                    onClick={() => {
+                                                        openDialogue();
+                                                        setFormErrors((formE) => ({...formE, photos: {accept: '', minLimit: '', maxLimit: '', size: '', minDim: '', maxDim: ''}}));
+                                                    }}
+                                                    rightIcon={<Icon as={FiUpload}/>}
+                                                >
+                                                    Upload de Fotos
+                                                </Button>
+                                            </Flex>
+                                        }
+                                        </DropArea>
+                                    )}
+                                >                                
+                                </RUG>                                
+                            </Flex>
+                        </Flex>
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
 
             <Divider my="6" borderColor="gray.400" />
 

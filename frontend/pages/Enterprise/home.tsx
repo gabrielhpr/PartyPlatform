@@ -70,21 +70,27 @@ export default function HomePageEnterprise() {
 
         const token = localStorage.getItem("tokenEnterprise");
 
-        // Get ga data
-        // try {
-        //     api.get("/enterprise/getGoogleAnalyticsData", {
-        //         headers: {
-        //             'Authorization': `Bearer ${JSON.parse(token)}`
-        //         }
-        //     })
-        //     .then((response) => {
-        //         setGaReports( response );
-        //         console.log( response.data );
-        //     });
-        // }
-        // catch( err ) {
-        //     console.log( err );
-        // }
+        //Get ga data
+        try {
+            api.get("/enterprise/getGoogleAnalyticsData", {
+                headers: {
+                    'Authorization': `Bearer ${JSON.parse(token)}`
+                },
+                params: {
+                    partyType: partyTypeSelected
+                }
+            })
+            .then((response) => {
+                setGaReports( response );
+                console.log('Retorno do servidor - dados ga');
+                console.log( response.data );
+                console.log( response.data.result );
+
+            });
+        }
+        catch( err ) {
+            console.log( err );
+        }
     }, [authenticatedEnterprise]);
 
     useEffect(() => {

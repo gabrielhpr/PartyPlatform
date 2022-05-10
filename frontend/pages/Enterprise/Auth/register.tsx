@@ -1265,9 +1265,7 @@ export default function RegisterEnterprise() {
                     Festa Infantil"
                     handleNextStep={nextStep}
                     handlePreviousStep={previousStep}
-                >
-                   
-
+                >                   
                     <Flex
                         direction='column'
                         w='100%'
@@ -1311,7 +1309,6 @@ export default function RegisterEnterprise() {
                             pt='2'
                             //direction='column'
                         >
-                            
                             <RUG 
                                 //w='100%'
                                 action="http://example.com/upload"  
@@ -1379,17 +1376,10 @@ export default function RegisterEnterprise() {
                                     </DropArea>
                                 )}
                             >                                
-                            </RUG>
-                            
-                            
+                            </RUG>                            
                         </Flex>
                     </Flex>
-
-
-
-
                 </RegisterFormLayout>
-
             );
 
         case 10:

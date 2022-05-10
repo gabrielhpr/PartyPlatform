@@ -13,6 +13,11 @@ module.exports = class RootController {
         const { partyType, serviceCategory, serviceSpecificCategory, city, state, country, price, buffetIncluded, nOfPeople } = req.query;
         console.log( partyType, serviceCategory, serviceSpecificCategory, city, state, country, price, buffetIncluded, nOfPeople );
 
+        if( !serviceCategory ) {
+            res.status(422).json({ message: "A categoria do serviço é obrigatória!"});
+            return;
+        }
+
         // Number of People
         console.log('Number of people: ');
         console.log( nOfPeople );
@@ -46,7 +51,6 @@ module.exports = class RootController {
                     minPeopleColumn = maxPeopleColumn = '';
                 }
             }
-
         }
         
         // Price Filter
@@ -119,7 +123,6 @@ module.exports = class RootController {
 
         await rootModel.updateEnterprise( enterprise );
 
-
         // Sending the email using Mandril
         const run = async () => {
             const response = await mailchimpClient.messages.send({ message: 
@@ -141,7 +144,6 @@ module.exports = class RootController {
         run();
 
         return res.status(200).json({message: "Email enviado com sucesso!"});
-
 
     }
 

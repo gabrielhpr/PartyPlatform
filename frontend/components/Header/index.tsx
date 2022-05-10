@@ -10,6 +10,7 @@ import { useUserAuthContext } from "../../context/userContext";
 import { useRouter } from 'next/router';
 import { FaRegUser } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
+import Logo from "../../assets/imgs/logo.png";
 
 interface HeaderProps {
     name: string;
@@ -76,7 +77,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
             width="100%"
             bg={scrollHeader ? "brand.yellow" : "brand.yellow"}
             color="brand.dark_blue"
-            py="6"
+            py="8"
             alignItems="center"
             maxHeight={70}
             px={{base:"5",lg:"12"}}
@@ -103,18 +104,38 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
             {/* Logo and enterprise name */}
             <Flex width={{base:"80%",lg:"30%"}}
                 ml='3'
+                textAlign='center'
+                //mx='auto'
+                justifyContent='center'
+                //py='1'
+                
             >
                 <NavLink width='100%' href='/'
                     _hover={{outline: 'none'}}
                     _focus={{border:'none'}}
+                    //mr='auto'
+                    //justifyContent='center'
                 >
-                    <Text
+                    <Flex
+                        position='relative'
+                        h={432/6.5}
+                        w={571/6.5}
+                        mx={{base:'auto', lg:'0'}}
+                        //h='auto'
+                    >
+                        <Image
+                            src={Logo}
+                            layout="fill"
+                            //width={150}
+                        />
+                    </Flex>
+                    {/* <Text
                         textAlign='center'
                         fontSize={25}
                         fontWeight={500}
                     >
                         {authenticatedEnterprise ? 'Festafy Business': 'Festafy'}
-                    </Text>
+                    </Text> */}
                 </NavLink>
             </Flex>
         
@@ -129,7 +150,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                                 bg='none'
                                 //border="2px solid"
                                 //borderColor={"brand.dark_blue"}
-                                color={"brand.dark_blue"}
+                                color="brand.dark_blue"
                                 transition="0.3s"
                                 _hover={{bg:"brand.yellow_60", color:"brand.dark_blue"}}
                                 onClick={handleLogoutUser}
@@ -202,6 +223,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                             icon={<Icon as={FaRegUser} />}
                             fontSize="24"
                             variant="unstyled"
+                            color='brand.dark_blue'
                             //onClick={}
                         />
                     </NavLink>

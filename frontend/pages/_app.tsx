@@ -6,7 +6,7 @@ import { SidebarDrawerProvider } from '../context/sidebarDrawerContext';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <UserProvider>
+      <UserProvider>
         <EnterpriseProvider>
         <ChakraProvider theme={theme}>
           <SidebarDrawerProvider>

@@ -101,16 +101,19 @@ export default function useUserAuth() {
                 }
             })
             .then((response) => {
+
                 return response.data;
             });
         }
         catch(err) {
-            // tratar o erro
+            // Tratar o erro
             console.log(err);
             msgText = err.response.data.message;
             msgType = "error";
         }
         setFlashMessage( msgText, msgType );
+
+        return msgType;
     }
 
     async function userSendEmail(emailData: any) {

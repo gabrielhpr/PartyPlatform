@@ -10,35 +10,46 @@ module.exports = class RootModel {
         console.log('model - price');
         console.log(price);
 
+        let values:any = [];
+
         let query_select = `
             SELECT Ads.*,
-                   Ent.*
+                   Ent.enterpriseName,
+                   Ent.location,
+                   Ent.enterpriseCategory,
+                   Ent.enterpriseSpecificCategory
             FROM Ads 
             INNER JOIN Enterprise AS Ent 
             ON Ads.enterpriseId = Ent.id            
-            WHERE Ent.enterpriseCategory = '${serviceCategory}' 
+            WHERE Ent.enterpriseCategory = ?
         `;
+        values.append( serviceCategory );
 
         // Party Type
         if( partyType != undefined && partyType != '' ) {
-            query_select = query_select + ` AND Ads.partyMainFocus = '${partyType}' `;
+            query_select = query_select + ` AND Ads.partyMainFocus = ? `;
+            values.append( partyType );
         }
         // Service Specific Category
         if( serviceSpecificCategory != undefined && serviceSpecificCategory != '' ) {
-            query_select = query_select + ` AND Ent.enterpriseSpecificCategory = '${serviceSpecificCategory}' `;
+            query_select = query_select + ` AND Ent.enterpriseSpecificCategory = ? `;
+            values.append( serviceSpecificCategory );
         }
         /*--- LOCATION --*/
         // City
         if( city != undefined && city != '' ) {
-            query_select = query_select + ` AND Ent.city = '${city}' `;
+            query_select = query_select + ` AND Ent.city = ? `;
+            values.append( city );
         }
         // State
         if( state != undefined && state != '' ) {
-            query_select = query_select + ` AND Ent.state = '${state}' `;
+            query_select = query_select + ` AND Ent.state = ? `;
+            values.append( state );
         }
         // Country
         if( country != undefined && country != '' ) {
-            query_select = query_select + ` AND Ent.country = '${country}' `;
+            query_select = query_select + ` AND Ent.country = ? `;
+            values.append( country );
         }
         
         // Number of People
@@ -46,14 +57,16 @@ module.exports = class RootModel {
             if( serviceCategory == 'Espaco' && minPeopleColumn == '' ) {
                 query_select = query_select + ` AND 
                                                 ( 
-                                                (Ads.q3 = 'Sim' AND ( ${minPeople} >= Ads.q6 AND ${maxPeople} <= Ads.q7 ) ) 
+                                                (Ads.q3 = 'Sim' AND ( ? >= Ads.q6 AND ? <= Ads.q7 ) ) 
                                                 OR 
-                                                (Ads.q3 = 'Não' AND (${minPeople} >= Ads.q22 AND ${maxPeople} <= Ads.23) ) 
+                                                (Ads.q3 = 'Não' AND ( ? >= Ads.q22 AND ? <= Ads.23 ) ) 
                                                 ) 
                                             `;
+                values.push(...[minPeople, maxPeople, minPeople, maxPeople]);
             }
             else {
-                query_select = query_select + `AND ( ${minPeople} >= ${minPeopleColumn} AND Ads.${maxPeople} <= ${maxPeopleColumn} ) `;
+                query_select = query_select + `AND ( ? >= ?? AND ? <= ?? ) `;
+                values.push(...[minPeople, minPeopleColumn, maxPeople, maxPeopleColumn]);
             }
         }        
 
@@ -69,35 +82,46 @@ module.exports = class RootModel {
                     query_select = query_select + ` AND Ads.q3 = 'Não' `;
                 }
             }
-            query_select = query_select + ` AND Ads.${priceColumn} BETWEEN ${lowerPrice} AND ${upperPrice} `
+            query_select = query_select + ` AND ?? BETWEEN ? AND ? `;
+            values.push(...[priceColumn, lowerPrice, upperPrice]);
         }
 
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, values ).catch( (err:any) => {throw err});
         
         return result; 
     }
-
-    async getEspacoIsBuffet() {
-
-    }
-
 
     async selectServiceById( enterpriseId: number, partyType: string ) {
         
         const query_select = `
-            SELECT Ent.*,
+            SELECT Ent.id,
+                   Ent.fullName,
+                   Ent.email,
+                   Ent.phone,
+                   Ent.whatsapp,
+                   Ent.enterpriseName,
+                   Ent.country,
+                   Ent.state,
+                   Ent.city,
+                   Ent.location,
+                   Ent.address,
+                   Ent.addressNumber,
+                   Ent.instagram,
+                   Ent.facebook,
+                   Ent.website,
+                   Ent.enterpriseCategory,
+                   Ent.enterpriseSpecificCategory,
                    Ads.*
             FROM Enterprise as Ent
             INNER JOIN Ads ON Ent.id = Ads.enterpriseId
-            WHERE Ent.id = ${enterpriseId}
-            AND Ads.partyMainFocus = '${partyType}'
+            WHERE Ent.id = ?
+            AND Ads.partyMainFocus = ?
         `;
         
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [enterpriseId, partyType] ).catch( (err:any) => {throw err});
         
         return result; 
     }
-
 
     async selectOpinionsByEnterpriseId( enterpriseId: number, partyType: string ) {
         const query_select = `
@@ -109,11 +133,11 @@ module.exports = class RootModel {
             INNER JOIN Rating AS Rat ON Ent.id = Rat.enterpriseId 
             INNER JOIN User ON User.id = Rat.userId
             LEFT JOIN RatingAnswer AS RatAns ON Rat.id = RatAns.ratingId 
-            WHERE Ent.id = ${enterpriseId}
-            AND Rat.partyType = '${partyType}'
+            WHERE Ent.id = ?
+            AND Rat.partyType = ?
         `;
         
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [enterpriseId, partyType] ).catch( (err:any) => {throw err});
         
         return result; 
     }
@@ -122,10 +146,10 @@ module.exports = class RootModel {
         const query_select = `
             SELECT  Ent.*
             FROM Enterprise as Ent    
-            WHERE Ent.email = '${email}'
+            WHERE Ent.email = ?
         `;
         
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [email] ).catch( (err:any) => {throw err});
         
         return result[0]; 
     }
@@ -133,10 +157,10 @@ module.exports = class RootModel {
         const query_select = `
             SELECT  Ent.*
             FROM Enterprise as Ent    
-            WHERE Ent.id = ${id}
+            WHERE Ent.id = ?
         `;
         
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [id] ).catch( (err:any) => {throw err});
         
         return result[0]; 
     }
@@ -144,29 +168,50 @@ module.exports = class RootModel {
     async updateEnterprise( data: any ) {
         console.log('insert enterprise - Model');
 
+        let values = [
+                data.fullName,
+                data.email,
+                data.phone,
+                data.whatsapp,
+                data.password,
+                data.enterpriseName,
+                data.location,
+                data.country,
+                data.state,
+                data.city,
+                data.address,
+                data.addressNumber,
+                data.instagram,
+                data.facebook,
+                data.website,
+                data.tokenResetPassword,
+                data.tokenCreatedAt,
+                data.id
+        ];
+
         const query_update = `
             UPDATE Enterprise
-            SET fullName = '${data.fullName}',
-                email = '${data.email}',
-                phone = '${data.phone}',
-                whatsapp = '${data.whatsapp}',
-                password = '${data.password}',
-                enterpriseName = '${data.enterpriseName}',
-                location = '${data.location}',
-                country = '${data.country}',
-                state = '${data.state}',
-                city = '${data.city}',
-                address = '${data.address}',
-                addressNumber = '${data.addressNumber}',
-                instagram = '${data.instagram}',
-                facebook = '${data.facebook}',
-                website = '${data.website}',
-                tokenResetPassword = '${data.tokenResetPassword}',
-                tokenCreatedAt = '${data.tokenCreatedAt}'
-            WHERE id = ${data.id}
+            SET fullName =  ?,
+                email =  ?,
+                phone =  ?,
+                whatsapp =  ?,
+                password =  ?,
+                enterpriseName =  ?,
+                location =  ?,
+                country =  ?,
+                state =  ?,
+                city =  ?,
+                address =  ?,
+                addressNumber =  ?,
+                instagram =  ?,
+                facebook =  ?,
+                website =  ?,
+                tokenResetPassword =  ?,
+                tokenCreatedAt =  ?
+            WHERE id = ?
         `;
 
-        await connQuery( query_update ).catch((err:any) => {throw err});
+        await connQuery( query_update, values ).catch((err:any) => {throw err});
     }
 
     async getEnterpriseByToken( token: string ) {
@@ -174,10 +219,10 @@ module.exports = class RootModel {
             SELECT  Ent.id 
                     ,Ent.tokenCreatedAt 
             FROM Enterprise as Ent    
-            WHERE Ent.tokenResetPassword = '${token}'
+            WHERE Ent.tokenResetPassword = ?
         `;
         
-        const result = await connQuery( query_select ).catch( (err:any) => {throw err});
+        const result = await connQuery( query_select, [token] ).catch( (err:any) => {throw err});
         
         return result[0]; 
     }
