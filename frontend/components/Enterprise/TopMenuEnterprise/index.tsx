@@ -7,8 +7,6 @@ import { TopMenuItem } from "./TopMenuItem";
 
 export function TopMenuEnterprise() {
     
-
-
     return (
         <Flex as="header"
             width="100%"

@@ -125,15 +125,20 @@ module.exports = class RootController {
 
         // Sending the email using Mandril
         const run = async () => {
-            const response = await mailchimpClient.messages.send({ message: 
+            const response = await mailchimpClient.messages.sendTemplate({ 
+                template_name: 'RecoveryPasswordEnterprise',
+                template_content: [{}], 
+                message: 
                 {
-                    subject: '[Redefinição de senha]',
-                    text: `
-                        Olá!
-
-                        O link para redefinição da sua senha é:
-                        localhost:3000/Enterprise/Auth/resetPassword?token=${enterprise.tokenResetPassword}
-                    `,
+                    subject: '[Redefinição de senha] - Festafy - Portal de Festas',
+                    merge_vars: [
+                        {
+                            rcpt: enterprise.email,
+                            vars: [
+                                {name: 'LINKENTERPRISE', content: `localhost:3000/Enterprise/Auth/resetPassword?token=${enterprise.tokenResetPassword}`}                                
+                            ]
+                        }
+                    ],
                     from_email: 'festafy@festafy.com.br',
                     to: [ {email: enterprise.email, name: 'Fornecedor', type:'to'} ]
                 } 

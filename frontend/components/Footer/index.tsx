@@ -37,7 +37,7 @@ export function Footer() {
                         spacing={3}
                         fontSize={{base: 16, lg:14}}
                     >
-                        <NavLink href="">
+                        <NavLink href="/contact">
                             Entrar em contato
                         </NavLink>
                         <NavLink href="">
@@ -46,7 +46,7 @@ export function Footer() {
                         <NavLink href="">
                             Definições de Cookies
                         </NavLink>
-                        <NavLink href="">
+                        <NavLink href="/about">
                             Quem somos ?
                         </NavLink>
                         <NavLink href="">
@@ -55,7 +55,7 @@ export function Footer() {
                         <NavLink href="">
                             Política de Cookies
                         </NavLink>
-                        <NavLink href="">
+                        <NavLink href="/Enterprise/enterpriseAccess">
                             Cadastro de empresas
                         </NavLink>
                     </Stack>

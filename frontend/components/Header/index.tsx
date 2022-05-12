@@ -10,7 +10,7 @@ import { useUserAuthContext } from "../../context/userContext";
 import { useRouter } from 'next/router';
 import { FaRegUser } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
-import Logo from "../../assets/imgs/logo.png";
+import Logo from "../../assets/imgs/logo4.png";
 
 interface HeaderProps {
     name: string;
@@ -77,7 +77,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
             width="100%"
             bg={scrollHeader ? "brand.yellow" : "brand.yellow"}
             color="brand.dark_blue"
-            py="8"
+            py="10"
             alignItems="center"
             maxHeight={70}
             px={{base:"5",lg:"12"}}
@@ -118,8 +118,8 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                 >
                     <Flex
                         position='relative'
-                        h={432/6.5}
-                        w={571/6.5}
+                        h={432/5.5}
+                        w={571/5.5}
                         mx={{base:'auto', lg:'0'}}
                         //h='auto'
                     >
@@ -146,6 +146,22 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                 ?
                     <Flex width="70%" justifyContent="flex-end">
                         <Flex>
+                            {/* HOME */}
+                            <NavLink
+                                href="/User/home"
+                                _hover={{textDecoration:"none"}}
+                            >
+                                <Button bg="none"
+                                    //border="2px solid"
+                                    //borderColor={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
+                                    color={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
+                                    transition="0.3s"
+                                    _hover={{bg:"brand.white", color:"brand.dark_blue"}}
+                                >
+                                    HOME
+                                </Button>
+                            </NavLink>
+
                             <Button
                                 bg='none'
                                 //border="2px solid"

@@ -482,20 +482,26 @@ module.exports = class UserController {
         // Sending the email using Mandril
 
         const run = async () => {
-            const response = await mailchimpClient.messages.send({ message: 
+            const response = await mailchimpClient.messages.sendTemplate({ 
+                template_name: 'UserAskForBudget',
+                template_content: [{}],
+                message: 
                 {
-                    subject: '[Pedido de orçamento]',
-                    text: `
-                        Olá, tudo bem ? ${userData.fullName} 
-                        enviou um pedido de orçamento para você! 
-                        Sua festa será realizada no dia ${emailData.partyDate}
-                        e é do tipo ${emailData.partyType}. 
-                        Para entrar em contato com o cliente, utilize o 
-                        email: ${userData.email} ou o telefone: 
-                        ${userData.phone}.
-                        A mensagem deixada por ele foi: 
-                        ${emailData.messageContent}.
-                    `,
+                    subject: '[Pedido de orçamento] - Festafy - Plataforma de Festas',
+                    merge_vars: [
+                        {
+                            rcpt: enterpriseEmail,
+                            vars: [
+                                {name: 'NAMEUSER', content: userData.fullName},
+                                {name: 'DATEUSER', content: emailData.partyDate},
+                                {name: 'PARTYTYPEUSER', content: emailData.partyType},
+                                {name: 'MESSAGECONTENT', content: emailData.messageContent},
+                                {name: 'EMAILUSER', content: userData.email},
+                                {name: 'PHONEUSER', content: userData.phone},
+                                {name: 'WHATSAPPUSER', content: userData.whatsapp}
+                            ]
+                        }
+                    ],
                     from_email: 'festafy@festafy.com.br',
                     to: [ {email: enterpriseEmail, name: 'Fornecedor', type:'to'} ]
                 } 

@@ -17,6 +17,7 @@ export function NotAuthorizedComponent({link}: NotAuthorizedComponentInter) {
         >
             <Text
                 fontSize={25}
+                textAlign='center'
             >
                 Para ter acesso a essa página, crie uma conta ou faça login!
             </Text>

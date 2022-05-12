@@ -5,6 +5,7 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { FaBirthdayCake } from "react-icons/fa";
 import { GiBlockHouse, GiCupcake, GiForkKnifeSpoon, GiPartyFlags } from "react-icons/gi";
+import { HiHome } from "react-icons/hi";
 import { ImCamera } from "react-icons/im";
 import { RiCompass3Line, RiContactsLine, RiDashboardLine, RiDraftFill, RiGitMergeLine, RiInputMethodLine, RiSettings3Line, RiStore3Fill, RiSuitcaseLine } from "react-icons/ri";
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
@@ -40,8 +41,17 @@ export function SidebarNav() {
             {
                 authenticatedUser
                 ?
-                <>
-                </>
+                <Stack spacing="8">
+                    <NavLink icon={HiHome} href="/User/home">Home</NavLink>
+                    <Divider/>
+                    <NavLink icon={GiBlockHouse} href="/services?serviceCategory=Espaco">Espaços</NavLink>
+                    <NavLink icon={GiForkKnifeSpoon} href="/services?serviceCategory=Servico&serviceSpecificCategory=Buffet">Buffets</NavLink>
+                    <NavLink icon={FaBirthdayCake} href="/services?serviceCategory=Servico&serviceSpecificCategory=Bolos">Bolos</NavLink>
+                    <NavLink icon={GiPartyFlags} href="/services?serviceCategory=Servico&serviceSpecificCategory=Decoracao">Decoração</NavLink>
+                    <NavLink icon={GiCupcake} href="/services?serviceCategory=Servico&serviceSpecificCategory=Doces">Doces</NavLink>
+                    <NavLink icon={ImCamera} href="/services?serviceCategory=Servico&serviceSpecificCategory=FotografiaFilmagem">Fotografia/Filmagem</NavLink>
+                    <NavLink icon={BsMusicNoteBeamed} href="/services?serviceCategory=Servico&serviceSpecificCategory=Musica">Música</NavLink>
+                </Stack>
                 :
                 authenticatedEnterprise
                 ?

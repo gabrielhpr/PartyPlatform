@@ -159,22 +159,29 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                         { name }
                     </Text>
 
-                    {
-                        classification != '0'
-                        &&
-                        <Flex alignItems='center' w='25%'>
-                            <Icon as={RiStarSFill}/>
-                            <Text>
-                                { classification }
-                            </Text>
-                        </Flex>
-                    }
 
                     <Flex alignItems='center' w='100%'>
+                        {
+                            classification != '0'
+                            &&
+                            <Flex alignItems='center'> 
+                                <Icon as={RiStarSFill}
+                                    color='brand.yellow_50'
+                                    fontSize={{base:20, lg:21}}
+                                />
+                                <Text
+                                    fontSize={{base: 17, lg: 16}}
+                                    ml='1'
+                                >
+                                    { classification }
+                                </Text>
+                            </Flex>
+                        }
                         <Text 
                             whiteSpace='nowrap'
                             overflow='hidden'
                             textOverflow='clip'
+                            ml='3'
                         >
                             { location }
                         </Text>

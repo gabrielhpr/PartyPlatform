@@ -5,10 +5,13 @@ export const theme = extendTheme({
 
     colors: {
         brand: {
-            "yellow":    "#ffdd7c",
-            "red":       "#FF5851",
-            "blue":      "#3A57B5",
-            "dark_blue": "#021231",
+            //"yellow":    "#ffdd7c",
+            //FFDF71
+            "yellow":    "#ffdf71",
+            //"red":       "#FF5851",
+            "red":       "#ff001e",
+            "blue":      "#1d42b3",
+            "dark_blue": "#000",
 
 
 

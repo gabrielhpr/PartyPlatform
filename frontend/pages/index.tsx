@@ -26,7 +26,6 @@ import { FiSearch } from 'react-icons/fi';
 import Script from 'next/script'
 
 
-
 export default function HomePage() {
     const [photoNum, setPhotNum] = useState(0);
 
@@ -159,8 +158,6 @@ export default function HomePage() {
 
 
             {/* Header */}
-            {/*************/}
-
             <Header name='' position='relative' />
 
             <Sidebar/>
@@ -197,7 +194,7 @@ export default function HomePage() {
 
                         <Text as='h2' 
                             fontSize={{base:32,lg:42}}
-                            fontWeight={600} 
+                            fontWeight={500} 
                             color='black'
                             zIndex={2} 
                             textAlign='center'
