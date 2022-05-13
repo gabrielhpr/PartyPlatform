@@ -66,6 +66,9 @@ export default function HomePageEnterprise() {
         if( !authenticatedEnterprise ) {
             return;
         }
+        if( partyTypeSelected == '' ) {
+            return;
+        }
 
         const token = localStorage.getItem("tokenEnterprise");
 
@@ -108,7 +111,7 @@ export default function HomePageEnterprise() {
             console.log( err );
         });
 
-    }, [authenticatedEnterprise]);
+    }, [authenticatedEnterprise, partyTypeSelected]);
 
     useEffect(() => {
         if( !authenticatedEnterprise ) {
@@ -140,7 +143,6 @@ export default function HomePageEnterprise() {
         });
 
     }, [partyTypeSelected]);
-
 
 
     if( authenticatedEnterprise ) {

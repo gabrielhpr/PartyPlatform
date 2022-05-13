@@ -1,5 +1,13 @@
 const RootModel = require('../models/RootModel');
 const rootModel = new RootModel();
+
+const EnterpriseModel = require('../models/EnterpriseModel');
+const enterpriseModel = new EnterpriseModel();
+
+const UserModel = require('../models/UserModel');
+const userModel = new UserModel();
+
+
 const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.js");
 const mailchimpClient = mailchimpFactory("rcUfsa5vVBpbmJlzbkjF0A");
 import bcrypt = require("bcrypt");
@@ -99,11 +107,12 @@ module.exports = class RootController {
         res.status(200).json({ service: service, opinions: opinions });
     }
 
+    // ENTERPRISE
     static async sendEmailResetPasswordEnterprise(req: any, res: any) {
         const { email } = req.body;
 
         // Check if email exists
-        let enterprise = await rootModel.getEnterpriseByEmail( email );
+        let enterprise = await enterpriseModel.getEnterpriseByEmail( email );
         console.log('enterpriseId é: ');
         console.log( enterprise );
         console.log( enterprise.id );
@@ -121,12 +130,12 @@ module.exports = class RootController {
         enterprise.tokenResetPassword = token;
         enterprise.tokenCreatedAt = Date.now().toString();
 
-        await rootModel.updateEnterprise( enterprise );
+        await enterpriseModel.updateEnterprise( enterprise.id, enterprise );
 
         // Sending the email using Mandril
         const run = async () => {
             const response = await mailchimpClient.messages.sendTemplate({ 
-                template_name: 'RecoveryPasswordEnterprise',
+                template_name: 'RecoveryPassword',
                 template_content: [{}], 
                 message: 
                 {
@@ -135,12 +144,13 @@ module.exports = class RootController {
                         {
                             rcpt: enterprise.email,
                             vars: [
-                                {name: 'LINKENTERPRISE', content: `localhost:3000/Enterprise/Auth/resetPassword?token=${enterprise.tokenResetPassword}`}                                
+                                {name: 'NAME', content: `${enterprise.enterpriseName}`},
+                                {name: 'LINKRECOVER', content: `http://localhost:3000/Enterprise/Auth/resetPassword?token=${enterprise.tokenResetPassword}`}                                
                             ]
                         }
                     ],
                     from_email: 'festafy@festafy.com.br',
-                    to: [ {email: enterprise.email, name: 'Fornecedor', type:'to'} ]
+                    to: [ {email: enterprise.email, name: `${enterprise.enterpriseName}`, type:'to'} ]
                 } 
             });
             console.log(response);
@@ -152,7 +162,7 @@ module.exports = class RootController {
 
     }
 
-    static async checkResetPasswordValidity(req: any, res: any) {
+    static async checkResetPasswordValidityEnterprise(req: any, res: any) {
         const { token } = req.query;
 
         if( token == undefined ) {
@@ -160,7 +170,7 @@ module.exports = class RootController {
             return;
         }
 
-        let enterprise = await rootModel.getEnterpriseByToken( token );
+        let enterprise = await enterpriseModel.getEnterpriseByToken( token );
         console.log( enterprise );
 
         if( enterprise.length == 0 ) {
@@ -183,14 +193,14 @@ module.exports = class RootController {
         return res.status(200).json({message: "Token válido!"});
     }
 
-    static async resetPassword(req: any, res: any) {
+    static async resetPasswordEnterprise(req: any, res: any) {
         const { password, passwordConfirmation, token } = req.body;
         console.log( token );
 
-        let result = await rootModel.getEnterpriseByToken( token );
+        let result = await enterpriseModel.getEnterpriseByToken( token );
         console.log('id');
         console.log(result.id);
-        let enterprise = await rootModel.getEnterpriseById( result.id );
+        let enterprise = await enterpriseModel.getEnterpriseById( result.id );
 
         console.log( enterprise );
         // SENHA
@@ -217,6 +227,129 @@ module.exports = class RootController {
         enterprise.tokenResetPassword = '';
         enterprise.tokenCreatedAt = '';
 
-        await rootModel.updateEnterprise( enterprise );
+        await enterpriseModel.updateEnterprise( enterprise );
+    }
+
+    // USER
+    static async sendEmailResetPasswordUser(req: any, res: any) {
+        const { email } = req.body;
+
+        // Check if email exists
+        let user = await userModel.getUserByEmail( email );
+        console.log('userId é: ');
+        console.log( user );
+        console.log( user.id );
+
+        if( user == undefined ) {
+            res.status(422).json({ message: "E-mail não cadastrado!"});
+            return;
+        }
+
+        let randomToken = require('random-token').create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+        let token = randomToken(64); 
+        console.log('o token é');
+        console.log( token );
+
+        user.tokenResetPassword = token;
+        user.tokenCreatedAt = Date.now().toString();
+
+        await userModel.updateUser( user.id, user );
+
+        // Sending the email using Mandril
+        const run = async () => {
+            const response = await mailchimpClient.messages.sendTemplate({ 
+                template_name: 'RecoveryPassword',
+                template_content: [{}], 
+                message: 
+                {
+                    subject: '[Redefinição de senha] - Festafy - Portal de Festas',
+                    merge_vars: [
+                        {
+                            rcpt: user.email,
+                            vars: [
+                                {name: 'NAME', content: `${user.fullName}`},                                
+                                {name: 'LINKRECOVER', content: `http://localhost:3000/User/Auth/resetPassword?token=${user.tokenResetPassword}`}                                
+                            ]
+                        }
+                    ],
+                    from_email: 'festafy@festafy.com.br',
+                    to: [ {email: user.email, name: `${user.fullName}`, type:'to'} ]
+                } 
+            });
+            console.log(response);
+        };
+
+        run();
+
+        return res.status(200).json({message: "Email enviado com sucesso!"});
+
+    }
+
+    static async checkResetPasswordValidityUser(req: any, res: any) {
+        const { token } = req.query;
+
+        if( token == undefined ) {
+            res.status(422).json({ message: "Token não encontrado!"});
+            return;
+        }
+
+        let user = await userModel.getUserByToken( token );
+        console.log( user );
+
+        if( user.length == 0 ) {
+            res.status(422).json({ message: "Token não encontrado!"});
+            return;
+        }
+
+        let dateNow = Date.now();
+
+        let diff = dateNow - parseInt( user.tokenCreatedAt );
+        diff = diff / 1000;
+
+        // User is just allowed to reset password between the first hour of
+        // token creation
+        if( diff > 3600 ) {
+            res.status(422).json({ message: "Token expirado!"});
+            return;
+        }
+
+        return res.status(200).json({message: "Token válido!"});
+    }
+
+    static async resetPasswordUser(req: any, res: any) {
+        const { password, passwordConfirmation, token } = req.body;
+        console.log( token );
+
+        let result = await userModel.getUserByToken( token );
+        console.log('id');
+        console.log(result.id);
+        let user = await userModel.getUserById( result.id );
+
+        console.log( user );
+        // SENHA
+        if( !password ) {
+            res.status(422).json({ message: "A senha é obrigatória!" });
+            return;
+        }
+        // Tamanho da senha
+        if( password.length < 6 ) {
+            res.status(422).json({ message: "A senha deve ter no mínimo 6 caracteres!" });
+            return;
+        }
+        // Senha deve ser igual a sua confirmação
+        if( password != passwordConfirmation ) {
+            res.status(422).json({ message: "A confirmação de senha deve ser igual a senha!" });
+            return;
+        }
+
+        // Transform password to hash password
+        const salt = await bcrypt.genSalt(12);
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        user.password = passwordHash;
+        user.tokenResetPassword = '';
+        user.tokenCreatedAt = '';
+
+        await userModel.updateUser( user );
     }
 }

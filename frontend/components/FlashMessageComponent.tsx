@@ -38,6 +38,7 @@ export function FlashMessageComponent() {
             justifyContent='center'
             borderRadius={8}
             zIndex={10}
+            textAlign='center'
         >
             { message }
         </Flex>

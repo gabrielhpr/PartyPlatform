@@ -13,6 +13,7 @@ import { Sidebar } from "../components/Sidebar";
 import { MenuServicesOnClick } from "../components/MenuServicesOnClick";
 import { FiSearch } from "react-icons/fi";
 import KidBirthday from '../assets/imgs/kid-birthday.jpg';
+import PessoasFesta from '../assets/imgs/pessoas-festa.jpg';
 
 export default function ServicesPage() {
     const [services, setServices] = useState([]);
@@ -161,7 +162,9 @@ export default function ServicesPage() {
                 w='100vw'
                 fontSize={32}
                 justifyContent='center'
-                bg='gray.white'
+                //color='brand.white'
+                fontWeight={400}
+                bg='brand.white'
                 borderBottom='1px solid rgba(0,0,0,0.3)'
             >
                 <Flex 
@@ -189,6 +192,7 @@ export default function ServicesPage() {
                             w='90%'
                             mx='auto'
                             mb='3'
+                            color='brand.dark_blue'
                             fontSize={{base:20, lg:26}}
                         >
                             {routerNext.query?.partyType} / {routerNext.query?.serviceCategory == 'Espaco' ? 'Espaço' : ''} {enterpriseSpecificCategoryDict[routerNext.query?.serviceSpecificCategory]}
@@ -744,9 +748,9 @@ export default function ServicesPage() {
                         justifyContent='center'
                         alignItems='center'
                         //mx='auto'
-                        w='50%'
+                        w='45%'
                         h='98%'
-                        bg='brand.white'
+                        bg='brand.blue'
                         //borderLeftRadius=
                         //borderTopRadius={{base:'30%'}}
                         //borderTopRightRadius={{base:'30%',lg:'0%'}}
@@ -758,12 +762,21 @@ export default function ServicesPage() {
                             w='100%'
                             mr='5'
                             //borderRadius={4}
-                            borderLeftRadius={80}
+                            //borderLeftRadius={20}
                             overflow='hidden'
                             
                         >
+                            <Flex
+                                bg='brand.white'
+                                w={85}
+                                h='100%'
+                                borderRightRadius='80%'
+                                zIndex={10}
+                            >
+
+                            </Flex>
                             <Image
-                                src={KidBirthday}
+                                src={PessoasFesta}
                                 layout='fill'
                                 objectFit='cover'
                             /> 

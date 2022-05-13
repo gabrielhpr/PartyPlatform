@@ -66,7 +66,9 @@ module.exports = class UserController {
             'location': location,
             'city': city,
             'state': state,
-            'country': country
+            'country': country,
+            'tokenResetPassword': '',
+            'tokenCreatedAt': ''
         }
         
         // Try to create USER
@@ -494,6 +496,7 @@ module.exports = class UserController {
                             vars: [
                                 {name: 'NAMEUSER', content: userData.fullName},
                                 {name: 'DATEUSER', content: emailData.partyDate},
+                                {name: 'NOFPEOPLE', content: emailData.nOfPeople},
                                 {name: 'PARTYTYPEUSER', content: emailData.partyType},
                                 {name: 'MESSAGECONTENT', content: emailData.messageContent},
                                 {name: 'EMAILUSER', content: userData.email},

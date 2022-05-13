@@ -8,15 +8,15 @@ import { Header } from "../../../components/Header";
 import { Sidebar } from "../../../components/Sidebar";
 import api from "../../../utils/api";
 
-export default function ResetPasswordEnterprise() {
-    const [enterprisePassword, setEnterprisePassword] = useState({password: '', passwordConfirmation: ''});
-    const [formErrorsEnterprisePassword, setFormErrorsEnterprisePassword] = useState({password: '', passwordConfirmation: ''});
+export default function ResetPasswordUser() {
+    const [userPassword, setUserPassword] = useState({password: '', passwordConfirmation: ''});
+    const [formErrorsUserPassword, setFormErrorsUserPassword] = useState({password: '', passwordConfirmation: ''});
     const routerNext = useRouter();
     const [validToken, setValidToken] = useState(false);
 
     function handleChange( event: any ) {
-        setEnterprisePassword({...enterprisePassword, [event.currentTarget.name]: event.currentTarget.value});
-        setFormErrorsEnterprisePassword({...formErrorsEnterprisePassword, [event.currentTarget.name]: ''});
+        setUserPassword({...userPassword, [event.currentTarget.name]: event.currentTarget.value});
+        setFormErrorsUserPassword({...formErrorsUserPassword, [event.currentTarget.name]: ''});
     }
 
     async function handleSubmitNewPassword() {
@@ -27,13 +27,17 @@ export default function ResetPasswordEnterprise() {
 
         try {
             await api.patch(
-            '/resetPasswordEnterprise',
+            '/resetPasswordUser',
             {
-                password: enterprisePassword.password,
-                passwordConfirmation: enterprisePassword.passwordConfirmation,
+                password: userPassword.password,
+                passwordConfirmation: userPassword.passwordConfirmation,
                 token: token
             }
-            );
+            )
+            .then((res) => {
+                console.log('then do reset password user');
+                console.log( res );
+            });
         }
         catch(err) {
             // tratar o erro
@@ -53,7 +57,7 @@ export default function ResetPasswordEnterprise() {
             return;
         }
 
-        api.get('/checkResetPasswordValidityEnterprise', {
+        api.get('/checkResetPasswordValidityUser', {
             params: {
                 token: token
             }
@@ -99,16 +103,16 @@ export default function ResetPasswordEnterprise() {
                 >
                     <Flex direction='column'
                     >
-                        <FormControl isInvalid={formErrorsEnterprisePassword.password != '' ? true : false}>
+                        <FormControl isInvalid={formErrorsUserPassword.password != '' ? true : false}>
                             <TextSpanInput
                                 textToShow="Nova Senha"
                             />
                             <Input type='password' name='password' 
-                                value={enterprisePassword.password} 
+                                value={userPassword.password} 
                                 onChange={handleChange} 
                             />
                             <FormErrorMessage>
-                                {formErrorsEnterprisePassword.password}
+                                {formErrorsUserPassword.password}
                             </FormErrorMessage>
                         </FormControl>
                     </Flex>
@@ -116,16 +120,16 @@ export default function ResetPasswordEnterprise() {
                     <Flex direction='column'
                         mt='2'
                     >
-                        <FormControl isInvalid={formErrorsEnterprisePassword.passwordConfirmation != '' ? true : false}>
+                        <FormControl isInvalid={formErrorsUserPassword.passwordConfirmation != '' ? true : false}>
                             <TextSpanInput
                                 textToShow="Confirme a sua nova senha"
                             />
                             <Input type='password' name='passwordConfirmation' 
-                                value={enterprisePassword.passwordConfirmation}    
+                                value={userPassword.passwordConfirmation}    
                                 onChange={handleChange} 
                             />
                             <FormErrorMessage>
-                                {formErrorsEnterprisePassword.passwordConfirmation}
+                                {formErrorsUserPassword.passwordConfirmation}
                             </FormErrorMessage>
                         </FormControl>
                     </Flex> 

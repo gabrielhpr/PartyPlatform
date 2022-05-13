@@ -135,6 +135,7 @@ module.exports = class RootModel {
             LEFT JOIN RatingAnswer AS RatAns ON Rat.id = RatAns.ratingId 
             WHERE Ent.id = ?
             AND Rat.partyType = ?
+            ORDER BY Rat.partyDate DESC
         `;
         
         const result = await connQuery( query_select, [enterpriseId, partyType] ).catch( (err:any) => {throw err});
@@ -142,89 +143,5 @@ module.exports = class RootModel {
         return result; 
     }
 
-    async getEnterpriseByEmail( email: string ) {
-        const query_select = `
-            SELECT  Ent.*
-            FROM Enterprise as Ent    
-            WHERE Ent.email = ?
-        `;
-        
-        const result = await connQuery( query_select, [email] ).catch( (err:any) => {throw err});
-        
-        return result[0]; 
-    }
-    async getEnterpriseById( id: number ) {
-        const query_select = `
-            SELECT  Ent.*
-            FROM Enterprise as Ent    
-            WHERE Ent.id = ?
-        `;
-        
-        const result = await connQuery( query_select, [id] ).catch( (err:any) => {throw err});
-        
-        return result[0]; 
-    }
-
-    async updateEnterprise( data: any ) {
-        console.log('insert enterprise - Model');
-
-        let values = [
-                data.fullName,
-                data.email,
-                data.phone,
-                data.whatsapp,
-                data.password,
-                data.enterpriseName,
-                data.location,
-                data.country,
-                data.state,
-                data.city,
-                data.address,
-                data.addressNumber,
-                data.instagram,
-                data.facebook,
-                data.website,
-                data.tokenResetPassword,
-                data.tokenCreatedAt,
-                data.id
-        ];
-
-        const query_update = `
-            UPDATE Enterprise
-            SET fullName =  ?,
-                email =  ?,
-                phone =  ?,
-                whatsapp =  ?,
-                password =  ?,
-                enterpriseName =  ?,
-                location =  ?,
-                country =  ?,
-                state =  ?,
-                city =  ?,
-                address =  ?,
-                addressNumber =  ?,
-                instagram =  ?,
-                facebook =  ?,
-                website =  ?,
-                tokenResetPassword =  ?,
-                tokenCreatedAt =  ?
-            WHERE id = ?
-        `;
-
-        await connQuery( query_update, values ).catch((err:any) => {throw err});
-    }
-
-    async getEnterpriseByToken( token: string ) {
-        const query_select = `
-            SELECT  Ent.id 
-                    ,Ent.tokenCreatedAt 
-            FROM Enterprise as Ent    
-            WHERE Ent.tokenResetPassword = ?
-        `;
-        
-        const result = await connQuery( query_select, [token] ).catch( (err:any) => {throw err});
-        
-        return result[0]; 
-    }
 }
    

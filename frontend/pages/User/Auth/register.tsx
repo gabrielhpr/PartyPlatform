@@ -460,7 +460,7 @@ export default function registerUser() {
                                         }}
                                         isChecked={userRegisterData.accept == 'true' ? true : false}
                                     >
-                                        Aceito os <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>Termos de uso</NavLink> e de <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>privacidade</NavLink>.
+                                        Aceito os <NavLink href='https://www.iubenda.com/termos-e-condicoes/19023979' color='brand.blue' fontWeight={500} isExternal>Termos e Condições</NavLink> e <NavLink href='https://www.iubenda.com/privacy-policy/19023979' color='brand.blue' fontWeight={500} isExternal>Política de Privacidade</NavLink>.
                                     </Checkbox>
                                     
                                     <FormErrorMessage>

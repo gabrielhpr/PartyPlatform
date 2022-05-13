@@ -1,5 +1,5 @@
 import { RiQuestionFill } from "react-icons/ri"
-import { GiBlockHouse, GiCupcake, GiPartyFlags, GiForkKnifeSpoon, GiPartyPopper } from "react-icons/gi";
+import { GiBlockHouse, GiCupcake, GiPartyFlags, GiForkKnifeSpoon, GiPartyPopper, GiNotebook } from "react-icons/gi";
 import { FaBirthdayCake } from "react-icons/fa";
 import { ImCamera } from "react-icons/im";
 import { BsMusicNoteBeamed } from "react-icons/bs";
@@ -25,7 +25,8 @@ export const typeOfServices = {
             {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico', icon: ImCamera},
             {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico', icon: GiPartyFlags},
             {value: 'Musica', textToShow: 'Música', parent:'Servico', icon: BsMusicNoteBeamed},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper}
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper},
+            {value: 'Assessoria', textToShow: 'Assessoria', parent:'Servico', icon: GiNotebook}
         ]
     },
     Debutante: {
@@ -41,7 +42,8 @@ export const typeOfServices = {
             {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico', icon: ImCamera},
             {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico', icon: GiPartyFlags},
             {value: 'Musica', textToShow: 'Música', parent:'Servico', icon: BsMusicNoteBeamed},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper}
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper},
+            {value: 'Assessoria', textToShow: 'Assessoria', parent:'Servico', icon: GiNotebook}
         ]
     },
     Aniversario: {
@@ -57,7 +59,8 @@ export const typeOfServices = {
             {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem', parent:'Servico', icon: ImCamera},
             {value: 'Decoracao', textToShow: 'Decoração', parent:'Servico', icon: GiPartyFlags},
             {value: 'Musica', textToShow: 'Música', parent:'Servico', icon: BsMusicNoteBeamed},
-            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper}
+            {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa', parent:'Servico', icon: GiPartyPopper},
+            {value: 'Assessoria', textToShow: 'Assessoria', parent:'Servico', icon: GiNotebook}
         ]
     }
 } 
@@ -86,7 +89,8 @@ export const enterpriseSpecificCategory = {
         {value: 'Decoracao', textToShow: 'Decoração'},
         {value: 'Doces', textToShow: 'Doces'},
         {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
-        {value: 'Musica', textToShow: 'Música'}
+        {value: 'Musica', textToShow: 'Música'},
+        {value: 'Assessoria', textToShow: 'Assessoria'}
     ]
 }
 
@@ -99,7 +103,8 @@ export const enterpriseSpecificCategoryDict = {
     'Decoracao': 'Decoração',
     'Doces': 'Doces',
     'FotografiaFilmagem': 'Fotografia/Filmagem',
-    'Musica': 'Música'
+    'Musica': 'Música',
+    'Assessoria': 'Assessoria'
 }
 
 export const locationMap = {
@@ -195,6 +200,13 @@ export const priceOptionsPerService = {
             {value: '5000-1000000', textToShow: '+R$5000'},        
         ],
         Musica: [
+            {value: '-1', textToShow: 'Sem filtro'},
+            {value: '0-500', textToShow: 'Até R$500'},
+            {value: '500-1000', textToShow: 'Entre R$500 e R$1000'},
+            {value: '1000-2000', textToShow: 'Entre R$1000 e R$2000'},
+            {value: '2000-1000000', textToShow: '+R$2000'}
+        ],
+        Assessoria: [
             {value: '-1', textToShow: 'Sem filtro'},
             {value: '0-500', textToShow: 'Até R$500'},
             {value: '500-1000', textToShow: 'Entre R$500 e R$1000'},
@@ -380,6 +392,14 @@ export const specificQuestions = {
             {name:['q12','q13'], question: 'Se fosse necessário, poderia realizar horas extras ?', description: '', type:'radio', options: ['Sim','Não'], placeholder: 'Observações: '},
             {name:['q14'], question: 'Como é o pagamento das horas extras ?', description: '', type:'textarea', placeholder: ''},
             {name:['q15'], question: 'Quais são as formas de pagamento ?', description: '', type:'textarea', placeholder: ''}
+        ],
+        Assessoria: [
+            {name:['q1'], question: 'Qual o preço mínimo do serviço ?', description: '', type: 'input', inputType: 'text', span: 'R$ ', specific: 'price'},
+            {name:['q2'], question: 'Com que antecedência devo entrar em contato ?', description: '', type:'textarea', placeholder: ''},
+            {name:['q3'], question: 'Quais são os serviços oferecidos ?', description: '', type:'textarea', placeholder: ''},
+            {name:['q4'], question: 'Trabalha sozinho ou conta com uma equipe de profissionais ?', description: '', type:'radio', options:['Sozinho', 'Com equipe'], placeholder: 'Observações: '},
+            {name:['q5','q6'], question: 'Parcela até a data do evento ?', description: '', type: 'radio', options: ['Sim', 'Não'], placeholder: 'Observações: '},
+            {name:['q7'], question: 'Quais são as formas de pagamento ?', description: '', type:'textarea', placeholder: ''}
         ]
     }
 }

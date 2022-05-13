@@ -81,11 +81,11 @@ module.exports = class UserModel {
             data.email,
             data.phone,
             data.password,
-            data.partyType,
-            data.partyDate,
             data.city,
             data.state,
             data.country,
+            data.tokenResetPassword,
+            data.tokenCreatedAt,
             id
         ];
 
@@ -95,11 +95,11 @@ module.exports = class UserModel {
                 email = ?,
                 phone = ?,
                 password = ?,
-                partyType = ?,
-                partyDate = ?,
                 city = ?,
                 state = ?,
-                country = ?
+                country = ?,
+                tokenResetPassword = ?,
+                tokenCreatedAt = ?
             WHERE id = ?
         `;
 
@@ -201,5 +201,18 @@ module.exports = class UserModel {
         const result = await connQuery( query_select, [enterpriseId] ).catch( (err:any) => {throw err});
         
         return result[0];
+    }
+
+    async getUserByToken( token: string ) {
+        const query_select = `
+            SELECT  id 
+                    ,tokenCreatedAt 
+            FROM User
+            WHERE tokenResetPassword = ?
+        `;
+        
+        const result = await connQuery( query_select, [token] ).catch( (err:any) => {throw err});
+        
+        return result[0]; 
     }
 }

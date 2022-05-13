@@ -4,7 +4,8 @@ import { Button, Flex, Icon, Input, Menu, MenuButton, MenuItem,
     ModalOverlay, Popover, PopoverArrow, PopoverBody, 
     PopoverCloseButton, PopoverContent, PopoverHeader, 
     PopoverTrigger, Stack, Text, Textarea, 
-    Tooltip, useDisclosure, Link as NavLink, Img, Box, FormControl, FormErrorMessage, Checkbox } from "@chakra-ui/react";
+    IconButton,
+    Tooltip, useDisclosure, Link as NavLink, Img, Box, FormControl, FormErrorMessage, Checkbox, Alert, AlertIcon, AlertTitle, AlertDescription } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { RegisterFormLayout } from "../components/Enterprise/RegisterFormLayout";
 import { RiInformationLine } from 'react-icons/ri';
@@ -17,6 +18,7 @@ import { dateRegex, invalidTextRegex, validTextRegex } from "../utils/regexCusto
 import { FlashMessageComponent } from "../components/FlashMessageComponent";
 import { userRegisterDataFormErrorNullState, userRegisterDataFormErrorProps, userRegisterDataNullState, userRegisterDataProps } from "../utils/userInterface";
 import { userRegisterFormSchema, userRegisterPasswordSchema } from "../utils/validations";
+import useFlashMessage from "../hooks/useFlashMessage";
 
 interface ratingDataInterf {
     step: number;
@@ -35,7 +37,7 @@ interface ratingDataInterf {
 }
 
 const ratingDataNullState = {
-    step: 0,
+    step: 1,
     enterpriseId: '',
     partyType: '',
     partyDate: '',
@@ -287,6 +289,8 @@ export default function Rating() {
     const { authenticatedUser, loginUser, registerUser, userRate } = useUserAuthContext();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const { setFlashMessage } = useFlashMessage();
+
     const routerNext = useRouter();
 
     // Used in Menu search
@@ -392,7 +396,7 @@ export default function Rating() {
     }
 
     function previousStep() {       
-        if( ratingData.step > 0) {
+        if( ratingData.step > 1) {
             setRatingData({...ratingData, step: ratingData.step - 1});
         }
     }
@@ -558,12 +562,12 @@ export default function Rating() {
                     style="yellow"
                 >
                     <Flex direction='column' 
-                        h={{base:'90%', lg:'80%'}}
-                        w={{base:'85%', lg:'60%'}} 
+                        h={{base:'90%', lg:'95%'}}
+                        w={{base:'85%', lg:'70%'}} 
                         justifyContent='flex-start'
                         alignItems='center'
-                        overflowY={{base:'scroll',lg:'hidden'}}
-                        px='1'
+                        overflowY={{base:'scroll',lg:'scroll'}}
+                        px='3'
                     >
                         
                         {/* Infos do prestador de serviço */}
@@ -620,27 +624,34 @@ export default function Rating() {
                                     <Flex direction='column' width='100%'
                                         mb='2'
                                     >
-                                        <Flex >
-
-                                            <Text fontWeight={500}
+                                        <Flex>
+                                            <Text 
+                                                fontWeight={500}
                                                 fontSize={20}
                                                 mr='1'
                                             >
                                                 {el.title}
                                             </Text>
 
-                                            <Tooltip label={el.subTitle} 
-                                                aria-label='A tooltip'
-                                                w='100%' h='100%'
-                                            >
-                                                <Text as='span'>
-                                                    <Icon as={RiInformationLine} w='100%' h='100%'/>
-                                                </Text>
-                                            </Tooltip>
+                                            <Popover>
+                                                <PopoverTrigger>
+                                                    <IconButton 
+                                                        aria-label="tip" 
+                                                        bg='brand.white'
+                                                        icon={<Icon as={RiInformationLine} fontSize={23}/>} 
+                                                    />
+                                                </PopoverTrigger>
+                                                <PopoverContent bg='brand.white'>
+                                                    <PopoverArrow />
+                                                    <PopoverCloseButton />
+                                                    <PopoverHeader>Dica</PopoverHeader>
+                                                    <PopoverBody>
+                                                        {el.subTitle}
+                                                    </PopoverBody>
+                                                </PopoverContent>
+                                            </Popover>
                                         </Flex>
                                                             
-                                        
-
                                         <FormControl 
                                             isInvalid={formErrorsRating[el.name] != '' ? true : false}
                                         >
@@ -657,8 +668,10 @@ export default function Rating() {
                                                         {ratingData[el.name] != 0 ? ratingData[el.name] : 'Nota'}
                                                     </MenuButton>
                                                     <MenuList
-                                                        w={{base:'80vw', lg:'20vw'}}
-                                                        //h={{base:'20vh', lg:'25vh'}}
+                                                        w={{base:'75vw', lg:'20vw'}}
+                                                        //h={{base:'30vh', lg:'25vh'}}
+                                                        //alignItems='space-between'
+
                                                     >
                                                         <MenuOptionGroup type='radio'
                                                             onChange={(event: any) => {
@@ -666,24 +679,37 @@ export default function Rating() {
                                                                 setFormErrorsRating({...formErrorsRating, [el.name]: ''});
                                                                 console.log( ratingData );
                                                             }}
+
                                                         >
-                                                            <MenuItemOption value='5'>
+                                                            <MenuItemOption value='5'
+                                                                h={{base:'7vh', lg:'5vh'}}
+
+                                                            >
                                                                 5 - Excelente
                                                             </MenuItemOption>
                                                             
-                                                            <MenuItemOption value='4'>
+                                                            <MenuItemOption value='4'
+                                                                h={{base:'7vh', lg:'5vh'}}
+                                                            >
                                                                 4 - Ótimo
                                                             </MenuItemOption>
                                                             
-                                                            <MenuItemOption value='3'>
+                                                            <MenuItemOption value='3'
+                                                                h={{base:'7vh', lg:'5vh'}}
+
+                                                            >
                                                                 3 - Bom
                                                             </MenuItemOption>
 
-                                                            <MenuItemOption value='2'>
+                                                            <MenuItemOption value='2'
+                                                                h={{base:'7vh', lg:'5vh'}}
+                                                            >
                                                                 2 - Regular
                                                             </MenuItemOption>
 
-                                                            <MenuItemOption value='1'>
+                                                            <MenuItemOption value='1'
+                                                                h={{base:'7vh', lg:'5vh'}}
+                                                            >
                                                                 1 - Ruim
                                                             </MenuItemOption>
                                                         </MenuOptionGroup>
@@ -720,9 +746,10 @@ export default function Rating() {
                 >
                     <Flex direction='column' 
                         alignItems='flex-start'
-                        h={{base:'90%', lg:'70%'}}
+                        h={{base:'90%', lg:'75%'}}
                         w={{base:'85%', lg:'60%'}} 
-                        overflowY={{base:'scroll',lg:'hidden'}}
+                        overflowY={{base:'scroll',lg:'scroll'}}
+                        px='3'
 
                     >
 
@@ -882,13 +909,14 @@ export default function Rating() {
                 <RegisterFormLayout 
                     question={authenticatedUser ? "Clique em finalizar para enviar a sua opinião" : "Realize o login ou cadastre-se para registrar a sua avaliação!"}
                     //subTitle="Deixe aqui a sua opinião sobre os fornecedores"
-                    handleNextStep={authenticatedUser ? handleSubmitRating : () => {}}
+                    handleNextStep={authenticatedUser ? handleSubmitRating : () => {
+                        setFlashMessage('É necessário fazer login ou se cadastrar', 'error');
+                    }}
                     handlePreviousStep={previousStep}
                     lastStep={true}
                     showFooterMenu={true}
                     style="yellow"
                 >
-                    <FlashMessageComponent/>
 
                     <Flex direction='column'  
                         //justifyContent='flex-end' 
@@ -897,7 +925,7 @@ export default function Rating() {
                         py='2'
                         h={{base:'90%', lg:'100%'}}
                         w={{base:'85%', lg:'80%'}} 
-                        overflowY={{base:'scroll',lg:'hidden'}}
+                        overflowY={{base:'scroll',lg:'scroll'}}
                         //overflowY={{base:'scroll',lg:'hidden'}}
                     >
                         {

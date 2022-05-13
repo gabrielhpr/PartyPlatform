@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { FaBirthdayCake } from "react-icons/fa";
-import { GiBlockHouse, GiCupcake, GiForkKnifeSpoon, GiPartyFlags } from "react-icons/gi";
+import { GiBlockHouse, GiCupcake, GiForkKnifeSpoon, GiNotebook, GiPartyFlags } from "react-icons/gi";
 import { HiHome } from "react-icons/hi";
 import { ImCamera } from "react-icons/im";
 import { RiCompass3Line, RiContactsLine, RiDashboardLine, RiDraftFill, RiGitMergeLine, RiInputMethodLine, RiSettings3Line, RiStore3Fill, RiSuitcaseLine } from "react-icons/ri";
@@ -51,6 +51,7 @@ export function SidebarNav() {
                     <NavLink icon={GiCupcake} href="/services?serviceCategory=Servico&serviceSpecificCategory=Doces">Doces</NavLink>
                     <NavLink icon={ImCamera} href="/services?serviceCategory=Servico&serviceSpecificCategory=FotografiaFilmagem">Fotografia/Filmagem</NavLink>
                     <NavLink icon={BsMusicNoteBeamed} href="/services?serviceCategory=Servico&serviceSpecificCategory=Musica">Música</NavLink>
+                    <NavLink icon={GiNotebook} href="/services?serviceCategory=Servico&serviceSpecificCategory=Assessoria">Assessoria</NavLink>
                 </Stack>
                 :
                 authenticatedEnterprise
@@ -71,6 +72,7 @@ export function SidebarNav() {
                     <NavLink icon={GiCupcake} href="/services?serviceCategory=Servico&serviceSpecificCategory=Doces">Doces</NavLink>
                     <NavLink icon={ImCamera} href="/services?serviceCategory=Servico&serviceSpecificCategory=FotografiaFilmagem">Fotografia/Filmagem</NavLink>
                     <NavLink icon={BsMusicNoteBeamed} href="/services?serviceCategory=Servico&serviceSpecificCategory=Musica">Música</NavLink>
+                    <NavLink icon={GiNotebook} href="/services?serviceCategory=Servico&serviceSpecificCategory=Assessoria">Assessoria</NavLink>
                     <Divider/>
                     <NavLink icon={RiSuitcaseLine} href="/Enterprise/enterpriseAccess">Acesso Empresas</NavLink>
                 </Stack>

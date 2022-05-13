@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { ReactNode } from "react";
 import { RiCloseFill } from "react-icons/ri";
+import { FlashMessageComponent } from "../FlashMessageComponent";
 import { Header } from "../Header";
 
 interface CreateAdLayoutProps {
@@ -50,6 +51,8 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
             direction={{base:'column', lg:'row'}}
             //justifyContent={{base:'space-between', lg:'space-between'}}
         >
+            <FlashMessageComponent/>
+
             {/* Pergunta */}
             <Flex 
                 height={{base:"30%", lg:"100%"}} 

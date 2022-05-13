@@ -250,6 +250,8 @@ module.exports = class EnterpriseModel {
             data.instagram,
             data.facebook,
             data.website,
+            data.tokenResetPassword,
+            data.tokenCreatedAt,
             enterpriseId
         ];
 
@@ -270,8 +272,8 @@ module.exports = class EnterpriseModel {
                 instagram = ?
                 facebook = ?
                 website = ?
-                tokenResetPassword = '',
-                tokenCreatedAt = ''
+                tokenResetPassword = ?,
+                tokenCreatedAt = ?
             WHERE id = ?
         `;
 
@@ -335,6 +337,19 @@ module.exports = class EnterpriseModel {
         `;
         
         const result = await connQuery( query_select, [enterpriseId] ).catch( (err:any) => {throw err} );
+        
+        return result[0]; 
+    }
+
+    async getEnterpriseByToken( token: string ) {
+        const query_select = `
+            SELECT  Ent.id 
+                    ,Ent.tokenCreatedAt 
+            FROM Enterprise as Ent    
+            WHERE Ent.tokenResetPassword = ?
+        `;
+        
+        const result = await connQuery( query_select, [token] ).catch( (err:any) => {throw err});
         
         return result[0]; 
     }

@@ -210,7 +210,9 @@ module.exports = class EnterpriseController {
             'facebook': facebook,
             'website': website,
             'enterpriseCategory': enterpriseCategory,
-            'enterpriseSpecificCategory': enterpriseSpecificCategory
+            'enterpriseSpecificCategory': enterpriseSpecificCategory,
+            'tokenResetPassword': '',
+            'tokenCreatedAt': ''
         }
         
         // Photos
@@ -1057,6 +1059,7 @@ module.exports = class EnterpriseController {
         // WEBSITE
         enterpriseData.website = website;
 
+
         try {
             await enterpriseModel.updateEnterprise( enterpriseData.id, enterpriseData );
             res.status(200).send('Atualizado com sucesso');
@@ -1094,6 +1097,8 @@ module.exports = class EnterpriseController {
     static async getGoogleAnalyticsData(req: any, res: any) {
         let id:number;
         const partyType = req.query.partyType;
+        console.log('getGoogleanalyticsdata');
+        console.log( partyType );
 
         if(req.headers.authorization) {
             const token = getToken(req);
@@ -1189,7 +1194,7 @@ module.exports = class EnterpriseController {
                             'dimensions': [
                                 {"name": 'eventName'},
                                 {"name": 'customEvent:event_label'},
-                                {"name": 'customEvent:event_category'}
+                                {"name": 'customEvent:event_category'},
                             ],
                             'dimensionFilter': {
                                 'andGroup': {

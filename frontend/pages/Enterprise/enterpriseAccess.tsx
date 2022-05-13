@@ -15,6 +15,7 @@ import { Sidebar } from "../../components/Sidebar";
 import { Footer } from "../../components/Footer";
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 import api from "../../utils/api";
+import useFlashMessage from "../../hooks/useFlashMessage";
 
 export default function enterpriseAccess() {
     const [enterpriseAccessData, setEnterpriseAccessData] = useState({email: '', password:''});
@@ -23,6 +24,7 @@ export default function enterpriseAccess() {
     const routerNext = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const modalResetPassword = useDisclosure();
+    const { setFlashMessage } = useFlashMessage();
 
     const handleDragStart = (e) => e.preventDefault();
 
@@ -49,7 +51,7 @@ export default function enterpriseAccess() {
             msgText = err.response.data.message;
             msgType = "error";
         }
-        //setFlashMessage( msgText, msgType );
+        setFlashMessage( msgText, msgType );
     }
     
     function handleSubmit( event: any ) {
@@ -229,7 +231,6 @@ export default function enterpriseAccess() {
                                                                     Esqueceu sua senha ?
                                                                 </Text>
                                                             </Button>
-                                                            
                                                         </Flex>
 
                                                     </Flex>

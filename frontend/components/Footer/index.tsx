@@ -26,7 +26,7 @@ export function Footer() {
                 >
                     <Text
                         color='brand.white'
-                        fontSize={{base: 21, lg:19}}
+                        fontSize={{base: 21, lg:21}}
                         fontWeight={500}
                     >
                         Informação
@@ -35,24 +35,21 @@ export function Footer() {
                         direction='row'
                         flexWrap='wrap'
                         spacing={3}
-                        fontSize={{base: 16, lg:14}}
+                        fontSize={{base: 16, lg:16}}
                     >
                         <NavLink href="/contact">
                             Entrar em contato
                         </NavLink>
-                        <NavLink href="">
+                        <NavLink href="https://www.iubenda.com/privacy-policy/19023979" isExternal>
                             Política de Privacidade
-                        </NavLink>
-                        <NavLink href="">
-                            Definições de Cookies
                         </NavLink>
                         <NavLink href="/about">
                             Quem somos ?
                         </NavLink>
-                        <NavLink href="">
-                            Condições Legais
+                        <NavLink href="https://www.iubenda.com/termos-e-condicoes/19023979" isExternal>
+                            Termos e Condições
                         </NavLink>
-                        <NavLink href="">
+                        <NavLink href="https://www.iubenda.com/privacy-policy/19023979/cookie-policy" isExternal>
                             Política de Cookies
                         </NavLink>
                         <NavLink href="/Enterprise/enterpriseAccess">
@@ -68,7 +65,7 @@ export function Footer() {
                 >
                     <Text
                         color='brand.white'
-                        fontSize={{base: 21, lg:19}}
+                        fontSize={{base: 21, lg:21}}
                         fontWeight={500}
                     >
                         Nossas redes sociais
@@ -76,19 +73,19 @@ export function Footer() {
                     <Stack
                         spacing={2}
                         direction='row'
+                        fontSize={{base: 42, lg: 32}}
+
                     >
                         <NavLink
                             href=''
                         >
                             <Icon as={AiOutlineInstagram} 
-                                fontSize={{base: 42, lg: 28}}
                             />
                         </NavLink>
                         <NavLink
                             href=''
                         >
                             <Icon as={AiOutlineFacebook} 
-                                fontSize={{base: 42, lg: 28}}
                             />
                         </NavLink>
                     </Stack>

@@ -393,6 +393,7 @@ export default function ServiceProfilePage() {
            
             if( isValid ) {
                 console.log('Entrou handleSendEmail');
+
                 userSendEmail( emailData );
                 console.log('Saiu handleSendEmail');
             }
@@ -546,7 +547,9 @@ export default function ServiceProfilePage() {
                         <Flex mt='2'
                             justifyContent={{base:'space-between', lg:'flex-start'}}
                         >
-                            <Flex alignItems='center'>
+                            <Flex alignItems='center'
+                                display={opinions.length > 0 ? 'flex': 'none'}
+                            >
                                 <Icon as={RiStarSFill} color='red' />
                                 <Text ml='1'>
                                     {Number(opinions?.reduce((acc:any, curr:any) => acc + curr.ratingGeneral, 0) / opinions.length).toFixed(2)}
@@ -1091,13 +1094,16 @@ export default function ServiceProfilePage() {
                                 display={{base:'none', lg:'flex'}}
                             >
                                 <Flex 
-                                    h={430}
+                                    h={500}
+                                    //minH={450}
                                     w='85%'
                                     position='sticky'
                                     top={20}
                                     px='5'
                                     boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                     borderRadius={8}
+                                    //alignItems='space-between'
+                                    //py='auto'
                                     direction='column'
                                     textAlign='center'
                                 >
@@ -1189,6 +1195,8 @@ export default function ServiceProfilePage() {
                                         >
                                             Pedir orçamento!
                                         </Button>
+
+                                        
                                     </Flex>
                                 </Flex>    
                             </Flex>
@@ -1749,7 +1757,7 @@ export default function ServiceProfilePage() {
                                             }}
                                             isChecked={userRegisterData.accept == 'true' ? true : false}
                                         >
-                                            Aceito os <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>Termos de uso</NavLink> e de <NavLink href='https://www.google.com.br' color='brand.blue' fontWeight={500} isExternal>privacidade</NavLink>.
+                                            Aceito os <NavLink href='https://www.iubenda.com/termos-e-condicoes/19023979' color='brand.blue' fontWeight={500} isExternal>Termos e Condições</NavLink> e <NavLink href='https://www.iubenda.com/privacy-policy/19023979' color='brand.blue' fontWeight={500} isExternal>Política de Privacidade</NavLink>.
                                         </Checkbox>
                                         
                                         <FormErrorMessage>
