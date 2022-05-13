@@ -15,7 +15,7 @@ import { LocationInfoMyBusiness } from "../../components/Enterprise/MyBusiness/L
 import { useEnterpriseAuthContext } from "../../context/enterpriseContext";
 import { NotAuthorizedComponent } from "../../components/NotAuthorizedComponent";
 import * as yup from 'yup';
-import { monetaryRegex, validTextRegex, invalidTextRegex } from "../../utils/regexCustom";
+import { enterpriseRegisterMyBusinessFormSchema, enterpriseRegisterPasswordSchema } from "../../utils/validations";
 import { locationMap, typeOfParties } from "../../utils/typeOfParties";
 import { Sidebar } from "../../components/Sidebar";
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
@@ -242,37 +242,6 @@ const enterpriseDataFormErrorNullState = {
     q50: ''
 }
 
-const enterpriseRegisterFormSchema = yup.object().shape({
-    fullName: yup.string().required('O nome completo é obrigatório')
-        .matches(validTextRegex, {message: 'O nome completo não pode apresentar aspas.', excludeEmptyString: true}),
-    email: yup.string().required("O e-mail é obrigatório").email("E-mail inválido")
-        .matches(validTextRegex, {message:'O email não pode apresentar aspas', excludeEmptyString: true}),
-    phone: yup.string().required("O telefone é obrigatório").matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido', excludeEmptyString: true } ),
-    whatsapp: yup.string().optional().matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido', excludeEmptyString: true } ),
-    enterpriseName: yup.string().required('O nome da empresa é obrigatório')
-        .matches(validTextRegex, {message:'O nome da empresa não pode apresentar aspas', excludeEmptyString: true}),
-    location: yup.string().required('A localização é obrigatória').oneOf(
-        Object.values(locationMap).map((el,index) => {return el.textToShow})
-        , 'Opção não válida'),
-    address: yup.string().required('O endereço é obrigatório')
-        .matches(validTextRegex, {message:'O endereço não pode apresentar aspas', excludeEmptyString: true}),
-    addressNumber: yup.string().required('O número de endereço é obrigatório')
-        .matches(/^[1-9]+[0-9]*$/, {message: 'Número de endereço inválido', excludeEmptyString: true}),
-    instagram: yup.string().optional()
-        .matches(validTextRegex, {message:'O instagram não pode apresentar aspas', excludeEmptyString: true}),
-    facebook: yup.string().optional()
-        .matches(validTextRegex, {message:'O facebook não pode apresentar aspas', excludeEmptyString: true}),
-    website: yup.string().optional()
-        .matches(validTextRegex, {message:'O website não pode apresentar aspas', excludeEmptyString: true})
-});
-
-const enterpriseRegisterPasswordSchema = yup.object().shape({
-    password: yup.string().min(6, "No mínimo 6 caracteres"),
-    passwordConfirmation: yup.string().oneOf([null, yup.ref("password")], 
-        "As senhas precisam ser iguais")
-});
-
-
 export default function MyBusinessEnterprise() {
     const { authenticatedEnterprise } = useEnterpriseAuthContext();
     const [enterpriseData, setEnterpriseData] = useState<enterpriseDataInterf>(enterpriseDataNullState);
@@ -386,7 +355,7 @@ export default function MyBusinessEnterprise() {
         console.log(enterpriseData);
         // Error messages
         await fields.map(async (el,index) => {
-            await enterpriseRegisterFormSchema
+            await enterpriseRegisterMyBusinessFormSchema
             .validateAt( el, enterpriseData )
             .catch((err) => {
                 setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
@@ -406,7 +375,7 @@ export default function MyBusinessEnterprise() {
         console.log( formErrors );
 
         // Validate
-        return await enterpriseRegisterFormSchema
+        return await enterpriseRegisterMyBusinessFormSchema
         .isValid({
             email: enterpriseData.email,
             fullName: enterpriseData.fullName,  

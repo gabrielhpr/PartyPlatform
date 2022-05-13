@@ -38,6 +38,10 @@ export default function userAccess() {
         try {
             const data = await api.post("/sendEmailResetPasswordUser", {email: emailResetPassword}).then((response) => {
                 return response.data;
+            })
+            .then((res) => {
+                modalResetPassword.onClose();
+                setEmailResetPassword('');
             });
         }   
         catch(err) {
@@ -188,7 +192,11 @@ export default function userAccess() {
                                     bg='brand.white'
                                     h={{base: '40%',lg:'35%'}}
                                 >
-                                    <ModalHeader></ModalHeader>
+                                    <ModalHeader>
+                                        <FlashMessageComponent/>
+
+
+                                    </ModalHeader>
                                     <ModalCloseButton />
                                     <ModalBody
                                     >

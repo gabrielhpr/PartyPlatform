@@ -55,6 +55,9 @@ export function Footer() {
                         <NavLink href="/Enterprise/enterpriseAccess">
                             Cadastro de empresas
                         </NavLink>
+                        <NavLink href="/image-attribution">
+                            Imagens - Direitos Autorais
+                        </NavLink>
                     </Stack>
                 </Flex>
 

@@ -3,7 +3,7 @@ import {
         specificQuestions, enterpriseSpecificCategoryDict, locationMap, locationMapUser 
         } from "./typeOfParties";
 import * as yup from 'yup';
-import { monetaryRegex, validTextRegex, invalidTextRegex, dateRegex } from "./regexCustom";
+import { monetaryRegex, validTextRegex, invalidTextRegex, dateRegex, passwordStrongRegex } from "./regexCustom";
 
 function handleTestValidation(value:any, ctx: any, questionN: number) {
     console.log('question number: ');
@@ -31,15 +31,18 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
                                         .oneOf( qObj.options, 'Opção não válida');
                         case 'textarea':
                             schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .max(290, 'A resposta deve ter no máximo 290 caracteres.')
                                         .matches( validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
                         case 'input':
                             if( qObj.specific == 'price' ) {
                                 schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                            .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
+                                    .max(20, 'A resposta deve ter no máximo 20 caracteres.')    
+                                    .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
                             }
                             else if( qObj.specific == 'nOfPeople' ) {
                                 schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                            .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
+                                    .max(10, 'A resposta deve ter no máximo 10 caracteres.')    
+                                    .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
                             }
                     }
                 }
@@ -48,6 +51,7 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
             else if( specificQuestions.Espaco[i]?.name[1] == ('q'+questionN) ) {
                 //console.log('espaco caso 1');
                 schemaQ = yup.string().optional()
+                            .max(290, 'A resposta deve ter no máximo 290 caracteres.')
                             .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
             }
         }
@@ -68,27 +72,31 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
                                     .oneOf( qObj.options, 'Opção não válida');
                     case 'textarea':
                         schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                    .max(290, 'A resposta deve ter no máximo 290 caracteres.')
                                     .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
                     case 'input':
                         if( qObj.specific == 'price' ) {
                             schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .max(20, 'A resposta deve ter no máximo 20 caracteres.')    
                                         .matches(monetaryRegex, {message:'Valor inválido - Exemplo válido: 99,99', excludeEmptyString: true });
                         }
                         else if( qObj.specific == 'nOfPeople' ) {
                             schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .max(10, 'A resposta deve ter no máximo 10 caracteres.')    
                                         .matches(/^[1-9]+[0-9]*$/, {message:'Valor inválido - O número deve ser positivo e inteiro', excludeEmptyString: true });
                         }
                         else if( qObj.specific == 'float' ) {
                             schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
+                                        .max(10, 'A resposta deve ter no máximo 10 caracteres.')    
                                         .matches(/^[0-9]+(,[0-9][0-9])?$/, {message:'Valor inválido - Exemplo válido: 1,5', excludeEmptyString: true });
                         }
                 }
-                
             }
             // Observations case
             else if( specificQuestions.Servico[spcCat][i].name[1] == ('q'+questionN) ) {
                 console.log('servico caso 1');
                 schemaQ = yup.string().optional()
+                            .max(290, 'A resposta deve ter no máximo 290 caracteres.')
                             .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
             }
         }
@@ -117,26 +125,40 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
 
 export const enterpriseRegisterFormSchema = yup.object().shape({
     fullName: yup.string().required('O nome completo é obrigatório')
+        .min(3, 'O nome completo deve ter no mínimo 3 caracteres')
+        .max(90, 'O nome completo deve ter no máximo 90 caracteres')
         .matches(validTextRegex, {message: 'O nome completo não pode apresentar aspas.', excludeEmptyString: true}),
     email: yup.string().required("O e-mail é obrigatório").email("E-mail inválido")
+        .max(90, 'O email deve ter no máximo 90 caracteres')
         .matches(validTextRegex, {message:'O email não pode apresentar aspas', excludeEmptyString: true}),
-    phone: yup.string().required("O telefone é obrigatório").matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido', excludeEmptyString: true } ),
-    whatsapp: yup.string().optional().matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido', excludeEmptyString: true } ),
-    accept: yup.string().oneOf(['true'], 'Você deve aceitar os termos de uso e de privacidade para prosseguir!'),
+    phone: yup.string().required("O telefone é obrigatório")
+        .matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido', excludeEmptyString: true } ),
+    whatsapp: yup.string().optional()
+        .matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido', excludeEmptyString: true } ),
+    accept: yup.string()
+        .oneOf(['true'], 'Você deve aceitar os termos de uso e de privacidade para prosseguir!'),
     enterpriseName: yup.string().required('O nome da empresa é obrigatório')
+        .min(3, 'O nome da empresa deve ter no mínimo 3 caracteres')
+        .max(40, 'O nome da empresa deve ter no máximo 40 caracteres')
         .matches(validTextRegex, {message:'O nome da empresa não pode apresentar aspas', excludeEmptyString: true}),
     location: yup.string().required('A localização é obrigatória').oneOf(
         Object.values(locationMap).map((el,index) => {return el.textToShow})
         , 'Opção não válida'),
     address: yup.string().required('O endereço é obrigatório')
+        .min(5, 'O endereço deve ter no mínimo 5 caracteres')
+        .max(90, 'O endereço deve ter no máximo 90 caracteres')
         .matches(validTextRegex, {message:'O endereço não pode apresentar aspas', excludeEmptyString: true}),
     addressNumber: yup.string().required('O número de endereço é obrigatório')
+        .max(90, 'O número de endereço deve ter no máximo 10 caracteres')
         .matches(/^[1-9]+[0-9]*$/, {message: 'Número de endereço inválido', excludeEmptyString: true}),
     instagram: yup.string().optional()
-        .matches(validTextRegex, {message:'O instagram não pode apresentar aspas', excludeEmptyString: true}),
+        .max(40, 'A conta do instagram deve ter no máximo 40 caracteres')
+        .matches(validTextRegex, {message:'A conta do instagram não pode apresentar aspas', excludeEmptyString: true}),
     facebook: yup.string().optional()
-        .matches(validTextRegex, {message:'O facebook não pode apresentar aspas', excludeEmptyString: true}),
+        .max(40, 'A conta do facebook deve ter no máximo 40 caracteres')
+        .matches(validTextRegex, {message:'A conta do facebook não pode apresentar aspas', excludeEmptyString: true}),
     website: yup.string().optional()
+        .max(40, 'O website deve ter no máximo 40 caracteres')
         .matches(validTextRegex, {message:'O website não pode apresentar aspas', excludeEmptyString: true}),
     partyMainFocus: yup.string().required('O principal tipo de festa é obrigatório')
         .oneOf(
@@ -145,11 +167,52 @@ export const enterpriseRegisterFormSchema = yup.object().shape({
         ),
     serviceDescription: yup.string().required('A descrição do serviço é obrigatória')
         .min(300, 'A descrição do serviço deve ter no mínimo 300 caracteres.')
+        .max(3000, 'A descrição do serviço deve ter no máximo 3000 caracteres.')
         .matches(validTextRegex, {message:'A descrição do serviço não pode apresentar aspas', excludeEmptyString: true}),
 });
 
+export const enterpriseRegisterMyBusinessFormSchema = yup.object().shape({
+    fullName: yup.string().required('O nome completo é obrigatório')
+        .min(3, 'O nome completo deve ter no mínimo 3 caracteres')
+        .max(90, 'O nome completo deve ter no máximo 90 caracteres')
+        .matches(validTextRegex, {message: 'O nome completo não pode apresentar aspas.', excludeEmptyString: true}),
+    email: yup.string().required("O e-mail é obrigatório").email("E-mail inválido")
+        .max(90, 'O email deve ter no máximo 90 caracteres')
+        .matches(validTextRegex, {message:'O email não pode apresentar aspas', excludeEmptyString: true}),
+    phone: yup.string().required("O telefone é obrigatório")
+        .matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido', excludeEmptyString: true } ),
+    whatsapp: yup.string().optional()
+        .matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido', excludeEmptyString: true } ),
+    enterpriseName: yup.string().required('O nome da empresa é obrigatório')
+        .min(3, 'O nome da empresa deve ter no mínimo 3 caracteres')
+        .max(40, 'O nome da empresa deve ter no máximo 40 caracteres')
+        .matches(validTextRegex, {message:'O nome da empresa não pode apresentar aspas', excludeEmptyString: true}),
+    location: yup.string().required('A localização é obrigatória').oneOf(
+        Object.values(locationMap).map((el,index) => {return el.textToShow})
+        , 'Opção não válida'),
+    address: yup.string().required('O endereço é obrigatório')
+        .min(5, 'O endereço deve ter no mínimo 5 caracteres')
+        .max(90, 'O endereço deve ter no máximo 90 caracteres')
+        .matches(validTextRegex, {message:'O endereço não pode apresentar aspas', excludeEmptyString: true}),
+    addressNumber: yup.string().required('O número de endereço é obrigatório')
+        .max(90, 'O número de endereço deve ter no máximo 10 caracteres')
+        .matches(/^[1-9]+[0-9]*$/, {message: 'Número de endereço inválido', excludeEmptyString: true}),
+    instagram: yup.string().optional()
+        .max(40, 'A conta do instagram deve ter no máximo 40 caracteres')
+        .matches(validTextRegex, {message:'A conta do instagram não pode apresentar aspas', excludeEmptyString: true}),
+    facebook: yup.string().optional()
+        .max(40, 'A conta do facebook deve ter no máximo 40 caracteres')
+        .matches(validTextRegex, {message:'A conta do facebook não pode apresentar aspas', excludeEmptyString: true}),
+    website: yup.string().optional()
+        .max(40, 'O website deve ter no máximo 40 caracteres')
+        .matches(validTextRegex, {message:'O website não pode apresentar aspas', excludeEmptyString: true}),
+});
+
 export const enterpriseRegisterPasswordSchema = yup.object().shape({
-    password: yup.string().required("Senha obrigatória").min(6, "No mínimo 6 caracteres"),
+    password: yup.string().required("Senha obrigatória")
+        .min(8, "No mínimo 8 caracteres")
+        .max(20, "No máximo 20 caracteres")
+        .matches(passwordStrongRegex, {message:'A senha deve apresentar pelo menos 1 caractere maiúsculo, 1 minúsculo, 1 especial (!@#$%^&*_) e 1 número.', excludeEmptyString: true}),
     passwordConfirmation: yup.string().oneOf([null,yup.ref("password")], 
         "As senhas precisam ser iguais")
 });
@@ -515,27 +578,68 @@ export const enterpriseRegisterQuestionsDataSchema = yup.object().shape({
 
 export const userRegisterFormSchema = yup.object().shape({
     fullName: yup.string().required('O nome completo é obrigatório')
+        .min(3, 'O nome completo deve ter no mínimo 3 caracteres')
+        .max(90, 'O nome completo deve ter no máximo 90 caracteres')
         .matches(validTextRegex, {message: 'O nome completo não pode apresentar aspas.', excludeEmptyString: true}),
     email: yup.string().required("O e-mail é obrigatório").email("E-mail inválido")
+        .max(90, 'O email deve ter no máximo 90 caracteres')
         .matches(validTextRegex, {message:'O email não pode apresentar aspas', excludeEmptyString: true}),
-    phone: yup.string().required("O telefone é obrigatório").matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido. Digite somente os números, não inclua (), - ou espaços.', excludeEmptyString: true } ),
-    whatsapp: yup.string().optional().matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido. Digite somente os números, não inclua (), - ou espaços.', excludeEmptyString: true } ),
+    phone: yup.string().required("O telefone é obrigatório")
+        .matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Telefone inválido. Digite somente os números, não inclua (), - ou espaços.', excludeEmptyString: true } ),
+    whatsapp: yup.string().optional()
+        .matches(/^[1-9]{2}(?:[2-8]|9[1-9])[0-9]{3}[0-9]{4}$/, { message: 'Whatsapp inválido. Digite somente os números, não inclua (), - ou espaços.', excludeEmptyString: true } ),
     location: yup.string().required('A localização é obrigatória').oneOf(
         Object.values(locationMapUser).map((el,index) => {return el.textToShow})
         , 'Opção não válida'),
-    accept: yup.string().oneOf(['true'], 'Você deve aceitar os termos de uso e de privacidade para prosseguir!')
+    accept: yup.string()
+        .oneOf(['true'], 'Você deve aceitar os termos de uso e de privacidade para prosseguir!')
 });
 
 export const userRegisterPasswordSchema = yup.object().shape({
-    password: yup.string().required("Senha obrigatória").min(6, "No mínimo 6 caracteres"),
+    password: yup.string().required("Senha obrigatória")
+        .min(8, "No mínimo 8 caracteres")
+        .max(20, "No máximo 20 caracteres")
+        .matches(passwordStrongRegex, {message:'A senha deve apresentar pelo menos 1 caractere maiúsculo, 1 minúsculo, 1 especial (!@#$%^&*_) e 1 número.', excludeEmptyString: true}),
     passwordConfirmation: yup.string().oneOf([null,yup.ref("password")], 
         "As senhas precisam ser iguais")
 });
 
 export const askBudgetSchema = yup.object().shape({
-    partyDate: yup.string().required("A data da festa é obrigatória").matches(dateRegex, { message: 'Data inválida. A data deve ter o formato dd/mm/yyyy.', excludeEmptyString: true } ),    
+    partyDate: yup.string().required("A data da festa é obrigatória")
+        .matches(dateRegex, { message: 'Data inválida. A data deve ter o formato dd/mm/yyyy.', excludeEmptyString: true } ),    
     nOfPeople: yup.string().required("A quantidade de pessoas é obrigatória")
-               .matches(/^[1-9]+[0-9]*$/, {message: 'Deve ser um número inteiro e positivo, sem vírgulas ou pontos', excludeEmptyString: true}),
+        .max(5, "O número de pessoas deve ter no máximo 5 dígitos")
+        .matches(/^[1-9]+[0-9]*$/, {message: 'Deve ser um número inteiro e positivo, sem vírgulas ou pontos', excludeEmptyString: true}),
     messageContent: yup.string().required("O conteúdo da mensagem é obrigatório")
-                    .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString: true})    
+        .max(20, "A mensagem deve ter no máximo 500 caracteres")
+        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString: true})    
+});
+
+export const RatingFormSchema = yup.object().shape({
+    partyType: yup.string().required('O tipo da festa é obrigatório').oneOf(
+        Object.values(typeOfParties).map((el,index) => {return el.value})
+        , 'Opção não válida'),
+    partyDate: yup.string().required("A data da festa é obrigatória")
+        .matches(dateRegex, { message: 'Data inválida. A data deve ter o formato dd/mm/yyyy.', excludeEmptyString: true } ),
+    ratingServiceQuality: yup.string().required('Esse quesito é obrigatório')
+        .oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    ratingPrice: yup.string().required('Esse quesito é obrigatório')
+        .oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    ratingAnswerTime: yup.string().required('Esse quesito é obrigatório')
+        .oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    ratingFlexibility: yup.string().required('Esse quesito é obrigatório')
+        .oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    ratingProfessionalism: yup.string().required('Esse quesito é obrigatório')
+        .oneOf(['1','2','3','4','5'], 'Opção inválida'),
+    recommendToAFriend: yup.string().required('Esse quesito é obrigatório')
+        .oneOf(['Sim', 'Não'], 'Opção inválida'),
+    recommendToAFriendObservation: yup.string().optional()
+        .max(290, 'A observação deve ter no máximo 290 caracteres')
+        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true}),                       
+    opinionTitle: yup.string().required('O título da opinião é obrigatório')
+        .max(40, 'O título da opinião deve ter no máximo 40 caracteres')
+        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true}),                       
+    opinionContent: yup.string().required('O conteúdo da opinião é obrigatório')
+        .max(500, 'A opinião deve ter no máximo 500 caracteres')
+        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true})                      
 });

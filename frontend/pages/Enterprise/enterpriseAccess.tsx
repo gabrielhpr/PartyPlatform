@@ -365,7 +365,9 @@ export default function enterpriseAccess() {
                                 bg='brand.white'
                                 h={{base: '40%',lg:'35%'}}
                             >
-                                <ModalHeader></ModalHeader>
+                                <ModalHeader>
+                                    <FlashMessageComponent/>
+                                </ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody
                                 >

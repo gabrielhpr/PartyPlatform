@@ -6,13 +6,16 @@ import { FlashMessageComponent } from "../../../components/FlashMessageComponent
 import { Footer } from "../../../components/Footer";
 import { Header } from "../../../components/Header";
 import { Sidebar } from "../../../components/Sidebar";
+import useFlashMessage from "../../../hooks/useFlashMessage";
 import api from "../../../utils/api";
+import { userRegisterPasswordSchema } from "../../../utils/validations";
 
 export default function ResetPasswordUser() {
     const [userPassword, setUserPassword] = useState({password: '', passwordConfirmation: ''});
     const [formErrorsUserPassword, setFormErrorsUserPassword] = useState({password: '', passwordConfirmation: ''});
     const routerNext = useRouter();
     const [validToken, setValidToken] = useState(false);
+    const { setFlashMessage } = useFlashMessage();
 
     function handleChange( event: any ) {
         setUserPassword({...userPassword, [event.currentTarget.name]: event.currentTarget.value});
@@ -25,23 +28,63 @@ export default function ResetPasswordUser() {
             return;
         }
 
-        try {
-            await api.patch(
-            '/resetPasswordUser',
-            {
-                password: userPassword.password,
-                passwordConfirmation: userPassword.passwordConfirmation,
-                token: token
-            }
-            )
-            .then((res) => {
-                console.log('then do reset password user');
-                console.log( res );
+        //*--------------- VALIDATION ----------------*// 
+        let fields = ['password', 'passwordConfirmation'];
+
+        //Reset errors message
+        fields.map((el, index) => {
+            setFormErrorsUserPassword((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await userRegisterPasswordSchema
+            .validateAt( el, userPassword)
+            .catch((err) => {
+                setFormErrorsUserPassword((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
             });
-        }
-        catch(err) {
-            // tratar o erro
-            console.log(err);
+        });
+
+        // Validate
+        let passwordIsValid = await userRegisterPasswordSchema
+        .isValid( userPassword )
+        .then((val) =>{
+            if( val ) {
+                return true;
+            }
+        })
+        .catch((err) => {
+            return false;
+        });
+        //*--------------------------------------------*// 
+
+        if( passwordIsValid ) {
+            let msgText = 'Senha alterada com sucesso!';
+            let msgType = 'success';
+    
+            try {
+                await api.patch(
+                '/resetPasswordUser',
+                {
+                    password: userPassword.password,
+                    passwordConfirmation: userPassword.passwordConfirmation,
+                    token: token
+                }
+                )
+                .then((res) => {
+                    console.log('then do reset password user');
+                    console.log( res );
+                    routerNext.push('/User/userAccess');                
+                });
+            }
+            catch(err) {
+                // tratar o erro
+                msgText = err.response.data.message;
+                msgType = "error";
+                //console.log(err);
+            }
+            setFlashMessage( msgText, msgType );
         }
     }
 
@@ -80,6 +123,8 @@ export default function ResetPasswordUser() {
         >
             <Header name='' position="relative" />
             <Sidebar/>
+
+            <FlashMessageComponent/>
 
             <Flex 
                 w='100vw'

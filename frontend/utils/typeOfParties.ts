@@ -8,7 +8,7 @@ import { BsMusicNoteBeamed } from "react-icons/bs";
 export const typeOfParties = {
     Infantil: {value: 'Infantil', textToShow: 'Infantil'},
     Debutante: {value: 'Debutante', textToShow: '15 anos (Debutante)'},
-    Aniversario: {value: 'Aniversario', textToShow: 'Outros aniversários'}
+    Aniversario: {value: 'Aniversario', textToShow: 'Outras Festas'}
 }
 
 export const typeOfServices = {

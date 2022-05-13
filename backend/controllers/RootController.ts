@@ -111,13 +111,17 @@ module.exports = class RootController {
     static async sendEmailResetPasswordEnterprise(req: any, res: any) {
         const { email } = req.body;
 
+        if( !email ) {
+            res.status(422).json({ message: "O e-mail é obrigatório!"});
+            return;
+        }
+
         // Check if email exists
         let enterprise = await enterpriseModel.getEnterpriseByEmail( email );
         console.log('enterpriseId é: ');
         console.log( enterprise );
-        console.log( enterprise.id );
 
-        if( enterprise == undefined ) {
+        if( enterprise.length == 0 ) {
             res.status(422).json({ message: "E-mail não cadastrado!"});
             return;
         }
@@ -159,7 +163,6 @@ module.exports = class RootController {
         run();
 
         return res.status(200).json({message: "Email enviado com sucesso!"});
-
     }
 
     static async checkResetPasswordValidityEnterprise(req: any, res: any) {
@@ -199,6 +202,10 @@ module.exports = class RootController {
 
         let result = await enterpriseModel.getEnterpriseByToken( token );
         console.log('id');
+        if( result.length == 0 ) {
+            res.status(422).json({ message: "Token inválido ou expirado" });
+            return;
+        }
         console.log(result.id);
         let enterprise = await enterpriseModel.getEnterpriseById( result.id );
 
@@ -234,13 +241,18 @@ module.exports = class RootController {
     static async sendEmailResetPasswordUser(req: any, res: any) {
         const { email } = req.body;
 
+        if( !email ) {
+            res.status(422).json({ message: "O e-mail é obrigatório!"});
+            return;
+        }
         // Check if email exists
         let user = await userModel.getUserByEmail( email );
         console.log('userId é: ');
         console.log( user );
-        console.log( user.id );
+        //console.log( user.id );
 
-        if( user == undefined ) {
+        if( user.length == 0 ) {
+            console.log('user undefined');
             res.status(422).json({ message: "E-mail não cadastrado!"});
             return;
         }
@@ -282,7 +294,6 @@ module.exports = class RootController {
         run();
 
         return res.status(200).json({message: "Email enviado com sucesso!"});
-
     }
 
     static async checkResetPasswordValidityUser(req: any, res: any) {
@@ -322,7 +333,12 @@ module.exports = class RootController {
 
         let result = await userModel.getUserByToken( token );
         console.log('id');
-        console.log(result.id);
+
+        if( result.length == 0 ) {
+            res.status(422).json({ message: "Token expirado ou inválido!" });
+            return;
+        }
+
         let user = await userModel.getUserById( result.id );
 
         console.log( user );
@@ -350,6 +366,8 @@ module.exports = class RootController {
         user.tokenResetPassword = '';
         user.tokenCreatedAt = '';
 
-        await userModel.updateUser( user );
+        await userModel.updateUser( user.id, user );
+
+        return res.status(200).json({message: "Senha alterada com sucesso!"});
     }
 }

@@ -6,13 +6,17 @@ import { FlashMessageComponent } from "../../../components/FlashMessageComponent
 import { Footer } from "../../../components/Footer";
 import { Header } from "../../../components/Header";
 import { Sidebar } from "../../../components/Sidebar";
+import useFlashMessage from "../../../hooks/useFlashMessage";
 import api from "../../../utils/api";
+import { enterpriseRegisterPasswordSchema } from "../../../utils/validations";
 
 export default function ResetPasswordEnterprise() {
     const [enterprisePassword, setEnterprisePassword] = useState({password: '', passwordConfirmation: ''});
     const [formErrorsEnterprisePassword, setFormErrorsEnterprisePassword] = useState({password: '', passwordConfirmation: ''});
     const routerNext = useRouter();
     const [validToken, setValidToken] = useState(false);
+    const { setFlashMessage } = useFlashMessage();
+
 
     function handleChange( event: any ) {
         setEnterprisePassword({...enterprisePassword, [event.currentTarget.name]: event.currentTarget.value});
@@ -25,20 +29,64 @@ export default function ResetPasswordEnterprise() {
             return;
         }
 
-        try {
-            await api.patch(
-            '/resetPasswordEnterprise',
-            {
-                password: enterprisePassword.password,
-                passwordConfirmation: enterprisePassword.passwordConfirmation,
-                token: token
+        //*--------------- VALIDATION ----------------*// 
+        let fields = ['password', 'passwordConfirmation'];
+
+        //Reset errors message
+        fields.map((el, index) => {
+            setFormErrorsEnterprisePassword((formE) => ({...formE, [el]:''}));
+        })
+
+        // Error messages
+        await fields.map(async (el,index) => {
+            await enterpriseRegisterPasswordSchema
+            .validateAt( el, enterprisePassword)
+            .catch((err) => {
+                setFormErrorsEnterprisePassword((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log(err);
+            });
+        });
+
+        // Validate
+        let passwordIsValid = await enterpriseRegisterPasswordSchema
+        .isValid( enterprisePassword )
+        .then((val) =>{
+            if( val ) {
+                return true;
             }
-            );
+        })
+        .catch((err) => {
+            return false;
+        });
+        //*--------------------------------------------*// 
+
+        if( passwordIsValid ) {
+            let msgText = 'Senha alterada com sucesso!';
+            let msgType = 'success';
+
+            try {
+                await api.patch(
+                '/resetPasswordEnterprise',
+                {
+                    password: enterprisePassword.password,
+                    passwordConfirmation: enterprisePassword.passwordConfirmation,
+                    token: token
+                }
+                )
+                .then((res) => {
+                    routerNext.push('/Enterprise/enterpriseAccess');                
+                });
+            }
+            catch(err) {
+                // tratar o erro
+                msgText = err.response.data.message;
+                msgType = "error";
+                console.log(err);
+            }
+            setFlashMessage( msgText, msgType );
         }
-        catch(err) {
-            // tratar o erro
-            console.log(err);
-        }
+
+        
     }
 
     useEffect(() => {

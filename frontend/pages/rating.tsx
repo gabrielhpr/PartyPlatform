@@ -17,7 +17,7 @@ import * as yup from 'yup';
 import { dateRegex, invalidTextRegex, validTextRegex } from "../utils/regexCustom";
 import { FlashMessageComponent } from "../components/FlashMessageComponent";
 import { userRegisterDataFormErrorNullState, userRegisterDataFormErrorProps, userRegisterDataNullState, userRegisterDataProps } from "../utils/userInterface";
-import { userRegisterFormSchema, userRegisterPasswordSchema } from "../utils/validations";
+import { userRegisterFormSchema, userRegisterPasswordSchema, RatingFormSchema } from "../utils/validations";
 import useFlashMessage from "../hooks/useFlashMessage";
 
 interface ratingDataInterf {
@@ -247,28 +247,6 @@ const ratingDataFormErrorNullState = {
     opinionTitle: '',
     opinionContent: ''
 }
-
-const RatingFormSchema = yup.object().shape({
-    partyType: yup.string().required('O tipo da festa é obrigatório').oneOf(
-        Object.values(typeOfParties).map((el,index) => {return el.value})
-        , 'Opção não válida'),
-    partyDate: yup.string().required("A data da festa é obrigatória").matches(dateRegex, { message: 'Data inválida. A data deve ter o formato dd/mm/yyyy.', excludeEmptyString: true } ),
-    ratingServiceQuality: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
-    ratingPrice: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
-    ratingAnswerTime: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
-    ratingFlexibility: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
-    ratingProfessionalism: yup.string().required('Esse quesito é obrigatório').oneOf(['1','2','3','4','5'], 'Opção inválida'),
-    recommendToAFriend: yup.string().required('Esse quesito é obrigatório').oneOf(['Sim', 'Não'], 'Opção inválida'),
-    recommendToAFriendObservation: yup.string().optional()
-        .max(500, 'A observação deve ter no máximo 500 caracteres')
-        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true}),                       
-    opinionTitle: yup.string().required('O título da opinião é obrigatório')
-        .max(60, 'O título da opinião deve ter no máximo 60 caracteres')
-        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true}),                       
-    opinionContent: yup.string().required('O conteúdo da opinião é obrigatório')
-        .max(500, 'A opinião deve ter no máximo 500 caracteres')
-        .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true})                      
-});
 
 export default function Rating() {
     // RATING

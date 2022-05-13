@@ -18,7 +18,7 @@ export default function AboutPage() {
                 direction='column'
                 alignItems='center'
                 justifyContent='center'
-                h='60vh'
+                h='80vh'
             >
                 <Text
                     fontSize={{base:28, lg:32}}
@@ -33,13 +33,42 @@ export default function AboutPage() {
                     fontSize={{base:18,lg:20}}
                     mt='0'
                 >
-                    Nós somos 
+                    O Festafy foi fundada por dois sócios: Gabriel e Adenilson. 
+                    <br/>
+                    Gabriel é do 
+                    setor de tecnologia e já trabalhou com Ciência de Dados. 
+                    <br/>
+                    Adenilson é do ramo de festas e aluga espaços para festas e 
+                    decoração.
+                </Text>
+
+                <Text
+                    fontSize={{base:28, lg:32}}
+                    fontWeight={500}
+                    py='2'
+                    mt='3'
+                >
+                    Missão
+                </Text>
+
+                <Text
+                    textAlign='center'
+                    fontSize={{base:18,lg:20}}
+                    mt='0'
+                >
+                    Nossa missão é criar uma plataforma especializada em festas 
+                    <br />
+                    de aniversários e outros eventos. 
+                    <br/>
+                    Ajudando clientes a encontrarem profissionais perfeitos para 
+                    <br />
+                    o que as suas festas precisam e ajudando fornecedores a 
+                    <br />
+                    encontrarem clientes que se identificam com o serviço 
+                    realizado.
                 </Text>
 
                 
-
-
-
                 <Flex
                     position='relative'
                     h={432/4}
