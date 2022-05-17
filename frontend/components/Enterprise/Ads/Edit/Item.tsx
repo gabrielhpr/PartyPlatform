@@ -83,7 +83,7 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
                 >
                         {isTitleItem 
                             ?
-                            <TitleEdit title={title}/>
+                            <TitleEdit title={title} id={title}/>
                             :
                             <Text as="h2"
                                 fontWeight={400}

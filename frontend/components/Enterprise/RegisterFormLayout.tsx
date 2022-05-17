@@ -13,8 +13,8 @@ interface CreateAdLayoutProps {
     style?: string;
     showFooterMenu?: boolean;
     children: ReactNode;
-    handleNextStep: Function;
-    handlePreviousStep: Function;
+    handleNextStep: (event:any) => void;
+    handlePreviousStep: (event: any) => void;
 }
 
 
@@ -22,7 +22,8 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
     style='yellow',
     showFooterMenu=true,
     children, 
-    handleNextStep, handlePreviousStep
+    handleNextStep, 
+    handlePreviousStep
 }: CreateAdLayoutProps) {
 
 

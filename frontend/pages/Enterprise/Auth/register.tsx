@@ -14,8 +14,8 @@ import { PriceCard } from "../../../components/Enterprise/priceCard";
 import { enterpriseRegisterFormSchema, enterpriseRegisterPasswordSchema, enterpriseRegisterCategoryDataSchema, enterpriseRegisterQuestionsDataSchema } from '../../../utils/validations';
 import * as yup from 'yup';
 // Add style manually
-import 'react-upload-gallery/dist/style.css' // or scss
-import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery'
+import 'react-upload-gallery/dist/style.css'; // or scss
+import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery';
 import { FiUpload } from "react-icons/fi";
 
 
@@ -383,7 +383,7 @@ export default function RegisterEnterprise() {
 
     const onImageChange = (imageList: any, addUpdateIndex: any) => {
         // data for submit
-        console.log(imageList, addUpdateIndex);
+        //console.log(imageList, addUpdateIndex);
         setEnterpriseData({...enterpriseData, photos: imageList});
     };
 
@@ -402,8 +402,8 @@ export default function RegisterEnterprise() {
     
 
     function handleFileChange( event: any ) {
-        console.log( 'event files images' );
-        console.log( event.currentTarget.files );
+        //console.log( 'event files images' );
+        //console.log( event.currentTarget.files );
         setPreview(Array.from(event.currentTarget.files));
         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: [...event.currentTarget.files]});
         
@@ -412,12 +412,12 @@ export default function RegisterEnterprise() {
     function handleChange( event: any ) {
         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: event.currentTarget.value});
         setFormErrors({...formErrors, [event.currentTarget.name]: ''});
-        console.log( enterpriseData );
+        //console.log( enterpriseData );
     }
 
     // Used in Menu search
     function searchFunction( event: any, menuId: string ) {
-        console.log( event.currentTarget.value );
+        //console.log( event.currentTarget.value );
         let inputValue = event.currentTarget.value.toUpperCase();
         let menu = document.getElementById( menuId );
         let itemList = menu.getElementsByTagName("button");
@@ -454,7 +454,7 @@ export default function RegisterEnterprise() {
     }
 
     async function handleValidation( fields: Array<string>, schemaForm: any ) {
-        console.log(fields);
+        //console.log(fields);
 
         // Reset errors message
         fields.map((el, index) => {
@@ -467,7 +467,7 @@ export default function RegisterEnterprise() {
             .validateAt( el, enterpriseData)
             .catch((err) => {
                 setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -478,13 +478,13 @@ export default function RegisterEnterprise() {
             
             let isValidField = yup.reach( schemaForm, el )
             .isValidSync( enterpriseData[el] );
-            console.log(isValidField);
+            //console.log(isValidField);
 
             validForm = validForm && isValidField;                
         });
 
-        console.log('validForm');
-        console.log(validForm);
+        //console.log('validForm');
+        //console.log(validForm);
         // If there is no error its validated
         if( validForm ) {
             setEnterpriseData({...enterpriseData, step: enterpriseData.step + 1});
@@ -516,7 +516,7 @@ export default function RegisterEnterprise() {
                 .validateAt( el, enterpriseData)
                 .catch((err) => {
                     setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                    console.log(err);
+                    //console.log(err);
                 });
             });
 
@@ -912,8 +912,9 @@ export default function RegisterEnterprise() {
                             <TextSpanInput
                                 textToShow="Usuário ( E-mail cadastrado na página anterior )"
                             />
-                            <Input type='text' value={enterpriseData.email}
-                                disabled={true} 
+                            <Input type='text' 
+                                value={enterpriseData.email}
+                                disabled={true}                                
                             />
                         </Flex>
                         
@@ -925,6 +926,7 @@ export default function RegisterEnterprise() {
                                 <Input type='password' name='password' 
                                     value={enterpriseData.password} 
                                     onChange={handleChange} 
+                                    placeholder="pass1"
                                 />
                                 <FormErrorMessage>
                                     {formErrors.password}
@@ -940,6 +942,7 @@ export default function RegisterEnterprise() {
                                 <Input type='password' name='passwordConfirmation' 
                                     value={enterpriseData.passwordConfirmation}    
                                     onChange={handleChange} 
+                                    placeholder="pass2"
                                 />
                                 <FormErrorMessage>
                                     {formErrors.passwordConfirmation}

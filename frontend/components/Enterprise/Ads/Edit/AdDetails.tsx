@@ -10,13 +10,104 @@ import { useState } from "react";
 import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery';
 import { FiUpload } from "react-icons/fi";
 
+interface enterpriseDataFormErrorInterf {
+    // Contact Data
+    fullName: string;
+    email: string;
+    phone: string;
+    whatsapp?: string;
+    // Access Data
+    password: string;
+    passwordConfirmation: string;
+    // About the enterprise
+    enterpriseName: string;
+    
+    // Just for showing the user
+    location: string;
+
+    city: string;
+    state: string;
+    country: string;
+    address: string;
+    addressNumber: string;
+    // Enterprise Social Media
+    instagram?: string;
+    facebook?: string;
+    website?: string;
+    
+    partyMainFocus: string;
+    serviceDescription: string;
+    enterpriseCategory: string;
+    enterpriseSpecificCategory: string;
+
+    photos: {
+        accept: string;
+        minLimit: string;
+        maxLimit: string;
+        size: string;
+        minDim: string;
+        maxDim: string;
+    };
+
+    q1: string;
+    q2: string;
+    q3: string;
+    q4: string;
+    q5: string;
+    q6: string;
+    q7: string;
+    q8: string;
+    q9: string;
+    q10: string;
+    q11: string;
+    q12: string;
+    q13: string;
+    q14: string;
+    q15: string;
+    q16: string;
+    q17: string;
+    q18: string;
+    q19: string;
+    q20: string;
+    q21: string;
+    q22: string;
+    q23: string;
+    q24: string;
+    q25: string;
+    q26: string;
+    q27: string;
+    q28: string;
+    q29: string;
+    q30: string;
+    q31: string;
+    q32: string;
+    q33: string;
+    q34: string;
+    q35: string;
+    q36: string;
+    q37: string;
+    q38: string;
+    q39: string;
+    q40: string;
+    q41: string;
+    q42: string;
+    q43: string;
+    q44: string;
+    q45: string;
+    q46: string;
+    q47: string;
+    q48: string;
+    q49: string;
+    q50: string;
+}
+
 interface AdDetailsEditProps {
     serviceDescription: string;
     photos: string[];
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
     questions: Object;
-    formErrors: Object;
+    formErrors: enterpriseDataFormErrorInterf;
     setData: Function;
     setFormErrors: Function;
     saveDataChanged: Function;
@@ -141,9 +232,9 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                             justifyContent='space-evenly'
                         >
                             {
-                                Object.values( formErrors.photos ).some( value => value != '')
+                                Object.values( formErrors?.photos ).some( value => value != '')
                                 &&
-                                Object.values(formErrors.photos).map((el, index) => {
+                                Object.values( formErrors?.photos ).map((el, index) => {
                                     if( el != '' ) {
                                         return (
                                             <Alert status='error'
@@ -298,8 +389,8 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
             <Box w='100%'>
                 <TitleEdit 
                     title="Informações básicas do anúncio" 
-                    mb="5"
                     id="Informações básicas do anúncio"
+                    mb="5"
                     //handleData={handleData}
                 />
 

@@ -4,12 +4,13 @@ import { typeOfServices } from '../utils/typeOfParties';
 
 interface MenuServicesOnClickProps {
     partyType: string;
-    handlePreviousStep: Function;
-    handleClick: (event: any) => {};
+    name?: string;
+    handlePreviousStep: (event: any) => void;
+    handleClick: (event: any) => void;
 }
 
 
-export function MenuServicesOnClick( { partyType, handlePreviousStep, handleClick }: MenuServicesOnClickProps ) {
+export function MenuServicesOnClick( { partyType, handlePreviousStep, name, handleClick }: MenuServicesOnClickProps ) {
     
     return (
         <Flex direction='column' h={300} flexWrap='wrap'

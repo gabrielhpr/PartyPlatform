@@ -6,10 +6,10 @@ interface TypeOfAccommodationItemProps {
     textToShow: string;
     description?: string;
     textAlign?: 'center' | 'left';
-    selectedName: string;
+    selectedName: string | number;
     styleType?: number;
     width?: string;
-    handleOnClick: Function;
+    handleOnClick: (event:any) => void;
 }
 
 export function ItemList({name, value, textToShow, description, selectedName, textAlign='left', styleType=1,

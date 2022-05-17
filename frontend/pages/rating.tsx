@@ -83,7 +83,7 @@ interface serviceDataInterf {
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
 
-    photos: any[];
+    photos: string;
 
     q1: string;
     q2: string;
@@ -166,7 +166,7 @@ const serviceNullState = {
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
 
-    photos: [],
+    photos: '',
 
     q1: '',
     q2: '',
@@ -258,7 +258,7 @@ export default function Rating() {
     // LOGIN
     const [userLoginData, setUserLoginData] = useState({email: '', password:''});
     // USER DATA FROM DB
-    const [userStoredData, setUserStoredData] = useState({});
+    const [userStoredData, setUserStoredData] = useState<userRegisterDataProps>(userRegisterDataNullState);
     // SERVICE INFORMATION
     const [service, setService] = useState<serviceDataInterf>( serviceNullState );
     // Menu location
@@ -292,7 +292,8 @@ export default function Rating() {
         if( !routerNext.isReady ) {
             return;
         }
-        setRatingData({...ratingData, enterpriseId: routerNext.query.enterpriseId, step: 1});
+        let entId = routerNext.query.enterpriseId.toString();
+        setRatingData({...ratingData, enterpriseId: entId, step: 1});
 
         const {enterpriseId, partyType} = routerNext.query;
 

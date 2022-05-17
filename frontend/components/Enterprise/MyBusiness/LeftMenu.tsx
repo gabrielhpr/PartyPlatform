@@ -17,11 +17,11 @@ interface LeftMenuEditProps {
         }
     };
     selectedOption: string;
-    handleOnClick: () => {};
-    rest: any;
+    handleOnClick: (event: any) => void;
+    w?: {base: string, lg: string};
 }
 
-export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selectedOption, handleOnClick, ...rest }: LeftMenuEditProps) {
+export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selectedOption, handleOnClick, w, ...rest }: LeftMenuEditProps) {
     
     return (
         <Flex 
@@ -32,6 +32,7 @@ export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selecte
             borderLeftRadius={8}
             borderRightRadius={{base:8, lg:0}}
             direction='column'
+            w={w}
             {...rest}
         >
             <Flex justifyContent="flex-start"

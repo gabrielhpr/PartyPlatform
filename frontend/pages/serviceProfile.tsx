@@ -50,7 +50,7 @@ interface serviceDataInterf {
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
 
-    photos: any[];
+    photos: string;
 
     q1: string;
     q2: string;
@@ -133,7 +133,7 @@ const serviceNullState = {
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
 
-    photos: [],
+    photos: '',
 
     q1: '',
     q2: '',
@@ -188,7 +188,7 @@ const serviceNullState = {
 }
 
 interface askBudgetInterf {
-    enterpriseId: number;
+    enterpriseId: string;
     partyType: string;
     partyDate: string;
     nOfPeople: string;
@@ -196,7 +196,7 @@ interface askBudgetInterf {
 }
 
 const askBudgetNullState = {
-    enterpriseId: 0,
+    enterpriseId: '',
     partyType: '',
     partyDate: '',
     nOfPeople: '',
@@ -204,7 +204,7 @@ const askBudgetNullState = {
 }
 
 interface askBudgetFormErrorInterf {
-    enterpriseId: number;
+    enterpriseId: string;
     partyType: string;
     partyDate: string;
     nOfPeople: string;
@@ -212,7 +212,7 @@ interface askBudgetFormErrorInterf {
 }
 
 const askBudgetFormErrorNullState = {
-    enterpriseId: 0,
+    enterpriseId: '',
     partyType: '',
     partyDate: '',
     nOfPeople: '',
@@ -411,7 +411,9 @@ export default function ServiceProfilePage() {
             return;
         }
         
-        const {id, partyType} = routerNext.query;
+        let {id, partyType} = routerNext.query;
+        id = id.toString();
+        partyType = partyType.toString();
 
         if (typeof window !== 'undefined') {
             window.gtag('event', 'page_view', {

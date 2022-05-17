@@ -19,6 +19,7 @@ export default function ServicesPage() {
     const [services, setServices] = useState([]);
     const [filters, setFilters] = useState({price:{value:'', textToShow:''}, buffetIncluded: false, nOfPeople: ''});
     const routerNext = useRouter();
+    //const [queryDataRouter, setQueryDataRouter] = useState();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [searchData, setSearchData] = useState({ partyType: '', serviceCategory: '', serviceSpecificCategory: '', location: '', city: '', state: '', country: ''});
     const [menuPartyTypeDisp, setMenuPartyTypeDisp] = useState('none');
@@ -195,7 +196,7 @@ export default function ServicesPage() {
                             color='brand.dark_blue'
                             fontSize={{base:20, lg:26}}
                         >
-                            {routerNext.query?.partyType} / {routerNext.query?.serviceCategory == 'Espaco' ? 'Espaço' : ''} {enterpriseSpecificCategoryDict[routerNext.query?.serviceSpecificCategory]}
+                            {routerNext.query?.partyType} / {routerNext.query?.serviceCategory == 'Espaco' ? 'Espaço' : ''} {enterpriseSpecificCategoryDict[String(routerNext.query?.serviceSpecificCategory)]}
                         </Text>
 
                         <Flex 
@@ -840,7 +841,7 @@ export default function ServicesPage() {
                                                     {
                                                         routerNext.query.serviceCategory == 'Servico'
                                                         ?
-                                                        priceOptionsPerService.Servico[routerNext?.query?.serviceSpecificCategory].map((el,index) => {
+                                                        priceOptionsPerService.Servico[routerNext?.query?.serviceSpecificCategory.toString()].map((el,index) => {
                                                             return (
                                                                 <MenuItemOption value={el.value}
                                                                     onClick={(event: any) => {
@@ -938,7 +939,7 @@ export default function ServicesPage() {
                                         (
                                             (
                                             routerNext.query.serviceCategory == 'Servico' 
-                                            && ( ['Buffet', 'Bolos', 'Decoracao'].includes(routerNext.query.serviceSpecificCategory) )
+                                            && ( ['Buffet', 'Bolos', 'Decoracao'].includes(routerNext.query.serviceSpecificCategory.toString()) )
                                             )
                                             ||
                                             routerNext.query.serviceCategory == 'Espaco' 
@@ -1071,7 +1072,7 @@ export default function ServicesPage() {
                                                                 {
                                                                     routerNext.query.serviceCategory == 'Servico'
                                                                     ?
-                                                                    priceOptionsPerService.Servico[routerNext?.query?.serviceSpecificCategory].map((el,index) => {
+                                                                    priceOptionsPerService.Servico[routerNext?.query?.serviceSpecificCategory.toString()].map((el,index) => {
                                                                         return (
                                                                             <MenuItemOption value={el.value}
                                                                                 h='8vh'
@@ -1175,7 +1176,7 @@ export default function ServicesPage() {
                                                     (
                                                         (
                                                         routerNext.query.serviceCategory == 'Servico' 
-                                                        && ( ['Buffet', 'Bolos', 'Decoracao'].includes(routerNext.query.serviceSpecificCategory) )
+                                                        && ( ['Buffet', 'Bolos', 'Decoracao'].includes(routerNext.query.serviceSpecificCategory.toString()) )
                                                         )
                                                         ||
                                                         routerNext.query.serviceCategory == 'Espaco' 

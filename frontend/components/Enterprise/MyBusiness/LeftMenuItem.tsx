@@ -6,7 +6,7 @@ interface LeftMenuItemEditProps {
     title: string;
     value: string;
     subMenu?: string[];
-    handleOnClick: () => {};
+    handleOnClick: (event: any) => void;
     selectedOption: string;
 }
 

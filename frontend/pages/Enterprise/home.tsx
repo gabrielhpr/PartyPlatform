@@ -18,10 +18,20 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import { useRouter } from "next/router";
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 
+interface statisticsInterf {
+    nEmailsOrders: number;
+    nReviews: number;
+}
+
+const statisticsNullState = {
+    nEmailsOrders: 0,
+    nReviews: 0,
+}
+
 export default function HomePageEnterprise() {
     const { authenticatedEnterprise } = useEnterpriseAuthContext();
     const [ gaReports, setGaReports ] = useState({});
-    const [ statistics, setStatistics ] = useState({});
+    const [ statistics, setStatistics ] = useState<statisticsInterf>(statisticsNullState);
     const [ partyTypeOptions, setPartyTypeOptions ] = useState([]);
     const [ partyTypeSelected, setPartyTypeSelected ] = useState('');
     const [ opinions, setOpinions ] = useState([]);

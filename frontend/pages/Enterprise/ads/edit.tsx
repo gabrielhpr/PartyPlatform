@@ -25,8 +25,9 @@ interface adDataInterf {
     serviceDescription: string;
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
+    partyMainFocus: string;
 
-    photos: any[];
+    photos: string;
     photosRemoved: any[];
     photosNew: any[];
     photosNewOrder: any[];
@@ -88,8 +89,9 @@ const adDataNullState = {
     serviceDescription: '',
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
+    partyMainFocus: '',
 
-    photos: [],
+    photos: '',
     photosRemoved: [],
     photosNew: [],
     photosNewOrder: [],

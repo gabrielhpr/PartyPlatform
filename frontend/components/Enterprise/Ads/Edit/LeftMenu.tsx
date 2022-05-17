@@ -11,12 +11,12 @@ interface LeftMenuEditProps {
     propertyName: string;
     srcImage: string;
     stateChanger: Function;
-    rest: any;
+    w?: {base: string; lg: string};
 }
 
 
 
-export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: LeftMenuEditProps) {
+export function LeftMenuEdit({propertyName, srcImage, stateChanger, w,...rest }: LeftMenuEditProps) {
     
     const menuItems = ['Detalhes do anúncio'];
     
@@ -30,6 +30,7 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, ...rest }: L
             borderLeftRadius={8}
             borderRightRadius={{base:8, lg:0}}
             direction='column'
+            w={w}
             {...rest}
         >
             <Flex justifyContent="flex-start"
