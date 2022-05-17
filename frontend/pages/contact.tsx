@@ -3,7 +3,7 @@ import { RiMailFill } from "react-icons/ri";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
-import Logo from "../assets/imgs/logo3.png";
+import Logo from "../assets/imgs/logo.png";
 import Image from "next/image"
 
 export default function ContactPage() {

@@ -10,7 +10,7 @@ import { useUserAuthContext } from "../../context/userContext";
 import { useRouter } from 'next/router';
 import { FaRegUser } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
-import Logo from "../../assets/imgs/logo4.png";
+import Logo from "../../assets/imgs/logo.png";
 
 interface HeaderProps {
     name: string;
