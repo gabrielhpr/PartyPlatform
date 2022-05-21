@@ -96,7 +96,8 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                                     </Flex>
 
                                     <Image
-                                        src={`http://localhost:5000/images/enterprise/${image}`}
+                                        unoptimized
+                                        src={image}
                                         layout='fill'
                                         objectFit='cover'
                                         priority={true}
@@ -118,7 +119,8 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                                     cursor='pointer'
                                 >
                                     <Image
-                                        src={`http://localhost:5000/images/enterprise/${image}`}
+                                        unoptimized
+                                        src={image}
                                         layout='fill'
                                         objectFit='cover'
                                         priority={true}

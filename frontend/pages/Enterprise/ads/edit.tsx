@@ -27,7 +27,7 @@ interface adDataInterf {
     enterpriseSpecificCategory: string;
     partyMainFocus: string;
 
-    photos: string;
+    photos: string[];
     photosRemoved: any[];
     photosNew: any[];
     photosNewOrder: any[];
@@ -91,7 +91,7 @@ const adDataNullState = {
     enterpriseSpecificCategory: '',
     partyMainFocus: '',
 
-    photos: '',
+    photos: [],
     photosRemoved: [],
     photosNew: [],
     photosNewOrder: [],
@@ -713,7 +713,7 @@ export default function EditAdsEnterprise() {
                         {/* Left Menu */}
                         <LeftMenuEdit 
                             propertyName={typeOfParties[adData?.partyMainFocus].textToShow}
-                            srcImage={`http://localhost:5000/images/enterprise/${adData?.photos.split(",")[0]}`}
+                            srcImage={adData?.photos[0]}
                             stateChanger={setComponentToLoad}
                             w={{base:'100%', lg:'25%'}}
                         />
@@ -731,7 +731,7 @@ export default function EditAdsEnterprise() {
                                 ?
                                 <AdDetailsEdit
                                     serviceDescription={adData['serviceDescription']}
-                                    photos={adData['photos'].split(",")}
+                                    photos={adData['photos']}
                                     enterpriseCategory={enterpriseData?.enterpriseCategory}
                                     enterpriseSpecificCategory={enterpriseData?.enterpriseSpecificCategory}
                                     questions={getQuestionsObj( adData )} 

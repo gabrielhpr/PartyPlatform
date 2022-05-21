@@ -1,6 +1,7 @@
 import bcrypt = require("bcrypt");
 import jwt = require("jsonwebtoken");
 import { nextTick } from "process";
+import { getAllImages } from "../helpers/get-images-aws";
 const createEnterpriseToken = require('../helpers/create-enterprise-token');
 const getToken = require('../helpers/get-token');
 const EnterpriseModel = require('../models/EnterpriseModel');
@@ -217,10 +218,13 @@ module.exports = class EnterpriseController {
         
         // Photos
         const photos = req.files;
+        
+        console.log('photos');
+        console.log( photos );
 
         let photosName: string[] = [];
         photos.map((photo: any) => {
-            photosName.push( photo.filename );
+            photosName.push( photo.key );
         });
         let photosNameString = photosName.toString();
 
@@ -354,6 +358,12 @@ module.exports = class EnterpriseController {
 
     // Get Enterprise Ads
     static async getAds(req: any, res: any) {
+        var aws = require("aws-sdk");
+        aws.config.update({region: 'us-east-1'});
+        var s3 = new aws.S3({ 
+            apiVersion: 'latest',
+        });
+
         console.log('chegou getAds');
         let ads;
         let id;
@@ -369,12 +379,23 @@ module.exports = class EnterpriseController {
             });
             ads = await enterpriseModel.getAllAds(id);                
         }
+
+        for(let i=0; i < ads.length; i++) {
+            ads[i].photos = await getAllImages( s3, 'festafy-images-bucket', ads[i].photos );
+        }
         
+
         res.status(200).json({ ads });
     }
 
     // Get Enterprise Specific Ad (Infantil, Debutante, ...)
     static async getSpecificAd(req: any, res: any) {
+        var aws = require("aws-sdk");
+        aws.config.update({region: 'us-east-1'});
+        var s3 = new aws.S3({ 
+            apiVersion: 'latest',
+        });
+
         console.log('chegou getSpecific Ad');
         let ad;
         let id;
@@ -396,6 +417,9 @@ module.exports = class EnterpriseController {
             id = decoded.id;
         });
         ad = await enterpriseModel.getAd(id, partyType); 
+        
+        ad.photos = await getAllImages( s3, 'festafy-images-bucket', ad.photos );
+
         console.log('saiu do get Ad');
         console.log(ad);
         
@@ -487,7 +511,7 @@ module.exports = class EnterpriseController {
         const newPhotos = req.files;
         let newPhotosName: string[] = [];
         newPhotos.map((photo: any) => {
-            newPhotosName.push( photo.filename );
+            newPhotosName.push( photo.key );
         });
 
         let index = 0;
@@ -677,7 +701,7 @@ module.exports = class EnterpriseController {
 
         let photosName: string[] = [];
         photos.map((photo: any) => {
-            photosName.push( photo.filename );
+            photosName.push( photo.key );
         });
         let photosNameString = photosName.toString();
 
@@ -897,16 +921,16 @@ module.exports = class EnterpriseController {
         console.log('entrou no edit enterprise');
         console.log(location);
         // New Enterprise Photo
-        var photoName;
+        // var photoName;
 
-        var newEnterprisePhoto;
-        if( req.files ) {
-            newEnterprisePhoto = req.files;
-            console.log('New Enterprise Photo Filename');
-            console.log(newEnterprisePhoto.filename);
+        // var newEnterprisePhoto;
+        // if( req.files ) {
+        //     newEnterprisePhoto = req.files;
+        //     console.log('New Enterprise Photo Filename');
+        //     console.log(newEnterprisePhoto.filename);
             
-            photoName = newEnterprisePhoto.filename;
-        }
+        //     photoName = newEnterprisePhoto.filename;
+        // }
        
 
         if(!req.headers.authorization) {
@@ -939,12 +963,12 @@ module.exports = class EnterpriseController {
         console.log(enterpriseData.fullName);
         
         // PHOTO
-        if( photoName ) {
-            enterpriseData.photo = photoName;
+        // if( photoName ) {
+        //     enterpriseData.photo = photoName;
     
-            console.log('Photo name');
-            console.log(enterpriseData.photo);
-        }
+        //     console.log('Photo name');
+        //     console.log(enterpriseData.photo);
+        // }
 
         // EMAIL
         if( !email ) {

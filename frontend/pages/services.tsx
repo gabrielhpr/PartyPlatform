@@ -1291,7 +1291,7 @@ export default function ServicesPage() {
                                             classification={el.ratingQuantity != 0 ? `${(el.ratingSum / el.ratingQuantity).toFixed(1)} (${el.ratingQuantity})` : '0'}
                                             rangeOfPeople='10-100'
                                             price={'R$ ' + minPrice(el)}
-                                            photos={el.photos.split(",").slice(0,5)}
+                                            photos={el.photos.slice(0,5)}
                                             handleOnClick={() => handleClick(el)} 
                                         />
                                     );

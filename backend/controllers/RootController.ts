@@ -1,6 +1,7 @@
 const RootModel = require('../models/RootModel');
 const rootModel = new RootModel();
 
+
 const EnterpriseModel = require('../models/EnterpriseModel');
 const enterpriseModel = new EnterpriseModel();
 
@@ -11,10 +12,17 @@ const userModel = new UserModel();
 const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.js");
 const mailchimpClient = mailchimpFactory("rcUfsa5vVBpbmJlzbkjF0A");
 import bcrypt = require("bcrypt");
+import { getAllImages } from "../helpers/get-images-aws";
 
 module.exports = class RootController {
 
     static async getServices(req: any, res: any) {
+        var aws = require("aws-sdk");
+        aws.config.update({region: 'us-east-1'});
+        var s3 = new aws.S3({ 
+            apiVersion: 'latest',
+        });
+        
         console.log('getServices');
         console.log( req.query);
         
@@ -88,19 +96,33 @@ module.exports = class RootController {
             }
         }
 
-        const services = await rootModel.selectServices(partyType, serviceCategory, serviceSpecificCategory, city, state, country, {price: price, lowerPrice: lowerPrice, upperPrice: upperPrice, priceColumn: priceColumn }, {nOfPeople: nOfPeople, minPeople: minPeople, maxPeople: maxPeople, minPeopleColumn: minPeopleColumn, maxPeopleColumn: maxPeopleColumn} );
+        let services = await rootModel.selectServices(partyType, serviceCategory, serviceSpecificCategory, city, state, country, {price: price, lowerPrice: lowerPrice, upperPrice: upperPrice, priceColumn: priceColumn }, {nOfPeople: nOfPeople, minPeople: minPeople, maxPeople: maxPeople, minPeopleColumn: minPeopleColumn, maxPeopleColumn: maxPeopleColumn} );
         
+        for(let i=0; i < services.length; i++) {
+            services[i].photos = await getAllImages( s3, 'festafy-images-bucket', services[i].photos );
+        }
+
         console.log( services );
         res.status(200).json({ services });
     }
 
     static async getServiceById(req: any, res: any) {
+        var aws = require("aws-sdk");
+        aws.config.update({region: 'us-east-1'});
+        var s3 = new aws.S3({ 
+            apiVersion: 'latest',
+        });
+
         console.log( req.query);
         
         const { id, partyType } = req.query;
-
-        const service = await rootModel.selectServiceById(parseInt(id), partyType);
+        console.log( id );
+        console.log( partyType );
         
+
+        let service = await rootModel.selectServiceById(parseInt(id), partyType);
+        service.photos = await getAllImages( s3, 'festafy-images-bucket', service.photos );
+
         const opinions = await rootModel.selectOpinionsByEnterpriseId(parseInt(id), partyType);
 
         console.log( service );

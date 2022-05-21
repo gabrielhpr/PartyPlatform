@@ -158,7 +158,7 @@ export default function AdsEnterprise() {
                                             classification={el.ratingQuantity != 0 ? `${(el.ratingSum / el.ratingQuantity).toFixed(1)} (${el.ratingQuantity})` : '0'}
                                             rangeOfPeople='10-100'
                                             price={'R$ ' + minPrice(el)}
-                                            photos={el.photos.split(",")}
+                                            photos={el.photos}
                                             handleOnClick={() => handleEditAd(el.id, el.partyMainFocus)} 
                                         />
                                     </Flex>

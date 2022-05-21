@@ -50,7 +50,7 @@ interface serviceDataInterf {
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
 
-    photos: string;
+    photos: string | string[];
 
     q1: string;
     q2: string;
@@ -133,7 +133,7 @@ const serviceNullState = {
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
 
-    photos: '',
+    photos: [],
 
     q1: '',
     q2: '',
@@ -438,7 +438,7 @@ export default function ServiceProfilePage() {
             console.log('Opinions');
             console.log(response.data.opinions);
             
-            setService(response.data.service[0]);
+            setService(response.data.service);
             setOpinions(response.data.opinions);
         })
         .catch((err) => {
@@ -658,9 +658,11 @@ export default function ServiceProfilePage() {
                             }
 
                             <Image
+                                unoptimized
                                 layout='fill'
                                 objectFit='cover'
-                                src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[0]}`}
+                                // http://localhost:5000/images/enterprise/
+                                src={service.photos[0]}
                             />
                         </Flex>
 
@@ -677,8 +679,10 @@ export default function ServiceProfilePage() {
                                 position='relative'
                             > 
                                 <Image
+                                    unoptimized
                                     layout='fill'
-                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[1]}`}
+                                    //src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[1]}`}
+                                    src={service.photos[1]}
                                     objectFit='cover'
                                 />
                             </Flex>
@@ -690,9 +694,11 @@ export default function ServiceProfilePage() {
                                 position='relative'
                             >
                                 <Image
+                                    unoptimized
                                     layout='fill'
                                     objectFit='cover'
-                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[2]}`}
+                                    //src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[2]}`}
+                                    src={service.photos[2]}
                                 />
                             </Flex>
 
@@ -703,8 +709,10 @@ export default function ServiceProfilePage() {
 
                             >
                                 <Image
+                                    unoptimized
                                     layout='fill'
-                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[3]}`}
+                                    //src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[3]}`}
+                                    src={service.photos[3]}
                                     objectFit='cover'
                                 />
                             </Flex>
@@ -732,8 +740,10 @@ export default function ServiceProfilePage() {
                                 </Button>
 
                                 <Image
+                                    unoptimized
                                     layout='fill'
-                                    src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
+                                    //src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[4]}`}
+                                    src={service.photos[4]}
                                     objectFit='cover'
                                 />
                             </Flex>
@@ -745,10 +755,19 @@ export default function ServiceProfilePage() {
                             buttonText='Ver todas as fotos'
                             handleFunctions={modalGallery}
                             content={
+                                /*
                                 service.photos?.split(',').map((image, index) => {
                                     return {
                                         'id': `service_${index}`,
                                         'src': `http://localhost:5000/images/enterprise/${image}`,
+                                        'alt': 'Service',
+                                    }
+                                })
+                                */
+                                service.photos?.map((image, index) => {
+                                    return {
+                                        'id': `service_${index}`,
+                                        'src': `${image}`,
                                         'alt': 'Service',
                                     }
                                 })

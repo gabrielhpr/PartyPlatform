@@ -3,19 +3,19 @@ const router = require("express").Router();
 const EnterpriseController = require("../controllers/EnterpriseController");
 
 // middleware
-const { imageUpload } = require("../helpers/image-upload");
+const { upload } = require("../helpers/image-upload");
 const verifyToken = require("../helpers/verify-token");
 
 // POST
 router.post(
     "/register", 
-    imageUpload.array('photos'), 
+    upload.array('photos'), 
     EnterpriseController.register
 );
 router.post("/login", EnterpriseController.login);
 router.post(
     "/ads/create",
-    imageUpload.array('photos'),
+    upload.array('photos'),
     EnterpriseController.createAd
 );
 router.post("/answerRating", EnterpriseController.answerRating);
@@ -24,13 +24,12 @@ router.post("/answerRating", EnterpriseController.answerRating);
 router.patch(
     "/ads/edit/:partyType",
     verifyToken, 
-    imageUpload.array("photosNew"), 
+    upload.array("photosNew"), 
     EnterpriseController.editAd
 );
 router.patch(
     "/myenterprise/edit",
     verifyToken, 
-    imageUpload.single("photo"), 
     EnterpriseController.editEnterprise
 );
 

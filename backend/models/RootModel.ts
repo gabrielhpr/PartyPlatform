@@ -120,7 +120,7 @@ module.exports = class RootModel {
         
         const result = await connQuery( query_select, [enterpriseId, partyType] ).catch( (err:any) => {throw err});
         
-        return result; 
+        return result[0]; 
     }
 
     async selectOpinionsByEnterpriseId( enterpriseId: number, partyType: string ) {

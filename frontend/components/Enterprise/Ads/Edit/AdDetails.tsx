@@ -170,7 +170,8 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
 
                                 >
                                     <Image 
-                                        src={`http://localhost:5000/images/enterprise/${photos[index]}`}
+                                        unoptimized
+                                        src={photos[index]}
                                         objectFit="cover"
                                         layout="fill"
                                     />
@@ -189,7 +190,8 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                         overflow='hidden'
                     >
                         <Image 
-                            src={`http://localhost:5000/images/enterprise/${photos[3]}`}
+                            unoptimized
+                            src={photos[3]}
                             objectFit="cover"
                             layout='fill'
                         />
@@ -289,7 +291,7 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                     initialState={photos.map((el, index) => {
                                         console.log(index);
                                         return (
-                                            {source:`http://localhost:5000/images/enterprise/${photos[photos.length-index-1]}`, name: photos[photos.length-index-1]}
+                                            {source:`${photos[photos.length-index-1]}`, name: photos[photos.length-index-1]}
                                         )
                                     })
                                     }

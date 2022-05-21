@@ -3,7 +3,7 @@ import { RiMailFill } from "react-icons/ri";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
-import Logo from "../assets/imgs/logo3.png";
+import Logo from "../assets/imgs/logo.png";
 import Image from "next/image"
 import CriancaAniversario from "../assets/imgs/crianca-aniversario.png";
 import Debutante from "../assets/imgs/debutante.png";
@@ -42,8 +42,6 @@ export default function ContactPage() {
                     mt='0'
                 >
                 </Text>
-               
-               
                 
                 <Flex
                     w={{base:'100%', lg:'80%'}}
@@ -51,7 +49,6 @@ export default function ContactPage() {
                     direction='column'
                     justifyContent='center'
                     alignItems='center'
-
                 >
                     {
                     [

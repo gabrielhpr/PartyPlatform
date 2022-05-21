@@ -65,6 +65,7 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, w,...rest }:
                 display={{base:'none', lg:'flex'}}
             >
                 <Image 
+                    unoptimized
                     src={srcImage}
                     layout='fill'
                     objectFit="cover"

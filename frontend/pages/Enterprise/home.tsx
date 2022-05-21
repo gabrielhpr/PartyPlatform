@@ -217,7 +217,7 @@ export default function HomePageEnterprise() {
 
                         {
                             [
-                            {id: 'visualizacoes', icon: RiSearchEyeLine, value: gaReports[0]?.rows[0]?.metricValues[0]?.value, text1: 'Visualizações', text2: 'nos últimos 12 meses' },
+                            {id: 'visualizacoes', icon: RiSearchEyeLine, value: gaReports[0]?.rows != undefined ? gaReports[0]?.rows[0]?.metricValues[0]?.value : '', text1: 'Visualizações', text2: 'nos últimos 12 meses' },
                             {id: 'pedidosRecebidos',icon: FiMail, value: statistics?.nEmailsOrders, text1: 'Pedidos recebidos', text2: 'nos últimos 12 meses' },
                             {id: 'avaliacoes',icon: AiOutlineStar, value: statistics?.nReviews, text1: 'Avaliações', text2: 'nos últimos 12 meses' },
                             {id: 'cliquesVerTelefone', icon: FiPhone, value: gaReports[1]?.rows != undefined ? gaReports[1]?.rows[0]?.metricValues[0]?.value : '', text1: 'Cliques em Ver Telefone', text2: 'nos últimos 12 meses' },
