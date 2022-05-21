@@ -2,14 +2,13 @@ version: "3"
 services:
 
   api.prod.docker:
-    container_name: "festafy_cont_api"
+    container_name: "festafy_api"
     restart: "always"
-    image: festafy_image_api
+    image: festafy_api
     user: root
     working_dir: /app/
     environment:
       - NODE_ENV=production
-      - GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
     volumes:
       - ./:/app/
     expose:

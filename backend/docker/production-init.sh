@@ -12,14 +12,14 @@ if [[ ! -e $DIR ]]; then
 fi
 
 # Database migration
-echo "Migrating Database..."
+#echo "Migrating Database..."
 
 # Uncompress Dist
 # cd /app/uiq/www/api/ && tar -xzvf dist.tar.gz
 
 # Build Docker images
 echo "Building Docker Images..."
-cd /app/api/
+cd ~/home/ec2-user/app/api
 ./docker/production-build.sh
 
 # Run containers for the first time
