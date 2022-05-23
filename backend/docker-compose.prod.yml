@@ -1,12 +1,11 @@
 version: "3"
 services:
-
   api.prod.docker:
-    container_name: "festafy_api"
+    container_name: festafy_api
     restart: "always"
     image: festafy_api
     user: root
-    working_dir: /app/
+    working_dir: /app
     environment:
       - NODE_ENV=production
     volumes:
@@ -17,4 +16,4 @@ services:
       - 5000:5000
     env_file:
       - /etc/environment
-    command: "/./app/docker/loopback/start.sh"
+    command: "/./app/api/docker/loopback/start.sh"

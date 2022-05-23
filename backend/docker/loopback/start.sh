@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-echo 'Checking up MySQL...'
-until mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h $MYSQL_HOST -e ";" ; do
-    echo 'Waiting MySQL...'
-    sleep 5
-done
+#echo 'Checking up MySQL...'
+#until mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h $MYSQL_HOST -e ";" ; do
+#    echo 'Waiting MySQL...'
+#    sleep 5
+#done
 
 DIR="/app/api"
 if [[ ! -e $DIR ]]; then
-  cd /app/api/ && npm run rebuild
+  cd /app/ && npm run rebuild
 fi
 
 echo "Migrating DB..."
-cd /app/api && node migrate.js
+#cd /app/api && node migrate.js
 
 echo 'Starting up API...'
 if [ "$NODE_ENV" == "development" ]

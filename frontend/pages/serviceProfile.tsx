@@ -50,7 +50,7 @@ interface serviceDataInterf {
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
 
-    photos: string | string[];
+    photos: string[];
 
     q1: string;
     q2: string;

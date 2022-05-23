@@ -7,7 +7,7 @@
             "exec_mode"   : "cluster",
             "watch"       : false,
             "merge_logs"  : true,
-            "cwd"         : "/app/api/",
+            "cwd"         : "/app/",
             "env_production" : {
                 "NODE_ENV": process.env.NODE_ENV,
                 "INSTANCE": process.env.INSTANCE,

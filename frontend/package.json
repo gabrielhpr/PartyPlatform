@@ -14,6 +14,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@hookform/resolvers": "^2.8.8",
+    "@serverless/cli": "^1.6.0",
     "@types/gtag.js": "^0.0.10",
     "@types/yup": "^0.29.13",
     "axios": "^0.26.0",
@@ -29,6 +30,8 @@
     "react-icons": "^4.3.1",
     "react-responsive-carousel": "3.2.18",
     "react-upload-gallery": "^0.4.0",
+    "serverless": "2.72.2",
+    "serverless-webpack": "^5.7.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {
