@@ -2,31 +2,40 @@
 FROM node:14
 
 # User user as root
-USER gabhenr
+USER root
 
 # Create App
 RUN mkdir /app
 
-RUN apt-get update && apt upgrade -y
+#RUN apt-get update && apt upgrade -y
 
-RUN npm install -g yarn
-RUN yarn add -g pm2
-RUN pm2 install pm2-logrotate
 
 #Set working directory to /app
 WORKDIR /app
 
 #Set PATH /app/node_modules/.bin
-ENV PATH /app/node_modules/.bin:$PATH
+#ENV PATH /app/node_modules/.bin:$PATH
 
 #Copy package.json in the image
 COPY package.json ./
+COPY yarn.lock ./
+
+RUN yarn install
+#RUN npm install yarn -g
+RUN yarn add pm2
+RUN pm2 install pm2-logrotate
+
+COPY . .
+
+RUN yarn build
+
+
 
 #Install Packages
-RUN yarn install 
+#RUN yarn install 
 
 #Copy the app
-COPY . ./
+#COPY . ./
 
 #Expose application port
 EXPOSE 5000
