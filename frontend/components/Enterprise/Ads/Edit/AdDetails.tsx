@@ -266,7 +266,10 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                     bg='brand.blue'
                                     color='brand.white'
                                     onClick={() => {
-                                        saveImagesChanged();
+                                        let res = saveImagesChanged();
+                                        if( res == true ) {
+                                            modalPhotos.onClose();
+                                        }
                                     }}
                                 >
                                     Salvar Alterações
@@ -314,9 +317,11 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                         console.log(newIndex);
                                     }}
                                     onChange={(images) => {
+                                        console.log('change images');
+                                        console.log(images);
                                         let newOrder = images.map((el, index) => {
                                             if( el.file == undefined) {
-                                                return el.name;
+                                                return el.uid.split('-')[2];
                                             }
                                             else {
                                                 return 'novaImagem';

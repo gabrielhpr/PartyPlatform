@@ -26,7 +26,8 @@ export function TopMenuItem({name, icon, href}: TopMenuItemProps) {
         <NavLink h='100%'
             href={href}
             _hover={{outline: 'none'}}
-            display={ name=='Avaliações' ? {base:'none', lg:'flex'} : {base:'flex', lg:'flex'}}
+            display={{base:'flex', lg:'flex'}}
+            //display={ name=='Avaliações' ? {base:'none', lg:'flex'} : {base:'flex', lg:'flex'}}
         >
             <Flex direction='column' 
                 borderBottom='4px solid'

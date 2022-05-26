@@ -41,11 +41,11 @@ export function TopMenuEnterprise() {
                 href='/Enterprise/rating'
             />  
 
-            <TopMenuItem
+            {/* <TopMenuItem
                 name='Minha conta'
                 icon={RiSettings3Line}
                 href='/Enterprise/settings'
-            />
+            /> */}
         </Flex>
     );
 }

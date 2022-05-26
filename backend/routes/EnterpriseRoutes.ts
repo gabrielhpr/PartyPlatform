@@ -24,7 +24,7 @@ router.post("/answerRating", EnterpriseController.answerRating);
 router.patch(
     "/ads/edit/:partyType",
     verifyToken, 
-    upload.array("photosNew"), 
+    upload.array('photosNew'), 
     EnterpriseController.editAd
 );
 router.patch(

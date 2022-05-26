@@ -926,7 +926,6 @@ export default function RegisterEnterprise() {
                                 <Input type='password' name='password' 
                                     value={enterpriseData.password} 
                                     onChange={handleChange} 
-                                    placeholder="pass1"
                                 />
                                 <FormErrorMessage>
                                     {formErrors.password}
@@ -942,7 +941,6 @@ export default function RegisterEnterprise() {
                                 <Input type='password' name='passwordConfirmation' 
                                     value={enterpriseData.passwordConfirmation}    
                                     onChange={handleChange} 
-                                    placeholder="pass2"
                                 />
                                 <FormErrorMessage>
                                     {formErrors.passwordConfirmation}

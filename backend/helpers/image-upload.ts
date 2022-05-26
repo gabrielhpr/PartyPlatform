@@ -1,5 +1,6 @@
 var aws = require("aws-sdk");
 import { fromIni } from "@aws-sdk/credential-providers";
+import { BUCKET_NAME } from "../utils/bucketname";
 var multer = require('multer');
 var multerS3 = require('multer-s3');
 
@@ -17,7 +18,7 @@ var s3 = new aws.S3({
 var upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'festafy-images-bucket',
+        bucket: BUCKET_NAME,
         metadata: function (req:any, file:any, cb:any) {
             cb(null, {fieldName: file.fieldname});
         },

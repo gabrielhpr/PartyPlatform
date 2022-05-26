@@ -285,24 +285,23 @@ export default function MyBusinessEnterprise() {
 
         const token = localStorage.getItem("tokenEnterprise");
 
-        const formData = new FormData;
+        // const formData = new FormData;
     
-        Object.keys(enterpriseData).forEach((key:any) => {
-            if(key == 'photosNew') {
-                console.log('entrou no photos object key');
-                formData.append('photo', enterpriseData[key][0]);
-            }
-            else {
-                formData.append(key, enterpriseData[key]);
-            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-        })
+        // Object.keys(enterpriseData).forEach((key:any) => {
+        //     if(key == 'photosNew') {
+        //         console.log('entrou no photos object key');
+        //         formData.append('photo', enterpriseData[key][0]);
+        //     }
+        //     else {
+        //         formData.append(key, enterpriseData[key]);
+        //     }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+        // })
 
         api.patch(
         '/enterprise/myenterprise/edit',
-            formData, 
+            enterpriseData, 
             {
                 headers: {
-                    "content-type": "multipart/form-data",
                     "Authorization": `Bearer ${JSON.parse(token)}`
                 }
             }

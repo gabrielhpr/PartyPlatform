@@ -13,6 +13,8 @@ const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.j
 const mailchimpClient = mailchimpFactory("rcUfsa5vVBpbmJlzbkjF0A");
 import bcrypt = require("bcrypt");
 import { getAllImages } from "../helpers/get-images-aws";
+import { BUCKET_NAME } from "../utils/bucketname";
+import { FRONTEND_NAME } from "../utils/frontendname";
 
 module.exports = class RootController {
 
@@ -99,7 +101,7 @@ module.exports = class RootController {
         let services = await rootModel.selectServices(partyType, serviceCategory, serviceSpecificCategory, city, state, country, {price: price, lowerPrice: lowerPrice, upperPrice: upperPrice, priceColumn: priceColumn }, {nOfPeople: nOfPeople, minPeople: minPeople, maxPeople: maxPeople, minPeopleColumn: minPeopleColumn, maxPeopleColumn: maxPeopleColumn} );
         
         for(let i=0; i < services.length; i++) {
-            services[i].photos = await getAllImages( s3, 'festafy-images-bucket', services[i].photos );
+            services[i].photos = await getAllImages( s3, BUCKET_NAME, services[i].photos );
         }
 
         console.log( services );
@@ -121,7 +123,7 @@ module.exports = class RootController {
         
 
         let service = await rootModel.selectServiceById(parseInt(id), partyType);
-        service.photos = await getAllImages( s3, 'festafy-images-bucket', service.photos );
+        service.photos = await getAllImages( s3, BUCKET_NAME, service.photos );
 
         const opinions = await rootModel.selectOpinionsByEnterpriseId(parseInt(id), partyType);
 
@@ -171,7 +173,7 @@ module.exports = class RootController {
                             rcpt: enterprise.email,
                             vars: [
                                 {name: 'NAME', content: `${enterprise.enterpriseName}`},
-                                {name: 'LINKRECOVER', content: `http://localhost:3000/Enterprise/Auth/resetPassword?token=${enterprise.tokenResetPassword}`}                                
+                                {name: 'LINKRECOVER', content: `${FRONTEND_NAME}/Enterprise/Auth/resetPassword?token=${enterprise.tokenResetPassword}`}                                
                             ]
                         }
                     ],
@@ -302,7 +304,7 @@ module.exports = class RootController {
                             rcpt: user.email,
                             vars: [
                                 {name: 'NAME', content: `${user.fullName}`},                                
-                                {name: 'LINKRECOVER', content: `http://localhost:3000/User/Auth/resetPassword?token=${user.tokenResetPassword}`}                                
+                                {name: 'LINKRECOVER', content: `${FRONTEND_NAME}/User/Auth/resetPassword?token=${user.tokenResetPassword}`}                                
                             ]
                         }
                     ],

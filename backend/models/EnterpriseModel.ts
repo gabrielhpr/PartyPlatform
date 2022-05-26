@@ -114,6 +114,8 @@ module.exports = class EnterpriseModel {
     }
 
     async updateAd( adId:number, data: any ){
+        console.log('updateAd');
+        console.log(data);
         let objKeys = Object.keys(data);
 
         let values = [
@@ -169,7 +171,7 @@ module.exports = class EnterpriseModel {
             data.q48,
             data.q49,
             data.q50,
-            data.adId
+            adId
         ];
 
         const query_update = `
@@ -225,7 +227,7 @@ module.exports = class EnterpriseModel {
                 q47 = ?,
                 q48 = ?,
                 q49 = ?,
-                q50 = ?,
+                q50 = ?
             WHERE id = ?
         `;
 
@@ -257,21 +259,21 @@ module.exports = class EnterpriseModel {
 
         const query_update = `
             UPDATE Enterprise
-            SET fullName = ?
-                email = ?
-                phone = ?
-                whatsapp = ?
-                password = ?
-                enterpriseName = ?
-                location = ?
-                country = ?
-                state = ?
-                city = ?
-                address = ?
-                addressNumber = ?
-                instagram = ?
-                facebook = ?
-                website = ?
+            SET fullName = ?,
+                email = ?,
+                phone = ?,
+                whatsapp = ?,
+                password = ?,
+                enterpriseName = ?,
+                location = ?,
+                country = ?,
+                state = ?,
+                city = ?,
+                address = ?,
+                addressNumber = ?,
+                instagram = ?,
+                facebook = ?,
+                website = ?,
                 tokenResetPassword = ?,
                 tokenCreatedAt = ?
             WHERE id = ?

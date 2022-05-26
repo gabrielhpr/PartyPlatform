@@ -480,6 +480,9 @@ export default function EditAdsEnterprise() {
                     } 
                 }
             }
+            else if(key == 'photos') {
+
+            }
             else {
                 formData.append(key, adData[key]);
             }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
@@ -505,6 +508,7 @@ export default function EditAdsEnterprise() {
         });
         
         setHasToUpdate(false);
+        window.location.reload();
 
     }, [adData, hasToUpdate]);
 
@@ -522,9 +526,10 @@ export default function EditAdsEnterprise() {
     function saveImagesChanged() {
         console.log( adData );
         if( adData.photosNewOrder.length < 5 ) {
-            return;
+            return false;
         }
         setHasToUpdate( true );
+        return true;
     }
 
     async function saveDataChanged( data: Object ) {

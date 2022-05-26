@@ -31,7 +31,7 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
                                         .oneOf( qObj.options, 'Opção não válida');
                         case 'textarea':
                             schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                        .max(290, 'A resposta deve ter no máximo 290 caracteres.')
+                                        .max(190, 'A resposta deve ter no máximo 190 caracteres.')
                                         .matches( validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
                         case 'input':
                             if( qObj.specific == 'price' ) {
@@ -51,7 +51,7 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
             else if( specificQuestions.Espaco[i]?.name[1] == ('q'+questionN) ) {
                 //console.log('espaco caso 1');
                 schemaQ = yup.string().optional()
-                            .max(290, 'A resposta deve ter no máximo 290 caracteres.')
+                            .max(190, 'A resposta deve ter no máximo 190 caracteres.')
                             .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
             }
         }
@@ -72,7 +72,7 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
                                     .oneOf( qObj.options, 'Opção não válida');
                     case 'textarea':
                         schemaQ = yup.string().required('A resposta dessa questão é obrigatória')
-                                    .max(290, 'A resposta deve ter no máximo 290 caracteres.')
+                                    .max(190, 'A resposta deve ter no máximo 190 caracteres.')
                                     .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
                     case 'input':
                         if( qObj.specific == 'price' ) {
@@ -96,7 +96,7 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
             else if( specificQuestions.Servico[spcCat][i].name[1] == ('q'+questionN) ) {
                 console.log('servico caso 1');
                 schemaQ = yup.string().optional()
-                            .max(290, 'A resposta deve ter no máximo 290 caracteres.')
+                            .max(190, 'A resposta deve ter no máximo 190 caracteres.')
                             .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
             }
         }

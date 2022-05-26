@@ -153,7 +153,7 @@ export default function RatingEnterprise() {
                     {/* OPINIONS */}
                     {
                         opinions.length > 0
-                        &&
+                        ?
                         <Flex
                             w={{base:'95%', lg:'70%'}}
                         >
@@ -385,7 +385,16 @@ export default function RatingEnterprise() {
                                 
                             </Flex>
                         </Flex>
-
+                        :
+                        <Flex
+                            h='50vh'
+                            justifyContent='center'
+                            alignItems='center'
+                        >
+                            <Text>
+                                Ainda não há avaliações disponíveis
+                            </Text>
+                        </Flex>
                     }
 
                 </Flex>

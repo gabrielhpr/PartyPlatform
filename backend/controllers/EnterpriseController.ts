@@ -2,6 +2,7 @@ import bcrypt = require("bcrypt");
 import jwt = require("jsonwebtoken");
 import { nextTick } from "process";
 import { getAllImages } from "../helpers/get-images-aws";
+import { BUCKET_NAME } from "../utils/bucketname";
 const createEnterpriseToken = require('../helpers/create-enterprise-token');
 const getToken = require('../helpers/get-token');
 const EnterpriseModel = require('../models/EnterpriseModel');
@@ -341,7 +342,7 @@ module.exports = class EnterpriseController {
         const enterpriseExists = await enterpriseModel.getEnterpriseByEmail( email );
 
         if( !enterpriseExists ) {
-            res.status(422).json({ message: "Não há empresa cadastrada com esse email" });
+            res.status(422).json({ message: "E-mail ou senha inválida" });
             return;
         }
 
@@ -349,7 +350,7 @@ module.exports = class EnterpriseController {
         const checkPassword = await bcrypt.compare(password, enterpriseExists.password);
 
         if( !checkPassword ) {
-            res.status(422).json({ message: "Senha inválida" });
+            res.status(422).json({ message: "E-mail ou senha inválida" });
             return; 
         }
 
@@ -381,7 +382,7 @@ module.exports = class EnterpriseController {
         }
 
         for(let i=0; i < ads.length; i++) {
-            ads[i].photos = await getAllImages( s3, 'festafy-images-bucket', ads[i].photos );
+            ads[i].photos = await getAllImages( s3, BUCKET_NAME, ads[i].photos );
         }
         
 
@@ -418,7 +419,7 @@ module.exports = class EnterpriseController {
         });
         ad = await enterpriseModel.getAd(id, partyType); 
         
-        ad.photos = await getAllImages( s3, 'festafy-images-bucket', ad.photos );
+        ad.photos = await getAllImages( s3, BUCKET_NAME, ad.photos );
 
         console.log('saiu do get Ad');
         console.log(ad);
@@ -441,7 +442,6 @@ module.exports = class EnterpriseController {
         // Get request body
         const { 
             serviceDescription, 
-            photos,
             photosRemoved,
             q1,
             q2,
@@ -496,7 +496,9 @@ module.exports = class EnterpriseController {
         } = req.body;
         
         let {photosNewOrder} = req.body;
+        
         photosNewOrder = photosNewOrder.split(',');
+        
         console.log('photosNewOrder');
         console.log( photosNewOrder );
         console.log( typeof(photosNewOrder) );
@@ -504,38 +506,7 @@ module.exports = class EnterpriseController {
         console.log('serviceDescription');
         console.log(serviceDescription);
         
-        //*---------- PHOTOS ---------*//
-        let allPhotos;
-
-        // New Photos
-        const newPhotos = req.files;
-        let newPhotosName: string[] = [];
-        newPhotos.map((photo: any) => {
-            newPhotosName.push( photo.key );
-        });
-
-        let index = 0;
-        allPhotos = photosNewOrder.map((photo: string) => {
-            if( photo == 'novaImagem' ) {
-                let rename = newPhotosName[index];
-                index = index + 1;
-                return rename;
-            }
-            else {
-                return photo;
-            }
-        });
-        console.log('allphotos');
-        console.log(allPhotos);
-
-        allPhotos = allPhotos.join(',');
-        console.log(allPhotos);
-
-        // Remove from db old PHOTOS
-        //
-        //
-
-        /*------------------------------------------*/
+        
 
         if(!req.headers.authorization) {
             return res.status(500).send({message: "Não possui token!"});
@@ -565,11 +536,61 @@ module.exports = class EnterpriseController {
         console.log(ad.serviceDescription);
         
         // Photos
-        ad.photos = allPhotos;
+        //*---------- PHOTOS ---------*//
+        let allPhotos;
 
-        console.log('photos - Nova ordem');
-        console.log(ad.photos);
+        // New Photos
+        const newPhotos = req.files;
+        let newPhotosName: string[] = [];
         
+        if( newPhotos.length > 0 ) {
+            newPhotos.map((photo: any) => {
+                newPhotosName.push( photo.key );
+            });
+        }
+
+        if( photosNewOrder.length > 3 ) {
+
+            let index = 0;
+            
+            // Photos from database
+            let photosFromDB = ad.photos;
+            photosFromDB = photosFromDB.split(',');
+    
+            console.log('photos new order length');
+            console.log(photosNewOrder);
+
+            allPhotos = photosNewOrder.map((photo: string) => {
+                if( photo == 'novaImagem' ) {
+                    let rename = newPhotosName[index];
+                    index = index + 1;
+                    return rename;
+                }
+                else {
+                    return photosFromDB[photosFromDB.length - parseInt(photo) - 1];
+                }
+            });
+            console.log('allphotos');
+            console.log(allPhotos);
+    
+            allPhotos = allPhotos.join(',');
+            console.log(allPhotos);
+
+            // Update photos
+            ad.photos = allPhotos;
+    
+            console.log('photos - Nova ordem');
+            console.log(ad.photos);
+            
+        }
+
+        // Remove from db old PHOTOS
+        //
+        //
+
+        
+        /*------------------------------------------*/
+
         
         // if( !answer1 ) {
         //     res.status(422).json({ message: "A resposta da pergunta 1 é obrigatória!" });
