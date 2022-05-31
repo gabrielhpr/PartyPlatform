@@ -6,8 +6,8 @@ import * as yup from 'yup';
 import { monetaryRegex, validTextRegex, invalidTextRegex, dateRegex, passwordStrongRegex } from "./regexCustom";
 
 function handleTestValidation(value:any, ctx: any, questionN: number) {
-    console.log('question number: ');
-    console.log( questionN );
+    //console.log('question number: ');
+    //console.log( questionN );
 
     let schemaQ = yup.string().optional();
 
@@ -15,7 +15,7 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
     if( ctx.parent.enterpriseCategory == 'Espaco' ) {
         for(let i=0; i < specificQuestions.Espaco.length; i++) {
             if( specificQuestions.Espaco[i].name[0] == ('q'+questionN) ) {
-                //console.log('espaco caso 0');
+                ////console.log('espaco caso 0');
                 let qObj = specificQuestions.Espaco[i];
 
                 if( (questionN >= 5 && questionN <=20) && ctx.parent.q3 == 'Não' ) {
@@ -63,7 +63,7 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
         for(let i=0; i < specificQuestions.Servico[spcCat].length; i++) {
             
             if( specificQuestions.Servico[spcCat][i].name[0] == ('q'+questionN) ) {
-                console.log('servico caso 0');
+                //console.log('servico caso 0');
                 let qObj = specificQuestions.Servico[spcCat][i];
                 
                 switch( qObj.type ) {
@@ -94,7 +94,7 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
             }
             // Observations case
             else if( specificQuestions.Servico[spcCat][i].name[1] == ('q'+questionN) ) {
-                console.log('servico caso 1');
+                //console.log('servico caso 1');
                 schemaQ = yup.string().optional()
                             .max(190, 'A resposta deve ter no máximo 190 caracteres.')
                             .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString:true});                        
@@ -102,19 +102,19 @@ function handleTestValidation(value:any, ctx: any, questionN: number) {
         }
     }
     else {
-        console.log('chegou no else');
+        //console.log('chegou no else');
         return false;
     }
 
     return schemaQ.isValid( value ).then( async (valid) => {
         if( valid ) {
-            console.log(questionN);
-            console.log('valor valido');
+            //console.log(questionN);
+            //console.log('valor valido');
             return true;
         }
         else {
-            console.log(questionN);
-            console.log('valor nao valido');
+            //console.log(questionN);
+            //console.log('valor nao valido');
             let errMes = await schemaQ.validate(value).catch((err) => {return err});
             return ctx.createError({
                 message: errMes,

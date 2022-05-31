@@ -7,8 +7,8 @@ module.exports = class RootModel {
     async selectServices(partyType: string, serviceCategory: string, serviceSpecificCategory: string, city: string, state: string, country: string, priceObj: {price: string, lowerPrice:string, upperPrice: string, priceColumn:string}, nOfPeopleObj: {nOfPeople: string, minPeople: string, maxPeople: string, minPeopleColumn: string, maxPeopleColumn: string}) {
         const { price, lowerPrice, upperPrice, priceColumn } = priceObj;
         const { nOfPeople, minPeople, maxPeople, minPeopleColumn, maxPeopleColumn } = nOfPeopleObj;
-        console.log('model - price');
-        console.log(price);
+        //console.log('model - price');
+        //console.log(price);
 
         let values:any = [];
 

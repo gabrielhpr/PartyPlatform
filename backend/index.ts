@@ -53,7 +53,7 @@ app.use("/user", UserRoutes);
 const RootRoutes = require("./routes/RootRoutes");
 app.use("", RootRoutes);
 
-console.log('Ouvindo na porta 5000');
+//console.log('Ouvindo na porta 5000');
 
 const PORT = process.env.PORT || 5000;
 app.listen( PORT );

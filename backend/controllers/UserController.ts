@@ -97,7 +97,7 @@ module.exports = class UserController {
     static async login(req: any, res: any) {
         const { email, password } = req.body;
 
-        console.log( req.body );
+        //console.log( req.body );
 
         if(!email) {
             res.status(422).json({ message: "O e-mail é obrigatório!"});
@@ -130,7 +130,7 @@ module.exports = class UserController {
    
     // Get User
     static async getUser(req: any, res: any) {
-        console.log('chegou getUser');
+        //console.log('chegou getUser');
         let userData;
         let id;
 
@@ -138,7 +138,7 @@ module.exports = class UserController {
             return res.status(500).send({message: "Não possui token!"});
         }
         
-        console.log('tem token');
+        //console.log('tem token');
         const token = getToken(req);
 
         jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
@@ -180,8 +180,8 @@ module.exports = class UserController {
         var newUserPhoto;
         if( req.files ) {
             newUserPhoto = req.files;
-            console.log('New User Photo Filename');
-            console.log(newUserPhoto.filename);
+            //console.log('New User Photo Filename');
+            //console.log(newUserPhoto.filename);
             
             photoName = newUserPhoto.filename;
         }
@@ -189,7 +189,7 @@ module.exports = class UserController {
         if(!req.headers.authorization) {
             return res.status(500).send({message: "Não possui token!"});
         }
-        console.log('tem token');
+        //console.log('tem token');
 
         // Token
         const token = getToken(req);
@@ -211,14 +211,14 @@ module.exports = class UserController {
             return;
         }
         userData.fullName = fullName;
-        console.log(userData.fullName);
+        //console.log(userData.fullName);
         
         // PHOTO
         if( photoName ) {
             userData.photo = photoName;
     
-            console.log('Photo name');
-            console.log(userData.photo);
+            //console.log('Photo name');
+            //console.log(userData.photo);
         }
 
         // EMAIL
@@ -227,8 +227,8 @@ module.exports = class UserController {
             return;
         }
         userData.email = email;
-        console.log('Email');
-        console.log(userData.email);
+        //console.log('Email');
+        //console.log(userData.email);
         
         // PHONE
         if( !phone ) {
@@ -236,8 +236,8 @@ module.exports = class UserController {
             return;
         }
         userData.phone = phone;
-        console.log('Telefone');
-        console.log(userData.phone);
+        //console.log('Telefone');
+        //console.log(userData.phone);
 
         // SENHA
         if( !password ) {
@@ -303,7 +303,7 @@ module.exports = class UserController {
         try {
             await userModel.updateUser( userData.id, userData );
             res.status(200).send('Atualizado com sucesso');
-            console.log('update com sucesso');
+            //console.log('update com sucesso');
         }
         catch (err) {
             res.status(500).json({message: err});
@@ -336,8 +336,7 @@ module.exports = class UserController {
     // Create user rating about the service
     static async rate(req: any, res: any) {
         
-        console.log('entrou no rate');
-
+        //console.log('entrou no rate');
         const {
             enterpriseId,
             partyType,
@@ -366,7 +365,7 @@ module.exports = class UserController {
             return res.status(500).send({message: "Não possui token!"});
         }
         
-        console.log('tem token');
+        //console.log('tem token');
         const token = getToken(req);
 
         let userId;
@@ -385,9 +384,9 @@ module.exports = class UserController {
 
         let ratingExists = await userModel.checkRatingExists(userId, enterpriseId, partyType, partyDate);
 
-        console.log('O valor de rating exists in controller é: ');
-        console.log(ratingExists);
-        console.log( typeof(ratingExists) );
+        //console.log('O valor de rating exists in controller é: ');
+        //console.log(ratingExists);
+        //console.log( typeof(ratingExists) );
 
         if( ratingExists.length != 0 ) {
             res.status(422).json({ message: "Já existe uma avaliação sua para esse prestador de serviço para o tipo de festa e data inserida!"});
@@ -420,8 +419,8 @@ module.exports = class UserController {
             await userModel.insertRating( ratingData );
             
             const { adId, ratingQuantity, ratingSum } = await userModel.getAdRating(enterpriseId, partyType);
-            console.log('getAdRating');
-            console.log( ratingQuantity, ratingSum );
+            //console.log('getAdRating');
+            //console.log( ratingQuantity, ratingSum );
             // Update Ad ratingQuantity and ratingSum
             await userModel.updateAdRating( adId, ratingQuantity + 1, ratingSum + ratingGeneral );
 
@@ -435,7 +434,7 @@ module.exports = class UserController {
     }
 
     static async sendEmail(req: any, res: any) {
-        console.log('Entrou - Controller - sendEmail');
+        //console.log('Entrou - Controller - sendEmail');
         const {
             enterpriseId,
             partyType,
@@ -451,7 +450,7 @@ module.exports = class UserController {
         }
         
         let userId;
-        console.log('tem token');
+        //console.log('tem token');
         const token = getToken(req);
 
         jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
@@ -465,8 +464,8 @@ module.exports = class UserController {
 
         const { enterpriseEmail } = await userModel.getEntepriseEmail( enterpriseId );
 
-        console.log( 'enterpriseEmail' );
-        console.log( enterpriseEmail );
+        //console.log( 'enterpriseEmail' );
+        //console.log( enterpriseEmail );
 
         const emailData = {
             'type': 'budget',
@@ -509,7 +508,7 @@ module.exports = class UserController {
                     to: [ {email: enterpriseEmail, name: 'Fornecedor', type:'to'} ]
                 } 
             });
-            console.log(response);
+            //console.log(response);
         };
 
         run();

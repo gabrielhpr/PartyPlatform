@@ -38,7 +38,7 @@ module.exports = class UserModel {
     async insertUser( dataObject: userDataObjProps ) {
         const { email } = dataObject;
 
-        console.log('insertUser');
+        //console.log('insertUser');
         let objLength = Object.keys(dataObject).length;
 
         const query_insert = `INSERT INTO User 
@@ -107,7 +107,7 @@ module.exports = class UserModel {
     }
 
     async insertRating( ratingData: ratingObjProps ) {
-        console.log('insert rating');
+        //console.log('insert rating');
         let objLength = Object.keys(ratingData).length;
 
         const query_insert = `INSERT INTO Rating 
@@ -121,7 +121,7 @@ module.exports = class UserModel {
     }
 
     async checkRatingExists( userId: number, enterpriseId: number, partyType: string, partyDate: string) {
-        console.log('entrou no checkRatingExists');
+        //console.log('entrou no checkRatingExists');
         
         const query_select = `
             SELECT  Ent.id,
@@ -144,7 +144,7 @@ module.exports = class UserModel {
     }
 
     async insertEmail( emailData: any ) {
-        console.log('insert email data');
+        //console.log('insert email data');
         let objLength = Object.keys(emailData).length;
 
         const query_insert = `INSERT INTO BudgetEmails 
@@ -158,7 +158,7 @@ module.exports = class UserModel {
     }
 
     async getAdRating( enterpriseId: number, partyType: string ) {
-        console.log('entrou model getAdRating');
+        //console.log('entrou model getAdRating');
         const query_select = `
                              SELECT 
                                     id as adId,
@@ -175,11 +175,11 @@ module.exports = class UserModel {
     }
 
     async updateAdRating( adId: number, ratingQuantity: number, ratingSum: number ) {
-        console.log('updateAdRating model');
-        console.log(adId);
+        //console.log('updateAdRating model');
+        //console.log(adId);
         
-        console.log(ratingQuantity);
-        console.log(ratingSum);
+        //console.log(ratingQuantity);
+        //console.log(ratingSum);
                 
         const query_update = `
             UPDATE Ads

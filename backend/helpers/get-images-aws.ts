@@ -2,7 +2,7 @@
 // Receive a string containing pictures name
 // Return an array containing pictures source
 export async function getAllImages( s3obj: any, bucketName: string, imagesString: string ) {
-    console.log( imagesString );
+    //console.log( imagesString );
     let imagesNameArr = imagesString.split(',');
     
     let images = [];

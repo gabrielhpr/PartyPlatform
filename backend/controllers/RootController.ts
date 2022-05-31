@@ -25,11 +25,11 @@ module.exports = class RootController {
             apiVersion: 'latest',
         });
         
-        console.log('getServices');
-        console.log( req.query);
+        //console.log('getServices');
+        //console.log( req.query);
         
         const { partyType, serviceCategory, serviceSpecificCategory, city, state, country, price, buffetIncluded, nOfPeople } = req.query;
-        console.log( partyType, serviceCategory, serviceSpecificCategory, city, state, country, price, buffetIncluded, nOfPeople );
+        //console.log( partyType, serviceCategory, serviceSpecificCategory, city, state, country, price, buffetIncluded, nOfPeople );
 
         if( !serviceCategory ) {
             res.status(422).json({ message: "A categoria do serviço é obrigatória!"});
@@ -37,8 +37,8 @@ module.exports = class RootController {
         }
 
         // Number of People
-        console.log('Number of people: ');
-        console.log( nOfPeople );
+        //console.log('Number of people: ');
+        //console.log( nOfPeople );
         
         let minPeopleColumn, maxPeopleColumn;
         let minPeople, maxPeople;
@@ -72,9 +72,9 @@ module.exports = class RootController {
         }
         
         // Price Filter
-        console.log( 'price: ' );
-        console.log( price );
-        console.log(typeof(price));
+        //console.log( 'price: ' );
+        //console.log( price );
+        //console.log(typeof(price));
         
 
         let lowerPrice, upperPrice, priceColumn;
@@ -104,7 +104,7 @@ module.exports = class RootController {
             services[i].photos = await getAllImages( s3, BUCKET_NAME, services[i].photos );
         }
 
-        console.log( services );
+        //console.log( services );
         res.status(200).json({ services });
     }
 
@@ -115,11 +115,11 @@ module.exports = class RootController {
             apiVersion: 'latest',
         });
 
-        console.log( req.query);
+        //console.log( req.query);
         
         const { id, partyType } = req.query;
-        console.log( id );
-        console.log( partyType );
+        //console.log( id );
+        //console.log( partyType );
         
 
         let service = await rootModel.selectServiceById(parseInt(id), partyType);
@@ -127,7 +127,7 @@ module.exports = class RootController {
 
         const opinions = await rootModel.selectOpinionsByEnterpriseId(parseInt(id), partyType);
 
-        console.log( service );
+        //console.log( service );
         res.status(200).json({ service: service, opinions: opinions });
     }
 
@@ -142,8 +142,8 @@ module.exports = class RootController {
 
         // Check if email exists
         let enterprise = await enterpriseModel.getEnterpriseByEmail( email );
-        console.log('enterpriseId é: ');
-        console.log( enterprise );
+        //console.log('enterpriseId é: ');
+        //console.log( enterprise );
 
         if( enterprise.length == 0 ) {
             res.status(422).json({ message: "E-mail não cadastrado!"});
@@ -152,8 +152,8 @@ module.exports = class RootController {
 
         let randomToken = require('random-token').create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
         let token = randomToken(64); 
-        console.log('o token é');
-        console.log( token );
+        //console.log('o token é');
+        //console.log( token );
 
         enterprise.tokenResetPassword = token;
         enterprise.tokenCreatedAt = Date.now().toString();
@@ -181,7 +181,7 @@ module.exports = class RootController {
                     to: [ {email: enterprise.email, name: `${enterprise.enterpriseName}`, type:'to'} ]
                 } 
             });
-            console.log(response);
+            //console.log(response);
         };
 
         run();
@@ -198,7 +198,7 @@ module.exports = class RootController {
         }
 
         let enterprise = await enterpriseModel.getEnterpriseByToken( token );
-        console.log( enterprise );
+        //console.log( enterprise );
 
         if( enterprise.length == 0 ) {
             res.status(422).json({ message: "Token não encontrado!"});
@@ -222,25 +222,25 @@ module.exports = class RootController {
 
     static async resetPasswordEnterprise(req: any, res: any) {
         const { password, passwordConfirmation, token } = req.body;
-        console.log( token );
+        //console.log( token );
 
         let result = await enterpriseModel.getEnterpriseByToken( token );
-        console.log('id');
+        //console.log('id');
         if( result.length == 0 ) {
             res.status(422).json({ message: "Token inválido ou expirado" });
             return;
         }
-        console.log(result.id);
+        //console.log(result.id);
         let enterprise = await enterpriseModel.getEnterpriseById( result.id );
 
-        console.log( enterprise );
+        //console.log( enterprise );
         // SENHA
         if( !password ) {
             res.status(422).json({ message: "A senha é obrigatória!" });
             return;
         }
         // Tamanho da senha
-        if( password.length < 6 ) {
+        if( password.length < 8 ) {
             res.status(422).json({ message: "A senha deve ter no mínimo 6 caracteres!" });
             return;
         }
@@ -259,6 +259,7 @@ module.exports = class RootController {
         enterprise.tokenCreatedAt = '';
 
         await enterpriseModel.updateEnterprise( enterprise );
+        res.status(200).json({message: "Senha alterada com sucesso!"});
     }
 
     // USER
@@ -271,20 +272,20 @@ module.exports = class RootController {
         }
         // Check if email exists
         let user = await userModel.getUserByEmail( email );
-        console.log('userId é: ');
-        console.log( user );
-        //console.log( user.id );
+        //console.log('userId é: ');
+        //console.log( user );
+        ////console.log( user.id );
 
         if( user.length == 0 ) {
-            console.log('user undefined');
+            //console.log('user undefined');
             res.status(422).json({ message: "E-mail não cadastrado!"});
             return;
         }
 
         let randomToken = require('random-token').create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
         let token = randomToken(64); 
-        console.log('o token é');
-        console.log( token );
+        //console.log('o token é');
+        //console.log( token );
 
         user.tokenResetPassword = token;
         user.tokenCreatedAt = Date.now().toString();
@@ -312,7 +313,7 @@ module.exports = class RootController {
                     to: [ {email: user.email, name: `${user.fullName}`, type:'to'} ]
                 } 
             });
-            console.log(response);
+            //console.log(response);
         };
 
         run();
@@ -329,7 +330,7 @@ module.exports = class RootController {
         }
 
         let user = await userModel.getUserByToken( token );
-        console.log( user );
+        //console.log( user );
 
         if( user.length == 0 ) {
             res.status(422).json({ message: "Token não encontrado!"});
@@ -353,10 +354,10 @@ module.exports = class RootController {
 
     static async resetPasswordUser(req: any, res: any) {
         const { password, passwordConfirmation, token } = req.body;
-        console.log( token );
+        //console.log( token );
 
         let result = await userModel.getUserByToken( token );
-        console.log('id');
+        //console.log('id');
 
         if( result.length == 0 ) {
             res.status(422).json({ message: "Token expirado ou inválido!" });
@@ -365,7 +366,7 @@ module.exports = class RootController {
 
         let user = await userModel.getUserById( result.id );
 
-        console.log( user );
+        //console.log( user );
         // SENHA
         if( !password ) {
             res.status(422).json({ message: "A senha é obrigatória!" });
@@ -392,6 +393,6 @@ module.exports = class RootController {
 
         await userModel.updateUser( user.id, user );
 
-        return res.status(200).json({message: "Senha alterada com sucesso!"});
+        res.status(200).json({message: "Senha alterada com sucesso!"});
     }
 }

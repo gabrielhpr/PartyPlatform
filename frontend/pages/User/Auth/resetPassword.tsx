@@ -75,7 +75,9 @@ export default function ResetPasswordUser() {
                 .then((res) => {
                     console.log('then do reset password user');
                     console.log( res );
-                    routerNext.push('/User/userAccess');                
+                    setTimeout(() => {
+                        routerNext.push('/User/userAccess');                
+                    }, 2000);
                 });
             }
             catch(err) {

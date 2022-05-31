@@ -220,8 +220,8 @@ module.exports = class EnterpriseController {
         // Photos
         const photos = req.files;
         
-        console.log('photos');
-        console.log( photos );
+        //console.log('photos');
+        //console.log( photos );
 
         let photosName: string[] = [];
         photos.map((photo: any) => {
@@ -326,7 +326,7 @@ module.exports = class EnterpriseController {
     static async login(req: any, res: any) {
         const { email, password } = req.body;
 
-        console.log( req.body );
+        //console.log( req.body );
 
         if(!email) {
             res.status(422).json({ message: "O e-mail é obrigatório!"});
@@ -365,12 +365,12 @@ module.exports = class EnterpriseController {
             apiVersion: 'latest',
         });
 
-        console.log('chegou getAds');
+        //console.log('chegou getAds');
         let ads;
         let id;
 
         if(req.headers.authorization) {
-            console.log('tem token');
+            //console.log('tem token');
             const token = getToken(req);
             jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
                 if(err) {
@@ -397,19 +397,19 @@ module.exports = class EnterpriseController {
             apiVersion: 'latest',
         });
 
-        console.log('chegou getSpecific Ad');
+        //console.log('chegou getSpecific Ad');
         let ad;
         let id;
         const partyType = req.params.partyType;
         
-        console.log('req.query: ');
-        console.log( req.params );
+        //console.log('req.query: ');
+        //console.log( req.params );
 
         if(!req.headers.authorization) {
             return res.status(500).send({message: "Não possui token!"});
         }
 
-        console.log('tem token');
+        //console.log('tem token');
         const token = getToken(req);
         jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
             if(err) {
@@ -421,8 +421,8 @@ module.exports = class EnterpriseController {
         
         ad.photos = await getAllImages( s3, BUCKET_NAME, ad.photos );
 
-        console.log('saiu do get Ad');
-        console.log(ad);
+        //console.log('saiu do get Ad');
+        //console.log(ad);
         
                                 
         res.status(200).json({ ad });
@@ -433,8 +433,8 @@ module.exports = class EnterpriseController {
 
         // Get request params
         const partyType = req.params.partyType;
-        console.log('partyType: ');
-        console.log(partyType);
+        //console.log('partyType: ');
+        //console.log(partyType);
         
         var id;
         var ad;
@@ -499,12 +499,12 @@ module.exports = class EnterpriseController {
         
         photosNewOrder = photosNewOrder.split(',');
         
-        console.log('photosNewOrder');
-        console.log( photosNewOrder );
-        console.log( typeof(photosNewOrder) );
+        //console.log('photosNewOrder');
+        //console.log( photosNewOrder );
+        //console.log( typeof(photosNewOrder) );
 
-        console.log('serviceDescription');
-        console.log(serviceDescription);
+        //console.log('serviceDescription');
+        //console.log(serviceDescription);
         
         
 
@@ -512,7 +512,7 @@ module.exports = class EnterpriseController {
             return res.status(500).send({message: "Não possui token!"});
         }
 
-        console.log('tem token');
+        //console.log('tem token');
 
         // Token
         const token = getToken(req);
@@ -533,7 +533,7 @@ module.exports = class EnterpriseController {
             return;
         }
         ad.serviceDescription = serviceDescription;
-        console.log(ad.serviceDescription);
+        //console.log(ad.serviceDescription);
         
         // Photos
         //*---------- PHOTOS ---------*//
@@ -557,8 +557,8 @@ module.exports = class EnterpriseController {
             let photosFromDB = ad.photos;
             photosFromDB = photosFromDB.split(',');
     
-            console.log('photos new order length');
-            console.log(photosNewOrder);
+            //console.log('photos new order length');
+            //console.log(photosNewOrder);
 
             allPhotos = photosNewOrder.map((photo: string) => {
                 if( photo == 'novaImagem' ) {
@@ -570,17 +570,17 @@ module.exports = class EnterpriseController {
                     return photosFromDB[photosFromDB.length - parseInt(photo) - 1];
                 }
             });
-            console.log('allphotos');
-            console.log(allPhotos);
+            //console.log('allphotos');
+            //console.log(allPhotos);
     
             allPhotos = allPhotos.join(',');
-            console.log(allPhotos);
+            //console.log(allPhotos);
 
             // Update photos
             ad.photos = allPhotos;
     
-            console.log('photos - Nova ordem');
-            console.log(ad.photos);
+            //console.log('photos - Nova ordem');
+            //console.log(ad.photos);
             
         }
 
@@ -650,7 +650,7 @@ module.exports = class EnterpriseController {
         try {
             await enterpriseModel.updateAd(ad.id, ad);
             res.status(200).send('Atualizado com sucesso');
-            console.log('update com sucesso');
+            //console.log('update com sucesso');
         }
         catch (err) {
             res.status(500).json({message: err});
@@ -810,7 +810,7 @@ module.exports = class EnterpriseController {
 
     // Get Enterprise
     static async getEnterprise(req: any, res: any) {
-        console.log('chegou getEnterprise');
+        //console.log('chegou getEnterprise');
         let enterpriseData;
         let id;
 
@@ -818,7 +818,7 @@ module.exports = class EnterpriseController {
             return res.status(500).send({message: "Não possui token!"});
         }
         
-        console.log('tem token');
+        //console.log('tem token');
         const token = getToken(req);
 
         jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
@@ -835,7 +835,7 @@ module.exports = class EnterpriseController {
     }
 
     static async getOpinions(req: any, res: any) {
-        console.log('chegou getOpinions');
+        //console.log('chegou getOpinions');
         let opinions;
         let id;
         let partyType = req.query.partyType;
@@ -844,7 +844,7 @@ module.exports = class EnterpriseController {
             return res.status(500).send({message: "Não possui token!"});
         }
         
-        console.log('tem token');
+        //console.log('tem token');
         const token = getToken(req);
 
         jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
@@ -860,7 +860,7 @@ module.exports = class EnterpriseController {
     }
 
     static async answerRating(req: any, res: any) {
-        console.log('entrou no answerRating');
+        //console.log('entrou no answerRating');
 
         const {
             ratingId,
@@ -874,7 +874,7 @@ module.exports = class EnterpriseController {
             return res.status(500).send({message: "Não possui token!"});
         }
         
-        console.log('tem token');
+        //console.log('tem token');
         const token = getToken(req);
 
         let enterpriseIdByToken;
@@ -939,8 +939,8 @@ module.exports = class EnterpriseController {
         } = req.body;
         
         
-        console.log('entrou no edit enterprise');
-        console.log(location);
+        //console.log('entrou no edit enterprise');
+        //console.log(location);
         // New Enterprise Photo
         // var photoName;
 
@@ -958,7 +958,7 @@ module.exports = class EnterpriseController {
             return res.status(500).send({message: "Não possui token!"});
         }
 
-        console.log('tem token');
+        //console.log('tem token');
 
         // Token
         const token = getToken(req);
@@ -981,7 +981,7 @@ module.exports = class EnterpriseController {
             return;
         }
         enterpriseData.fullName = fullName;
-        console.log(enterpriseData.fullName);
+        //console.log(enterpriseData.fullName);
         
         // PHOTO
         // if( photoName ) {
@@ -1008,8 +1008,8 @@ module.exports = class EnterpriseController {
                 return;
             }
             enterpriseData.email = email;
-            console.log('Email');
-            console.log(enterpriseData.email);
+            //console.log('Email');
+            //console.log(enterpriseData.email);
         }
         
         // PHONE
@@ -1018,13 +1018,13 @@ module.exports = class EnterpriseController {
             return;
         }
         enterpriseData.phone = phone;
-        console.log('Telefone');
-        console.log(enterpriseData.phone);
+        //console.log('Telefone');
+        //console.log(enterpriseData.phone);
         
         // WHATSAPP
         enterpriseData.whatsapp = whatsapp;
-        console.log('Whatsapp');
-        console.log(enterpriseData.whatsapp);
+        //console.log('Whatsapp');
+        //console.log(enterpriseData.whatsapp);
 
         // SENHA
         if( password != '' ) {
@@ -1108,7 +1108,7 @@ module.exports = class EnterpriseController {
         try {
             await enterpriseModel.updateEnterprise( enterpriseData.id, enterpriseData );
             res.status(200).send('Atualizado com sucesso');
-            console.log('update com sucesso');
+            //console.log('update com sucesso');
         }
         catch (err) {
             res.status(500).json({message: err});
@@ -1142,8 +1142,8 @@ module.exports = class EnterpriseController {
     static async getGoogleAnalyticsData(req: any, res: any) {
         let id:number;
         const partyType = req.query.partyType;
-        console.log('getGoogleanalyticsdata');
-        console.log( partyType );
+        //console.log('getGoogleanalyticsdata');
+        //console.log( partyType );
 
         if(req.headers.authorization) {
             const token = getToken(req);
@@ -1154,8 +1154,8 @@ module.exports = class EnterpriseController {
                 id = decoded.id;
             });
         }
-        console.log('o id é: ');
-        console.log( id );
+        //console.log('o id é: ');
+        //console.log( id );
 
         // Before running the sample:
         // - Enable the API at:
@@ -1383,7 +1383,7 @@ module.exports = class EnterpriseController {
                     ], 
                 },
             });
-            console.log(result);
+            //console.log(result);
             res.status(200).json({ result });
 
             // Example response
@@ -1394,8 +1394,8 @@ module.exports = class EnterpriseController {
         }
         
         await main().catch(e => {
-            console.log('error');
-            console.error(e);
+            //console.log('error');
+            //console.error(e);
             throw e;
         });
 
@@ -1416,18 +1416,18 @@ module.exports = class EnterpriseController {
                 id = decoded.id;
             });
         }
-        console.log('o id é: ');
-        console.log( id );
+        //console.log('o id é: ');
+        //console.log( id );
 
         // Get the number of orders (emails) received in the last 12 months        
         let nEmailsOrders = await enterpriseModel.selectNEmailsOrders( id );
-        console.log('Vamos exibir a quantidade de pedidos de emails nos ultimos 12 meses - Controller');
-        console.log( nEmailsOrders.quantity );
+        //console.log('Vamos exibir a quantidade de pedidos de emails nos ultimos 12 meses - Controller');
+        //console.log( nEmailsOrders.quantity );
 
         // Get the number of reviews received in the last 12 months
         let nReviews = await enterpriseModel.selectNReviews( id );
-        console.log('Vamos exibir a quantidade de reviews dos ultimos 12 meses - Controller');
-        console.log( nReviews );
+        //console.log('Vamos exibir a quantidade de reviews dos ultimos 12 meses - Controller');
+        //console.log( nReviews );
 
         res.status(200).json({ nEmailsOrders: nEmailsOrders.quantity, nReviews: nReviews.quantity });
     }

@@ -43,7 +43,7 @@ export default function ResetPasswordEnterprise() {
             .validateAt( el, enterprisePassword)
             .catch((err) => {
                 setFormErrorsEnterprisePassword((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -74,14 +74,16 @@ export default function ResetPasswordEnterprise() {
                 }
                 )
                 .then((res) => {
-                    routerNext.push('/Enterprise/enterpriseAccess');                
+                    setTimeout(() => {
+                        routerNext.push('/Enterprise/enterpriseAccess');                
+                    }, 2000);
                 });
             }
             catch(err) {
                 // tratar o erro
                 msgText = err.response.data.message;
                 msgType = "error";
-                console.log(err);
+                //console.log(err);
             }
             setFlashMessage( msgText, msgType );
         }
@@ -95,7 +97,7 @@ export default function ResetPasswordEnterprise() {
         }
 
         let { token } = routerNext.query;
-        console.log( token );
+        //console.log( token );
 
         if( token == undefined ) {
             return;
@@ -107,13 +109,13 @@ export default function ResetPasswordEnterprise() {
             }
         })
         .then((response) => {
-            console.log('response from server');
-            console.log( response.status );
+            //console.log('response from server');
+            //console.log( response.status );
             setValidToken( true );
         })
         .catch((err) => {
-            console.log('deu ruim');
-            console.log( err );
+            //console.log('deu ruim');
+            //console.log( err );
         }); 
         
     }, [routerNext.query]);
