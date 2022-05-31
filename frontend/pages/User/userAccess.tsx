@@ -25,8 +25,8 @@ export default function userAccess() {
     
     async function handleSubmit( event: any ) {
         event.preventDefault();
-        console.log('entrou no submit');
-        console.log( userAccessData );
+        //console.log('entrou no submit');
+        //console.log( userAccessData );
 
         await loginUser( userAccessData );
     }
@@ -45,7 +45,7 @@ export default function userAccess() {
             });
         }   
         catch(err) {
-            console.log( err );
+            //console.log( err );
             msgText = err.response.data.message;
             msgType = "error";
         }

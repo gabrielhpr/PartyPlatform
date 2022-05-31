@@ -44,10 +44,14 @@ export default function enterpriseAccess() {
         try {
             const data = await api.post("/sendEmailResetPasswordEnterprise", {email: emailResetPassword}).then((response) => {
                 return response.data;
+            })
+            .then((res) => {
+                modalResetPassword.onClose();
+                setEmailResetPassword('');
             });
         }   
         catch(err) {
-            console.log( err );
+            //console.log( err );
             msgText = err.response.data.message;
             msgType = "error";
         }
@@ -56,8 +60,8 @@ export default function enterpriseAccess() {
     
     function handleSubmit( event: any ) {
         event.preventDefault();
-        console.log('entrou no submit');
-        console.log( enterpriseAccessData );
+        //console.log('entrou no submit');
+        //console.log( enterpriseAccessData );
 
         loginEnterprise( enterpriseAccessData );
     }
