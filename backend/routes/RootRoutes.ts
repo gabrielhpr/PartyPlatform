@@ -16,7 +16,9 @@ router.patch("/resetPasswordEnterprise", RootController.resetPasswordEnterprise)
 router.get("/checkResetPasswordValidityUser", RootController.checkResetPasswordValidityUser);
 router.post("/sendEmailResetPasswordUser", RootController.sendEmailResetPasswordUser);
 router.patch("/resetPasswordUser", RootController.resetPasswordUser);
-
+router.get("/", function(req: any, res: any) {
+    res.status(200).json({ message: "Success" });
+} );
 //partyType='.+'&service='.+'&location='.+'
 //router.get("/services", EnterpriseController.services);
 //router.post("/login", UserController.login);

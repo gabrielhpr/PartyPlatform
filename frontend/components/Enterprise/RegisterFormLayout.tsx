@@ -261,13 +261,13 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
                                 _hover={{textDecor: 'none'}}
                             >
                                 <Button 
-                                    bg={style=='yellow' ? 'brand.yellow' : 'brand.dark_blue'}
-                                    color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
+                                    bg={style=='yellow' ? 'brand.red' : 'brand.blue'}
+                                    color={style=='yellow' ? 'brand.white' : 'brand.white'}
                                     py="6"
                                     px="6"
                                     fontSize={20}
                                     onClick={handleNextStep}
-                                    _hover={style=='yellow' ? {bg:'brand.yellow_50'} : {bg:'brand.white_40'}}
+                                    _hover={style=='yellow' ? {bg:'brand.red'} : {bg:'brand.blue'}}
                                 >
                                     {
                                         lastStep 

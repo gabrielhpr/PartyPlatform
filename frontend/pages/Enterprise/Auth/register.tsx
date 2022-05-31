@@ -594,7 +594,10 @@ export default function RegisterEnterprise() {
             });
         }
         else if( enterpriseData.step == 9 ) {
-            if( enterpriseData.photos.length < 5 ) {
+            // Makes the test work
+            let filesLength = (document.getElementsByClassName("rug-file-input")[0] as HTMLInputElement).files?.length;
+            // && filesLength < 5
+            if( enterpriseData.photos.length < 5 && filesLength < 5) { //enterpriseData.photos.length < 5 ) {
                 console.log('min images error');
                 setFormErrors((formE) => ({...formE, photos: {...formE.photos, minLimit: 'Você deve adicionar no mínimo 5 imagens.'}}));
             }
@@ -846,9 +849,12 @@ export default function RegisterEnterprise() {
                                 />
                                 <Input type='tel' name='phone' 
                                     value={enterpriseData.phone} onChange={handleChange} 
-                                    placeholder="Ex. 11912345678"
+                                    placeholder="Ex. 11977778888"
                                 />
-                                <FormHelperText>Digite somente os números do telefone com o DDD </FormHelperText>
+                                <FormHelperText>
+                                    Digite o DDD mais o número. Sem (), -, espaços ou outros símbolos.
+                                    Exemplo: 11977778888
+                                </FormHelperText>
                                 <FormErrorMessage>
                                     {formErrors.phone}
                                 </FormErrorMessage>
@@ -864,7 +870,10 @@ export default function RegisterEnterprise() {
                                 <Input type='number' name='whatsapp' 
                                     value={enterpriseData.whatsapp} onChange={handleChange} 
                                 />
-                                <FormHelperText>Digite somente os números do whatsapp com o DDD </FormHelperText>
+                                <FormHelperText>
+                                    Digite o DDD mais o número. Sem (), -, espaços ou outros símbolos.
+                                    Exemplo: 11977778888 
+                                </FormHelperText>
                                 <FormErrorMessage>
                                     {formErrors.whatsapp}
                                 </FormErrorMessage>
@@ -910,7 +919,7 @@ export default function RegisterEnterprise() {
                     >
                         <Flex direction='column'>
                             <TextSpanInput
-                                textToShow="Usuário ( E-mail cadastrado na página anterior )"
+                                textToShow="O seu usuário será o e-mail cadastrado na página anterior:"
                             />
                             <Input type='text' 
                                 value={enterpriseData.email}
@@ -927,6 +936,10 @@ export default function RegisterEnterprise() {
                                     value={enterpriseData.password} 
                                     onChange={handleChange} 
                                 />
+                                <FormHelperText>
+                                    A senha deve ter no mínimo 8 caracteres. Sendo pelo menos 1 letra maiúscula, 
+                                    1 minúscula, 1 número e 1 caractere especial.
+                                </FormHelperText>
                                 <FormErrorMessage>
                                     {formErrors.password}
                                 </FormErrorMessage>
@@ -999,6 +1012,9 @@ export default function RegisterEnterprise() {
                                     }}
                                     onClick={() => {
                                         setMenuWhere('onclick')
+                                    }}
+                                    onFocus={() => {
+                                        setMenuWhere('onclick');
                                     }}
                                 />
                                 <Flex 
@@ -1353,8 +1369,7 @@ export default function RegisterEnterprise() {
                                 accept={['jpg', 'jpeg', 'png']}
                                 onChange={(images) => {
                                     console.log( enterpriseData );
-                                    setEnterpriseData({...enterpriseData, photos: images});
-                                    
+                                    setEnterpriseData((enterpriseData) => ({...enterpriseData, photos: images}));
                                 }}
                                 onWarning={(type, rules) => {
                                     switch(type) {

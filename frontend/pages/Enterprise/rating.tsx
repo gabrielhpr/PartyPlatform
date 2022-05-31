@@ -107,6 +107,7 @@ export default function RatingEnterprise() {
         console.log('Entrou handleSubmitRatingAnswer');
         await enterpriseAnswerRate( answerOpinion );
         console.log('Saiu handleSubmitRatingAnswer');
+        window.location.reload();
     }
 
     if( authenticatedEnterprise ) {

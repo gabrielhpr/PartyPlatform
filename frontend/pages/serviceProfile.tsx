@@ -796,7 +796,9 @@ export default function ServiceProfilePage() {
                                     Descrição
                                 </Text>
 
-                                <Text as='p'>
+                                <Text as='p'
+                                    whiteSpace='pre-wrap'
+                                >
                                     {service.serviceDescription}
                                 </Text>
                             </Flex>                            

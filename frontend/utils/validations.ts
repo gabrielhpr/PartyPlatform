@@ -611,7 +611,7 @@ export const askBudgetSchema = yup.object().shape({
         .max(5, "O número de pessoas deve ter no máximo 5 dígitos")
         .matches(/^[1-9]+[0-9]*$/, {message: 'Deve ser um número inteiro e positivo, sem vírgulas ou pontos', excludeEmptyString: true}),
     messageContent: yup.string().required("O conteúdo da mensagem é obrigatório")
-        .max(20, "A mensagem deve ter no máximo 500 caracteres")
+        .max(500, "A mensagem deve ter no máximo 500 caracteres")
         .matches(validTextRegex, {message: invalidTextRegex, excludeEmptyString: true})    
 });
 

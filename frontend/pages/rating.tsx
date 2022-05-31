@@ -19,6 +19,8 @@ import { FlashMessageComponent } from "../components/FlashMessageComponent";
 import { userRegisterDataFormErrorNullState, userRegisterDataFormErrorProps, userRegisterDataNullState, userRegisterDataProps } from "../utils/userInterface";
 import { userRegisterFormSchema, userRegisterPasswordSchema, RatingFormSchema } from "../utils/validations";
 import useFlashMessage from "../hooks/useFlashMessage";
+import Image from 'next/image'
+
 
 interface ratingDataInterf {
     step: number;
@@ -83,7 +85,7 @@ interface serviceDataInterf {
     enterpriseCategory: string;
     enterpriseSpecificCategory: string;
 
-    photos: string;
+    photos: string[];
 
     q1: string;
     q2: string;
@@ -166,7 +168,7 @@ const serviceNullState = {
     enterpriseCategory: '',
     enterpriseSpecificCategory: '',
 
-    photos: '',
+    photos: [],
 
     q1: '',
     q2: '',
@@ -306,7 +308,7 @@ export default function Rating() {
         .then((response) => {
             console.log('Service');
             console.log(response.data.service[0]);
-            setService(response.data.service[0]);
+            setService(response.data.service);
         })
     }, [routerNext.query]);
 
@@ -546,27 +548,35 @@ export default function Rating() {
                         justifyContent='flex-start'
                         alignItems='center'
                         overflowY={{base:'scroll',lg:'scroll'}}
-                        px='3'
+                        px='5'
                     >
                         
                         {/* Infos do prestador de serviço */}
                         {
                             service?.serviceDescription != ''
-                            ?
+                            &&
                             /* Enterprise Details */
                             <Flex
                                 w='100%'
                                 mb='12'
+                                h={{base:'30%', lg:'20%'}}
                                 boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                 borderRadius={8}
                             >
 
-                                <Flex w='45%'>
-                                    <Img 
-                                        borderLeftRadius={8} 
+                                <Flex w='45%'
+                                    borderLeftRadius={8} 
+                                    position='relative'
+                                    overflow='hidden'
+                            
+                                >
+                                    <Image
+                                        unoptimized
+                                        layout='fill'
                                         objectFit='cover'
-                                        src={`http://localhost:5000/images/enterprise/${service.photos.split(',')[0]}`}
+                                        src={service?.photos[0]}
                                     />
+                                    
                                 </Flex>
                                 
                                 <Flex direction='column' alignItems='center'
@@ -586,9 +596,7 @@ export default function Rating() {
                                 </Flex>
 
                             </Flex>
-                            :
-                            <>
-                            </>
+                            
                         }
 
                         {

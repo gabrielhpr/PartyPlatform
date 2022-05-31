@@ -87,8 +87,37 @@ describe('Register Enterprise Process', () => {
         // Próximo passo
         await user.click( screen.getByText('Avançar') );
 
+        let input18 = (await screen.findByText('Prestador de serviço'));//.parentElement.children[1];
+        await user.click(input18);
+
+        // Próximo passo
+        await user.click( screen.getByText('Avançar') );
+
+        let input19 = (await screen.findByText('Bolos'));//.parentElement.children[1];
+        await user.click(input19);
+
+        await user.click( screen.getByText('Avançar') );
+
+        const files = [
+            new File(['foto1'], '../../Images/foto1.jpg', {type: 'image/jpg'}),
+            new File(['foto2'], '../../Images/foto2.jpg', {type: 'image/jpg'}),
+            new File(['foto3'], '../../Images/foto3.jpg', {type: 'image/jpg'}),
+            new File(['foto4'], '../../Images/foto4.jpg', {type: 'image/jpg'}),
+            new File(['foto5'], '../../Images/foto5.jpg', {type: 'image/jpg'}),
+        ];
+        let input20 = ( (await screen.findByText('Upload de Fotos')).parentElement.parentElement.parentElement.lastElementChild as HTMLInputElement);
+
+        await user.upload(input20, files);
+
+        await user.click( screen.getByText('Avançar') );
+
+        let input21 = (await screen.findByText('Bolos'));//.parentElement.children[1];
+        await user.click(input21);
+
         await waitFor(() => {
-            expect( screen.getByText('Prestador de serviço') ).toBeInTheDocument();
+            //expect(input20.files[0]).toBe(files[0]);
+
+            expect( screen.getByText('Que tipos de bolos oferece ?') ).toBeInTheDocument();
         })
     })
 })
