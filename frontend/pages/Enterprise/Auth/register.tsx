@@ -383,7 +383,7 @@ export default function RegisterEnterprise() {
 
     const onImageChange = (imageList: any, addUpdateIndex: any) => {
         // data for submit
-        //console.log(imageList, addUpdateIndex);
+        ////console.log(imageList, addUpdateIndex);
         setEnterpriseData({...enterpriseData, photos: imageList});
     };
 
@@ -433,13 +433,13 @@ export default function RegisterEnterprise() {
     }
 
     async function handleSubmit() {
-        console.log('entrou no submit!');
+        //console.log('entrou no submit!');
 
         const formData = new FormData;
     
         await Object.keys(enterpriseData).forEach((key:any) => {
             if(key == 'photos') {
-                console.log('entrou no photos object key');
+                //console.log('entrou no photos object key');
                 for(let i = 0; i < enterpriseData[key].length; i++) {
                     formData.append('photos', enterpriseData[key][i].file);
                 }
@@ -449,7 +449,7 @@ export default function RegisterEnterprise() {
             }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
         })
 
-        console.log( formData.values );
+        //console.log( formData.values );
         registerEnterprise( formData );
     }
 
@@ -494,14 +494,14 @@ export default function RegisterEnterprise() {
     async function nextStep() {
         
         if( enterpriseData.step == 1 ) {     
-            console.log('entrou no step 1');       
+            //console.log('entrou no step 1');       
             await handleValidation(
                 ['fullName', 'email', 'phone', 'whatsapp', 'accept'],
                 enterpriseRegisterFormSchema
             );
         }
         else if( enterpriseData.step == 2 ) {
-            console.log('entrou no step 2');
+            //console.log('entrou no step 2');
         
             let fields = ['password', 'passwordConfirmation'];
 
@@ -516,7 +516,7 @@ export default function RegisterEnterprise() {
                 .validateAt( el, enterpriseData)
                 .catch((err) => {
                     setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                    //console.log(err);
+                    ////console.log(err);
                 });
             });
 
@@ -530,42 +530,42 @@ export default function RegisterEnterprise() {
             });
         }
         else if( enterpriseData.step == 3 ) {
-            console.log('entrou no step 3');       
+            //console.log('entrou no step 3');       
             await handleValidation(
                 ['enterpriseName', 'location', 'address', 'addressNumber'],
                 enterpriseRegisterFormSchema
             ); 
         }
         else if( enterpriseData.step == 4 ) {
-            console.log('entrou no step 4');       
+            //console.log('entrou no step 4');       
             await handleValidation(
                 ['instagram', 'facebook', 'website'],
                 enterpriseRegisterFormSchema
             ); 
         }
         else if( enterpriseData.step == 5 ) {
-            console.log('entrou no step 5');       
+            //console.log('entrou no step 5');       
             await handleValidation(
                 ['partyMainFocus'],
                 enterpriseRegisterFormSchema
             ); 
         }
         else if( enterpriseData.step == 6 ) {
-            console.log('entrou no step 6');       
+            //console.log('entrou no step 6');       
             await handleValidation(
                 ['serviceDescription'],
                 enterpriseRegisterFormSchema
             ); 
         }
         else if( enterpriseData.step == 7 ) {
-            console.log('entrou no step 7');       
+            //console.log('entrou no step 7');       
             await handleValidation(
                 ['enterpriseCategory'],
                 enterpriseRegisterCategoryDataSchema
             ); 
         }
         else if( enterpriseData.step == 8 ) {
-            console.log('entrou no step 8');
+            //console.log('entrou no step 8');
         
             let fields = ['enterpriseCategory', 'enterpriseSpecificCategory'];
 
@@ -580,7 +580,7 @@ export default function RegisterEnterprise() {
                 .validateAt( el, enterpriseData)
                 .catch((err) => {
                     setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                    console.log(err);
+                    //console.log(err);
                 });
             });
 
@@ -598,7 +598,7 @@ export default function RegisterEnterprise() {
             let filesLength = (document.getElementsByClassName("rug-file-input")[0] as HTMLInputElement).files?.length;
             // && filesLength < 5
             if( enterpriseData.photos.length < 5 && filesLength < 5) { //enterpriseData.photos.length < 5 ) {
-                console.log('min images error');
+                //console.log('min images error');
                 setFormErrors((formE) => ({...formE, photos: {...formE.photos, minLimit: 'Você deve adicionar no mínimo 5 imagens.'}}));
             }
             else {
@@ -606,8 +606,8 @@ export default function RegisterEnterprise() {
             }
         }
         else if( enterpriseData.step == 10 ) {
-            console.log('entrou no step 10');
-            console.log( enterpriseData );
+            //console.log('entrou no step 10');
+            //console.log( enterpriseData );
 
             let fields = [
                 'enterpriseCategory', 
@@ -669,11 +669,11 @@ export default function RegisterEnterprise() {
                 .validateAt( el, enterpriseData)
                 .catch((err) => {
                     setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                    console.log(err);
+                    //console.log(err);
                 });
             });
 
-            console.log( formErrors );
+            //console.log( formErrors );
 
             // Validate
             await enterpriseRegisterQuestionsDataSchema
@@ -728,7 +728,7 @@ export default function RegisterEnterprise() {
             .then((val) =>{
                 if( val == true ) {
                     // Validou bemmmm
-                    console.log('Validou bemmm');
+                    //console.log('Validou bemmm');
                     
                     // Register enterprise
                     handleSubmit();
@@ -888,7 +888,7 @@ export default function RegisterEnterprise() {
                                     onChange={(event: any) => {
                                         setEnterpriseData({...enterpriseData, [event.currentTarget.name]: String(event.currentTarget.checked)});
                                         setFormErrors({...formErrors, [event.currentTarget.name]: ''});
-                                        console.log(event.currentTarget.checked);
+                                        //console.log(event.currentTarget.checked);
                                     }}
                                     isChecked={enterpriseData.accept == 'true' ? true : false}
                                 >
@@ -1368,29 +1368,29 @@ export default function RegisterEnterprise() {
                                 }}
                                 accept={['jpg', 'jpeg', 'png']}
                                 onChange={(images) => {
-                                    console.log( enterpriseData );
+                                    //console.log( enterpriseData );
                                     setEnterpriseData((enterpriseData) => ({...enterpriseData, photos: images}));
                                 }}
                                 onWarning={(type, rules) => {
                                     switch(type) {
                                         case 'accept':
-                                            console.log(`Only ${rules.accept.join(', ')}`);
+                                            //console.log(`Only ${rules.accept.join(', ')}`);
                                             setFormErrors((formE) => ({...formE, photos: {...formE.photos, accept: `Formato inválido. Os formatos permitidos são ${rules.accept.join(', ')}`}}));
 
                                         case 'limit':
-                                            console.log('limit <= ', rules.limit);
+                                            //console.log('limit <= ', rules.limit);
                                             setFormErrors((formE) => ({...formE, photos: {...formE.photos, maxLimit: `O limite de fotos é ${rules.limit}`}}));
 
                                         case 'size':
-                                            console.log('max size <= ', rules.size);
+                                            //console.log('max size <= ', rules.size);
                                             setFormErrors((formE) => ({...formE, photos: {...formE.photos, size: `O tamanho da imagem deve ser menor do que 1Mb.`}}));
                                     
                                         case 'minWidth': case 'minHeight':
-                                            console.log('Dimensions > ', `${rules.width.min}x${rules.height.min}`);
+                                            //console.log('Dimensions > ', `${rules.width.min}x${rules.height.min}`);
                                             setFormErrors((formE) => ({...formE, photos: {...formE.photos, minDim: `A largura mínima deve ser 600px e a altura mínima deve ser 400px.`}}));
                                     
                                         case 'maxWidth': case 'maxHeight':
-                                            console.log('Dimensions < ', `${rules.width.max}x${rules.height.max}`);
+                                            //console.log('Dimensions < ', `${rules.width.max}x${rules.height.max}`);
                                             //setFormErrors((formE) => ({...formE, photos: {...formE.photos, maxDim: `A largura máxima deve ser xx e a altura máxima deve ser yy.`}}));
                                     
                                         default:

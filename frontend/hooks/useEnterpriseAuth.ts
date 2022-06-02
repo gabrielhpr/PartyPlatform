@@ -79,7 +79,7 @@ export default function useEnterpriseAuth() {
             routerNext.push("/Enterprise/ads");
         }
         catch( err ) {
-            console.log( err );
+            //console.log( err );
             msgText = err.response.data.message;
             msgType = "error";
         }
@@ -99,7 +99,7 @@ export default function useEnterpriseAuth() {
         }
         catch(err) {
             // tratar o erro
-            console.log(err);
+            //console.log(err);
             msgText = err.response.data.message;
             msgType = "error";
         }
@@ -109,16 +109,17 @@ export default function useEnterpriseAuth() {
     async function loginEnterprise(enterprise: any) {
         let msgText = 'Login realizado com sucesso';
         let msgType = 'success';
-        console.log(' entrou no login enterprise ');
+        //console.log(' entrou no login enterprise ');
 
         try {
-            const data = await api.post("/enterprise/login", enterprise).then((response) => {
+            const data = await api.post("/enterprise/login", enterprise)
+            .then((response) => {
                 return response.data;
             });
             await authEnterprise(data);
         }   
         catch(err) {
-            console.log( err );
+            //console.log( err );
             msgText = err.response.data.message;
             msgType = "error";
         }
@@ -150,7 +151,7 @@ export default function useEnterpriseAuth() {
         }
         catch(err) {
             // tratar o erro
-            console.log(err);
+            //console.log(err);
             msgText = err.response.data.message;
             msgType = "error";
         }

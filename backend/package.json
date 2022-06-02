@@ -5,6 +5,10 @@
   "author": "Gabriel Henrique",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "npm": "8.1.2",
+    "node": "16.13.2"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.95.0",
     "@aws-sdk/credential-providers": "^3.95.0",

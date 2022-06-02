@@ -258,7 +258,7 @@ module.exports = class RootController {
         enterprise.tokenResetPassword = '';
         enterprise.tokenCreatedAt = '';
 
-        await enterpriseModel.updateEnterprise( enterprise );
+        await enterpriseModel.updateEnterprise( enterprise.id, enterprise );
         res.status(200).json({message: "Senha alterada com sucesso!"});
     }
 

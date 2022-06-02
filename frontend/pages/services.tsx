@@ -32,8 +32,8 @@ export default function ServicesPage() {
     });
     
     function handleClick( el: any ) {
-        console.log( el );
-        const id = el.id;
+        //console.log( el );
+        const id = el.enterpriseId;
         const partyType = el.partyMainFocus;
 
         localStorage.setItem("previousRoute", routerNext.asPath);
@@ -83,7 +83,7 @@ export default function ServicesPage() {
     // Close dropdown menu on click outside
     useEffect(() => {
         if( !isMobileVersion ) {
-            console.log('entrou');
+            //console.log('entrou');
             document.addEventListener('mouseup', function (e) {
                 var menu1 = document.getElementById('menuPartyTypeOnClickAndOnSearch');
                 var menu2 = document.getElementById('menuServicesOnClick');
@@ -109,7 +109,7 @@ export default function ServicesPage() {
 
     // Used in Menu search
     function searchFunction( event: any, menuId: string ) {
-        console.log( event.currentTarget.value );
+        //console.log( event.currentTarget.value );
         let inputValue = event.currentTarget.value.toUpperCase();
         let menu = document.getElementById( menuId );
         let itemList = menu.getElementsByTagName("button");
@@ -143,10 +143,10 @@ export default function ServicesPage() {
         })
         .then((response) => {
             setServices(response.data.services);
-            console.log(services[0]);
+            //console.log(services[0]);
         })
         .catch((err) => {
-            console.log(err);
+            //console.log(err);
         }) 
 
     }, [routerNext.query]);
@@ -243,17 +243,17 @@ export default function ServicesPage() {
                                         }
                                     }}
                                     onClick={() => {
-                                        console.log('clicou');
+                                        //console.log('clicou');
                                         if(searchData.partyType === '') {
                                             setMenuPartyTypeDisp('');
                                         }
                                         else if (searchData.serviceCategory === '') {
                                             if(isMobileVersion) {
-                                                console.log('is mobile version');
+                                                //console.log('is mobile version');
                                                 setMenuService('mobile');
                                             }
                                             else {
-                                                console.log('not mobile version');
+                                                //console.log('not mobile version');
                                                 setMenuService('onclick');
                                             }
                                         }
@@ -350,7 +350,7 @@ export default function ServicesPage() {
                                                         setSearchInputValueFirst('');
                                                         setMenuPartyTypeDisp('none');
                                                         if( isMobileVersion ) {
-                                                            console.log('is mobile versions');
+                                                            //console.log('is mobile versions');
                                                             
                                                             setMenuService('mobile');
                                                         }
@@ -516,8 +516,8 @@ export default function ServicesPage() {
                                         name='service'
                                         partyType={searchData.partyType}
                                         handleClick={(event) => {
-                                            console.log('menuServicesOnClick');
-                                            console.log(searchData.partyType);
+                                            //console.log('menuServicesOnClick');
+                                            //console.log(searchData.partyType);
                                             setSearchData({...searchData, serviceCategory: event.currentTarget.value.split('-')[0], serviceSpecificCategory: event.currentTarget.value.split('-')[1]});
                                             setMenuService('none');
                                         }}
@@ -666,7 +666,7 @@ export default function ServicesPage() {
                                                 value={searchData.location}
                                                 
                                                 onChange={(event: any) => {
-                                                    console.log(event.currentTarget.value);
+                                                    //console.log(event.currentTarget.value);
                                                     setSearchData({...searchData, location: event.currentTarget.value});
                                                     searchFunction(event, "menuWhere");
                                                 }}
@@ -860,7 +860,7 @@ export default function ServicesPage() {
                                                                                 nOfPeople: routerNext.query.nOfPeople
                                                                             }
                                                                         });
-                                                                        console.log(filters);
+                                                                        ////console.log(filters);
                                                                     }}
                                                                 >
                                                                     {el.textToShow}
@@ -879,7 +879,7 @@ export default function ServicesPage() {
                                                                             
                                                                             onClick={() => {
                                                                                 setFilters({...filters, price: {value: '', textToShow: ''}, buffetIncluded: false})
-                                                                                console.log(filters);
+                                                                                //console.log(filters);
                                                                                 
                                                                             }}
                                                                         >
@@ -891,7 +891,7 @@ export default function ServicesPage() {
                                                                             textColor={filters.buffetIncluded == true ? 'brand.white' : 'brand.dark_blue'}
                                                                             onClick={() => { 
                                                                                 setFilters({...filters, price: {value: '', textToShow: ''}, buffetIncluded: true});
-                                                                                console.log(filters);
+                                                                                //console.log(filters);
                                                                                 
                                                                             }}
                                                                         >
@@ -921,7 +921,7 @@ export default function ServicesPage() {
                                                                                 nOfPeople: routerNext.query.nOfPeople
                                                                             }
                                                                         });
-                                                                        console.log(filters);
+                                                                        //console.log(filters);
                                                                     }}
                                                                 >
                                                                     {el.textToShow}
@@ -992,7 +992,7 @@ export default function ServicesPage() {
                                                                                 nOfPeople: el.value
                                                                             }
                                                                         });
-                                                                        console.log(filters);
+                                                                        //console.log(filters);
                                                                     }}
                                                     
                                                                 >
@@ -1092,7 +1092,7 @@ export default function ServicesPage() {
                                                                                             nOfPeople: routerNext.query.nOfPeople
                                                                                         }
                                                                                     });
-                                                                                    console.log(filters);
+                                                                                    //console.log(filters);
                                                                                 }}
                                                                             >
                                                                                 {el.textToShow}
@@ -1114,7 +1114,7 @@ export default function ServicesPage() {
                                                                                         
                                                                                         onClick={() => {
                                                                                             setFilters({...filters, price: {value: '', textToShow: ''}, buffetIncluded: false})
-                                                                                            console.log(filters);
+                                                                                            //console.log(filters);
                                                                                             
                                                                                         }}
                                                                                     >
@@ -1127,7 +1127,7 @@ export default function ServicesPage() {
                                                                                         textColor={filters.buffetIncluded == true ? 'brand.white' : 'brand.dark_blue'}
                                                                                         onClick={() => { 
                                                                                             setFilters({...filters, price: {value: '', textToShow: ''}, buffetIncluded: true});
-                                                                                            console.log(filters);
+                                                                                            //console.log(filters);
                                                                                             
                                                                                         }}
                                                                                     >
@@ -1158,7 +1158,7 @@ export default function ServicesPage() {
                                                                                             nOfPeople: routerNext.query.nOfPeople
                                                                                         }
                                                                                     });
-                                                                                    console.log(filters);
+                                                                                    //console.log(filters);
                                                                                 }}
                                                                             >
                                                                                 {el.textToShow}
@@ -1232,7 +1232,7 @@ export default function ServicesPage() {
                                                                                             nOfPeople: el.value
                                                                                         }
                                                                                     });
-                                                                                    console.log(filters);
+                                                                                    //console.log(filters);
                                                                                 }}
                                                                 
                                                                             >

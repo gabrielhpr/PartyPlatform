@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, Input, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { TextSpanInput } from "../../../components/Enterprise/TextSpanInput";
@@ -157,6 +157,10 @@ export default function ResetPasswordEnterprise() {
                                 value={enterprisePassword.password} 
                                 onChange={handleChange} 
                             />
+                            <FormHelperText>
+                                A senha deve ter no mínimo 8 caracteres. Sendo pelo menos 1 letra maiúscula, 
+                                1 minúscula, 1 número e 1 caractere especial.
+                            </FormHelperText>
                             <FormErrorMessage>
                                 {formErrorsEnterprisePassword.password}
                             </FormErrorMessage>

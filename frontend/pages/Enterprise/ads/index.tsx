@@ -35,19 +35,19 @@ export default function AdsEnterprise() {
         })
         .then((response) => {
             setAds( response.data.ads );
-            console.log( response.data.ads );
-            console.log( ads.length );
+            //console.log( response.data.ads );
+            //console.log( ads.length );
             
         })
         .catch( err => {
-            console.log( err );
+            //console.log( err );
         });
     
     }, [authenticatedEnterprise]);
 
 
     function handleEditAd( id: number, partyType: string ) {
-        console.log( id );
+        //console.log( id );
         routerNext.push({
             pathname: '/Enterprise/ads/edit',
             query: { 

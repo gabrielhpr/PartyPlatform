@@ -116,7 +116,7 @@ interface AdDetailsEditProps {
 }
 
 export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, enterpriseSpecificCategory, questions, formErrors, setData, setFormErrors, saveDataChanged, saveImagesChanged, handleComponentToLoad}: AdDetailsEditProps) {
-    //console.log( questions );
+    ////console.log( questions );
     const modalPhotos = useDisclosure();
    
     return (
@@ -269,6 +269,9 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                         let res = saveImagesChanged();
                                         if( res == true ) {
                                             modalPhotos.onClose();
+                                            setTimeout(() => {
+                                                window.location.reload();
+                                            }, 2000);
                                         }
                                     }}
                                 >
@@ -292,7 +295,7 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                     //zIndex={10}
                                     //w='100%'
                                     initialState={photos.map((el, index) => {
-                                        console.log(index);
+                                        ////console.log(index);
                                         return (
                                             {source:`${photos[photos.length-index-1]}`, name: photos[photos.length-index-1]}
                                         )
@@ -312,13 +315,13 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                     }}
                                     accept={['jpg', 'jpeg', 'png']}
                                     onSortEnd={(images, {oldIndex, newIndex}) => {
-                                        //console.log(images);
-                                        console.log(oldIndex);
-                                        console.log(newIndex);
+                                        ////console.log(images);
+                                        //console.log(oldIndex);
+                                        //console.log(newIndex);
                                     }}
                                     onChange={(images) => {
-                                        console.log('change images');
-                                        console.log(images);
+                                        //console.log('change images');
+                                        //console.log(images);
                                         let newOrder = images.map((el, index) => {
                                             if( el.file == undefined) {
                                                 return el.uid.split('-')[2];
@@ -340,23 +343,23 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                     onWarning={(type, rules) => {
                                         switch(type) {
                                             case 'accept':
-                                                console.log(`Only ${rules.accept.join(', ')}`);
+                                                //console.log(`Only ${rules.accept.join(', ')}`);
                                                 setFormErrors((formE) => ({...formE, photos: {...formE.photos, accept: `Formato inválido. Os formatos permitidos são ${rules.accept.join(', ')}`}}));
 
                                             case 'limit':
-                                                console.log('limit <= ', rules.limit);
+                                                //console.log('limit <= ', rules.limit);
                                                 setFormErrors((formE) => ({...formE, photos: {...formE.photos, maxLimit: `O limite de fotos é ${rules.limit}`}}));
 
                                             case 'size':
-                                                console.log('max size <= ', rules.size);
+                                                //console.log('max size <= ', rules.size);
                                                 setFormErrors((formE) => ({...formE, photos: {...formE.photos, size: `O tamanho da imagem deve ser menor do que 1Mb.`}}));
                                         
                                             case 'minWidth': case 'minHeight':
-                                                console.log('Dimensions > ', `${rules.width.min}x${rules.height.min}`);
+                                                //console.log('Dimensions > ', `${rules.width.min}x${rules.height.min}`);
                                                 setFormErrors((formE) => ({...formE, photos: {...formE.photos, minDim: `A largura mínima deve ser 600px e a altura mínima deve ser 400px.`}}));
                                         
                                             case 'maxWidth': case 'maxHeight':
-                                                console.log('Dimensions < ', `${rules.width.max}x${rules.height.max}`);
+                                                //console.log('Dimensions < ', `${rules.width.max}x${rules.height.max}`);
                                                 //setFormErrors((formE) => ({...formE, photos: {...formE.photos, maxDim: `A largura máxima deve ser xx e a altura máxima deve ser yy.`}}));
                                         
                                             default:

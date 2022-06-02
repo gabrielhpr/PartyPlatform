@@ -63,7 +63,7 @@ export default function useUserAuth() {
         }
         catch(err) {
             // tratar o erro
-            console.log(err);
+            //console.log(err);
             msgText = err.response.data.message;
             msgType = "error";
         }
@@ -81,7 +81,7 @@ export default function useUserAuth() {
             await authUser(data, redirect);
         }   
         catch(err) {
-            console.log( err );
+            //console.log( err );
             msgText = err.response.data.message;
             msgType = "error";
         }
@@ -107,7 +107,7 @@ export default function useUserAuth() {
         }
         catch(err) {
             // Tratar o erro
-            console.log(err);
+            //console.log(err);
             msgText = err.response.data.message;
             msgType = "error";
         }
@@ -134,7 +134,7 @@ export default function useUserAuth() {
         }
         catch(err) {
             // tratar o erro
-            console.log(err);
+            //console.log(err);
             msgText = err.response.data.message;
             msgType = "error";
         }

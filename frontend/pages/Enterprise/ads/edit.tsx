@@ -412,10 +412,10 @@ export default function EditAdsEnterprise() {
         })
         .then((response) => {
             setAdData( Object.assign(adData, response.data.ad) );  
-            console.log( response.data.ad );             
+            //console.log( response.data.ad );             
         })
         .catch(err => {
-            console.log( err );
+            //console.log( err );
         });
 
     }, [routerNext.query, authenticatedEnterprise]);
@@ -436,11 +436,11 @@ export default function EditAdsEnterprise() {
             }
         })
         .then((response) => {
-            console.log( response.data.enterpriseData );
+            //console.log( response.data.enterpriseData );
             setEnterpriseData( response.data.enterpriseData );
         })
         .catch(err => {
-            console.log( err );
+            //console.log( err );
         });
         
     }, [routerNext.query, authenticatedEnterprise]);
@@ -465,15 +465,15 @@ export default function EditAdsEnterprise() {
             return;
         }
 
-        console.log('Chegou para atualizar o anúncios.');
-        console.log( adData );
+        //console.log('Chegou para atualizar o anúncios.');
+        //console.log( adData );
 
         const token = localStorage.getItem("tokenEnterprise");
         const formData = new FormData;
     
         Object.keys(adData).forEach((key:any) => {
             if(key == 'photosNew') {
-                console.log('entrou no photos object key');
+                //console.log('entrou no photos object key');
                 for(let i = 0; i < adData[key].length; i++) {
                     if( adData[key][i].file != undefined ) {
                         formData.append('photosNew', adData[key][i].file);
@@ -488,8 +488,8 @@ export default function EditAdsEnterprise() {
             }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
         })
 
-        console.log('formData');
-        console.log(formData);
+        //console.log('formData');
+        //console.log(formData);
         
         const { partyType } = routerNext.query;
 
@@ -504,11 +504,65 @@ export default function EditAdsEnterprise() {
             }
         )
         .catch(err => {
-            console.log( err );
+            //console.log( err );
         });
         
         setHasToUpdate(false);
-        window.location.reload();
+
+        // RESET ERROR MESSAGES
+        let fields = [
+            'q1',
+            'q2',
+            'q3',
+            'q4',
+            'q5',
+            'q6',
+            'q7',
+            'q8',
+            'q9',
+            'q10',
+            'q11',
+            'q12',
+            'q13',
+            'q14',
+            'q15',
+            'q16',
+            'q17',
+            'q18',
+            'q19',
+            'q20',
+            'q21',
+            'q22',
+            'q23',
+            'q24',
+            'q25',
+            'q26',
+            'q27',
+            'q28',
+            'q29',
+            'q30',
+            'q31',
+            'q32',
+            'q33',
+            'q34',
+            'q35',
+            'q36',
+            'q37',
+            'q38',
+            'q39',
+            'q40',
+            'q41',
+            'q42',
+            'q43',
+            'q44'
+        ];
+
+        //Reset errors message
+        setFormErrors((formE) => ({...formE, 'serviceDescription': ''}));
+        fields.map((el, index) => {
+            setFormErrors((formE) => ({...formE, [el]:''}));
+        });
+        //window.location.reload();
 
     }, [adData, hasToUpdate]);
 
@@ -524,7 +578,7 @@ export default function EditAdsEnterprise() {
     }
 
     function saveImagesChanged() {
-        console.log( adData );
+        //console.log( adData );
         if( adData.photosNewOrder.length < 5 ) {
             return false;
         }
@@ -533,11 +587,11 @@ export default function EditAdsEnterprise() {
     }
 
     async function saveDataChanged( data: Object ) {
-        console.log( adData );
-        console.log( enterpriseData.enterpriseCategory );
-        console.log( enterpriseData.enterpriseSpecificCategory );
+        //console.log( adData );
+        //console.log( enterpriseData.enterpriseCategory );
+        //console.log( enterpriseData.enterpriseSpecificCategory );
 
-        console.log( adData );
+        //console.log( adData );
 
         // VALIDATE THE DATA
         let fields = [
@@ -591,7 +645,7 @@ export default function EditAdsEnterprise() {
         setFormErrors((formE) => ({...formE, 'serviceDescription': ''}));
         fields.map((el, index) => {
             setFormErrors((formE) => ({...formE, [el]:''}));
-        })
+        });
 
         // ERROR MESSAGES
 
@@ -611,7 +665,7 @@ export default function EditAdsEnterprise() {
             });
         });
 
-        console.log( formErrors );
+        //console.log( formErrors );
 
         // Validate
         return await enterpriseRegisterQuestionsDataSchema
@@ -666,13 +720,13 @@ export default function EditAdsEnterprise() {
         .then((val) =>{
             if( val == true ) {
                 // Validou bemmmm
-                console.log('Validou bemmm');
+                //console.log('Validou bemmm');
                                 
 
                 /* ------- VALIDATE SERVICE DESCRIPTION ------ */
                 let isValidField = yup.reach( enterpriseRegisterFormSchema, 'serviceDescription' )
                 .isValidSync( adData['serviceDescription'] );
-                console.log(isValidField);
+                //console.log(isValidField);
 
                 if( isValidField == false ) {
                     return false;
@@ -682,12 +736,12 @@ export default function EditAdsEnterprise() {
                 // Update the data in database
                 setHasToUpdate(true);
 
-                console.log('antes do formData');
-                console.log(adData);
+                //console.log('antes do formData');
+                //console.log(adData);
                 return true;
             }
             else {
-                console.log('Não validou');
+                //console.log('Não validou');
                 // Update the data with previous data changed
                 // Object.keys( data ).map((key, index) => {
                 //     setAdData((prevAdData) => ({...prevAdData, [key]: prevAdDataState[key]}) );

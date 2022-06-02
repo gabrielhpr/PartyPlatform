@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton, FormControl, FormErrorMessage, Checkbox } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton, FormControl, FormErrorMessage, Checkbox, FormHelperText } from "@chakra-ui/react";
 import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
@@ -249,7 +249,7 @@ export default function ServiceProfilePage() {
     
     // MENU SEARCH
     function searchFunction( event: any, menuId: string ) {
-        console.log( event.currentTarget.value );
+        //console.log( event.currentTarget.value );
         let inputValue = event.currentTarget.value.toUpperCase();
         let menu = document.getElementById( menuId );
         let itemList = menu.getElementsByTagName("button");
@@ -274,7 +274,7 @@ export default function ServiceProfilePage() {
         });
     }
     async function handleValidation( fields: Array<string>, schemaForm: any, setErrorFunction: any, data: any ) {
-        console.log(fields);
+        //console.log(fields);
 
         // Reset errors message
         fields.map((el, index) => {
@@ -287,7 +287,7 @@ export default function ServiceProfilePage() {
             .validateAt( el, data)
             .catch((err) => {
                 setErrorFunction((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -298,13 +298,13 @@ export default function ServiceProfilePage() {
             
             let isValidField = yup.reach( schemaForm, el )
             .isValidSync( data[el] );
-            console.log(isValidField);
+            //console.log(isValidField);
 
             validForm = validForm && isValidField;                
         });
 
-        console.log('validForm');
-        console.log(validForm);
+        //console.log('validForm');
+        //console.log(validForm);
         // If there is no error its validated
         return validForm;
 
@@ -320,19 +320,19 @@ export default function ServiceProfilePage() {
     // HANDLE CHANGE
     function handleChangeLogin( event: any ) {
         setUserLoginData({...userLoginData, [event.currentTarget.name]: event.currentTarget.value});
-        console.log( userLoginData );
+        //console.log( userLoginData );
     }
     function handleChangeRegister( event: any ) {
         setUserRegisterData({...userRegisterData, [event.currentTarget.name]: event.currentTarget.value});
-        console.log( userRegisterData );
+        //console.log( userRegisterData );
     }
 
     // HANDLE SUBMIT
     async function handleSubmitLogin() {
-        console.log('Entrou handleSubmitLogin');
+        //console.log('Entrou handleSubmitLogin');
         await loginUser( userLoginData, false );
-        console.log('O resultado de loginUser é');
-        console.log('Saiu handleSubmitLogin');
+        //console.log('O resultado de loginUser é');
+        //console.log('Saiu handleSubmitLogin');
     }
     
     async function handleSubmitRegister() {
@@ -359,7 +359,7 @@ export default function ServiceProfilePage() {
             .validateAt( el, userRegisterData)
             .catch((err) => {
                 setFormErrorsUserRegister((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -371,17 +371,17 @@ export default function ServiceProfilePage() {
         });
 
         if( isValidGeneral && isValidPassword ) {
-            console.log('Entrou handleSubmitRegister');
+            //console.log('Entrou handleSubmitRegister');
             await registerUser( userRegisterData, false );
-            console.log('Saiu handleSubmitRegister');
+            //console.log('Saiu handleSubmitRegister');
         }
     }
 
     async function handleSendEmail() {
-        console.log( emailData );
+        //console.log( emailData );
 
         if( authenticatedUser ) {
-            console.log('vai enviar o email');
+            //console.log('vai enviar o email');
 
             // VALIDATE
             let isValid = await handleValidation(
@@ -392,10 +392,11 @@ export default function ServiceProfilePage() {
             );
            
             if( isValid ) {
-                console.log('Entrou handleSendEmail');
+                //console.log('Entrou handleSendEmail');
 
                 userSendEmail( emailData );
-                console.log('Saiu handleSendEmail');
+                modalBudget.onClose();
+                //console.log('Saiu handleSendEmail');
             }
         }
         else {
@@ -433,16 +434,16 @@ export default function ServiceProfilePage() {
                 }
         })
         .then((response) => {
-            console.log('Service');
-            console.log(response.data.service);
-            console.log('Opinions');
-            console.log(response.data.opinions);
+            //console.log('Service');
+            //console.log(response.data.service);
+            //console.log('Opinions');
+            //console.log(response.data.opinions);
             
             setService(response.data.service);
             setOpinions(response.data.opinions);
         })
         .catch((err) => {
-            console.log(err);
+            //console.log(err);
         });
     }, [routerNext.query]);
 
@@ -567,7 +568,7 @@ export default function ServiceProfilePage() {
                                 iconColor='black'
                                 content={service.phone}
                                 handleClick={() => {
-                                    console.log('entrou no handle click');
+                                    //console.log('entrou no handle click');
                                     if (typeof window !== 'undefined') {
                                         window.gtag('event', 'verTelefone', {
                                             'event_category': `${service.partyMainFocus}`,
@@ -590,7 +591,7 @@ export default function ServiceProfilePage() {
                                     iconColor='green'
                                     content={service.whatsapp}
                                     handleClick={() => {
-                                        console.log('entrou no handle click');
+                                        //console.log('entrou no handle click');
                                         if (typeof window !== 'undefined') {
                                             window.gtag('event', 'verWhatsapp', {
                                                 'event_category': `${service.partyMainFocus}`,
@@ -611,7 +612,7 @@ export default function ServiceProfilePage() {
                                 iconColor='black'
                                 content={service.email}
                                 handleClick={() => {
-                                    console.log('entrou no handle click');
+                                    //console.log('entrou no handle click');
                                     if (typeof window !== 'undefined') {
                                         window.gtag('event', 'verEmail', {
                                             'event_category': `${service.partyMainFocus}`,
@@ -1158,6 +1159,9 @@ export default function ServiceProfilePage() {
                                                         handleEmailDataChange( event );
                                                     }}
                                                 />
+                                                <FormHelperText>
+                                                    Inclua as barras '/'. Exemplo: 12/10/2022.
+                                                </FormHelperText>
                                                 <FormErrorMessage>
                                                     {formErrorsEmailData.partyDate}
                                                 </FormErrorMessage> 
@@ -1210,7 +1214,7 @@ export default function ServiceProfilePage() {
                                             fontSize={18}
                                             onClick={() => {
                                                 handleSendEmail();
-                                                // console.log('Service');
+                                                // //console.log('Service');
                                                 //console.log(service);
                                                 // console.log('Opinião');
                                                 // console.log(opinions[0]);

@@ -17,7 +17,7 @@ import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 import api from "../../utils/api";
 import useFlashMessage from "../../hooks/useFlashMessage";
 
-export default function enterpriseAccess() {
+export default function EnterpriseAccess() {
     const [enterpriseAccessData, setEnterpriseAccessData] = useState({email: '', password:''});
     const [emailResetPassword, setEmailResetPassword] = useState('');
     const { loginEnterprise } = useEnterpriseAuthContext();
