@@ -1,4 +1,5 @@
-import { Avatar, Box, Button, Flex, Icon, Menu, MenuButton, MenuItemOption, MenuList, MenuOptionGroup, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Icon, Menu, MenuButton, MenuItemOption, MenuList, 
+    MenuOptionGroup, Spinner, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BsWhatsapp } from "react-icons/bs";
 import { FiMail, FiPhone } from "react-icons/fi";
@@ -30,6 +31,7 @@ const statisticsNullState = {
 
 export default function HomePageEnterprise() {
     const { authenticatedEnterprise } = useEnterpriseAuthContext();
+    const [ loadingMetrics, setLoadingMetrics ] = useState(true);
     const [ gaReports, setGaReports ] = useState({});
     const [ statistics, setStatistics ] = useState<statisticsInterf>(statisticsNullState);
     const [ partyTypeOptions, setPartyTypeOptions ] = useState([]);
@@ -61,12 +63,12 @@ export default function HomePageEnterprise() {
             setPartyTypeOptions( response.data.ads.map((el, index) => {
                 return el.partyMainFocus;
             }));
-            console.log( 'O tipo de festa que será carregado no party type é: ' );
-            console.log( response.data.ads[0].partyMainFocus );
-            console.log( response.data.ads );                
+            //console.log( 'O tipo de festa que será carregado no party type é: ' );
+            //console.log( response.data.ads[0].partyMainFocus );
+            //console.log( response.data.ads );                
         })
         .catch( err => {
-            console.log( err );
+            //console.log( err );
         });
 
     }, [authenticatedEnterprise]);
@@ -93,12 +95,13 @@ export default function HomePageEnterprise() {
         })
         .then((response) => {
             setGaReports( response?.data?.result?.data?.reports );
-            console.log('Retorno do servidor - dados ga');
-            console.log( response.data );
-            console.log( response.data.result.data.reports );
+            setLoadingMetrics(false);
+            //console.log('Retorno do servidor - dados ga');
+            //console.log( response.data );
+            //console.log( response.data.result.data.reports );
         })
         .catch( err => {
-            console.log( err );
+            //console.log( err );
         });
         
 
@@ -113,12 +116,12 @@ export default function HomePageEnterprise() {
         })
         .then((response) => {
             setStatistics( response.data );
-            console.log('Retorno do servidor - dados ga');
-            console.log( response.data );
-            console.log( response.data );
+            //console.log('Retorno do servidor - dados ga');
+            //console.log( response.data );
+            //console.log( response.data );
         })
         .catch(err => {
-            console.log( err );
+            //console.log( err );
         });
 
     }, [authenticatedEnterprise, partyTypeSelected]);
@@ -130,8 +133,8 @@ export default function HomePageEnterprise() {
         if( partyTypeSelected == '' ) {
             return;
         }
-        console.log('Vai buscar as opinioes');
-        console.log( partyTypeSelected );
+        //console.log('Vai buscar as opinioes');
+        //console.log( partyTypeSelected );
 
         const token = localStorage.getItem("tokenEnterprise");
        
@@ -144,12 +147,12 @@ export default function HomePageEnterprise() {
             }
         })
         .then((response) => {
-            console.log('Opinions');
-            console.log(response.data.opinions);
+            //console.log('Opinions');
+            //console.log(response.data.opinions);
             setOpinions(response.data.opinions);
         })
         .catch(err => {
-            console.log( err ); 
+            //console.log( err ); 
         });
 
     }, [partyTypeSelected]);
@@ -175,7 +178,7 @@ export default function HomePageEnterprise() {
                     {/* PARTY TYPES - To show data about indicators and opinions */}
                     <Menu closeOnSelect={true}>
                         <MenuButton as={Button} colorScheme='blue' mb='5'>
-                            Tipo da Festa: {typeOfParties[partyTypeSelected]?.textToShow || 'Loading'}
+                            Tipo da Festa: {typeOfParties[partyTypeSelected]?.textToShow || 'Carregando'}
                         </MenuButton>
                         <MenuList minWidth='240px'>
                             <MenuOptionGroup defaultValue='asc' type='radio'
@@ -217,12 +220,12 @@ export default function HomePageEnterprise() {
 
                         {
                             [
-                            {id: 'visualizacoes', icon: RiSearchEyeLine, value: gaReports[0]?.rows != undefined ? gaReports[0]?.rows[0]?.metricValues[0]?.value : '', text1: 'Visualizações', text2: 'nos últimos 12 meses' },
+                            {id: 'visualizacoes', icon: RiSearchEyeLine, value: gaReports[0]?.rows != undefined ? gaReports[0]?.rows[0]?.metricValues[0]?.value : '0', text1: 'Visualizações', text2: 'nos últimos 12 meses' },
                             {id: 'pedidosRecebidos',icon: FiMail, value: statistics?.nEmailsOrders, text1: 'Pedidos recebidos', text2: 'nos últimos 12 meses' },
                             {id: 'avaliacoes',icon: AiOutlineStar, value: statistics?.nReviews, text1: 'Avaliações', text2: 'nos últimos 12 meses' },
-                            {id: 'cliquesVerTelefone', icon: FiPhone, value: gaReports[1]?.rows != undefined ? gaReports[1]?.rows[0]?.metricValues[0]?.value : '', text1: 'Cliques em Ver Telefone', text2: 'nos últimos 12 meses' },
-                            {id: 'cliquesVerWhatsapp',icon: BsWhatsapp, value: gaReports[2]?.rows != undefined ? gaReports[2]?.rows[0]?.metricValues[0]?.value : '', text1: 'Cliques em Ver Whatsapp', text2: 'nos últimos 12 meses' },
-                            {id: 'cliquesVerEmail',icon: IoMdMailOpen, value: gaReports[3]?.rows != undefined ? gaReports[3]?.rows[0]?.metricValues[0]?.value : '', text1: 'Cliques em Ver E-mail', text2: 'nos últimos 12 meses' },
+                            {id: 'cliquesVerTelefone', icon: FiPhone, value: gaReports[1]?.rows != undefined ? gaReports[1]?.rows[0]?.metricValues[0]?.value : '0', text1: 'Cliques em Ver Telefone', text2: 'nos últimos 12 meses' },
+                            {id: 'cliquesVerWhatsapp',icon: BsWhatsapp, value: gaReports[2]?.rows != undefined ? gaReports[2]?.rows[0]?.metricValues[0]?.value : '0', text1: 'Cliques em Ver Whatsapp', text2: 'nos últimos 12 meses' },
+                            {id: 'cliquesVerEmail',icon: IoMdMailOpen, value: gaReports[3]?.rows != undefined ? gaReports[3]?.rows[0]?.metricValues[0]?.value : '0', text1: 'Cliques em Ver E-mail', text2: 'nos últimos 12 meses' },
                         ].map((el, index) => {
                                 return (
                                     <Flex
@@ -243,7 +246,13 @@ export default function HomePageEnterprise() {
                                                 fontSize={28}
                                                 fontWeight={500}
                                             >
-                                                {el.value}
+                                                {
+                                                    loadingMetrics
+                                                    ?
+                                                    <Spinner size='xl' />
+                                                    :
+                                                    el.value
+                                                }
                                             </Text>
                                         </Flex>
 
@@ -272,7 +281,7 @@ export default function HomePageEnterprise() {
                     {/* OPINIONS */}
                     {
                         opinions.length > 0
-                        &&
+                        ?
                         <Flex
                             w={{base:'95%', lg:'70%'}}
                         >
@@ -423,6 +432,11 @@ export default function HomePageEnterprise() {
                                     Ver todas as avaliações
                                 </Button>
                             </Flex>
+                        </Flex>
+                        :
+                        <Flex
+                            h={{base:'0', lg:'30vh'}}
+                        >
                         </Flex>
                     }
                 </Flex>

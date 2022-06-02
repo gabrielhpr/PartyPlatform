@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, Flex, Icon, Menu, MenuButton, MenuItemOption, MenuList, MenuOptionGroup, Modal, 
     ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, 
+    Spinner, 
     Stack, Text, Textarea, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { BsWhatsapp } from "react-icons/bs";
@@ -20,6 +21,7 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 
 export default function RatingEnterprise() {
+    const [ loadingContent, setLoadingContent ] = useState( true );
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { authenticatedEnterprise, enterpriseAnswerRate } = useEnterpriseAuthContext();
     const [ partyTypeOptions, setPartyTypeOptions ] = useState([]);
@@ -62,12 +64,12 @@ export default function RatingEnterprise() {
             setPartyTypeOptions( response.data.ads.map((el, index) => {
                 return el.partyMainFocus;
             }));
-            console.log( 'O tipo de festa que será carregado no party type é: ' );
-            console.log( response.data.ads[0].partyMainFocus );
-            console.log( response.data.ads );                
+            //console.log( 'O tipo de festa que será carregado no party type é: ' );
+            //console.log( response.data.ads[0].partyMainFocus );
+            //console.log( response.data.ads );                
         })
         .catch( err => {
-            console.log( err );
+            //console.log( err );
         });
 
     }, [authenticatedEnterprise]);
@@ -79,8 +81,8 @@ export default function RatingEnterprise() {
         if( partyTypeSelected == '' ) {
             return;
         }
-        console.log('Vai buscar as opinioes');
-        console.log( partyTypeSelected );
+        //console.log('Vai buscar as opinioes');
+        //console.log( partyTypeSelected );
 
         const token = localStorage.getItem("tokenEnterprise");
        
@@ -93,20 +95,21 @@ export default function RatingEnterprise() {
             }
         })
         .then((response) => {
-            console.log('Opinions');
-            console.log(response.data.opinions);
+            //console.log('Opinions');
+            //console.log(response.data.opinions);
             setOpinions(response.data.opinions);
+            setLoadingContent(false);
         })
         .catch( err => {
-            console.log( err );
+            //console.log( err );
         });
     }, [partyTypeSelected]);
 
 
     async function handleSubmitRatingAnswer() {
-        console.log('Entrou handleSubmitRatingAnswer');
+        //console.log('Entrou handleSubmitRatingAnswer');
         await enterpriseAnswerRate( answerOpinion );
-        console.log('Saiu handleSubmitRatingAnswer');
+        //console.log('Saiu handleSubmitRatingAnswer');
         window.location.reload();
     }
 
@@ -131,7 +134,7 @@ export default function RatingEnterprise() {
                     <Menu closeOnSelect={true}>
                         <MenuButton as={Button} colorScheme='blue' mb='5'
                         >
-                            Tipo da Festa: {typeOfParties[partyTypeSelected]?.textToShow || 'Loading'}
+                            Tipo da Festa: {typeOfParties[partyTypeSelected]?.textToShow || 'Carregando'}
                         </MenuButton>
                         <MenuList minWidth='240px'>
                             <MenuOptionGroup defaultValue='asc' type='radio'
@@ -391,10 +394,26 @@ export default function RatingEnterprise() {
                             h='50vh'
                             justifyContent='center'
                             alignItems='center'
+                            direction='column'
                         >
+                            {
+                            loadingContent
+                            ?
+                            <>
+                                <Text
+                                    fontSize={24}
+                                    fontWeight={400}
+                                    mb='7'
+                                >
+                                    Carregando
+                                </Text>
+                                <Spinner size='xl' />
+                            </>
+                            :
                             <Text>
                                 Ainda não há avaliações disponíveis
                             </Text>
+                            }
                         </Flex>
                     }
 

@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Link as NavLink, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Icon, Link as NavLink, Spinner, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { RiAddLine } from "react-icons/ri";
 import { CardAds } from "../../../components/Enterprise/Ads/Card";
@@ -71,6 +71,7 @@ export default function AdsEnterprise() {
                     mt="5"
                     mb='14'
                     p={{base:'4', lg:"10"}}
+                    h='58vh'
                 >
     
                     <Stack 
@@ -126,6 +127,16 @@ export default function AdsEnterprise() {
     
                         {/* Enterprise Ads */}
                         {
+                            ads.length == 0
+                            ?
+                            <Flex
+                                px='12'
+                                justifyContent='center'
+                                alignItems='center'
+                            >
+                                <Spinner size='xl'/> 
+                            </Flex>
+                            :
                             ads.map((el, index) => {
                                 return(
                                     <Flex

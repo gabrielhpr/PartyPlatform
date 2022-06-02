@@ -68,7 +68,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
         else {
             setEnterpriseArea(false);
         }
-        console.log( routerNext.pathname );
+        //console.log( routerNext.pathname );
 
     }, [routerNext.pathname]);
 
@@ -124,6 +124,7 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                         //h='auto'
                     >
                         <Image
+                            priority={true}
                             src={Logo}
                             layout="fill"
                             //width={150}

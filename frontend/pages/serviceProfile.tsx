@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton, FormControl, FormErrorMessage, Checkbox, FormHelperText } from "@chakra-ui/react";
+import { Box, Flex, Text, Input, Icon, Img, Textarea, Button, Stack, Avatar, useBreakpointValue, useDisclosure, Link as NavLink, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, IconButton, FormControl, FormErrorMessage, Checkbox, FormHelperText, Spinner } from "@chakra-ui/react";
 import Image from 'next/image'
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { RiStarSFill, RiPhoneFill, RiWhatsappFill, RiMailFill, RiStarFill } from "react-icons/ri";
@@ -392,11 +392,13 @@ export default function ServiceProfilePage() {
             );
            
             if( isValid ) {
-                //console.log('Entrou handleSendEmail');
-
+                // Send email
                 userSendEmail( emailData );
+
+                // Reset email data
+                setEmailData({...emailData, partyDate: '', nOfPeople: '', messageContent: ''});
+                
                 modalBudget.onClose();
-                //console.log('Saiu handleSendEmail');
             }
         }
         else {
@@ -1330,6 +1332,9 @@ export default function ServiceProfilePage() {
                                                                 handleEmailDataChange( event );
                                                             }}
                                                         />
+                                                        <FormHelperText>
+                                                            Inclua as barras '/'. Exemplo: 12/10/2022.
+                                                        </FormHelperText>
                                                         <FormErrorMessage>
                                                             {formErrorsEmailData.partyDate}
                                                         </FormErrorMessage> 
@@ -1815,8 +1820,22 @@ export default function ServiceProfilePage() {
 
             </Flex>
             :
-            <>
-            </>
+            <Flex
+                h='70vh'
+                direction='column'
+                alignItems='center'
+                justifyContent='center'
+            >
+                <Text
+                    fontSize={24}
+                    fontWeight={400}
+                    mb='7'
+                >
+                    Carregando
+                </Text>
+                <Spinner size='xl' />
+            </Flex>
+
             }
 
             <Footer />

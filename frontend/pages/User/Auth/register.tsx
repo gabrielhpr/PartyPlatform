@@ -38,11 +38,11 @@ export default function registerUser() {
 
     function handleChange( event: any ) {
         setUserRegisterData({...userRegisterData, [event.currentTarget.name]: event.currentTarget.value });
-        console.log( userRegisterData );
+        //console.log( userRegisterData );
     }
 
     async function handleValidation( fields: Array<string>, schemaForm: any, setErrorFunction: any, data: any ) {
-        console.log(fields);
+        //console.log(fields);
 
         // Reset errors message
         fields.map((el, index) => {
@@ -55,7 +55,7 @@ export default function registerUser() {
             .validateAt( el, data)
             .catch((err) => {
                 setErrorFunction((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -66,13 +66,13 @@ export default function registerUser() {
             
             let isValidField = yup.reach( schemaForm, el )
             .isValidSync( data[el] );
-            console.log(isValidField);
+            //console.log(isValidField);
 
             validForm = validForm && isValidField;                
         });
 
-        console.log('validForm');
-        console.log(validForm);
+        //console.log('validForm');
+        //console.log(validForm);
         // If there is no error its validated
         return validForm;       
     }
@@ -101,7 +101,7 @@ export default function registerUser() {
             .validateAt( el, userRegisterData)
             .catch((err) => {
                 setFormErrorsUserRegister((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -113,16 +113,16 @@ export default function registerUser() {
         });
 
         if( isValidGeneral && isValidPassword ) {
-            console.log('Entrou handleSubmitRegister');
+            //console.log('Entrou handleSubmitRegister');
             await registerUser( userRegisterData, true );
-            console.log('Saiu handleSubmitRegister');
+            //console.log('Saiu handleSubmitRegister');
         }
 
     }
 
     // Used in Menu search
     function searchFunction( event: any, menuId: string ) {
-        console.log( event.currentTarget.value );
+        //console.log( event.currentTarget.value );
         let inputValue = event.currentTarget.value.toUpperCase();
         let menu = document.getElementById( menuId );
         let itemList = menu.getElementsByTagName("button");
@@ -151,6 +151,7 @@ export default function registerUser() {
             >
                
                 <Image src={PessoasFesta}
+                    priority={true}
                     layout='fill'
                     objectFit='cover'
                     objectPosition='center'

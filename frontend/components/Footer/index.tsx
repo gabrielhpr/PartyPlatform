@@ -80,13 +80,13 @@ export function Footer() {
 
                     >
                         <NavLink
-                            href=''
+                            href='https://www.instagram.com/festafy_br/'
                         >
                             <Icon as={AiOutlineInstagram} 
                             />
                         </NavLink>
                         <NavLink
-                            href=''
+                            href='https://www.facebook.com/profile.php?id=100081325641420'
                         >
                             <Icon as={AiOutlineFacebook} 
                             />

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Icon, Input, Menu, MenuButton, MenuDivider, MenuItemOption, MenuList, MenuOptionGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Input, Menu, MenuButton, MenuDivider, MenuItemOption, MenuList, MenuOptionGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
 import Image from 'next/image'
 import { useEffect, useState } from "react";
 import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
@@ -16,6 +16,7 @@ import KidBirthday from '../assets/imgs/kid-birthday.jpg';
 import PessoasFesta from '../assets/imgs/pessoas-festa.jpg';
 
 export default function ServicesPage() {
+    const [loadingContent, setLoadingContent] = useState(true);
     const [services, setServices] = useState([]);
     const [filters, setFilters] = useState({price:{value:'', textToShow:''}, buffetIncluded: false, nOfPeople: ''});
     const routerNext = useRouter();
@@ -124,6 +125,14 @@ export default function ServicesPage() {
         }
     }
     
+    // Show loading for 10 seconds if the content is not displayed yet
+    // waiting for it to load from server or show that there are no results
+    useEffect(() => {
+        setTimeout(() => {
+            setLoadingContent(false);
+        }, 10000);
+    }, []);
+
     useEffect(() => {
         if( !routerNext.isReady ) {
             return;
@@ -143,9 +152,17 @@ export default function ServicesPage() {
         })
         .then((response) => {
             setServices(response.data.services);
+            // Show loading until the answer from the server
+            setTimeout(() => {
+                setLoadingContent(false);
+            }, 5000);
             //console.log(services[0]);
         })
         .catch((err) => {
+            // Show loading until the answer from the server
+            setTimeout(() => {
+                setLoadingContent(false);
+            }, 5000);
             //console.log(err);
         }) 
 
@@ -1305,15 +1322,33 @@ export default function ServicesPage() {
                             pb='20'
                             px='10'
                             justifyContent='center'
+                            alignItems='center'
+                            direction='column'
                         >
-                            <Text
-                                fontSize={20}
-                                fontWeight={400}
-                                textAlign='center'
-                            >
-                                Não encontramos nenhum resultado para 
-                                a sua pesquisa
-                            </Text>
+                            {
+                                loadingContent
+                                ?
+                                <>
+                                    <Text
+                                        fontSize={24}
+                                        fontWeight={400}
+                                        mb='7'
+                                    >
+                                        Carregando
+                                    </Text>
+                                    <Spinner size='xl' />
+                                </>
+                                :
+                                <Text
+                                    fontSize={20}
+                                    fontWeight={400}
+                                    textAlign='center'
+                                >
+                                    Não encontramos nenhum resultado para 
+                                    a sua pesquisa
+                                </Text>
+                            }
+
                         </Flex>    
                         }
                     </Flex>

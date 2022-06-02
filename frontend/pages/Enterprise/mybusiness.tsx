@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Icon, Spinner, Text } from "@chakra-ui/react";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { TopMenuEnterprise } from "../../components/Enterprise/TopMenuEnterprise";
 import { Header } from "../../components/Header";
@@ -267,7 +267,7 @@ export default function MyBusinessEnterprise() {
             setEnterpriseData( response.data.enterpriseData );
         })
         .catch( err => {
-            console.log( err );
+            //console.log( err );
         })
         
     }, [authenticatedEnterprise]);
@@ -307,7 +307,7 @@ export default function MyBusinessEnterprise() {
             }
         )
         .catch( err => {
-            console.log( err );
+            //console.log( err );
         });
         
         setHasToUpdate(false);
@@ -317,9 +317,9 @@ export default function MyBusinessEnterprise() {
    
 
     async function saveDataChanged( data: Object ) {
-        console.log( data );
-        console.log('antes do formData');
-        console.log(enterpriseData);
+        //console.log( data );
+        //console.log('antes do formData');
+        //console.log(enterpriseData);
 
         // VALIDATE THE DATA
         let fields = [
@@ -348,17 +348,17 @@ export default function MyBusinessEnterprise() {
             setFormErrors((formE) => ({...formE, [el]:''}));
         });
 
-        console.log('cleaned formErrors');
-        console.log(formErrors);
+        //console.log('cleaned formErrors');
+        ////console.log(formErrors);
 
-        console.log(enterpriseData);
+        ////console.log(enterpriseData);
         // Error messages
         await fields.map(async (el,index) => {
             await enterpriseRegisterMyBusinessFormSchema
             .validateAt( el, enterpriseData )
             .catch((err) => {
                 setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                ////console.log(err);
             });
         });
         await fieldsPassword.map(async (el,index) => {
@@ -366,12 +366,12 @@ export default function MyBusinessEnterprise() {
             .validateAt( el, enterpriseData )
             .catch((err) => {
                 setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                //console.log(err);
+                ////console.log(err);
             });
         });
 
-        console.log( 'formErrors' );
-        console.log( formErrors );
+        //console.log( 'formErrors' );
+        //console.log( formErrors );
 
         // Validate
         return await enterpriseRegisterMyBusinessFormSchema
@@ -391,11 +391,11 @@ export default function MyBusinessEnterprise() {
         .then( async (val) => {
             if( val == true ) {
                 // Validou bemmmm
-                console.log('Validou bemmm - Passou pelo general');
-                console.log( enterpriseData );
+                //console.log('Validou bemmm - Passou pelo general');
+                //console.log( enterpriseData );
                 // Validate the password
                 if( enterpriseData.password != '' ) {
-                    console.log('Vai validar a senha');
+                    //console.log('Vai validar a senha');
                     return await enterpriseRegisterPasswordSchema
                     .isValid({
                         password: enterpriseData.password,
@@ -403,15 +403,15 @@ export default function MyBusinessEnterprise() {
                     })
                     .then((val2) => {
                         if( val == true ) {
-                            console.log('Validou a senha com sucesso');
+                            //console.log('Validou a senha com sucesso');
                             // Update the data in database
                             setHasToUpdate(true);
-                            console.log('antes do formData');
-                            console.log( enterpriseData );
+                            //console.log('antes do formData');
+                            //console.log( enterpriseData );
                             return true;
                         }
                         else {
-                            console.log('Não validou a senha com sucesso');
+                            //console.log('Não validou a senha com sucesso');
                             //Update the data with previous data changed
                             // Object.keys( data ).map((key, index) => {
                             //     setEnterpriseData((prevEnterpriseData) => ({...prevEnterpriseData, [key]: prevEnterpriseDataState[key]}) );
@@ -421,16 +421,16 @@ export default function MyBusinessEnterprise() {
                     })
                 }
                 else {
-                    console.log('Não vai validar a senha');
+                    //console.log('Não vai validar a senha');
                     setHasToUpdate(true);
-                    console.log('antes do formData');
-                    //console.log( enterpriseData );
+                    //console.log('antes do formData');
+                    ////console.log( enterpriseData );
                     return true;
                 }
 
             }
             else {
-                console.log('Não validou - general');
+                //console.log('Não validou - general');
                 //Update the data with previous data changed
                 // Object.keys( data ).map((key, index) => {
                 //     setEnterpriseData((prevEnterpriseData) => ({...prevEnterpriseData, [key]: prevEnterpriseDataState[key]}) );
@@ -441,7 +441,7 @@ export default function MyBusinessEnterprise() {
     }
 
     function handleClickMenu( event: any ) {
-        console.log( event.currentTarget.value );
+        //console.log( event.currentTarget.value );
         setComponentToLoad( event.currentTarget.value );
     }
 
@@ -530,7 +530,21 @@ export default function MyBusinessEnterprise() {
     
                 </Flex>
                 :
-                <Text>Loading</Text>
+                <Flex
+                    h='70vh'
+                    direction='column'
+                    alignItems='center'
+                    justifyContent='center'
+                >
+                    <Text
+                        fontSize={24}
+                        fontWeight={400}
+                        mb='7'
+                    >
+                        Carregando
+                    </Text>
+                    <Spinner size='xl' />
+                </Flex>
                 }
     
                 <Footer/>

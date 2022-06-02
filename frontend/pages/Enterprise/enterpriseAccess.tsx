@@ -83,6 +83,7 @@ export default function EnterpriseAccess() {
                     isMobileVersion == false
                     &&
                     <Image src={KidBirthday}
+                        priority={true}
                         layout='fill'
                         objectFit='cover'
                         objectPosition='center'

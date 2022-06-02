@@ -113,7 +113,7 @@ module.exports = class UserController {
         const userExists = await userModel.getUserByEmail( email );
 
         if( !userExists ) {
-            res.status(422).json({ message: "Não há usuário cadastrado com esse email" });
+            res.status(422).json({ message: "E-mail ou senha inválida" });
             return;
         }
 
@@ -121,7 +121,7 @@ module.exports = class UserController {
         const checkPassword = await bcrypt.compare(password, userExists.password);
 
         if( !checkPassword ) {
-            res.status(422).json({ message: "Senha inválida" });
+            res.status(422).json({ message: "E-mail ou senha inválida" });
             return; 
         }
 

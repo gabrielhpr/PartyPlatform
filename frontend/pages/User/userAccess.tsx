@@ -68,6 +68,7 @@ export default function userAccess() {
                 justifyContent='center'
             >
                 <Image src={FotoFestaEntregaPresente}
+                    priority={true}
                     layout='fill'
                     objectFit='cover'
                     objectPosition='center'
