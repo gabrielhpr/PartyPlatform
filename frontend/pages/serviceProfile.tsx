@@ -1410,7 +1410,9 @@ export default function ServiceProfilePage() {
                 <Modal isOpen={modalRegister.isOpen} onClose={modalRegister.onClose}>
                     <ModalOverlay />
                     <ModalContent>
-                        <ModalHeader></ModalHeader>
+                        <ModalHeader>
+                            <FlashMessageComponent/>
+                        </ModalHeader>
                     
                         <ModalCloseButton />
                         <ModalBody>
@@ -1427,6 +1429,8 @@ export default function ServiceProfilePage() {
                                 borderRadius={8} 
                                 fontSize={20}
                             >
+
+
                                 {/* LOGIN */}
                                 <Flex
                                     mb='2'
