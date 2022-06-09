@@ -13,8 +13,8 @@ interface ModalImageGalleryProps {
 export function ModalImageGallery( {buttonText, content, handleFunctions }: ModalImageGalleryProps ) {
     const { isOpen, onOpen, onClose } = handleFunctions;
     
-    console.log('content: ');
-    console.log(content);
+    //console.log('content: ');
+    //console.log(content);
 
     return (
         <>

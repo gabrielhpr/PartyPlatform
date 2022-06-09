@@ -12,7 +12,7 @@ export function FlashMessageComponent() {
             setVisibility( true );
             setMessage( message );
             setType( type );
-            console.log('entrou no bus');
+            //console.log('entrou no bus');
 
             setTimeout(() => {
                 setVisibility(false);

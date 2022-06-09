@@ -299,6 +299,7 @@ export default function ServicesPage() {
                                     width={{base:'100vw',lg:350}}
                                     mt={{base:12,lg:20}}
                                     position={{base:'fixed',lg:'absolute'}}
+                                    top={{base:0, lg:'auto'}}
                                     left={{base:0, lg:'auto'}}
                                     bottom={{base: 0, lg:'auto'}}
                                     borderTopRadius={{base:'30%'}}
@@ -401,6 +402,7 @@ export default function ServicesPage() {
                                     mt={12}
                                     position='fixed'
                                     left={0}
+                                    top={0}
                                     bottom={0}
                                     borderTopRadius='30%'
                                     borderRadius={0}
@@ -612,6 +614,7 @@ export default function ServicesPage() {
                                     width={{base:'100vw',lg:350}}
                                     mt={{base:12,lg:20}}
                                     left={{base:0, lg:'auto'}}
+                                    top={{base: 0, lg:'auto'}}
                                     bottom={{base: 0, lg:'auto'}}
                                     borderTopRadius={{base:'30%'}}
                                     borderRadius={{base:0, lg:10}}

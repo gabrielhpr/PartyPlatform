@@ -147,6 +147,8 @@ export default function ResetPasswordEnterprise() {
                     px='4'
                     bg='brand.white'
                 >
+                    <FlashMessageComponent/>
+
                     <Flex direction='column'
                     >
                         <FormControl isInvalid={formErrorsEnterprisePassword.password != '' ? true : false}>

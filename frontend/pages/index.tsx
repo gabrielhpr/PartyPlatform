@@ -48,7 +48,7 @@ export default function HomePage() {
     // Close dropdown menu on click outside
     useEffect(() => {
         if( !isMobileVersion ) {
-            console.log('entrou');
+            ////console.log('entrou');
             document.addEventListener('mouseup', function (e) {
                 var menu1 = document.getElementById('menuPartyTypeOnClickAndOnSearch');
                 var menu2 = document.getElementById('menuServicesOnClick');
@@ -108,12 +108,12 @@ export default function HomePage() {
 
     // Show current state of searchData
     function showData() {
-        console.log( searchData );
+        //console.log( searchData );
     }
 
     // Used in Menu search
     function searchFunction( event: any, menuId: string ) {
-        console.log( event.currentTarget.value );
+        //console.log( event.currentTarget.value );
         let inputValue = event.currentTarget.value.toUpperCase();
         let menu = document.getElementById( menuId );
         let itemList = menu.getElementsByTagName("button");
@@ -158,7 +158,7 @@ export default function HomePage() {
 
 
             {/* Header */}
-            <Header name='' position='relative' />
+            <Header name='' position='relative'/>
 
             <Sidebar/>
             
@@ -190,6 +190,7 @@ export default function HomePage() {
                         borderRadius={30}
                         borderRightRadius='50%'
                         px='30'
+                        zIndex={3}
                     >
 
                         <Text as='h2' 
@@ -247,17 +248,17 @@ export default function HomePage() {
                                         }
                                     }}
                                     onClick={() => {
-                                        console.log('clicou');
+                                        //console.log('clicou');
                                         if(searchData.partyType === '') {
                                             setMenuPartyTypeDisp('');
                                         }
                                         else if (searchData.serviceCategory === '') {
                                             if(isMobileVersion) {
-                                                console.log('is mobile version');
+                                                //console.log('is mobile version');
                                                 setMenuService('mobile');
                                             }
                                             else {
-                                                console.log('not mobile version');
+                                                //console.log('not mobile version');
                                                 setMenuService('onclick');
                                             }
                                         }
@@ -284,25 +285,27 @@ export default function HomePage() {
                                 <Box 
                                     height={{base:'100vh',lg:230}}
                                     width={{base:'100vw',lg:350}}
-                                    mt={{base:12,lg:20}}
+                                    mt={{base:0,lg:20}}
                                     position={{base:'fixed',lg:'absolute'}}
                                     left={{base:0, lg:'auto'}}
+                                    top={{base:0, lg:'auto'}}
                                     bottom={{base: 0, lg:'auto'}}
                                     borderTopRadius={{base:'30%'}}
                                     borderRadius={{base:0, lg:10}}
                                     id='menuPartyTypeOnClickAndOnSearch'
-                                    overflowY="scroll"
+                                    overflowY={{base:"scroll", lg:"scroll"}}
                                     display={menuPartyTypeDisp}
                                     zIndex={3}
                                     bg='white'
                                 >
                                     <Flex direction="column" id="menuPartyType"
                                         h='100%'
+                                        mb='10'
                                     >
                                         <Flex
-                                            h={{base:'10%',lg:'20%'}}
+                                            //h={{base:'10%',lg:'20%'}}
                                             px='5'
-                                            py='2'
+                                            py='4'
                                             bg='rgba(0,0,0,0.1)'
                                             alignItems='center'
                                             justifyContent='space-between'
@@ -340,9 +343,9 @@ export default function HomePage() {
                                             return(
                                                 <Button
                                                     bg='white'
-                                                    h={{base:'10%',lg:'25%'}}
+                                                    //h={{base:'10%',lg:'25%'}}
                                                     px='5'
-                                                    py='1'
+                                                    py={{base:'12', lg:'7'}}
                                                     borderRadius={0}
                                                     _focus={{outline:'none'}}
                                                     _hover={{bg:'rgba(0,0,0,0.1)'}}
@@ -354,7 +357,7 @@ export default function HomePage() {
                                                         setSearchInputValueFirst('');
                                                         setMenuPartyTypeDisp('none');
                                                         if( isMobileVersion ) {
-                                                            console.log('is mobile versions');
+                                                            //console.log('is mobile versions');
                                                             
                                                             setMenuService('mobile');
                                                         }
@@ -388,6 +391,7 @@ export default function HomePage() {
                                     mt={12}
                                     position='fixed'
                                     left={0}
+                                    top={0}
                                     bottom={0}
                                     borderTopRadius='30%'
                                     borderRadius={0}
@@ -520,8 +524,8 @@ export default function HomePage() {
                                         name='service'
                                         partyType={searchData.partyType}
                                         handleClick={(event) => {
-                                            console.log('menuServicesOnClick');
-                                            console.log(searchData.partyType);
+                                            //console.log('menuServicesOnClick');
+                                            //console.log(searchData.partyType);
                                             setSearchData({...searchData, serviceCategory: event.currentTarget.value.split('-')[0], serviceSpecificCategory: event.currentTarget.value.split('-')[1]});
                                             setMenuService('none');
                                         }}
@@ -599,7 +603,8 @@ export default function HomePage() {
                                     width={{base:'100vw',lg:350}}
                                     mt={{base:12,lg:20}}
                                     left={{base:0, lg:'auto'}}
-                                    bottom={{base: 0, lg:'auto'}}
+                                    //bottom={{base: 0, lg:'auto'}}
+                                    top={{base: 0, lg: 'auto'}}
                                     borderTopRadius={{base:'30%'}}
                                     borderRadius={{base:0, lg:10}}
                                     overflowY="scroll"
@@ -670,7 +675,7 @@ export default function HomePage() {
                                                 value={searchData.location}
                                                 
                                                 onChange={(event: any) => {
-                                                    console.log(event.currentTarget.value);
+                                                    //console.log(event.currentTarget.value);
                                                     setSearchData({...searchData, location: event.currentTarget.value});
                                                     searchFunction(event, "menuWhere");
                                                 }}
@@ -748,6 +753,8 @@ export default function HomePage() {
                     <Flex direction='column' 
                         justifyContent='center'
                         alignItems='center'
+                        zIndex={2}
+    
                         //mx='auto'
                         w={{base:'100%', lg:'50%'}}
                         h={{base:'50%', lg:'100%'}}
@@ -758,10 +765,14 @@ export default function HomePage() {
                         //borderBottomLeftRadius={{base:'30%'}}
 
                     >
-                        <Flex  mb={{base:'2', lg:'5'}} mx='auto'>
+                        <Flex  
+                            mb={{base:'2', lg:'5'}} 
+                            mx='auto'
+                            zIndex={1}
+                        >
                             <Flex position='relative'
-                                h={{base:150, lg:230}} 
-                                w={{base:150, lg:230}} 
+                                h={{base:'40vw', sm: 150, lg:230}} 
+                                w={{base:'40vw', sm: 150, lg:230}} 
                                 mr={{base:'2', lg:'5'}}
                                 borderRadius={4}
                                 borderTopLeftRadius='50%'
@@ -776,8 +787,8 @@ export default function HomePage() {
                             </Flex>
 
                             <Flex position='relative'
-                                h={{base:150, lg:230}} 
-                                w={{base:150, lg:230}} 
+                                h={{base:'40vw', sm: 150, lg:230}} 
+                                w={{base:'40vw', sm: 150, lg:230}} 
                                 borderRadius={4}
                                 overflow='hidden'
                                 borderTopRightRadius='50%'
@@ -790,10 +801,13 @@ export default function HomePage() {
                             </Flex>
                         </Flex>
                                         
-                        <Flex mx='auto'>
+                        <Flex 
+                            mx='auto'
+                            zIndex={1}
+                        >
                             <Flex position='relative'
-                                h={{base:150, lg:230}} 
-                                w={{base:150, lg:230}} 
+                                h={{base:'40vw', sm: 150, lg:230}} 
+                                w={{base:'40vw', sm: 150, lg:230}} 
                                 mr={{base:'2', lg:'5'}}
                                 borderRadius={4}
                                 borderBottomLeftRadius='50%'
@@ -807,8 +821,8 @@ export default function HomePage() {
                             </Flex>
 
                             <Flex position='relative'
-                                h={{base:150, lg:230}} 
-                                w={{base:150, lg:230}} 
+                                h={{base:'40vw', sm: 150, lg:230}} 
+                                w={{base:'40vw', sm: 150, lg:230}}  
                                 borderRadius={4}
                                 overflow='hidden'
                                 borderBottomRightRadius='50%'

@@ -126,8 +126,6 @@ export default function ResetPasswordUser() {
             <Header name='' position="relative" />
             <Sidebar/>
 
-            <FlashMessageComponent/>
-
             <Flex 
                 w='100vw'
                 h='90vh'
@@ -148,6 +146,8 @@ export default function ResetPasswordUser() {
                     px='4'
                     bg='brand.white'
                 >
+                    <FlashMessageComponent/>
+
                     <Flex direction='column'
                     >
                         <FormControl isInvalid={formErrorsUserPassword.password != '' ? true : false}>

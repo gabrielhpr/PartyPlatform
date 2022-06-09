@@ -331,6 +331,10 @@ export default function ServiceProfilePage() {
     async function handleSubmitLogin() {
         //console.log('Entrou handleSubmitLogin');
         await loginUser( userLoginData, false );
+
+        // Send the email
+        //await handleSendEmail();
+        
         //console.log('O resultado de loginUser é');
         //console.log('Saiu handleSubmitLogin');
     }
@@ -373,6 +377,9 @@ export default function ServiceProfilePage() {
         if( isValidGeneral && isValidPassword ) {
             //console.log('Entrou handleSubmitRegister');
             await registerUser( userRegisterData, false );
+
+            // Send the email
+            //await handleSendEmail();
             //console.log('Saiu handleSubmitRegister');
         }
     }
