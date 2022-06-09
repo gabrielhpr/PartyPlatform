@@ -165,6 +165,7 @@ export default function HomePage() {
             {/* Menu */}
             <Flex 
                 height='92vh'
+                //height={1000}
                 w='100vw'
                 fontSize={32}
                 justifyContent='center'
@@ -174,6 +175,7 @@ export default function HomePage() {
                 <Flex 
                     width='100%' 
                     height='92vh'
+                    //height={1000}
                     alignItems='center'
                     justifyContent='space-between'
                     bg='rgba(0,0,0,0)' zIndex={5}
@@ -194,7 +196,7 @@ export default function HomePage() {
                     >
 
                         <Text as='h2' 
-                            fontSize={{base:32,lg:42}}
+                            fontSize={{base:30, sm: 32, lg:42}}
                             fontWeight={500} 
                             color='black'
                             zIndex={2} 
@@ -205,7 +207,7 @@ export default function HomePage() {
                         </Text>
 
                         <Flex 
-                            width='90%'
+                            width={{base:'95%', sm: '80%', md: '60%', lg: '90%'}}
                             height={{base:'auto',lg:16}}
                             borderRadius={8}
                             alignItems='center'
@@ -388,7 +390,7 @@ export default function HomePage() {
                                     id='menuServicesOnSearchMobile'
                                     height='100vh'
                                     width='100vw'
-                                    mt={12}
+                                    //mt={12}
                                     position='fixed'
                                     left={0}
                                     top={0}
@@ -406,6 +408,7 @@ export default function HomePage() {
                                         <Flex justifyContent='space-between'
                                             alignItems='center'
                                             w='100%'
+                                            py='4'
                                         >
                                             <Button 
                                                 bg='none'
@@ -472,7 +475,7 @@ export default function HomePage() {
                                                     <Button
                                                         key={i}
                                                         w='100%'
-                                                        py='7'
+                                                        py='8'
                                                         bg='brand.white'
                                                         borderBottom='1px solid rgba(0,0,0,0.2)'
                                                         borderRadius={0}
@@ -601,7 +604,7 @@ export default function HomePage() {
                                     id='menuLocation'
                                     height={{base:'100vh',lg:230}}
                                     width={{base:'100vw',lg:350}}
-                                    mt={{base:12,lg:20}}
+                                    mt={{base:0,lg:20}}
                                     left={{base:0, lg:'auto'}}
                                     //bottom={{base: 0, lg:'auto'}}
                                     top={{base: 0, lg: 'auto'}}
@@ -630,8 +633,9 @@ export default function HomePage() {
                                                 justifyContent='space-between'
                                                 alignItems='center'
                                                 w='100%'
-                                                px='4'
+                                                px='5'
                                                 h='50%'
+                                                py='4'
                                                 //minHeight={100}
                                             >
                                                 <Flex alignItems='center'
@@ -649,7 +653,8 @@ export default function HomePage() {
                                                 <Button 
                                                     h='100%'
                                                     bg='brand.white'
-                                                    py='2' px='2'
+                                                    py='2' 
+                                                    px='2'
                                                     //_hover={{bg:'none', textColor: 'brand.red'}}
                                                     //_focus={{outline:'none'}}
                                                     onClick={() => {
@@ -741,7 +746,7 @@ export default function HomePage() {
                                 fontWeight={900}
                                 _focus={{outline:'none'}}
                                 onClick={handleSearch}
-                                leftIcon={<Icon as={FiSearch} fontSize={20} fontWeight={900} />}
+                                leftIcon={<Icon as={FiSearch} fontSize={20} fontWeight={900} display={{base: '', lg:'none'}} />}
                             >
                                 Pesquisar
                             </Button>
@@ -757,6 +762,7 @@ export default function HomePage() {
     
                         //mx='auto'
                         w={{base:'100%', lg:'50%'}}
+                        //h='auto'
                         h={{base:'50%', lg:'100%'}}
                         bg='brand.white'
                         borderLeftRadius={{base:'0%', lg:'50%'}}
@@ -865,7 +871,7 @@ export default function HomePage() {
                     w='100%'
                     h={{base:'35vh', lg:'30vh'}}
                     alignItems='flex-end'
-                    justifyContent={{base:'space-evenly',lg:'center'}}
+                    justifyContent={{base:'space-evenly', lg:'center'}}
                     mt='5'
                 >  
                     {
@@ -874,7 +880,7 @@ export default function HomePage() {
                                 <Button
                                     mr={{base:'0',lg:'5'}}
                                     p='0'
-                                    w={{base:'30vw', lg:'15vw'}}
+                                    w={{base:'30vw', md:'25vw', lg:'15vw'}}
                                     h='100%'
                                     bg={cardSearchData.partyType == el.value ? 'brand.yellow' : 'brand.white'}
                                     value={el.value}
@@ -888,7 +894,8 @@ export default function HomePage() {
                                     >
                                         <Flex position='relative'
                                             h='28vh' 
-                                            w={{base:'30vw', lg:'15vw'}}
+                                            //w={{base:'30vw', lg:'15vw'}}
+                                            w='100%'
                                             borderRadius={4}
                                             overflow='hidden'
                                         >
@@ -901,7 +908,8 @@ export default function HomePage() {
 
                                         <Flex
                                             h='7vh'
-                                            w={{base:'30vw', lg:'15vw'}}
+                                            //w={{base:'30vw', lg:'15vw'}}
+                                            w='100%'
                                             alignItems='center' 
                                             //flexWrap='wrap'                                            
                                         >
@@ -926,7 +934,8 @@ export default function HomePage() {
                 <Flex 
                     justifyContent='center'
                     alignItems='flex-start'
-                    h={{base:'45vh', lg:'35vh'}}
+                    //h={{base:'45vh', lg:'35vh'}}
+                    h={{base: 400, lg: 400}}
                     w='100%'
                     mt='4'
                     pt='14'
@@ -935,14 +944,18 @@ export default function HomePage() {
                 >
                     <Flex
                         w={{base:'60%', lg:'60%'}}
-                        h={{base:'20vh',lg:'15vh'}}
-                        >
+                        //h={{base:'20vh',lg:'15vh'}}
+                        h={{base: 350, lg: 350}}
+                    >
                         <AliceCarousel
                             autoPlay={false}
                             autoHeight={true}
                             responsive={{
-                                0: {items:1.1},
-                                1024: {items:5}
+                                0: {items:1.2},
+                                512: {items: 1.5},
+                                768: {items: 3.3},
+                                1024: {items:4.3},
+                                1280: {items: 5}
                             }}
 
                             mouseTracking
@@ -950,7 +963,8 @@ export default function HomePage() {
                                 typeOfServices[cardSearchData.partyType].services.map((el, index) => {
                                     return (
                                         <Button
-                                            h={{base:'20vh',lg:'15vh'}}
+                                            //h={{base:'20vh',lg:'15vh'}}
+                                            h={{base: 200, lg: 150}}
                                             w='90%'
                                             my='1'
                                             mx='1'

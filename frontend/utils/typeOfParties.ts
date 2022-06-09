@@ -11,6 +11,24 @@ export const typeOfParties = {
     Aniversario: {value: 'Aniversario', textToShow: 'Outras Festas'}
 }
 
+export const typeOfServicesIcons = {
+    Espaco: {
+        Chacara: {icon: GiBlockHouse},
+        SalaoDeFestas: {icon: GiBlockHouse}
+    },
+    Servico: {
+        Buffet: {icon: GiForkKnifeSpoon},
+        Bolos: {icon: FaBirthdayCake},
+        Doces: {icon: GiCupcake},
+        FotografiaFilmagem: {icon: ImCamera},
+        Decoracao: {icon: GiPartyFlags},
+        Musica: {icon: BsMusicNoteBeamed},
+        AnimacaoDeFesta: {icon: GiPartyPopper},
+        Assessoria: {icon: GiNotebook}
+    }
+}
+
+
 export const typeOfServices = {
     Infantil: {
         services: [

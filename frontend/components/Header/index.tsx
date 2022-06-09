@@ -185,8 +185,26 @@ export function Header( {name, position, type='oneColor'} : HeaderProps ) {
                 /* ENTERPRISE AUTHENTICATED */
                 authenticatedEnterprise
                 ?
-                    <Flex width="20%" justifyContent="flex-end">
+                    <Flex 
+                        //width="20%" 
+                        justifyContent="flex-end"
+                    >
                         <Flex>
+                            <NavLink
+                                href="/Enterprise/home"
+                                _hover={{textDecoration:"none"}}
+                                display={{base:'none', lg:'flex'}}
+                            >
+                                <Button bg="none"
+                                    //border="2px solid"
+                                    //borderColor={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
+                                    color={scrollHeader ? "brand.dark_blue": "brand.dark_blue"}
+                                    transition="0.3s"
+                                    _hover={{bg:"brand.white", color:"brand.dark_blue"}}
+                                >
+                                    HOME
+                                </Button>
+                            </NavLink>
                             <Button
                                 bg='none'
                                 //border="2px solid"

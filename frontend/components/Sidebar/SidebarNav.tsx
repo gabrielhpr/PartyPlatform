@@ -29,7 +29,7 @@ export function SidebarNav() {
         else {
             setEnterpriseArea(false);
         }
-        console.log( routerNext.pathname );
+        //console.log( routerNext.pathname );
 
     }, [routerNext.pathname]);
 
@@ -61,7 +61,6 @@ export function SidebarNav() {
                     <NavLink icon={RiDraftFill} href="/Enterprise/ads">Meus anúncios</NavLink>
                     <NavLink icon={RiStore3Fill} href="/Enterprise/mybusiness">Meu negócio</NavLink>
                     <NavLink icon={AiOutlineStar} href="/Enterprise/rating">Avaliações</NavLink>
-                    <NavLink icon={RiSettings3Line} href="/Enterprise/settings">Minha conta</NavLink>
                 </Stack>
                 :               
                 <Stack spacing="8">

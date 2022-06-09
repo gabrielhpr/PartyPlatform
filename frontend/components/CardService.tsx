@@ -34,8 +34,11 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
             //justifyContent='center'
             //alignItems='flex-start'
             bg='white'
-            h={{base:'50vh', lg:'42vh'}}
-            w={{base:'90vw', lg:'30vw', xl:'20vw'}}
+            //h={{base:'50vh', lg:'42vh'}}
+            h={{base:385, lg: 385}}
+            //w={{base:'90vw', lg:'30vw', xl:'20vw'}}
+            w={{base:'85vw', sm: '65vw', md: '50vw', lg:'30vw', xl:'20vw'}}
+
             position='relative'
             _hover={{bg: 'rgba(0,0,0,0.1)'}}
         >
@@ -51,11 +54,12 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                     photos.map((image, i) => {
                         // The last picture
                         if( (photos.length - 1) == i ) {
-                            console.log('entrou no last');
+                            //console.log('entrou no last');
                             return (
                                 <Box
                                     key={i}
-                                    h={{base:'40vh', lg:'32vh'}}
+                                    //h={{base:'40vh', lg:'32vh'}}
+                                    h={{base: 300, lg: 300}}
                                     overflow='hidden'
                                     borderTopRadius={borderTop==true ? 8 : 0}
                                     justifyContent='center'
@@ -109,7 +113,8 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
                             return (
                                 <Box
                                     key={i}
-                                    h={{base:'40vh', lg:'32vh'}}
+                                    //h={{base:'40vh', lg:'32vh'}}
+                                    h={{base:300, lg:300}}
                                     overflow='hidden'
                                     borderTopRadius={borderTop==true ? 8 : 0}
                                     justifyContent='center'
@@ -136,11 +141,12 @@ export function CardService( { name, location, classification, rangeOfPeople, pr
 
 
             <Flex 
-                h={{base:'10vh',lg:'10vh'}}
+                //h={{base:'10vh',lg:'10vh'}}
+                h={{base:80, lg:80}}
                 direction='column'
                 alignItems='center'
                 justifyContent='center'
-                py='2'
+                //py='1'
                 px='3'
                 onClick={handleOnClick}
                 cursor='pointer'

@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle, Box, Button, Flex, Grid, GridItem, Icon, Text } from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, Box, Button, Flex, Grid, GridItem, Icon, Spinner, Text } from "@chakra-ui/react";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { TopMenuEnterprise } from "../../../components/Enterprise/TopMenuEnterprise";
 import { Header } from "../../../components/Header";
@@ -807,6 +807,7 @@ export default function EditAdsEnterprise() {
                             }    
                         </Flex>
                     </Flex>
+                    <Footer />
                 </Box>
             )
         }
@@ -815,9 +816,22 @@ export default function EditAdsEnterprise() {
                 <Box>
                     <Header name="" position="relative" />
                     <TopMenuEnterprise />
-                    <Flex>
-                        <Text>Loading</Text>
+                    <Flex
+                        h='70vh'
+                        direction='column'
+                        alignItems='center'
+                        justifyContent='center'
+                    >
+                        <Text
+                            fontSize={24}
+                            fontWeight={400}
+                            mb='7'
+                        >
+                            Carregando
+                        </Text>
+                        <Spinner size='xl' />
                     </Flex>
+                    <Footer />
                 </Box>
             )
         }

@@ -71,7 +71,9 @@ export default function AdsEnterprise() {
                     mt="5"
                     mb='14'
                     p={{base:'4', lg:"10"}}
-                    h='58vh'
+                    //h='58vh'
+                    minH={{base:'50vh', lg:'50vh'}}
+                    h='auto'
                 >
     
                     <Stack 
@@ -87,7 +89,7 @@ export default function AdsEnterprise() {
                             ?
                             <NavLink href="/Enterprise/ads/create"
                                 h={{base:'25vw', lg:'15.3vw'}}
-                                w={{base:'90vw',lg:'15.3vw'}}
+                                w={{base:'88vw', sm: '65vw', md: '50vw', lg:'15.3vw'}}
                                 _hover={{textDecoration: 'none'}}
                             >
                                 <Flex 

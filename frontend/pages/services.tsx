@@ -174,9 +174,11 @@ export default function ServicesPage() {
 
             <Sidebar/>
 
-            {/* Carroussel and Menu */}
+            {/* Menu and picture */}
             <Flex 
-                height='25vh'
+                //height='25vh'
+                height={{base: 250, lg: 250}}
+                position='relative'
                 w='100vw'
                 fontSize={32}
                 justifyContent='center'
@@ -187,7 +189,7 @@ export default function ServicesPage() {
             >
                 <Flex 
                     width='100%' 
-                    height='25vh'
+                    height='100%'
                     alignItems='center'
                     justifyContent='space-between'
                     bg='rgba(0,0,0,0)' zIndex={5}
@@ -297,7 +299,7 @@ export default function ServicesPage() {
                                 <Box 
                                     height={{base:'100vh',lg:230}}
                                     width={{base:'100vw',lg:350}}
-                                    mt={{base:12,lg:20}}
+                                    mt={{base:0,lg:20}}
                                     position={{base:'fixed',lg:'absolute'}}
                                     top={{base:0, lg:'auto'}}
                                     left={{base:0, lg:'auto'}}
@@ -316,7 +318,7 @@ export default function ServicesPage() {
                                         <Flex
                                             h={{base:'10%',lg:'20%'}}
                                             px='5'
-                                            py='2'
+                                            py='4'
                                             bg='rgba(0,0,0,0.1)'
                                             alignItems='center'
                                             justifyContent='space-between'
@@ -354,9 +356,9 @@ export default function ServicesPage() {
                                             return(
                                                 <Button
                                                     bg='white'
-                                                    h={{base:'10%',lg:'25%'}}
+                                                    //h={{base:'10%',lg:'25%'}}
                                                     px='5'
-                                                    py='1'
+                                                    py={{base:'12', lg:'7'}}
                                                     borderRadius={0}
                                                     _focus={{outline:'none'}}
                                                     _hover={{bg:'rgba(0,0,0,0.1)'}}
@@ -399,7 +401,6 @@ export default function ServicesPage() {
                                     id='menuServicesOnSearchMobile'
                                     height='100vh'
                                     width='100vw'
-                                    mt={12}
                                     position='fixed'
                                     left={0}
                                     top={0}
@@ -417,6 +418,7 @@ export default function ServicesPage() {
                                         <Flex justifyContent='space-between'
                                             alignItems='center'
                                             w='100%'
+                                            py='4'
                                         >
                                             <Button 
                                                 bg='none'
@@ -483,7 +485,7 @@ export default function ServicesPage() {
                                                     <Button
                                                         key={i}
                                                         w='100%'
-                                                        py='7'
+                                                        py='8'
                                                         bg='brand.white'
                                                         borderBottom='1px solid rgba(0,0,0,0.2)'
                                                         borderRadius={0}
@@ -612,7 +614,7 @@ export default function ServicesPage() {
                                     id='menuLocation'
                                     height={{base:'100vh',lg:230}}
                                     width={{base:'100vw',lg:350}}
-                                    mt={{base:12,lg:20}}
+                                    mt={{base:0,lg:20}}
                                     left={{base:0, lg:'auto'}}
                                     top={{base: 0, lg:'auto'}}
                                     bottom={{base: 0, lg:'auto'}}
@@ -641,7 +643,8 @@ export default function ServicesPage() {
                                                 justifyContent='space-between'
                                                 alignItems='center'
                                                 w='100%'
-                                                px='4'
+                                                px='5'
+                                                py='4'
                                                 h='50%'
                                                 //minHeight={100}
                                             >
@@ -762,7 +765,7 @@ export default function ServicesPage() {
 
                     </Flex>
 
-                    {/* Square of pictures */}
+                    {/* Picture */}
                     <Flex 
                         display={{base:'none', lg:'flex'}}
                         direction='column' 
@@ -806,7 +809,7 @@ export default function ServicesPage() {
                 </Flex>
             </Flex>
 
-            <Box w='100%' h='auto' minHeight='70vh'
+            <Box w='100%' h='auto' //he='70vh'
             >
                 {/* Contain all cards */}
                 <Flex w='100%' h='100%' bg='white' mx='auto' >
@@ -821,7 +824,7 @@ export default function ServicesPage() {
                             py='5'
                             position='sticky'
                             top={0}
-                            zIndex={1}
+                            zIndex={5}
                         >
                             <Flex w='90%' 
                                 justifyContent='space-between'

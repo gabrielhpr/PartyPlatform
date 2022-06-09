@@ -77,7 +77,8 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, w,...rest }:
                 display={{base:'flex', lg:'none'}}
                 alignItems='center'
                 w={{base:'90%'}}
-                h={{base:'10vh'}}
+                py='1'
+                //h={{base:'10vh'}}
             >
                 <AliceCarousel
                     autoPlay={false}
@@ -93,10 +94,11 @@ export function LeftMenuEdit({propertyName, srcImage, stateChanger, w,...rest }:
                         menuItems.map((el, index) => {
                             return (
                                 <Button
-                                    h={{base:'5vh'}}
+                                    //h={{base:'5vh'}}
                                     w='90%'
                                     my='1'
                                     mx='1'
+                                    py='7'
                                     key={index}
                                     boxShadow="0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45)"
                                     bg='rgba(255,255,255,0.95)'

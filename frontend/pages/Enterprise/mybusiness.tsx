@@ -472,6 +472,8 @@ export default function MyBusinessEnterprise() {
                 */}
                     <LeftMenuMyBusiness 
                         propertyName={enterpriseData.enterpriseName}
+                        serviceCategory={enterpriseData.enterpriseCategory}
+                        serviceSpecificCategory={enterpriseData.enterpriseSpecificCategory}
                         //srcImage={`http://localhost:5000/images/enterprise/${adData?.photos.split(",")[0]}`}
                         handleOnClick={handleClickMenu}
                         menuOptions={{

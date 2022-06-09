@@ -6,9 +6,12 @@ import { LeftMenuItemMyBusiness } from "./LeftMenuItem";
 import Image from 'next/image';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
+import { typeOfServicesIcons } from "../../../utils/typeOfParties";
 
 interface LeftMenuEditProps {
     propertyName: string;
+    serviceCategory: string;
+    serviceSpecificCategory: string;
     srcImage?: string;
     menuOptions: { 
         [key: string]: {
@@ -21,7 +24,7 @@ interface LeftMenuEditProps {
     w?: {base: string, lg: string};
 }
 
-export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selectedOption, handleOnClick, w, ...rest }: LeftMenuEditProps) {
+export function LeftMenuMyBusiness({propertyName, serviceCategory, serviceSpecificCategory, srcImage, menuOptions, selectedOption, handleOnClick, w, ...rest }: LeftMenuEditProps) {
     
     return (
         <Flex 
@@ -57,12 +60,13 @@ export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selecte
                 height={250}
                 width="100%"
                 position='relative'
+                alignItems='center'
+                justifyContent='center'
             >
-                {/* <Image 
-                    src={srcImage}
-                    layout='fill'
-                    objectFit="cover"
-                /> */}
+                <Icon as={typeOfServicesIcons[serviceCategory][serviceSpecificCategory].icon} 
+                    color='brand.white' 
+                    fontSize={{base: 110, lg: 105}}
+                />
             </Flex>
 
             <Flex bg="brand.red"  height={2}/>
@@ -72,7 +76,8 @@ export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selecte
                 display={{base:'flex', lg:'none'}}
                 alignItems='center'
                 w={{base:'90%'}}
-                h={{base:'10vh'}}
+                //h={{base:'10vh'}}
+                py='1'
             >
                 <AliceCarousel
                     autoPlay={false}
@@ -88,7 +93,8 @@ export function LeftMenuMyBusiness({propertyName, srcImage, menuOptions, selecte
                         Object.values(menuOptions).map((el, index) => {
                             return (
                                 <Button
-                                    h={{base:'5vh'}}
+                                    //h={{base:'5vh'}}
+                                    py='8'
                                     w='90%'
                                     my='1'
                                     mx='1'

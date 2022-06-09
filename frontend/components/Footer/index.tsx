@@ -6,7 +6,7 @@ import { AiOutlineFacebook, AiOutlineInstagram } from "react-icons/ai";
 export function Footer() {
     return (
         <Box 
-            h={300}
+            h={{base: 400, lg: 300}}
             bg='brand.dark_blue'
             color='brand.white'
             //position='absolute'
@@ -35,27 +35,65 @@ export function Footer() {
                         direction='row'
                         flexWrap='wrap'
                         spacing={3}
-                        fontSize={{base: 16, lg:16}}
+                        fontSize={{base: 19, lg:16}}
+                        
                     >
-                        <NavLink href="/contact">
+                        <NavLink 
+                            href="/contact"
+                            py='3'
+                            px='2'
+                        >
                             Entrar em contato
                         </NavLink>
-                        <NavLink href="https://www.iubenda.com/privacy-policy/19023979" isExternal>
+
+                        <NavLink 
+                            href="https://www.iubenda.com/privacy-policy/19023979" 
+                            isExternal
+                            py='3'
+                            px='2'
+                        >
                             Política de Privacidade
                         </NavLink>
-                        <NavLink href="/about">
+
+                        <NavLink 
+                            py='3'
+                            px='2'
+                            href="/about"
+                        >
                             Quem somos ?
                         </NavLink>
-                        <NavLink href="https://www.iubenda.com/termos-e-condicoes/19023979" isExternal>
+
+                        <NavLink 
+                            href="https://www.iubenda.com/termos-e-condicoes/19023979" 
+                            isExternal
+                            py='3'
+                            px='2'
+                        >
                             Termos e Condições
                         </NavLink>
-                        <NavLink href="https://www.iubenda.com/privacy-policy/19023979/cookie-policy" isExternal>
+
+                        <NavLink 
+                            href="https://www.iubenda.com/privacy-policy/19023979/cookie-policy" 
+                            isExternal
+                            py='3'
+                            px='2'
+                        >
                             Política de Cookies
                         </NavLink>
-                        <NavLink href="/Enterprise/enterpriseAccess">
+
+                        <NavLink 
+                            href="/Enterprise/enterpriseAccess"
+                            py='3'
+                            px='2'
+                        >
                             Cadastro de empresas
                         </NavLink>
-                        <NavLink href="/image-attribution">
+
+                        <NavLink 
+                            href="/image-attribution"
+                            py='3'
+                            px='2'
+                        >
                             Imagens - Direitos Autorais
                         </NavLink>
                     </Stack>
@@ -65,6 +103,7 @@ export function Footer() {
                     w='90%'
                     direction='column'
                     py='2'
+                    mt='2'
                 >
                     <Text
                         color='brand.white'
@@ -76,7 +115,7 @@ export function Footer() {
                     <Stack
                         spacing={2}
                         direction='row'
-                        fontSize={{base: 42, lg: 32}}
+                        fontSize={{base: 46, lg: 32}}
 
                     >
                         <NavLink
