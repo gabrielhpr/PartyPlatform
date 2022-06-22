@@ -269,9 +269,6 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                         let res = saveImagesChanged();
                                         if( res == true ) {
                                             modalPhotos.onClose();
-                                            setTimeout(() => {
-                                                window.location.reload();
-                                            }, 2000);
                                         }
                                     }}
                                 >

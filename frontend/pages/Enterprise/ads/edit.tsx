@@ -390,6 +390,7 @@ export default function EditAdsEnterprise() {
     const [hasToUpdate, setHasToUpdate] = useState(false);
     const [formErrors, setFormErrors] = useState<enterpriseDataFormErrorInterf>( enterpriseDataFormErrorNullState );
     const routerNext = useRouter();
+    const [imagesChanged, setImagesChanged] = useState(false);
     const { authenticatedEnterprise } = useEnterpriseAuthContext();
 
     // GetData - Ads and enterprise
@@ -503,6 +504,13 @@ export default function EditAdsEnterprise() {
                 }
             }
         )
+        .then(() => {
+            // If images were changed will reload the page
+            if(imagesChanged) {
+                setImagesChanged(false);
+                window.location.reload();
+            }
+        })
         .catch(err => {
             //console.log( err );
         });
@@ -562,7 +570,6 @@ export default function EditAdsEnterprise() {
         fields.map((el, index) => {
             setFormErrors((formE) => ({...formE, [el]:''}));
         });
-        //window.location.reload();
 
     }, [adData, hasToUpdate]);
 
@@ -583,6 +590,7 @@ export default function EditAdsEnterprise() {
             return false;
         }
         setHasToUpdate( true );
+        setImagesChanged( true );
         return true;
     }
 
