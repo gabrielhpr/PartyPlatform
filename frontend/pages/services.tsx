@@ -62,6 +62,10 @@ export default function ServicesPage() {
             }
         });
 
+        // Reload page
+        setTimeout(() => {
+            document.location.reload();
+        }, 3000);
     }
 
     function handleSearchData( event: any ) {
