@@ -1248,10 +1248,11 @@ export default function ServiceProfilePage() {
                     &&
                     <>
                         <Flex
+                            zIndex={5}
                             position='fixed'
                             bg='brand.white'
                             bottom={0}
-                            h='9vh'
+                            h={75}
                             w='100%'
                             alignItems='center'
                             justifyContent='space-evenly'
@@ -1848,7 +1849,6 @@ export default function ServiceProfilePage() {
             </Flex>
 
             }
-
             <Footer />
         </Box>
     );

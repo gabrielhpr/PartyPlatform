@@ -6,7 +6,7 @@ import { AiOutlineFacebook, AiOutlineInstagram } from "react-icons/ai";
 export function Footer() {
     return (
         <Box 
-            h={{base: 400, lg: 300}}
+            h={{base: 'auto', lg: 300}}
             bg='brand.dark_blue'
             color='brand.white'
             //position='absolute'
@@ -17,12 +17,11 @@ export function Footer() {
                 alignItems='center'
                 direction='column'
                 w='100%'
-                py='5'
+                py='12'
             >
                 <Flex
                     w='90%'
                     direction='column'
-                    
                 >
                     <Text
                         color='brand.white'
@@ -119,7 +118,7 @@ export function Footer() {
 
                     >
                         <NavLink
-                            href='https://www.instagram.com/festafy_br/'
+                            href='https://www.instagram.com/festafyportal/'
                         >
                             <Icon as={AiOutlineInstagram} 
                             />

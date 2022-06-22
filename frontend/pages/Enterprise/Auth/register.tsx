@@ -1358,7 +1358,7 @@ export default function RegisterEnterprise() {
                                 autoUpload={false}
                                 rules={{
                                     limit: 25,
-                                    size: 1024,
+                                    size: 5120,
                                     width: {
                                         min: 600
                                     },

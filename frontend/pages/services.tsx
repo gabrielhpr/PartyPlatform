@@ -824,7 +824,7 @@ export default function ServicesPage() {
                             py='5'
                             position='sticky'
                             top={0}
-                            zIndex={5}
+                            zIndex={3}
                         >
                             <Flex w='90%' 
                                 justifyContent='space-between'
@@ -1327,6 +1327,7 @@ export default function ServicesPage() {
                             pt='10'
                             pb='20'
                             px='10'
+                            minH={300}
                             justifyContent='center'
                             alignItems='center'
                             direction='column'

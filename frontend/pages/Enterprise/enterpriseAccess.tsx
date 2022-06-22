@@ -76,7 +76,10 @@ export default function EnterpriseAccess() {
             <FlashMessageComponent/>
 
             {/* Top Picture */}
-            <Flex w='100%' h='55vh' position='relative' 
+            <Flex w='100%' 
+                h='55vh' 
+                minH={500}
+                position='relative' 
                 justifyContent='center'
             >
                 {
@@ -291,6 +294,7 @@ export default function EnterpriseAccess() {
                             direction="column"
                             w='30%'
                             height='80%'
+                            //height={300}
                             pt="0"
                             pb="1"
                             px="10" 
@@ -433,18 +437,23 @@ export default function EnterpriseAccess() {
                 <Flex 
                     justifyContent='center'
                     alignItems='flex-start'
-                    h={{base:'45vh', lg:'35vh'}}
+                    //minH={{base: 300, lg: 400}}
+                    //h={{base:'45vh', lg:'35vh'}}
+                    h={{base:400, lg:330}}
+
                     w='100%'
                 >
                     <Flex
                         w={{base:'80%', lg:'70%'}}
-                        h={{base:'25vh',lg:'15vh'}}
+                        //minH={{base: 300, lg: 400}}
+                        h={{base: 380, lg: 320}}
                     >
                         <AliceCarousel                                
                             autoPlay={false}
                             autoHeight={true}
                             responsive={{
-                                0: {items:1},
+                                0: {items:1.2},
+                                576: {items:2.2},
                                 1024: {items:3}
                             }}
                             disableButtonsControls={true}
@@ -463,7 +472,7 @@ export default function EnterpriseAccess() {
                                             justifyContent='center'
                                             alignItems='center'
                                             w={{base:'90%',lg:'90%'}}
-                                            h='35vh'
+                                            h={{base:300, lg: 270}}
                                             p='5'
                                             my='1'
                                             mx={{base:'5',lg:'5'}}
@@ -531,7 +540,7 @@ export default function EnterpriseAccess() {
                         mb={{base:'5',lg:'0'}}
                     >
                         <Flex position='relative'
-                            h={{base:'35vh',lg:'35vh'}}
+                            h={{base:300,lg:300}}
                             w={{base:'85vw',lg:'35vw'}}
                             borderRadius={4}
                             overflow='hidden'
