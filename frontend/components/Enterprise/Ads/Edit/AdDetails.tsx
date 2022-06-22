@@ -270,6 +270,9 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                         if( res == true ) {
                                             modalPhotos.onClose();
                                         }
+                                        else {
+                                            setFormErrors((formE) => ({...formE, photos: {...formE.photos, minLimit: 'Você deve adicionar pelo menos 5 fotos'}}));
+                                        }
                                     }}
                                 >
                                     Salvar Alterações
@@ -302,7 +305,7 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                     autoUpload={false}
                                     rules={{
                                         limit: 25,
-                                        size: 1024,
+                                        size: 5120,
                                         width: {
                                             min: 600
                                         },
@@ -349,11 +352,11 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
 
                                             case 'size':
                                                 //console.log('max size <= ', rules.size);
-                                                setFormErrors((formE) => ({...formE, photos: {...formE.photos, size: `O tamanho da imagem deve ser menor do que 1Mb.`}}));
+                                                setFormErrors((formE) => ({...formE, photos: {...formE.photos, size: `O tamanho da imagem deve ser menor do que 5Mb.`}}));
                                         
                                             case 'minWidth': case 'minHeight':
                                                 //console.log('Dimensions > ', `${rules.width.min}x${rules.height.min}`);
-                                                setFormErrors((formE) => ({...formE, photos: {...formE.photos, minDim: `A largura mínima deve ser 600px e a altura mínima deve ser 400px.`}}));
+                                                setFormErrors((formE) => ({...formE, photos: {...formE.photos, minDim: `A largura mínima deve ser 600px e a altura mínima deve ser 400px. A fotografia deve estar em formato paisagem.`}}));
                                         
                                             case 'maxWidth': case 'maxHeight':
                                                 //console.log('Dimensions < ', `${rules.width.max}x${rules.height.max}`);

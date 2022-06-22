@@ -587,6 +587,7 @@ export default function EditAdsEnterprise() {
     function saveImagesChanged() {
         //console.log( adData );
         if( adData.photosNewOrder.length < 5 ) {
+            
             return false;
         }
         setHasToUpdate( true );
