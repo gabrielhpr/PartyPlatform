@@ -7,12 +7,12 @@ import Image from 'next/image';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import { typeOfServicesIcons } from "../../../utils/typeOfParties";
+import { IoStorefront } from "react-icons/io5";
 
 interface LeftMenuEditProps {
     propertyName: string;
     serviceCategory: string;
     serviceSpecificCategory: string;
-    srcImage?: string;
     menuOptions: { 
         [key: string]: {
             value: string,
@@ -24,7 +24,7 @@ interface LeftMenuEditProps {
     w?: {base: string, lg: string};
 }
 
-export function LeftMenuMyBusiness({propertyName, serviceCategory, serviceSpecificCategory, srcImage, menuOptions, selectedOption, handleOnClick, w, ...rest }: LeftMenuEditProps) {
+export function LeftMenuMyBusiness({propertyName, serviceCategory, serviceSpecificCategory, menuOptions, selectedOption, handleOnClick, w, ...rest }: LeftMenuEditProps) {
     
     return (
         <Flex 
@@ -63,7 +63,13 @@ export function LeftMenuMyBusiness({propertyName, serviceCategory, serviceSpecif
                 alignItems='center'
                 justifyContent='center'
             >
-                <Icon as={typeOfServicesIcons[serviceCategory][serviceSpecificCategory].icon} 
+                <Icon as={
+                        serviceCategory != undefined && serviceSpecificCategory != undefined
+                        ?
+                        typeOfServicesIcons[serviceCategory][serviceSpecificCategory]?.icon
+                        :
+                        IoStorefront
+                    } 
                     color='brand.white' 
                     fontSize={{base: 110, lg: 105}}
                 />

@@ -878,14 +878,15 @@ export default function ServiceProfilePage() {
                                                         alignItems='flex-start'
                                                     >
                                                         <Text 
-                                                            fontSize={22}
+                                                            fontSize={20}
+                                                            fontWeight={500}
                                                             mb='3'
                                                         >
                                                             {el.question}
                                                         </Text>
 
                                                         <Text 
-                                                            fontSize={22}
+                                                            fontSize={18}
                                                             mb='3'
                                                         >
                                                             {service[el.name[0]]}

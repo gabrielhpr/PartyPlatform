@@ -595,9 +595,9 @@ export default function EditAdsEnterprise() {
     }
 
     async function saveDataChanged( data: Object ) {
-        console.log( adData );
-        console.log( formErrors );
-        console.log('entrou no saveDataChanged in edit');
+        // console.log( adData );
+        // console.log( formErrors );
+        // console.log('entrou no saveDataChanged in edit');
         //console.log( enterpriseData.enterpriseCategory );
         //console.log( enterpriseData.enterpriseSpecificCategory );
 
@@ -663,9 +663,9 @@ export default function EditAdsEnterprise() {
         await enterpriseRegisterFormSchema
             .validateAt( 'serviceDescription', adData )
             .catch((err) => {
-                console.log('serviceDescription');
-                console.log( err );
-                console.log( err.errors[0] );
+                // console.log('serviceDescription');
+                // console.log( err );
+                // console.log( err.errors[0] );
                 setFormErrors((formE) => ({...formE, 'serviceDescription': err.errors[0]}));
             });
 
@@ -675,9 +675,9 @@ export default function EditAdsEnterprise() {
             await enterpriseRegisterQuestionsDataSchema
             .validateAt( fields[i], adData )
             .catch((err) => {
-                console.log('Questions');
-                console.log( err );
-                console.log( err.errors[0] );
+                // console.log('Questions');
+                // console.log( err );
+                // console.log( err.errors[0] );
 
                 setFormErrors((formE) => ({...formE, [fields[i]]:err.errors[0]}));
             });

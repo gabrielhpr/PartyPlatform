@@ -302,7 +302,7 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                         ////console.log(index);
                                         //{source:`${photos[index]}`, name: photos[index]}
                                         return (
-                                            {source:`${photos[photos.length-index-1]}`, name: photos[photos.length-index-1]}
+                                            {source:`${photos[index]}`, name: photos[index]}
                                         )
                                     })
                                     }
@@ -450,8 +450,9 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                         ?
                         specificQuestions['Espaco']
                         .map((el, index) => {
+                            //console.log(questions[2]);
                             // POSSUI BUFFET JUNTO COM O ESPAÇO
-                            if( questions[2] == 'Sim' && 
+                            if( questions['q3'] == 'Sim' && 
                                 (
                                 ['q21','q22','q23'].includes(el?.name[0])
                                 ||
@@ -464,7 +465,7 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                 );
                             }
                             // SEM BUFFET JUNTO COM O ESPAÇO
-                            else if( questions[2] == 'Não' && 
+                            else if( questions['q3'] == 'Não' && 
                                 (
                                 ['q5','q6','q7','q8','q9','q10','q11','q12','q13','q14',
                                 'q15','q16','q17','q18','q19','q20'].includes(el?.name[0]) 

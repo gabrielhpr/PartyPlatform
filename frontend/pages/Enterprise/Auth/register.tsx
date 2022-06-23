@@ -451,7 +451,7 @@ export default function RegisterEnterprise() {
 
         //console.log( formData.values );
         await registerEnterprise( formData );
-        
+
     }
 
     async function handleValidation( fields: Array<string>, schemaForm: any ) {
@@ -662,7 +662,7 @@ export default function RegisterEnterprise() {
             //Reset errors message
             fields.map((el, index) => {
                 setFormErrors((formE) => ({...formE, [el]:''}));
-            })
+            });
 
             // Error messages
             await fields.map(async (el,index) => {
@@ -1384,7 +1384,7 @@ export default function RegisterEnterprise() {
 
                                         case 'size':
                                             //console.log('max size <= ', rules.size);
-                                            setFormErrors((formE) => ({...formE, photos: {...formE.photos, size: `O tamanho da imagem deve ser menor do que 1Mb.`}}));
+                                            setFormErrors((formE) => ({...formE, photos: {...formE.photos, size: `O tamanho da imagem deve ser menor do que 5Mb.`}}));
                                     
                                         case 'minWidth': case 'minHeight':
                                             //console.log('Dimensions > ', `${rules.width.min}x${rules.height.min}`);

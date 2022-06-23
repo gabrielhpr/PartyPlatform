@@ -53,6 +53,14 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
         }.bind(this));
     },[]);
 
+    // This is used when a Space changes its option of buffet, it open
+    // all the inputs that have to be filled 
+    useEffect(() => {
+        if( formErrors[name[0]] != '' ) {
+            setIsEdit(true);
+        }
+    }, [formErrors]);
+
     function handleInput( event: any ) {
         setInputData({...inputData, [event.currentTarget.name]: event.currentTarget.value});
     }
@@ -86,7 +94,7 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
                             <TitleEdit title={title} id={title}/>
                             :
                             <Text as="h2"
-                                fontWeight={400}
+                                fontWeight={500}
                                 fontSize={18}
                             >
                                 {title}
@@ -272,7 +280,6 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
                                 {formErrors[name[0]]}
                             </FormErrorMessage>
                         </FormControl>
-
                     </Flex>
                 }      
 

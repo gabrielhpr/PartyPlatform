@@ -895,7 +895,6 @@ export default function ServicesPage() {
                                                             )
                                                         })
                                                         :
-                                                        
                                                         priceOptionsPerService.Espaco[filters.buffetIncluded == false ? 'SoEspaco' : 'EspacoEBuffet'].map((el,index) => {
                                                             if( index == 0 ) {
                                                                 return (

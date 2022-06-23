@@ -28,7 +28,6 @@ export const typeOfServicesIcons = {
     }
 }
 
-
 export const typeOfServices = {
     Infantil: {
         services: [
@@ -86,7 +85,7 @@ export const typeOfServices = {
 export const enterpriseCategory = {
     Espaco: {
         value: 'Espaco', textToShow: 'Espaço para festas', 
-        description: 'Salão de Festas, Chácara, Buffet, ...'
+        description: 'Salão de Festas, Chácara, ...'
     },
     Servico: {
         value: 'Servico', textToShow: 'Prestador de serviço',
@@ -97,8 +96,7 @@ export const enterpriseCategory = {
 export const enterpriseSpecificCategory = {
     Espaco: [
         {value: 'SalaoDeFesta', textToShow: 'Salão de Festa'},
-        {value: 'Chacara', textToShow: 'Chácara'},
-        {value: 'Buffet', textToShow: 'Buffet'}
+        {value: 'Chacara', textToShow: 'Chácara'}
     ],
     Servico: [
         {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa'},
