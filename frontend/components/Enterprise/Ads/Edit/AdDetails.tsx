@@ -214,7 +214,11 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
             </Box>
                 
             {/* Edit photos */}
-            <Modal isOpen={modalPhotos.isOpen} onClose={modalPhotos.onClose}
+            <Modal isOpen={modalPhotos.isOpen} 
+                onClose={() => {
+                    modalPhotos.onClose();
+                    window.location.reload();
+                }}
                 size='full'
             >
                 <ModalOverlay />
@@ -296,6 +300,7 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                     //w='100%'
                                     initialState={photos.map((el, index) => {
                                         ////console.log(index);
+                                        //{source:`${photos[index]}`, name: photos[index]}
                                         return (
                                             {source:`${photos[photos.length-index-1]}`, name: photos[photos.length-index-1]}
                                         )
@@ -336,9 +341,10 @@ export function AdDetailsEdit({ serviceDescription, photos, enterpriseCategory, 
                                     onDeleted={(image) => {
                                         // File undefined a imagem já existe no db
                                         // Save removed image in images removed array
-                                        if( image.file == undefined ) {
-                                            setData((prevData) => ({...prevData, photosRemoved: [prevData.photosRemoved, image.name]}));//[...prevData['photosRemoved'], image.name]})); //[...prevData.photosRemoved, image.name] }));
-                                        }
+                                        //console.log(image);
+                                        //if( image.file == undefined ) {
+                                            //setData((prevData) => ({...prevData, photosRemoved: [prevData.photosRemoved, image.name]}));//[...prevData['photosRemoved'], image.name]})); //[...prevData.photosRemoved, image.name] }));
+                                        //}
                                     }}
                                     onWarning={(type, rules) => {
                                         switch(type) {

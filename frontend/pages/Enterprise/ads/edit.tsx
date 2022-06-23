@@ -406,51 +406,50 @@ export default function EditAdsEnterprise() {
         const token = localStorage.getItem("tokenEnterprise");
         const { partyType } = routerNext.query;
 
+        // GET ADS
         api.get(`/enterprise/ads/${partyType}`, {
             headers: {
                 'Authorization': `Bearer ${JSON.parse(token)}`
             }
         })
         .then((response) => {
-            setAdData( Object.assign(adData, response.data.ad) );  
-            //console.log( response.data.ad );             
+            //console.log('carregou ads');
+            //console.log( adData );
+            setAdData( Object.assign(adData, response.data.ad) );
+            //console.log( response.data.ad );            
+            
+            // GET ENTERPRISE DATA
+            api.get("/enterprise/myenterprise", {
+                headers: {
+                    'Authorization': `Bearer ${JSON.parse(token)}`
+                }
+            })
+            .then((response2) => {
+                //console.log('carregou empresa');
+                //console.log( adData );
+                //console.log( response.data.enterpriseData );
+                setEnterpriseData( response2.data.enterpriseData );
+                setAdData((prevAd) => ({...prevAd, enterpriseCategory: response2.data.enterpriseData.enterpriseCategory, enterpriseSpecificCategory: response2.data.enterpriseData.enterpriseSpecificCategory }) );
+                //console.log( adData );
+            })
+            .catch(err => {
+                //console.log( err );
+            });
+
         })
         .catch(err => {
             //console.log( err );
-        });
-
-    }, [routerNext.query, authenticatedEnterprise]);
-
-    useEffect(() => {
-        if( authenticatedEnterprise == false ) {
-            return;
-        }
-        if( !routerNext.isReady ) {
-            return;
-        }
-        const token = localStorage.getItem("tokenEnterprise");
-
-        // Get enterprise data
-        api.get("/enterprise/myenterprise", {
-            headers: {
-                'Authorization': `Bearer ${JSON.parse(token)}`
-            }
-        })
-        .then((response) => {
-            //console.log( response.data.enterpriseData );
-            setEnterpriseData( response.data.enterpriseData );
-        })
-        .catch(err => {
-            //console.log( err );
-        });
+        });  
         
+        
+
     }, [routerNext.query, authenticatedEnterprise]);
 
     // Enterprise Category and Specific Category are
     // used for validation in schema
-    useEffect(() => {
-        setAdData({...adData, enterpriseCategory: enterpriseData.enterpriseCategory, enterpriseSpecificCategory: enterpriseData.enterpriseSpecificCategory });
-    }, [enterpriseData, authenticatedEnterprise]);
+    // useEffect(() => {
+    //     setAdData({...adData, enterpriseCategory: enterpriseData.enterpriseCategory, enterpriseSpecificCategory: enterpriseData.enterpriseSpecificCategory });
+    // }, [enterpriseData, adData, authenticatedEnterprise]);
 
     // Update Ad
     useEffect(() => {
@@ -492,31 +491,6 @@ export default function EditAdsEnterprise() {
         //console.log('formData');
         //console.log(formData);
         
-        const { partyType } = routerNext.query;
-
-        api.patch(
-            `/enterprise/ads/edit/${partyType}`,
-            formData, 
-            {
-                headers: {
-                    "content-type": "multipart/form-data",
-                    'Authorization': `Bearer ${JSON.parse(token)}`
-                }
-            }
-        )
-        .then(() => {
-            // If images were changed will reload the page
-            if(imagesChanged) {
-                setImagesChanged(false);
-                window.location.reload();
-            }
-        })
-        .catch(err => {
-            //console.log( err );
-        });
-        
-        setHasToUpdate(false);
-
         // RESET ERROR MESSAGES
         let fields = [
             'q1',
@@ -571,6 +545,31 @@ export default function EditAdsEnterprise() {
             setFormErrors((formE) => ({...formE, [el]:''}));
         });
 
+        setHasToUpdate(false);
+
+        const { partyType } = routerNext.query;
+
+        api.patch(
+            `/enterprise/ads/edit/${partyType}`,
+            formData, 
+            {
+                headers: {
+                    "content-type": "multipart/form-data",
+                    'Authorization': `Bearer ${JSON.parse(token)}`
+                }
+            }
+        )
+        .then(() => {
+            // If images were changed will reload the page
+            if(imagesChanged) {
+                setImagesChanged(false);
+                window.location.reload();
+            }
+        })
+        .catch(err => {
+            //console.log( err );
+        });
+
     }, [adData, hasToUpdate]);
 
     function getQuestionsObj( parentObj: Object ) {
@@ -596,7 +595,9 @@ export default function EditAdsEnterprise() {
     }
 
     async function saveDataChanged( data: Object ) {
-        //console.log( adData );
+        console.log( adData );
+        console.log( formErrors );
+        console.log('entrou no saveDataChanged in edit');
         //console.log( enterpriseData.enterpriseCategory );
         //console.log( enterpriseData.enterpriseSpecificCategory );
 
@@ -662,17 +663,35 @@ export default function EditAdsEnterprise() {
         await enterpriseRegisterFormSchema
             .validateAt( 'serviceDescription', adData )
             .catch((err) => {
+                console.log('serviceDescription');
+                console.log( err );
+                console.log( err.errors[0] );
                 setFormErrors((formE) => ({...formE, 'serviceDescription': err.errors[0]}));
             });
 
+        console.log( adData );
         // Questions
-        await fields.map(async (el,index) => {
+        for (let i = 0; i < fields.length; i++) {
             await enterpriseRegisterQuestionsDataSchema
-            .validateAt( el, adData )
+            .validateAt( fields[i], adData )
             .catch((err) => {
-                setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
+                console.log('Questions');
+                console.log( err );
+                console.log( err.errors[0] );
+
+                setFormErrors((formE) => ({...formE, [fields[i]]:err.errors[0]}));
             });
-        });
+            
+        }
+        // await fields.map(async (el,index) => {
+        //     await enterpriseRegisterQuestionsDataSchema
+        //     .validateAt( el, adData )
+        //     .catch((err) => {
+        //         console.log('Questions');
+        //         console.log( err.errors[0] );
+        //         setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
+        //     });
+        // });
 
         //console.log( formErrors );
 

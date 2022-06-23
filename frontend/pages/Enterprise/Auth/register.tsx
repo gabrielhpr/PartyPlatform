@@ -450,7 +450,8 @@ export default function RegisterEnterprise() {
         })
 
         //console.log( formData.values );
-        registerEnterprise( formData );
+        await registerEnterprise( formData );
+        
     }
 
     async function handleValidation( fields: Array<string>, schemaForm: any ) {

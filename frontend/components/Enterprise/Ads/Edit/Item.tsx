@@ -26,18 +26,18 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
     const [inputData, setInputData] = useState({});
     const [menuWhere, setMenuWhere] = useState('none');
 
-    //console.log('Values received by props');
-    //console.log(`name: ${name}, itemValue: ${itemValue}, inputType: ${inputType}, options: ${options}`);
+    ////console.log('Values received by props');
+    ////console.log(`name: ${name}, itemValue: ${itemValue}, inputType: ${inputType}, options: ${options}`);
     
     useEffect(() => {
-        console.log('deu useEffect');
-        console.log( formErrors );
+        //console.log('deu useEffect');
+        //console.log( formErrors );
         if( name.length == 1 ) {
-            //console.log('nome length == 1');
+            ////console.log('nome length == 1');
             setInputData({ ...inputData, [name[0]]: itemValue[0] });    
         }
-        else {
-            //console.log('nome length == 2');
+        else if( name.length == 2 ) {
+            ////console.log('nome length == 2');
             setInputData({ ...inputData, [name[0]]: itemValue[0], [name[1]]: itemValue[1] });    
         }
     }, [isEdit]);
@@ -59,7 +59,7 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
 
     // Used in Menu search
     function searchFunction( event: any, menuId: string ) {
-        console.log( event.currentTarget.value );
+        //console.log( event.currentTarget.value );
         let inputValue = event.currentTarget.value.toUpperCase();
         let menu = document.getElementById( menuId );
         let itemList = menu.getElementsByTagName("button");
@@ -149,11 +149,11 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
                         <Icon as={RiCloseFill} 
                             onClick={() => {
                                 if( name.length == 1 ) {
-                                    console.log('nome length == 1');
+                                    //console.log('nome length == 1');
                                     setData((prevData) => ({...prevData, [name[0]]: inputData[name[0]]}));
                                 }
-                                else {
-                                    console.log('nome length == 2');
+                                else if( name.length == 2) {
+                                    //console.log('nome length == 2');
                                     setData((prevData) => ({...prevData, [name[0]]: inputData[name[0]], [name[1]]: inputData[name[1]]}));
                                 }
                                 setIsEdit(false);
@@ -164,9 +164,10 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
                             borderRadius="50%"
                         />
                     </Flex>
-                    <Text color="gray"
-                                fontWeight={400}
-                                fontSize={16}
+                    <Text 
+                        color="gray"
+                        fontWeight={400}
+                        fontSize={16}
                     >
                         {about}
                     </Text>
@@ -408,11 +409,11 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
                     <Text as="h3"
                         onClick={() => {
                             if( name.length == 1 ) {
-                                console.log('nome length == 1');
+                                //console.log('nome length == 1');
                                 setData((prevData) => ({...prevData, [name[0]]: inputData[name[0]]}));
                             }
                             else {
-                                console.log('nome length == 2');
+                                //console.log('nome length == 2');
                                 setData((prevData) => ({...prevData, [name[0]]: inputData[name[0]], [name[1]]: inputData[name[1]]}));
                             }
                             setIsEdit(false);
@@ -428,8 +429,8 @@ export function ItemEdit({isTitleItem=false, title, name, itemValue, about, inpu
                             async () => {
                                 await saveDataChanged( inputData )
                                 .then((isValid) => {
-                                    console.log('isvalid - item button');
-                                    console.log( isValid );
+                                    //console.log('isvalid - item button');
+                                    //console.log( isValid );
                                     if( isValid ) {
                                         setIsEdit(false);
                                     }
