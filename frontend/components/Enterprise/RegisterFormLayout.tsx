@@ -58,7 +58,7 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
             <Flex 
                 height={{base:"30%", lg:"100%"}} 
                 width={{base:"100%", lg:"45%"}}
-                overflowY='scroll'
+                overflowY={{base:'scroll', lg:'hidden'}}
                 justifyContent={{base:"space-between", lg:"center"}}
                 alignItems="center"
                 direction="column"
