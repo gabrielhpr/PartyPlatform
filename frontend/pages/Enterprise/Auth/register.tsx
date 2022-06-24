@@ -17,6 +17,7 @@ import * as yup from 'yup';
 import 'react-upload-gallery/dist/style.css'; // or scss
 import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery';
 import { FiUpload } from "react-icons/fi";
+import { AiOutlineArrowDown } from 'react-icons/ai';
 
 
 interface enterpriseDataInterf {
@@ -805,11 +806,14 @@ export default function RegisterEnterprise() {
                     style='dark'
                 >
                     <Stack direction='column' spacing={4} 
-                        w={{base:'80%', lg:'50%'}}
+                        w={{base:'85%', lg:'50%'}}
                         h={{base:'100%', lg:'auto'}}
-                        py='2'
+                        maxH={{lg:'85%'}}
+                        py='5'
+                        px='4'
                         overflowY='scroll'
                         mx='auto'
+                        my='auto'
                         //my='auto'
                         //alignItems='center'
                         //justifyContent='center'
@@ -915,8 +919,19 @@ export default function RegisterEnterprise() {
                     handlePreviousStep={previousStep}
                     style='dark'
                 >
-                    <Stack direction='column' spacing={4} 
-                        w={{base:'80%', lg:'50%'}}
+                    <Stack 
+                        direction='column' 
+                        spacing={4} 
+                        w={{base:'85%', lg:'50%'}}
+                        h={{base:'auto', lg:'auto'}}
+                        maxH={{base:'85%', lg:'85%'}}
+                        py='5'
+                        px='4'
+                        overflowY='scroll'
+                        mx='auto'
+                        my='auto'
+
+                        //w={{base:'80%', lg:'50%'}}
                     >
                         <Flex direction='column'>
                             <TextSpanInput
@@ -975,7 +990,14 @@ export default function RegisterEnterprise() {
                     style='dark'
                 >
                     <Stack direction='column' spacing={4} 
-                        w={{base:'80%', lg:'50%'}}
+                        w={{base:'85%', lg:'50%'}}
+                        h={{base:'auto', lg:'auto'}}
+                        maxH={{base:'85%', lg:'85%'}}
+                        py='5'
+                        px='4'
+                        overflowY='scroll'
+                        mx='auto'
+                        my='auto'
                         as='form'
                         autoComplete='off'
                     >
@@ -1113,7 +1135,14 @@ export default function RegisterEnterprise() {
                     style='dark'
                 >
                     <Stack direction='column' spacing={4} 
-                        w={{base:'80%', lg:'50%'}}
+                        w={{base:'85%', lg:'50%'}}
+                        h={{base:'auto', lg:'auto'}}
+                        maxH={{base:'85%', lg:'85%'}}
+                        py='5'
+                        px='4'
+                        overflowY='scroll'
+                        mx='auto'
+                        my='auto'
                     >
                         <Flex direction='column'>
                             <TextSpanInput
@@ -1159,11 +1188,22 @@ export default function RegisterEnterprise() {
                     handlePreviousStep={previousStep}
                 >
                     <FormControl 
-                        w={{base:'80%', lg:'50%'}}
+                        w={{base:'85%', lg:'50%'}}
+                        h={{base:'auto', lg:'auto'}}
+                        maxH={{base:'85%', lg:'85%'}}
+                        py='5'
+                        px='4'
+                        overflowY='scroll'
+                        mx='auto'
+                        my='auto'
                         isInvalid={formErrors.partyMainFocus != '' ? true : false}
                     >
-                        <Stack direction="column"
+                        <Stack 
+                            direction="column"
                             spacing={5}
+                            //w={{base:'85%', lg:'50%'}}
+                            
+
                         >
                             {
                             Object.values(typeOfParties).map((el, i) => {
@@ -1198,7 +1238,14 @@ export default function RegisterEnterprise() {
                     handlePreviousStep={previousStep}
                 >
                     <Flex direction='column' 
-                        w={{base:'80%', lg:'50%'}}
+                        w={{base:'85%', lg:'60%'}}
+                        h={{base:'auto', lg:'auto'}}
+                        maxH={{base:'85%', lg:'85%'}}
+                        py='5'
+                        px='4'
+                        overflowY='scroll'
+                        mx='auto'
+                        my='auto'
                     >
                         <Flex direction='column'>
                             <FormControl isInvalid={formErrors.serviceDescription != '' ? true : false}>
@@ -1227,7 +1274,14 @@ export default function RegisterEnterprise() {
                     handlePreviousStep={previousStep}
                 >
                     <FormControl 
-                        w={{base:'80%', lg:'60%'}}
+                        w={{base:'85%', lg:'60%'}}
+                        h={{base:'auto', lg:'auto'}}
+                        maxH={{base:'85%', lg:'85%'}}
+                        py='5'
+                        px='4'
+                        overflowY='scroll'
+                        mx='auto'
+                        my='auto'
                         isInvalid={formErrors.enterpriseCategory != '' ? true : false}
                     >
                         <Stack direction="column"
@@ -1265,15 +1319,42 @@ export default function RegisterEnterprise() {
                 >
                     <FormControl 
                         w='100%'
+                        h={{base:'47vh', lg:'70vh'}}
+                        //overflowX='hidden'
+
+                        //maxH={{base:'85vh', lg:'85vh'}}
+
+                        
                         isInvalid={formErrors.enterpriseSpecificCategory != '' ? true : false}
                     >
+                        <Icon as={AiOutlineArrowDown} position='absolute'
+                            fontSize={25}
+                            top='50%'
+                            left={10}
+                            color='brand.red'
+                        /> 
+
                         <Stack direction="column" 
+                            h={{base:'100%', lg:'100%'}}
+                            overflowY='scroll'
+
+                            w={{base:'80%', lg:'60%'}}
+                            //h={{base:'70vh', lg:'70vh'}}
+                            //maxH={{base:'85%', lg:'85%'}}
+                            py='5'
+                            //px='4'
+                            
+                            mx='auto'
+                            my='auto'
+
+                            
                             spacing={5} 
                             alignItems='center'
-                            justifyContent='center'
-                            flexWrap='wrap'
-                            w='100%' 
-                            h={{base:'60vh', lg:'80vh'}}
+                            //justifyContent='center'
+                            //flexWrap='wrap'
+                            
+                            //w='100%' 
+                            //h={{base:'60vh', lg:'80vh'}}
                         >
                             {
                             enterpriseSpecificCategory[enterpriseData.enterpriseCategory]
@@ -1281,7 +1362,7 @@ export default function RegisterEnterprise() {
                                 return(
                                     <ItemList
                                         styleType={2}
-                                        width='40%'
+                                        width='70%'
                                         name="enterpriseSpecificCategory"
                                         textAlign='center'
                                         value={el.value}

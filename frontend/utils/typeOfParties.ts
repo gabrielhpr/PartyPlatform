@@ -95,18 +95,18 @@ export const enterpriseCategory = {
 
 export const enterpriseSpecificCategory = {
     Espaco: [
-        {value: 'SalaoDeFesta', textToShow: 'Salão de Festa'},
-        {value: 'Chacara', textToShow: 'Chácara'}
+        {value: 'Chacara', textToShow: 'Chácara'},
+        {value: 'SalaoDeFesta', textToShow: 'Salão de Festa'}
     ],
     Servico: [
+        {value: 'Assessoria', textToShow: 'Assessoria'},
         {value: 'AnimacaoDeFesta', textToShow: 'Animação de Festa'},
         {value: 'Buffet', textToShow: 'Buffet'},
         {value: 'Bolos', textToShow: 'Bolos'},
         {value: 'Decoracao', textToShow: 'Decoração'},
         {value: 'Doces', textToShow: 'Doces'},
         {value: 'FotografiaFilmagem', textToShow: 'Fotografia/Filmagem'},
-        {value: 'Musica', textToShow: 'Música'},
-        {value: 'Assessoria', textToShow: 'Assessoria'}
+        {value: 'Musica', textToShow: 'Música'}
     ]
 }
 

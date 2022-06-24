@@ -58,6 +58,7 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
             <Flex 
                 height={{base:"30%", lg:"100%"}} 
                 width={{base:"100%", lg:"45%"}}
+                overflowY='scroll'
                 justifyContent={{base:"space-between", lg:"center"}}
                 alignItems="center"
                 direction="column"
@@ -123,7 +124,6 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
                         </AlertDialogOverlay>
                     </AlertDialog>
                 </Flex>
-                
 
                 <Text as="h2"
                     color={style=='yellow' ? 'brand.dark_blue' : 'brand.white'}
