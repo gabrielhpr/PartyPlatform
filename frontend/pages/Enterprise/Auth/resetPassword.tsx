@@ -9,6 +9,7 @@ import { Sidebar } from "../../../components/Sidebar";
 import useFlashMessage from "../../../hooks/useFlashMessage";
 import api from "../../../utils/api";
 import { enterpriseRegisterPasswordSchema } from "../../../utils/validations";
+import Head from 'next/head';
 
 export default function ResetPasswordEnterprise() {
     const [enterprisePassword, setEnterprisePassword] = useState({password: '', passwordConfirmation: ''});
@@ -124,6 +125,16 @@ export default function ResetPasswordEnterprise() {
     return (
         <Box
         >
+            <Head>
+                <title>Alteração da Senha</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Alteração da senha do fornecedor"/>
+                <meta property="og:title" content="Visualização dos seus anúncios"/>
+                <meta property="og:description" content="Visualize os seus anúncios criados na plataforma Festafy."/>
+                <meta property="og:url" content="https://www.festafy.com.br/Enterprise/Auth/resetPassword"/>
+                <meta property="og:type" content="website"/>
+            </Head>
             <Header name='' position="relative" />
             <Sidebar/>
 

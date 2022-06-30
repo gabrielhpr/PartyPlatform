@@ -18,6 +18,7 @@ import { FlashMessageComponent } from "../../../components/FlashMessageComponent
 import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery';
 import { FiUpload } from "react-icons/fi";
 import 'react-upload-gallery/dist/style.css' // or scss
+import Head from 'next/head';
 
 
 interface adDataInterf {
@@ -783,6 +784,16 @@ export default function EditAdsEnterprise() {
         if( adData.id != 0 && enterpriseData.id != 0 ) {
             return (    
                 <Box>
+                    <Head>
+                        <title>Edição de Anúncio</title>
+                        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                        <meta name="description" content="Página de edição do anúncio publicado na plataforma Festafy."/>
+                        <meta property="og:title" content="Edição do anúncio na plataforma Festafy."/>
+                        <meta property="og:description" content="Altere os dados referentes ao seu anúncio."/>
+                        <meta property="og:url" content="https://www.festafy.com.br/Enterprise/ads/edit"/>
+                        <meta property="og:type" content="website"/>
+                    </Head>
                     <Header name="" position="relative" />
                     <FlashMessageComponent/>
                     <TopMenuEnterprise />
@@ -842,6 +853,16 @@ export default function EditAdsEnterprise() {
         else {
             return (
                 <Box>
+                    <Head>
+                        <title>Edição de Anúncio</title>
+                        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                        <meta name="description" content="Página de edição do anúncio publicado na plataforma Festafy."/>
+                        <meta property="og:title" content="Edição do anúncio na plataforma Festafy."/>
+                        <meta property="og:description" content="Altere os dados referentes ao seu anúncio."/>
+                        <meta property="og:url" content="https://www.festafy.com.br/Enterprise/ads/edit"/>
+                        <meta property="og:type" content="website"/>
+                    </Head>
                     <Header name="" position="relative" />
                     <TopMenuEnterprise />
                     <Flex

@@ -16,6 +16,7 @@ import { Footer } from "../../components/Footer";
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 import api from "../../utils/api";
 import useFlashMessage from "../../hooks/useFlashMessage";
+import Head from 'next/head';
 
 export default function EnterpriseAccess() {
     const [enterpriseAccessData, setEnterpriseAccessData] = useState({email: '', password:''});
@@ -68,6 +69,16 @@ export default function EnterpriseAccess() {
 
     return (
         <Box w='100vw'>
+            <Head>
+                <title>Acesso Empresa</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Acesso Empresa - Aqui os fornecedores do ramo de festa podem se cadastrar e exibir os seus serviços ou produtos para novos clientes."/>
+                <meta property="og:title" content="Acesso empresa"/>
+                <meta property="og:description" content="Aqui os fornecedores do ramo de festa podem se cadastrar e exibir os seus serviços ou produtos para novos clientes."/>
+                <meta property="og:url" content="https://www.festafy.com.br/Enterprise/enterpriseAccess"/>
+                <meta property="og:type" content="website"/>
+            </Head>
             {/* Header */}
             <Header name="" position='relative' />
             

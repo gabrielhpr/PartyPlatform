@@ -329,17 +329,17 @@ export default function CreateAdEnterprise() {
             }
         })
         .then((response) => {
-            console.log('createAd - /enterprise/ads');
-            console.log( response.data.ads );
+            //console.log('createAd - /enterprise/ads');
+            //console.log( response.data.ads );
             setAdsCreated( response.data.ads );
             setPartiesAdsAlreadyCreated( response.data.ads.map((el, index) => {
                 return el.partyMainFocus;
             }));
-            console.log('partiesAdsAlreadyCreated');
-            console.log( partiesAdsAlreadyCreated );
+            //console.log('partiesAdsAlreadyCreated');
+            //console.log( partiesAdsAlreadyCreated );
         })
         .catch( err => {
-            console.log( err );
+            //console.log( err );
         });
         
 
@@ -360,26 +360,26 @@ export default function CreateAdEnterprise() {
             );
         })
         .catch(err => {
-            console.log( err );
+            //console.log( err );
         })
        
 
     }, [authenticatedEnterprise]);
 
     function handleFileChange( event: any ) {
-        console.log( 'event files images' );
-        console.log( event.currentTarget.files );
+        //console.log( 'event files images' );
+        //console.log( event.currentTarget.files );
         setPreview(Array.from(event.currentTarget.files));
         setNewAdData({...newAdData, [event.currentTarget.name]: [...event.currentTarget.files]});
     }
 
     function handleChange( event: any ) {
         setNewAdData({...newAdData, [event.currentTarget.name]: event.currentTarget.value});
-        console.log( newAdData );
+        //console.log( newAdData );
     }
 
     async function handleValidation( fields: Array<string>, schemaForm: any ) {
-        console.log(fields);
+        //console.log(fields);
 
         // Reset errors message
         fields.map((el, index) => {
@@ -392,7 +392,7 @@ export default function CreateAdEnterprise() {
             .validateAt( el, newAdData)
             .catch((err) => {
                 setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -403,13 +403,13 @@ export default function CreateAdEnterprise() {
             
             let isValidField = yup.reach( schemaForm, el )
             .isValidSync( newAdData[el] );
-            console.log(isValidField);
+            //console.log(isValidField);
 
             validForm = validForm && isValidField;                
         });
 
-        console.log('validForm');
-        console.log(validForm);
+        //console.log('validForm');
+        //console.log(validForm);
         // If there is no error its validated
         if( validForm ) {
             setStep(step + 1);
@@ -417,13 +417,13 @@ export default function CreateAdEnterprise() {
     }
 
     async function handleSubmit() {
-        console.log('entrou no submit!');
+        //console.log('entrou no submit!');
 
         const formData = new FormData;
     
         await Object.keys(newAdData).forEach((key:any) => {
             if(key == 'photos') {
-                console.log('entrou no photos object key');
+                //console.log('entrou no photos object key');
                 for(let i = 0; i < newAdData[key].length; i++) {
                     formData.append('photos', newAdData[key][i]);
                 }
@@ -433,21 +433,21 @@ export default function CreateAdEnterprise() {
             }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
         })
 
-        console.log( formData.values );
+        //console.log( formData.values );
 
         createAd( formData );
     }
 
     async function nextStep() { 
         if( step == 0 ) {
-            console.log('entrou no step 0');       
+            //console.log('entrou no step 0');       
             await handleValidation(
                 ['partyMainFocus'],
                 enterpriseRegisterFormSchema
             ); 
         }
         else if( step == 1 ) {
-            console.log('entrou no step 1');       
+            //console.log('entrou no step 1');       
             await handleValidation(
                 ['serviceDescription'],
                 enterpriseRegisterFormSchema
@@ -457,8 +457,8 @@ export default function CreateAdEnterprise() {
             setStep( step + 1 );
         }
         else if( step == 3 ) {
-            console.log('entrou no step 3');
-            console.log( newAdData );
+            //console.log('entrou no step 3');
+            //console.log( newAdData );
 
             let fields = [
                 'enterpriseCategory', 
@@ -520,11 +520,11 @@ export default function CreateAdEnterprise() {
                 .validateAt( el, newAdData)
                 .catch((err) => {
                     setFormErrors((formE) => ({...formE, [el]:err.errors[0]}));
-                    console.log(err);
+                    //console.log(err);
                 });
             });
 
-            console.log( formErrors );
+            //console.log( formErrors );
 
             // Validate
             await enterpriseRegisterQuestionsDataSchema
@@ -579,7 +579,7 @@ export default function CreateAdEnterprise() {
             .then((val) =>{
                 if( val == true ) {
                     // Validou bemmmm
-                    console.log('Validou bemmm');
+                    //console.log('Validou bemmm');
                     
                     // Register enterprise
                     handleSubmit();
@@ -771,8 +771,8 @@ export default function CreateAdEnterprise() {
                                     ['q21','q22','q23'].includes(el?.name[1])
                                     ) ) 
                                 {
-                                    console.log('entrou no sim');
-                                    console.log(el.name);
+                                    //console.log('entrou no sim');
+                                    //console.log(el.name);
                                     return (
                                         <>
                                         </>

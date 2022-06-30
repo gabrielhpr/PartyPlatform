@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import Image from 'next/image'
 import { Box, Button, Flex, Icon, Input, Text, Link as NavLink, useBreakpointValue } from '@chakra-ui/react';
 
@@ -24,6 +23,7 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import { Sidebar } from '../components/Sidebar';
 import { FiSearch } from 'react-icons/fi';
 import Script from 'next/script'
+import Head from 'next/head';
 
 
 export default function HomePage() {
@@ -154,8 +154,16 @@ export default function HomePage() {
                 `}
             </Script>
 
-
-
+            <Head>
+                <title>Festafy - Portal de Festas</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Encontre o fornecedor perfeito para o que a sua festa precisa."/>
+                <meta property="og:title" content="Festafy - Portal de Festas"/>
+                <meta property="og:description" content="Encontre o fornecedor perfeito para o que a sua festa precisa."/>
+                <meta property="og:url" content="https://www.festafy.com.br/"/>
+                <meta property="og:type" content="website"/>
+            </Head>
 
             {/* Header */}
             <Header name='' position='relative'/>

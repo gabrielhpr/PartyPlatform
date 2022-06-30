@@ -5,10 +5,22 @@ import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import Logo from "../assets/imgs/logo.png";
 import Image from "next/image"
+import Head from 'next/head';
 
 export default function AboutPage() {
     return (
         <Box>
+            <Head>
+                <title>Sobre</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Sobre nós - Conta um pouco acerca da nossa empresa Festafy."/>
+                <meta property="og:title" content="Sobre"/>
+                <meta property="og:description" content="Sobre nós - Conta um pouco acerca da nossa empresa Festafy."/>
+                <meta property="og:url" content="https://www.festafy.com.br/about"/>
+                <meta property="og:type" content="website"/>
+            </Head>
+
             {/* Header */}
             <Header name='' position='relative' />
 
