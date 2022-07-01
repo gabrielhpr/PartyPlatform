@@ -1207,7 +1207,7 @@ module.exports = class EnterpriseController {
                         {
                             'property': 'properties/311158295',
                             'dateRanges': [
-                                {'startDate': '365daysAgo', 'endDate': 'today'}
+                                {'startDate': '2022-06-29', 'endDate': 'today'}
                             ],
                             'metrics': [
                                 {"name": "uniiquePageViews", 'expression': 'screenPageViews'}
@@ -1231,7 +1231,7 @@ module.exports = class EnterpriseController {
                         {
                             'property': 'properties/311158295',
                             'dateRanges': [
-                                {'startDate': '365daysAgo', 'endDate': 'today'}
+                                {'startDate': '2022-06-29', 'endDate': 'today'}
                             ],
                             'metrics': [
                                 {"name": "uniqueClicks", 'expression': 'eventCount'}
@@ -1282,7 +1282,7 @@ module.exports = class EnterpriseController {
                         {
                             'property': 'properties/311158295',
                             'dateRanges': [
-                                {'startDate': '365daysAgo', 'endDate': 'today'}
+                                {'startDate': '2022-06-29', 'endDate': 'today'}
                             ],
                             'metrics': [
                                 {"name": "uniqueClicks", 'expression': 'eventCount'}
@@ -1333,7 +1333,7 @@ module.exports = class EnterpriseController {
                         {
                             'property': 'properties/311158295',
                             'dateRanges': [
-                                {'startDate': '365daysAgo', 'endDate': 'today'}
+                                {'startDate': '2022-06-29', 'endDate': 'today'}
                             ],
                             'metrics': [
                                 {"name": "uniqueClicks", 'expression': 'eventCount'}

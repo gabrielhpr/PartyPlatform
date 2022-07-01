@@ -18,6 +18,7 @@ import 'react-upload-gallery/dist/style.css'; // or scss
 import RUG, { DragArea, DropArea, Card, List } from 'react-upload-gallery';
 import { FiUpload } from "react-icons/fi";
 import { AiOutlineArrowDown } from 'react-icons/ai';
+import { FcBullish, FcShop, FcConferenceCall } from "react-icons/fc";
 
 
 interface enterpriseDataInterf {
@@ -767,27 +768,58 @@ export default function RegisterEnterprise() {
                     style="yellow"
                 >
                     <Flex 
-                        h={{base:'100%',lg:'50%'}}
+                        h={{base:'auto', lg:'auto'}}
+                        maxH={{base:'95%', lg:'85%'}}
                         direction='column'
                         alignItems='center'
-                        justifyContent='center'
-                        //mx='auto'
-                        //my='auto'
+                        justifyContent='start'
+                        overflowY='scroll'
+                        py='5'
                     >
-                        <Text
-                            fontWeight={500}
-                            fontSize={{base:25, lg:30}}
-                            textAlign='center'
+                        <Stack
+                            spacing={6}
+                            alignItems='center'
+                            //mt='auto'
+                            //justifyContent='center'
+                            w={{base:'100%', sm:'80%'}}
                         >
-                            Fique visível para centenas de clientes!
-                        </Text>
+                            {
+                                [
+                                    {text: 'Aumente já as suas vendas!', iconName: FcBullish},
+                                    {text: 'Consiga novos clientes!', iconName: FcConferenceCall},
+                                    {text: 'Foque no seu negócio, nós trazemos o cliente ideal até você!', iconName: FcShop},
+                                ].map((el, index) => {
+                                    return(
+                                        <Flex
+                                            w='90%'
+                                            alignItems='center'
+                                            justifyContent='center'
+                                        >
+                                            <Icon as={el.iconName} 
+                                                mx='2'
+                                                fontSize={40}
+                                            />
+                                            <Text
+                                                w='90%'
+                                                fontWeight={500}
+                                                fontSize={{base:25, lg:30}}
+                                                textAlign='center'
+                                            >
+                                                {el.text}
+                                            </Text>
+                                        </Flex>
+                                    );
+                                })
+
+                            }                          
+                        </Stack>
+                        
                         <Button 
                             mt='10'
                             bg='brand.red' color='white'
                             onClick={nextStep}
                             fontSize={24}
                             p='7'
-                            //w='60%'
                         >
                             Começar cadastro!
                         </Button>
