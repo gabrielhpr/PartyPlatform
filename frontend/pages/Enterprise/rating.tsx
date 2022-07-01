@@ -19,6 +19,7 @@ import { typeOfParties } from "../../utils/typeOfParties";
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
+import Head from 'next/head';
 
 export default function RatingEnterprise() {
     const [ loadingContent, setLoadingContent ] = useState( true );
@@ -116,6 +117,16 @@ export default function RatingEnterprise() {
     if( authenticatedEnterprise ) {
         return (
             <Box>
+                <Head>
+                    <title>Avaliações dos Clientes</title>
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <meta name="description" content="Veja o que os clientes disseram acerca do seu serviço. Dê uma resposta para eles."/>
+                    <meta property="og:title" content="Avaliações dos Clientes"/>
+                    <meta property="og:description" content="Veja o que os clientes disseram acerca do seu serviço. Dê uma resposta para eles."/>
+                    <meta property="og:url" content="https://www.festafy.com.br/Enterprise/rating"/>
+                    <meta property="og:type" content="website"/>
+                </Head>
                 <Header name="" position="relative" />
                 <FlashMessageComponent/>
                 <TopMenuEnterprise />
@@ -428,6 +439,16 @@ export default function RatingEnterprise() {
     else {
         return (
             <Box w='100vw' h='100vh'> 
+                <Head>
+                    <title>Avaliações dos Clientes</title>
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <meta name="description" content="Veja o que os clientes disseram acerca do seu serviço. Dê uma resposta para eles."/>
+                    <meta property="og:title" content="Avaliações dos Clientes"/>
+                    <meta property="og:description" content="Veja o que os clientes disseram acerca do seu serviço. Dê uma resposta para eles."/>
+                    <meta property="og:url" content="https://www.festafy.com.br/Enterprise/rating"/>
+                    <meta property="og:type" content="website"/>
+                </Head>
                 <NotAuthorizedComponent link='/Enterprise/enterpriseAccess' />
             </Box>
         )

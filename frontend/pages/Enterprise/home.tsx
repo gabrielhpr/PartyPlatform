@@ -18,6 +18,7 @@ import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import { useRouter } from "next/router";
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
+import Head from 'next/head';
 
 interface statisticsInterf {
     nEmailsOrders: number;
@@ -161,6 +162,17 @@ export default function HomePageEnterprise() {
     if( authenticatedEnterprise ) {
         return (
             <Box>
+                <Head>
+                    <title>Acesso Empresa</title>
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <meta name="description" content="Acompanhe as métricas do seu negócio, as avaliações dos clientes sobre os seus serviços ente outros recursos."/>
+                    <meta property="og:title" content="Acesso empresa"/>
+                    <meta property="og:description" content="Aqui os fornecedores do ramo de festa podem acompanhar as métricas do seu negócio, as avaliações dos clientes sobre os seus serviços entre outros recursos."/>
+                    <meta property="og:url" content="https://www.festafy.com.br/Enterprise/home"/>
+                    <meta property="og:type" content="website"/>
+                </Head>
+
                 <Header name="" position="relative" />
                 <FlashMessageComponent/>
                 <TopMenuEnterprise />
@@ -449,7 +461,17 @@ export default function HomePageEnterprise() {
     }
     else {
         return (
-            <Box w='100vw' h='100vh'> 
+            <Box w='100vw' h='100vh'>
+                <Head>
+                    <title>Acesso Empresa</title>
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <meta name="description" content="Acompanhe as métricas do seu negócio, as avaliações dos clientes sobre os seus serviços ente outros recursos."/>
+                    <meta property="og:title" content="Acesso empresa"/>
+                    <meta property="og:description" content="Aqui os fornecedores do ramo de festa podem acompanhar as métricas do seu negócio, as avaliações dos clientes sobre os seus serviços ente outros recursos."/>
+                    <meta property="og:url" content="https://www.festafy.com.br/Enterprise/home"/>
+                    <meta property="og:type" content="website"/>
+                </Head> 
                 <NotAuthorizedComponent link='/Enterprise/enterpriseAccess' />
             </Box>
         )

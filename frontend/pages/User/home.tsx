@@ -16,7 +16,7 @@ import { NotAuthorizedComponent } from "../../components/NotAuthorizedComponent"
 import { useUserAuthContext } from "../../context/userContext";
 import { TopMenuUser } from "../../components/User/TopMenuUser";
 import { Sidebar } from "../../components/Sidebar";
-
+import Head from 'next/head';
 
 export default function HomeUser() {
     const [cardSearchData, setCardSearchData] = useState({ partyType: 'Infantil', service: ''});
@@ -27,6 +27,17 @@ export default function HomeUser() {
     if( authenticatedUser ) {
         return (
             <Box>
+                <Head>
+                    <title>Acesso Usuário</title>
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <meta name="description" content="Avalie fornecedores, peça orçamentos pela plataforma do Festafy!"/>
+                    <meta property="og:title" content="Acesso Usuário"/>
+                    <meta property="og:description" content="Avalie fornecedores, peça orçamentos pela plataforma do Festafy!"/>
+                    <meta property="og:url" content="https://www.festafy.com.br/User/home"/>
+                    <meta property="og:type" content="website"/>
+                </Head>
+
                 <Header name='' position="relative" />
                 <FlashMessageComponent/>
             
@@ -202,6 +213,16 @@ export default function HomeUser() {
     else {
         return (
             <Box w='100vw' h='100vh'> 
+                <Head>
+                    <title>Acesso Usuário</title>
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <meta name="description" content="Avalie fornecedores, peça orçamentos pela plataforma do Festafy!"/>
+                    <meta property="og:title" content="Acesso Usuário"/>
+                    <meta property="og:description" content="Avalie fornecedores, peça orçamentos pela plataforma do Festafy!"/>
+                    <meta property="og:url" content="https://www.festafy.com.br/User/home"/>
+                    <meta property="og:type" content="website"/>
+                </Head>
                 <NotAuthorizedComponent link='/User/userAccess' />
             </Box>
         )

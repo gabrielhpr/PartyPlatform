@@ -12,10 +12,22 @@ import IdosoAniversario from "../assets/imgs/idoso-aniversario.png";
 import KidBirthday from "../assets/imgs/kid-birthday.jpg";
 import MulherAniversario from "../assets/imgs/mulher-aniversario.png"
 import PessoasFesta from "../assets/imgs/pessoas-festa.jpg";
+import Head from 'next/head';
 
-export default function ContactPage() {
+export default function ImageAttributionPage() {
     return (
         <Box>
+            <Head>
+                <title>Direitos Autorais das Imagens</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Contém informações acerca dos direitos autorais das imagens utilizadas no website."/>
+                <meta property="og:title" content="Direitos Autorais das Imagens"/>
+                <meta property="og:description" content="Contém informações acerca dos direitos autorais das imagens utilizadas no website."/>
+                <meta property="og:url" content="https://www.festafy.com.br/image-attribution"/>
+                <meta property="og:type" content="website"/>
+            </Head>
+
             {/* Header */}
             <Header name='' position='relative' />
 

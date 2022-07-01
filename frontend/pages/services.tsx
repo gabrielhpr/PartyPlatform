@@ -14,6 +14,8 @@ import { MenuServicesOnClick } from "../components/MenuServicesOnClick";
 import { FiSearch } from "react-icons/fi";
 import KidBirthday from '../assets/imgs/kid-birthday.jpg';
 import PessoasFesta from '../assets/imgs/pessoas-festa.jpg';
+import Head from 'next/head';
+
 
 export default function ServicesPage() {
     const [loadingContent, setLoadingContent] = useState(true);
@@ -174,6 +176,17 @@ export default function ServicesPage() {
 
     return (
         <Box h='100vh'>
+            <Head>
+                <title>Fornecedores</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Veja diversos fornecedores de festa."/>
+                <meta property="og:title" content="Fornecedores"/>
+                <meta property="og:description" content="Veja diversos fornecedores de festa."/>
+                <meta property="og:url" content="https://www.festafy.com.br/services"/>
+                <meta property="og:type" content="website"/>
+            </Head>
+
             <Header name="" position="relative" type='oneColor' />
 
             <Sidebar/>

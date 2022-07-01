@@ -12,6 +12,7 @@ import { FlashMessageComponent } from "../../../components/FlashMessageComponent
 import { userRegisterDataFormErrorNullState, userRegisterDataFormErrorProps, userRegisterDataNullState, userRegisterDataProps } from "../../../utils/userInterface";
 import * as yup from 'yup';
 import { userRegisterFormSchema, userRegisterPasswordSchema } from "../../../utils/validations";
+import Head from 'next/head';
 
 export default function registerUser() {
     const [userRegisterData, setUserRegisterData] = useState<userRegisterDataProps>(userRegisterDataNullState);
@@ -139,6 +140,16 @@ export default function registerUser() {
 
     return (
         <Box>
+            <Head>
+                <title>Cadastro do Usuário</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Cadastre-se para avaliar os fornecedores de festa e pedir orçamento para eles."/>
+                <meta property="og:title" content="Cadastro do Usuário"/>
+                <meta property="og:description" content="Cadastre-se para avaliar os fornecedores de festa e pedir orçamento para eles."/>
+                <meta property="og:url" content="https://www.festafy.com.br/User/Auth/register"/>
+                <meta property="og:type" content="website"/>
+            </Head>
             {/* Header */}
             <Header name="" position='relative' />
             

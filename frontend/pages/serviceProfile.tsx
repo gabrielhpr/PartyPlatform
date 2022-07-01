@@ -18,6 +18,7 @@ import { userRegisterDataNullState, userRegisterDataProps, userRegisterDataFormE
 import { FlashMessageComponent } from "../components/FlashMessageComponent";
 import { askBudgetSchema, userRegisterFormSchema, userRegisterPasswordSchema } from "../utils/validations";
 import * as yup from 'yup';
+import Head from 'next/head';
 
 interface serviceDataInterf {
     id: number;
@@ -482,6 +483,17 @@ export default function ServiceProfilePage() {
                     
                 `}
             </Script>
+
+            <Head>
+                <title>Página do Serviço</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Veja informações acerca do serviço do fornecedor. Dados de contato, fotos, descrição do serviço, ..."/>
+                <meta property="og:title" content="Página do Serviço"/>
+                <meta property="og:description" content="Veja informações acerca do serviço do fornecedor. Dados de contato, fotos, descrição do serviço, ..."/>
+                <meta property="og:url" content="https://www.festafy.com.br/serviceProfile"/>
+                <meta property="og:type" content="website"/>
+            </Head>
                        
             <Header name="" position="relative" />
 

@@ -9,6 +9,7 @@ import { Sidebar } from "../../../components/Sidebar";
 import useFlashMessage from "../../../hooks/useFlashMessage";
 import api from "../../../utils/api";
 import { userRegisterPasswordSchema } from "../../../utils/validations";
+import Head from 'next/head';
 
 export default function ResetPasswordUser() {
     const [userPassword, setUserPassword] = useState({password: '', passwordConfirmation: ''});
@@ -123,6 +124,16 @@ export default function ResetPasswordUser() {
     return (
         <Box
         >
+            <Head>
+                <title>Alteração da Senha</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Alteração da senha do usuário."/>
+                <meta property="og:title" content="Alteração da Senha"/>
+                <meta property="og:description" content="Alteração da Senha do Usuário na plataforma Festafy."/>
+                <meta property="og:url" content="https://www.festafy.com.br/User/Auth/resetPassword"/>
+                <meta property="og:type" content="website"/>
+            </Head>
             <Header name='' position="relative" />
             <Sidebar/>
 

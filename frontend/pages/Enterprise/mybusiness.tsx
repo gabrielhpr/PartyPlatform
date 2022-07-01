@@ -19,6 +19,7 @@ import { enterpriseRegisterMyBusinessFormSchema, enterpriseRegisterPasswordSchem
 import { locationMap, typeOfParties } from "../../utils/typeOfParties";
 import { Sidebar } from "../../components/Sidebar";
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
+import Head from 'next/head';
 
 
 interface enterpriseDataInterf {
@@ -448,6 +449,16 @@ export default function MyBusinessEnterprise() {
     if( authenticatedEnterprise ) {
         return (
             <Box>
+                <Head>
+                    <title>Meu Negócio</title>
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <meta name="description" content="Modifique os dados referentes ao seu negócio."/>
+                    <meta property="og:title" content="Meu Negócio"/>
+                    <meta property="og:description" content="Modifique os dados referentes ao seu negócio."/>
+                    <meta property="og:url" content="https://www.festafy.com.br/Enterprise/mybusiness"/>
+                    <meta property="og:type" content="website"/>
+                </Head>
                 <Header name="" position="relative" />
                 <FlashMessageComponent/>
                 <TopMenuEnterprise />
@@ -555,6 +566,16 @@ export default function MyBusinessEnterprise() {
     else {
         return (
             <Box w='100vw' h='100vh'> 
+                <Head>
+                    <title>Meu Negócio</title>
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <meta name="description" content="Modifique os dados referentes ao seu negócio."/>
+                    <meta property="og:title" content="Meu negócio"/>
+                    <meta property="og:description" content="Modifique os dados referentes ao seu negócio."/>
+                    <meta property="og:url" content="https://www.festafy.com.br/Enterprise/mybusiness"/>
+                    <meta property="og:type" content="website"/>
+                </Head>
                 <NotAuthorizedComponent link='/Enterprise/enterpriseAccess' />
             </Box>
         )

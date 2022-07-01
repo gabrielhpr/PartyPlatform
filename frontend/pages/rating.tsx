@@ -275,7 +275,7 @@ export default function Rating() {
 
     // Used in Menu search
     function searchFunction( event: any, menuId: string ) {
-        console.log( event.currentTarget.value );
+        ////console.log( event.currentTarget.value );
         let inputValue = event.currentTarget.value.toUpperCase();
         let menu = document.getElementById( menuId );
         let itemList = menu.getElementsByTagName("button");
@@ -306,8 +306,8 @@ export default function Rating() {
             }
         })
         .then((response) => {
-            console.log('Service');
-            console.log(response.data.service[0]);
+            //console.log('Service');
+            //console.log(response.data.service[0]);
             setService(response.data.service);
         })
     }, [routerNext.query]);
@@ -315,7 +315,7 @@ export default function Rating() {
     useEffect(() => {
 
         if( authenticatedUser == true ) {
-            console.log('authenticated user');
+            //console.log('authenticated user');
             try {
                 const token = localStorage.getItem("tokenUser");
                 
@@ -325,12 +325,12 @@ export default function Rating() {
                     }
                 })
                 .then((response) => {
-                    console.log(response.data.userData);
+                    //console.log(response.data.userData);
                     setUserStoredData(response.data.userData);
                 })
             }   
             catch(err) {
-                console.log( err );
+                //console.log( err );
                 // msgText = err.response.data.message;
                 // msgType = "error";
             }
@@ -351,7 +351,7 @@ export default function Rating() {
 
     async function nextStep() {
         if( ratingData.step == 1 ) {
-            console.log('entrou no step 1');       
+            //console.log('entrou no step 1');       
             let isValid = await handleValidation(
                 ['ratingServiceQuality', 'ratingPrice', 'ratingAnswerTime', 'ratingFlexibility', 'ratingProfessionalism'],
                 RatingFormSchema,
@@ -363,7 +363,7 @@ export default function Rating() {
             }
         }
         else if( ratingData.step == 2 ) {
-            console.log('entrou no step 2');       
+            //console.log('entrou no step 2');       
             let isValid = await handleValidation(
                 ['recommendToAFriend', 'recommendToAFriendObservation', 'opinionTitle', 'opinionContent', 'partyDate', 'partyType'],
                 RatingFormSchema,
@@ -384,21 +384,21 @@ export default function Rating() {
 
     function handleChange( event: any ) {
         setRatingData({...ratingData, [event.currentTarget.name]: event.currentTarget.value});
-        console.log( ratingData );
+        //console.log( ratingData );
     }
 
     function handleChangeLogin( event: any ) {
         setUserLoginData({...userLoginData, [event.currentTarget.name]: event.currentTarget.value});
-        console.log( userLoginData );
+        //console.log( userLoginData );
     }
 
     function handleChangeRegister( event: any ) {
         setUserRegisterData({...userRegisterData, [event.currentTarget.name]: event.currentTarget.value});
-        console.log( userRegisterData );
+        //console.log( userRegisterData );
     }
 
     async function handleValidation( fields: Array<string>, schemaForm: any, setErrorFunction: any, data: any ) {
-        console.log(fields);
+        //console.log(fields);
 
         // Reset errors message
         fields.map((el, index) => {
@@ -411,7 +411,7 @@ export default function Rating() {
             .validateAt( el, data)
             .catch((err) => {
                 setErrorFunction((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -422,13 +422,13 @@ export default function Rating() {
             
             let isValidField = yup.reach( schemaForm, el )
             .isValidSync( data[el] );
-            console.log(isValidField);
+            //console.log(isValidField);
 
             validForm = validForm && isValidField;                
         });
 
-        console.log('validForm');
-        console.log(validForm);
+        //console.log('validForm');
+        //console.log(validForm);
         // If there is no error its validated
         return validForm;
 
@@ -438,10 +438,10 @@ export default function Rating() {
     }
 
     async function handleSubmitLogin() {
-        console.log('Entrou handleSubmitLogin');
+        //console.log('Entrou handleSubmitLogin');
         await loginUser( userLoginData, false );
-        console.log('O resultado de loginUser é');
-        console.log('Saiu handleSubmitLogin');
+        //console.log('O resultado de loginUser é');
+        //console.log('Saiu handleSubmitLogin');
     }
 
     async function handleSubmitRegister() {
@@ -468,7 +468,7 @@ export default function Rating() {
             .validateAt( el, userRegisterData)
             .catch((err) => {
                 setFormErrorsUserRegister((formE) => ({...formE, [el]:err.errors[0]}));
-                console.log(err);
+                //console.log(err);
             });
         });
 
@@ -480,27 +480,27 @@ export default function Rating() {
         });
 
         if( isValidGeneral && isValidPassword ) {
-            console.log('Entrou handleSubmitRegister');
+            //console.log('Entrou handleSubmitRegister');
             await registerUser( userRegisterData, false );
-            console.log('Saiu handleSubmitRegister');
+            //console.log('Saiu handleSubmitRegister');
         }
     } 
     
     async function handleSubmitRating() {
-        console.log('Entrou handleSubmitRating');
-        console.log( ratingData );
+        //console.log('Entrou handleSubmitRating');
+        //console.log( ratingData );
         let result = await userRate( ratingData );
-        console.log( result );
+        //console.log( result );
         if( result == 'success' ) {
             window.setTimeout(() => {
                 routerNext.push('/');
             }, 1000);
         }
-        console.log('Saiu handleSubmitRating');
+        //console.log('Saiu handleSubmitRating');
     }
 
     function handleSubmit( event: any ) {
-        console.log(' handle submit ');
+        //console.log(' handle submit ');
     }
 
     switch( ratingData.step ) {
@@ -664,7 +664,7 @@ export default function Rating() {
                                                             onChange={(event: any) => {
                                                                 setRatingData({...ratingData, [el.name]: event});
                                                                 setFormErrorsRating({...formErrorsRating, [el.name]: ''});
-                                                                console.log( ratingData );
+                                                                ////console.log( ratingData );
                                                             }}
 
                                                         >

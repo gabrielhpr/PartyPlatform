@@ -52,6 +52,7 @@ export function RegisterFormLayout({ question, subTitle, lastStep=false,
             direction={{base:'column', lg:'row'}}
             //justifyContent={{base:'space-between', lg:'space-between'}}
         >
+            
             <FlashMessageComponent/>
 
             {/* Pergunta */}

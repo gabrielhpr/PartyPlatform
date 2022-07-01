@@ -10,6 +10,7 @@ import { Footer } from "../../components/Footer";
 import { FlashMessageComponent } from "../../components/FlashMessageComponent";
 import api from "../../utils/api";
 import useFlashMessage from "../../hooks/useFlashMessage";
+import Head from 'next/head';
 
 export default function userAccess() {
     const [userAccessData, setUserAccessData] = useState({email: '', password:''});
@@ -54,6 +55,17 @@ export default function userAccess() {
 
     return (
         <Box>
+            <Head>
+                <title>Acesso Usuário</title>
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                <meta name="description" content="Faça o login para avaliar fornecedores e pedir orçamentos pela plataforma do Festafy!"/>
+                <meta property="og:title" content="Acesso Usuário"/>
+                <meta property="og:description" content="Faça o login para avaliar fornecedores e pedir orçamentos pela plataforma do Festafy!"/>
+                <meta property="og:url" content="https://www.festafy.com.br/User/userAccess"/>
+                <meta property="og:type" content="website"/>
+            </Head>
+
             {/* Header */}
             <Header name="" position='relative' />
 
