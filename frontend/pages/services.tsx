@@ -1,7 +1,6 @@
 import { Box, Button, Flex, Icon, Input, Menu, MenuButton, MenuDivider, MenuItemOption, MenuList, MenuOptionGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
 import Image from 'next/image'
 import { useEffect, useState } from "react";
-import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
 import { CardService } from "../components/CardService";
 import api from "../utils/api";
 import { useRouter } from "next/router";
@@ -12,7 +11,6 @@ import { enterpriseSpecificCategoryDict, locationMap, minPrice, priceOptionsPerS
 import { Sidebar } from "../components/Sidebar";
 import { MenuServicesOnClick } from "../components/MenuServicesOnClick";
 import { FiSearch } from "react-icons/fi";
-import KidBirthday from '../assets/imgs/kid-birthday.jpg';
 import PessoasFesta from '../assets/imgs/pessoas-festa.jpg';
 import Head from 'next/head';
 
@@ -143,6 +141,8 @@ export default function ServicesPage() {
         if( !routerNext.isReady ) {
             return;
         }
+        setLoadingContent(true);
+
         const { partyType, serviceCategory, serviceSpecificCategory, city, state, country, price } = routerNext.query;
 
         api.get('/services', {

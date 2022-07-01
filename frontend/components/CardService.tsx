@@ -4,9 +4,6 @@ import { AiOutlinePicture } from "react-icons/ai";
 import { RiMapPin2Fill, RiMoneyDollarCircleFill, RiPriceTag3Fill, RiStarSFill } from 'react-icons/ri';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import FotoDebutante from '../assets/imgs/festaDebutante.jpg';
-import FotoInfantilFem from '../assets/imgs/festaInfantilFeminino1.jpg';
-import FotoInfantilMasc from '../assets/imgs/festaInfantilMasculino1.jpg';
 
 
 interface CardServiceProps {
