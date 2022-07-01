@@ -1283,27 +1283,52 @@ export default function ServiceProfilePage() {
                                 Pedir orçamento grátis!
                             </Button>
 
-                            {/* PHONE CALL */}
-                            <NavLink
-                                href={`tel:${service.phone}`}
-                                h='70%'
-                                w='20%'
-                                bg='brand.white'
-                                border='2px solid'
-                                borderColor='brand.dark_blue'
-                                color='brand.dark_blue'
-                                borderRadius={8}
-                            >
-                                <Flex 
-                                    h='100%'
-                                    alignItems='center'
-                                    justifyContent='center'
+                            {/* WHATSAPP ACTION or PHONE ACTION */}
+                            {
+                                service.whatsapp != ''
+                                ?
+                                <NavLink
+                                    href={`https://wa.me/55${service.whatsapp}`}
+                                    h='70%'
+                                    w='20%'
+                                    bg='brand.white'
+                                    border='2px solid'
+                                    borderColor='brand.dark_blue'
+                                    color='brand.dark_blue'
+                                    borderRadius={8}
                                 >
-                                    <Icon as={RiPhoneFill}
-                                        fontSize={24}
-                                    />
-                                </Flex>
-                            </NavLink>
+                                    <Flex 
+                                        h='100%'
+                                        alignItems='center'
+                                        justifyContent='center'
+                                    >
+                                        <Icon as={RiWhatsappFill}
+                                            fontSize={24}
+                                        />
+                                    </Flex>
+                                </NavLink>  
+                                :  
+                                <NavLink
+                                    href={`tel:${service.phone}`}
+                                    h='70%'
+                                    w='20%'
+                                    bg='brand.white'
+                                    border='2px solid'
+                                    borderColor='brand.dark_blue'
+                                    color='brand.dark_blue'
+                                    borderRadius={8}
+                                >
+                                    <Flex 
+                                        h='100%'
+                                        alignItems='center'
+                                        justifyContent='center'
+                                    >
+                                        <Icon as={RiPhoneFill}
+                                            fontSize={24}
+                                        />
+                                    </Flex>
+                                </NavLink>
+                            }
                         </Flex>
 
                         <Modal isOpen={modalBudget.isOpen} onClose={modalBudget.onClose} size='full'>
