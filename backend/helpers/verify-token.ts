@@ -15,7 +15,7 @@ const checkToken = (req:any, res:any, next:any) => {
     }
 
     try {
-        const verified = jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr");
+        const verified = jwt.verify(token, "");
         req.enterprise = verified;
         next();
     }
