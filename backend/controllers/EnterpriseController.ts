@@ -372,7 +372,7 @@ module.exports = class EnterpriseController {
         if(req.headers.authorization) {
             //console.log('tem token');
             const token = getToken(req);
-            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            jwt.verify(token, "", async function(err: any, decoded:any) {
                 if(err) {
                     return res.status(500).send({message: "Token inválido!"});
                 }
@@ -411,7 +411,7 @@ module.exports = class EnterpriseController {
 
         //console.log('tem token');
         const token = getToken(req);
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -517,7 +517,7 @@ module.exports = class EnterpriseController {
         // Token
         const token = getToken(req);
 
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -731,7 +731,7 @@ module.exports = class EnterpriseController {
         }
 
         const token = getToken(req);
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -821,7 +821,7 @@ module.exports = class EnterpriseController {
         //console.log('tem token');
         const token = getToken(req);
 
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -847,7 +847,7 @@ module.exports = class EnterpriseController {
         //console.log('tem token');
         const token = getToken(req);
 
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -878,7 +878,7 @@ module.exports = class EnterpriseController {
         const token = getToken(req);
 
         let enterpriseIdByToken;
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -963,7 +963,7 @@ module.exports = class EnterpriseController {
         // Token
         const token = getToken(req);
 
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -1122,7 +1122,7 @@ module.exports = class EnterpriseController {
 
         if(req.headers.authorization) {
             const token = getToken(req);
-            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            jwt.verify(token, "", async function(err: any, decoded:any) {
                 if(err) {
                     return res.status(500).send({message: "Token inválido!"});
                 }
@@ -1147,7 +1147,7 @@ module.exports = class EnterpriseController {
 
         if(req.headers.authorization) {
             const token = getToken(req);
-            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            jwt.verify(token, "", async function(err: any, decoded:any) {
                 if(err) {
                     return res.status(500).send({message: "Token inválido!"});
                 }
@@ -1197,7 +1197,7 @@ module.exports = class EnterpriseController {
                 //headers: {'Content-Type': 'application/json'}, 
                 //auth: jwt, 
                 // A Google Analytics GA4 property identifier whose events are tracked. Specified in the URL path and not the body. To learn more, see [where to find your Property ID](https://developers.google.com/analytics/devguides/reporting/data/v1/property-id). This property must be specified for the batch. The property within RunPivotReportRequest may either be unspecified or consistent with this property. Example: properties/1234
-                property: 'properties/311158295',
+                property: 'properties/',
                 
                 //'resource': reports
                 // Request body metadata
@@ -1205,7 +1205,7 @@ module.exports = class EnterpriseController {
                     'requests': [
                         // Number of visualizations
                         {
-                            'property': 'properties/311158295',
+                            'property': 'properties/',
                             'dateRanges': [
                                 {'startDate': '2022-06-29', 'endDate': 'today'}
                             ],
@@ -1229,7 +1229,7 @@ module.exports = class EnterpriseController {
                         },
                         // Clicks in show PHONE
                         {
-                            'property': 'properties/311158295',
+                            'property': 'properties/',
                             'dateRanges': [
                                 {'startDate': '2022-06-29', 'endDate': 'today'}
                             ],
@@ -1280,7 +1280,7 @@ module.exports = class EnterpriseController {
                         },
                         // Clicks in show Whatsapp if exists
                         {
-                            'property': 'properties/311158295',
+                            'property': 'properties/',
                             'dateRanges': [
                                 {'startDate': '2022-06-29', 'endDate': 'today'}
                             ],
@@ -1331,7 +1331,7 @@ module.exports = class EnterpriseController {
                         },
                         // Clicks in show E-mail
                         {
-                            'property': 'properties/311158295',
+                            'property': 'properties/',
                             'dateRanges': [
                                 {'startDate': '2022-06-29', 'endDate': 'today'}
                             ],
@@ -1409,7 +1409,7 @@ module.exports = class EnterpriseController {
 
         if(req.headers.authorization) {
             const token = getToken(req);
-            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            jwt.verify(token, "", async function(err: any, decoded:any) {
                 if(err) {
                     return res.status(500).send({message: "Token inválido!"});
                 }

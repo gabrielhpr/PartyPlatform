@@ -10,7 +10,7 @@ const userModel = new UserModel();
 
 
 const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.js");
-const mailchimpClient = mailchimpFactory("rcUfsa5vVBpbmJlzbkjF0A");
+const mailchimpClient = mailchimpFactory("");
 import bcrypt = require("bcrypt");
 import { getAllImages } from "../helpers/get-images-aws";
 import { BUCKET_NAME } from "../utils/bucketname";
@@ -150,7 +150,7 @@ module.exports = class RootController {
             return;
         }
 
-        let randomToken = require('random-token').create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+        let randomToken = require('random-token').create('');
         let token = randomToken(64); 
         //console.log('o token é');
         //console.log( token );
@@ -177,7 +177,7 @@ module.exports = class RootController {
                             ]
                         }
                     ],
-                    from_email: 'festafy@festafy.com.br',
+                    from_email: '',
                     to: [ {email: enterprise.email, name: `${enterprise.enterpriseName}`, type:'to'} ]
                 } 
             });
@@ -282,7 +282,7 @@ module.exports = class RootController {
             return;
         }
 
-        let randomToken = require('random-token').create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+        let randomToken = require('random-token').create('');
         let token = randomToken(64); 
         //console.log('o token é');
         //console.log( token );
@@ -309,7 +309,7 @@ module.exports = class RootController {
                             ]
                         }
                     ],
-                    from_email: 'festafy@festafy.com.br',
+                    from_email: '',
                     to: [ {email: user.email, name: `${user.fullName}`, type:'to'} ]
                 } 
             });

@@ -2,7 +2,7 @@ import bcrypt = require("bcrypt");
 import jwt = require("jsonwebtoken");
 import { nextTick } from "process";
 const mailchimpFactory = require("@mailchimp/mailchimp_transactional/src/index.js");
-const mailchimpClient = mailchimpFactory("rcUfsa5vVBpbmJlzbkjF0A");
+const mailchimpClient = mailchimpFactory("");
 
 const createUserToken = require('../helpers/create-user-token');
 const getToken = require('../helpers/get-token');
@@ -141,7 +141,7 @@ module.exports = class UserController {
         //console.log('tem token');
         const token = getToken(req);
 
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -194,7 +194,7 @@ module.exports = class UserController {
         // Token
         const token = getToken(req);
 
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -317,7 +317,7 @@ module.exports = class UserController {
 
         if( req.headers.authorization ) {
             const token = getToken(req);
-            jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+            jwt.verify(token, "", async function(err: any, decoded:any) {
                 if(err) {
                     return res.status(500).send({message: "Token inválido!"});
                 }
@@ -369,7 +369,7 @@ module.exports = class UserController {
         const token = getToken(req);
 
         let userId;
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).send({message: "Token inválido!"});
             }
@@ -453,7 +453,7 @@ module.exports = class UserController {
         //console.log('tem token');
         const token = getToken(req);
 
-        jwt.verify(token, "XXmncStwYptNz2DWXFvqbRTzEXWGjr", async function(err: any, decoded:any) {
+        jwt.verify(token, "", async function(err: any, decoded:any) {
             if(err) {
                 return res.status(500).json({message: "Token inválido!"});
             }

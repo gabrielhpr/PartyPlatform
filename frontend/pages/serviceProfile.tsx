@@ -468,7 +468,7 @@ export default function ServiceProfilePage() {
         <Box>
             {/* GOOGLE ANALYTICS */}
             <Script
-                src="https://www.googletagmanager.com/gtag/js?id=G-RLBGWS0TCG"
+                src=""
                 strategy="afterInteractive"
             />
             <Script id="google-analytics" strategy="afterInteractive">

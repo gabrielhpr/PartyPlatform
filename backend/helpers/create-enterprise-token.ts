@@ -6,7 +6,7 @@ const createEnterpriseToken = async(enterprise:any, req:any, res:any) => {
     const token = jwt.sign({
         name: enterprise.enterpriseName,
         id: enterprise.id,
-    }, "XXmncStwYptNz2DWXFvqbRTzEXWGjr");
+    }, "");
 
     // return token
     res.status(200).json({

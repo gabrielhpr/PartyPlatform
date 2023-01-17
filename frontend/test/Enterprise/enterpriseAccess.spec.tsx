@@ -24,9 +24,9 @@ describe('Login Enterprise Process', () => {
         // );
 
         // await page.click('input[name="email"]');
-        // await page.type('input[name="email"]', 'gabrielhprdeveloper@gmail.com');
+        // await page.type('input[name="email"]', '');
         // await page.click('input[name="password"]');
-        // await page.type('input[name="password"]', '&N61al97');
+        // await page.type('input[name="password"]', '');
         
 
         // const user = userEvent.setup();
@@ -38,8 +38,8 @@ describe('Login Enterprise Process', () => {
         // );
 
         // let enterprise1 = {
-        //     email: 'gabrielhprdeveloper12345@gmail.com',
-        //     password: '&N61al97',
+        //     email: '',
+        //     password: '',
         // }
        
         // // Começa 

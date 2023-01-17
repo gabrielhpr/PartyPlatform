@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 // PRODUCTION
-// https://dssgh3dia3p2z.cloudfront.net
+// 
 
 // TEST
 // http://localhost:3000
@@ -24,7 +24,7 @@ app.use(cors({
 // app.use(function (req:any, res:any, next) {
 
 //     // Website you wish to allow to connect
-//     res.setHeader('Access-Control-Allow-Origin', 'https://www.festafy.com.br');
+//     res.setHeader('Access-Control-Allow-Origin', '');
 
 //     // Request methods you wish to allow
 //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');

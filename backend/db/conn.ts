@@ -4,10 +4,10 @@ import { promisify } from 'util';
 // TEST
 const conn = mysql.createPool({
     connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
-    password: '&N61al97',
-    database: 'LOCFESTAS',
+    host: '',
+    user: '',
+    password: '',
+    database: '',
 });
 
 // PRODUCTION
