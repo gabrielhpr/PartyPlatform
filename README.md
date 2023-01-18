@@ -13,7 +13,10 @@ Users can register to rate Enterprises and to send emails for them asking for mo
 
 The backend was developed in NodeJS. The relevant folders are:
 
-- controllers: Responsible for validation and calling model functions that will interact with Database.
-- 
+- controllers: Responsible for validating data and calling model functions that will interact with Database.
+
+## FRONTEND
+
+The frontend was developed using ReactJS Library.
 
 
